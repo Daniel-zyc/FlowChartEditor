@@ -1,5 +1,7 @@
 #pragma once
 
+#include "dlineitem.h"
+
 #include <QAbstractGraphicsShapeItem>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -8,6 +10,8 @@
 #include <QStyle>
 #include <QPainter>
 #include <QBrush>
+
+class DLineItem;
 
 enum class ResizeOrient
 {
@@ -56,10 +60,17 @@ public:
 	virtual void resizeToRect(QRectF nrect) = 0;
 
 	virtual void resizeToPoint(const QPointF &p);
+	virtual void updateLinkedArrow();
+
+protected:
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
 	qreal sizePointRadius;
 	InteractPoint activeInteractType;
 	ResizeOrient resizeOrient;
+
+public:
+	QList<DLineItem *> arrows;
 };
 

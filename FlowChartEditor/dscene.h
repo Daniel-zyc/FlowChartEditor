@@ -9,6 +9,12 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
+enum class SceneState
+{
+	NONE = 0,
+	INSERTLINE
+};
+
 class DScene : public QGraphicsScene
 {
 	Q_OBJECT
@@ -61,7 +67,10 @@ private:
 	static qreal defaultScaleRatio;
 	static qreal defaultMoveDist;
 
-	DShapeBase *modifiedShape;
-	QMenu *menu;
+	SceneState state = SceneState::NONE;
+
+	DShapeBase *modifiedShape = nullptr, *startItem;
+	QMenu *menu = nullptr;
+	QPointF startPoint;
 };
 
