@@ -13,7 +13,7 @@ DLineItem::DLineItem()
 
 QRectF DLineItem::boundingRect() const
 {
-	qreal extra = (pen().width() + 20) / 2.0;
+	qreal extra = 20;
 
 	return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
 									  line().p2().y() - line().p1().y()))
@@ -46,5 +46,17 @@ void DLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		painter->drawLine(myLine);
 		myLine.translate(0,-8.0);
 		painter->drawLine(myLine);
+		painter->setPen(QPen(Qt::black, 2, Qt::SolidLine));
+		painter->setBrush(QBrush(Qt::white));
+		painter->drawEllipse(line().p1(), 5, 5);
+		painter->drawEllipse(line().p2(), 5, 5);
 	}
+}
+
+void DLineItem::updatePosition()
+{
+	QPointF pa = line().p1(), pb = line().p2();
+	if(startShape) pa = mapFromItem(startShape, 0, 0);
+	if(endShape) pb = mapFromItem(endShape, 0, 0);
+	setLine(QLineF(pa, pb));
 }

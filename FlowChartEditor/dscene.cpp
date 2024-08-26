@@ -14,18 +14,18 @@ DScene::DScene()
 }
 
 DScene::DScene(QObject *parent)
-	: QGraphicsScene(parent) //, reshapeItem(nullptr)
+	: QGraphicsScene(parent)
 {
 }
 
 DScene::DScene(const QRectF &sceneRect, QObject *parent)
-	: QGraphicsScene(sceneRect, parent) //, reshapeItem(nullptr)
+	: QGraphicsScene(sceneRect, parent)
 {
 
 }
 
 DScene::DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
-	: QGraphicsScene(x, y, width, height, parent) //, reshapeItem(nullptr)
+	: QGraphicsScene(x, y, width, height, parent)
 {
 
 }
@@ -92,10 +92,12 @@ void DScene::addEllItem()
 void DScene::addLineItem()
 {
 	qDebug() << "add line";
-	DLineItem *item = new DLineItem();
-	item->setLine(-100, -100, 100, 100);
-	item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	addItem(item);
+	state = SceneState::INSERTLINE;
+	// DLineItem *item = new DLineItem();
+	// item->setLine(-100, -100, 100, 100);
+	// item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	// addItem(item);
+
 }
 
 void DScene::delSelectedItem()
@@ -113,6 +115,14 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	QPointF p = event->scenePos();
 	QList<QGraphicsItem *> items = this->items(p);
+
+	if(state == SceneState::INSERTLINE)
+	{
+		event->accept();
+		if(items.empty()) startPoint = p, startItem = nullptr;
+		else startItem = dynamic_cast<DShapeBase*>(items.first());
+		return;
+	}
 
 	if(items.empty())
 	{
@@ -156,6 +166,25 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 	modifiedShape = nullptr;
+
+	if(state==SceneState::INSERTLINE)
+	{
+		QPointF p = event->scenePos();
+		QList<QGraphicsItem *> items = this->items(p);
+		DShapeBase *endItem = items.empty() ? nullptr : dynamic_cast<DShapeBase* >(items.first());
+		QRectF rc(this->startPoint, p);
+		DLineItem *line = new DLineItem();
+		line->setLine(rc.width()/2, rc.height()/2, -rc.width()/2, -rc.height()/2);
+		line->setPos(rc.center());
+		line->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+		line->startShape = endItem;
+		line->endShape = startItem;
+		if(endItem) endItem->arrows.append(line);
+		if(startItem) startItem->arrows.append(line);
+		line->updatePosition();
+		addItem(line);
+		state = SceneState::NONE;
+	}
 	QGraphicsScene::mouseReleaseEvent(event);
 }
 

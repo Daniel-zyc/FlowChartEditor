@@ -4,7 +4,8 @@ DShapeBase::DShapeBase(QGraphicsItem *parent)
 	:QAbstractGraphicsShapeItem(parent), sizePointRadius(5),
 	activeInteractType(InteractPoint::NONE), resizeOrient(ResizeOrient::NONE)
 {
-	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
+			 | QGraphicsItem::ItemSendsGeometryChanges);
 }
 
 QRectF DShapeBase::boundingRect() const
@@ -177,3 +178,21 @@ void DShapeBase::resizeToPoint(const QPointF &p)
 	setPos(cent);
 	update();
 }
+
+QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+	// qDebug() << change;
+	// if(change == QGraphicsItem::ItemPositionHasChanged)
+	// {
+		qDebug() << "changed";
+		updateLinkedArrow();
+	// }
+
+	return value;
+}
+
+void DShapeBase::updateLinkedArrow()
+{
+	for(DLineItem *item : arrows) item->updatePosition();
+}
+
