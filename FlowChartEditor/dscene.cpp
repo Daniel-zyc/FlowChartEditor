@@ -3,6 +3,7 @@
 #include "dshapebase.h"
 #include "drectitem.h"
 #include "dellitem.h"
+#include "dlineitem.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -76,20 +77,36 @@ void DScene::addTextItem()
 
 void DScene::addRectItem()
 {
-	qDebug() << "addRect";
-	DRectItem *item = new DRectItem(-100, -100, 200, 200);
+	qDebug() << "add rectangle";
+	DRectItem *item = new DRectItem(200, 200);
 	addItem(item);
 }
 
 void DScene::addEllItem()
 {
-	qDebug() << "addEll";
-	DEllItem *item = new DEllItem(-100, -100, 200, 200);
+	qDebug() << "add ellipse";
+	DEllItem *item = new DEllItem(200, 200);
 	addItem(item);
 }
 
 void DScene::addLineItem()
 {
+	qDebug() << "add line";
+	DLineItem *item = new DLineItem();
+	item->setLine(-100, -100, 100, 100);
+	item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	addItem(item);
+}
+
+void DScene::delSelectedItem()
+{
+	qDebug() << "delete selected";
+	QList<QGraphicsItem*> items = selectedItems();
+	for(QGraphicsItem *item : items)
+	{
+		this->removeItem(item);
+		delete item;
+	}
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -140,4 +157,9 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 	modifiedShape = nullptr;
 	QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void DScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	menu->popup(event->screenPos());
 }

@@ -6,10 +6,10 @@ DEllItem::DEllItem(QGraphicsItem *parent)
 
 }
 
-DEllItem::DEllItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
+DEllItem::DEllItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DEllItem(parent)
 {
-	rect = QRectF(x, y, w, h);
+	rect = QRectF(-w/2, -h/2, w, h);
 }
 
 void DEllItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

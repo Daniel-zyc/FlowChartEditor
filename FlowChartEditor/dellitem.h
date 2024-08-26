@@ -7,7 +7,7 @@ class DEllItem : public DShapeBase
 {
 public:
 	DEllItem(QGraphicsItem *parent = nullptr);
-	DEllItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	DEllItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 

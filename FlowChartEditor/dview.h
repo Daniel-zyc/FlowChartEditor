@@ -22,7 +22,10 @@ public:
 	void resetScale() { setScale(1.0); }
 	void setScale(qreal scale = 1.0);
 	void enlarge(qreal ratio = DView::defaultScaleRatio)
-	{ setScale(scale * ratio); }
+	{
+		qDebug() << "enlarge";
+		setScale(scale * ratio);
+	}
 	void shrink(qreal ratio = 1.0 / DView::defaultScaleRatio)
 	{ setScale(scale * ratio); }
 

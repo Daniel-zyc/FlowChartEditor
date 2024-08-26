@@ -19,6 +19,15 @@ MainWindow::MainWindow(QWidget *parent)
 	bindAction();
 
 	scene = new DScene(this);
+
+	QMenu *m = new QMenu();
+	m->addAction(ui->actDelSelectedItem);
+	m->addAction(ui->actAddRect);
+	m->addAction(ui->actAddEll);
+	m->addAction(ui->actAddLine);
+
+
+	scene->setMenu(m);
 	scene->addLine(-1000, 0, 1000, 0);
 	scene->addLine(0, -1000, 0, 1000);
 
@@ -98,6 +107,7 @@ void MainWindow::createMenu()
 
 void MainWindow::createToolBar()
 {
+	ui->headToolBar->addAction(ui->actAddLine);
 	ui->headToolBar->addAction(ui->actAddRect);
 	ui->headToolBar->addAction(ui->actAddEll);
 	ui->headToolBar->addAction(ui->actAddText);
@@ -105,6 +115,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
@@ -135,6 +146,16 @@ void MainWindow::bindAction()
 	connect(ui->actMoveRight, SIGNAL(triggered(bool)), this, SLOT(moveRight()));
 	connect(ui->actMoveUp, SIGNAL(triggered(bool)), this, SLOT(moveUp()));
 	connect(ui->actMoveDown, SIGNAL(triggered(bool)), this, SLOT(moveDown()));
+
+	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
+}
+
+void MainWindow::addLine()
+{
+	scene->addLineItem();
+	// DText *text = new DText("Hello World");
+	// text->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	// scene->addItem(text);
 }
 
 void MainWindow::addRect()
@@ -223,4 +244,9 @@ void MainWindow::moveDown()
 		view->moveDown();
 	else
 		scene->moveDown();
+}
+
+void MainWindow::delSelectedItem()
+{
+	scene->delSelectedItem();
 }

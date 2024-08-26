@@ -6,10 +6,10 @@ DRectItem::DRectItem(QGraphicsItem *parent)
 
 }
 
-DRectItem::DRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
+DRectItem::DRectItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DRectItem(parent)
 {
-	rect = QRectF(x, y, w, h);
+	rect = QRectF(-w/2, -h/2, w, h);
 }
 
 void DRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

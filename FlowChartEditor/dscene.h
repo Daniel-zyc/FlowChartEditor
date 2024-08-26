@@ -6,6 +6,8 @@
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
 
 class DScene : public QGraphicsScene
 {
@@ -43,10 +45,15 @@ public:
 	void addEllItem();
 	void addLineItem();
 
+	void delSelectedItem();
+
+	void setMenu(QMenu *m) { menu = m; }
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
 private:
 	static qreal defaultRotateDelta;
@@ -54,5 +61,6 @@ private:
 	static qreal defaultMoveDist;
 
 	DShapeBase *modifiedShape;
+	QMenu *menu;
 };
 

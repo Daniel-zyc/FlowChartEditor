@@ -23,6 +23,7 @@ private:
 	void bindAction();
 
 private slots:
+	void addLine();
 	void addRect();
 	void addEll();
 	void addText();
@@ -53,6 +54,8 @@ private slots:
 	void editMoveRight() { scene->moveRight(); }
 	void editMoveUp() { scene->moveUp(); }
 	void editMoveDown() { scene->moveDown(); }
+
+	void delSelectedItem();
 
 private:
 	Ui::MainWindow *ui;
