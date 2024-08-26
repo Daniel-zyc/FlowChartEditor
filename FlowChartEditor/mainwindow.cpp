@@ -111,6 +111,7 @@ void MainWindow::createToolBar()
 	ui->headToolBar->addAction(ui->actAddRect);
 	ui->headToolBar->addAction(ui->actAddEll);
 	ui->headToolBar->addAction(ui->actAddText);
+    ui->headToolBar->addAction(ui->actAddTri);
 }
 
 void MainWindow::bindAction()
@@ -119,6 +120,7 @@ void MainWindow::bindAction()
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
+    connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -180,6 +182,11 @@ void MainWindow::addText()
 	// DText *text = new DText("Hello World");
 	// text->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 	// scene->addItem(text);
+}
+
+void MainWindow::addTri()
+{
+    scene->addTriItem();
 }
 
 void MainWindow::rotateCW()

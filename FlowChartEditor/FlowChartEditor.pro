@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     dellitem.cpp \
     dlineitem.cpp \
+    dpolygon.cpp \
     drectitem.cpp \
     dscene.cpp \
     dshapebase.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 HEADERS += \
     dellitem.h \
     dlineitem.h \
+    dpolygon.h \
     drectitem.h \
     dscene.h \
     dshapebase.h \

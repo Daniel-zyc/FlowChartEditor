@@ -1,6 +1,7 @@
 #include "global.h"
 #include "dscene.h"
 #include "dshapebase.h"
+#include "dpolygon.h"
 #include "drectitem.h"
 #include "dellitem.h"
 #include "dlineitem.h"
@@ -96,6 +97,15 @@ void DScene::addLineItem()
 	item->setLine(-100, -100, 100, 100);
 	item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 	addItem(item);
+}
+
+void DScene::addTriItem()
+{
+    qDebug() << "add Triangle";
+    QPolygonF poly;
+    poly << QPointF(0, -10) << QPointF(10, 10) << QPointF(-10, 10);
+    DPolygon *polygon = new DPolygon(poly);
+    addItem(polygon);
 }
 
 void DScene::delSelectedItem()

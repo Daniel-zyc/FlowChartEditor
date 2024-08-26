@@ -44,6 +44,7 @@ public:
 	void addRectItem();
 	void addEllItem();
 	void addLineItem();
+    void addTriItem();
 
 	void delSelectedItem();
 
