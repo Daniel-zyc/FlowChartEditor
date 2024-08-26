@@ -1,0 +1,143 @@
+#include "global.h"
+#include "dscene.h"
+#include "dshapebase.h"
+#include "drectitem.h"
+#include "dellitem.h"
+
+qreal DScene::defaultRotateDelta = 10;
+qreal DScene::defaultScaleRatio = 1.2;
+qreal DScene::defaultMoveDist = 50;
+
+DScene::DScene()
+{
+}
+
+DScene::DScene(QObject *parent)
+	: QGraphicsScene(parent) //, reshapeItem(nullptr)
+{
+}
+
+DScene::DScene(const QRectF &sceneRect, QObject *parent)
+	: QGraphicsScene(sceneRect, parent) //, reshapeItem(nullptr)
+{
+
+}
+
+DScene::DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
+	: QGraphicsScene(x, y, width, height, parent) //, reshapeItem(nullptr)
+{
+
+}
+
+void DScene::setRotation(qreal angle)
+{
+	for(QGraphicsItem *item : selectedItems())
+		item->setRotation(angle);
+}
+
+void DScene::rotateSelected(qreal deg)
+{
+	for(QGraphicsItem *item : selectedItems())
+		item->setRotation(degMod(item->rotation() + deg));
+}
+
+void DScene::setScale(qreal scale)
+{
+	for(QGraphicsItem *item : selectedItems())
+		item->setScale(scale);
+}
+
+void DScene::enlargeSelected(qreal ratio)
+{
+	for(QGraphicsItem *item : selectedItems())
+		item->setScale(item->scale() * ratio);
+}
+
+void DScene::setCenter(qreal x, qreal y)
+{
+	for(QGraphicsItem *item : selectedItems())
+		item->setPos(x, y);
+}
+
+void DScene::moveSelected(qreal distx, qreal disty)
+{
+	for(QGraphicsItem *item : selectedItems())
+	{
+		QPointF pos = item->pos();
+		pos.setX(pos.x() + distx);
+		pos.setY(pos.y() + disty);
+		item->setPos(pos);
+	}
+}
+
+void DScene::addTextItem()
+{
+}
+
+void DScene::addRectItem()
+{
+	qDebug() << "addRect";
+	DRectItem *item = new DRectItem(-100, -100, 200, 200);
+	addItem(item);
+}
+
+void DScene::addEllItem()
+{
+	qDebug() << "addEll";
+	DEllItem *item = new DEllItem(-100, -100, 200, 200);
+	addItem(item);
+}
+
+void DScene::addLineItem()
+{
+}
+
+void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	QPointF p = event->scenePos();
+	QList<QGraphicsItem *> items = this->items(p);
+
+	if(items.empty())
+	{
+		QGraphicsScene::mousePressEvent(event);
+		return;
+	}
+
+	QGraphicsItem *item = items.first();
+
+	if(!item->isSelected())
+	{
+		QGraphicsScene::mousePressEvent(event);
+		return;
+	}
+
+	if((modifiedShape = dynamic_cast<DShapeBase*>(item)) != nullptr)
+	{
+		if(modifiedShape->checkInteractPoint(modifiedShape->mapFromScene(p)))
+		{
+			modifiedShape->setActiveInteractPoint(modifiedShape->mapFromScene(p));
+		}
+		else modifiedShape = nullptr;
+	}
+
+	QGraphicsScene::mousePressEvent(event);
+}
+
+void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+	QPointF p = event->scenePos();
+
+	if(modifiedShape != nullptr)
+	{
+		event->accept();
+		modifiedShape->resizeToPoint(modifiedShape->mapFromScene(p));
+		return;
+	}
+	QGraphicsScene::mouseMoveEvent(event);
+}
+
+void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+	modifiedShape = nullptr;
+	QGraphicsScene::mouseReleaseEvent(event);
+}
