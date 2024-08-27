@@ -57,6 +57,7 @@ public:
 	void addRoundRectItem();
 	void addEllItem();
 	void addLineItem();
+    void addTriItem();
 
 	void delSelectedItem();
 

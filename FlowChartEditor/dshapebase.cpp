@@ -215,7 +215,7 @@ MagPoint* DShapeBase::getMagPoint(QPointF p, bool isItemCord)
 
 QRectF DShapeBase::getResizeRect(const QPointF &p)
 {
-	QRectF nrc = this->sizeRect();
+    QRectF nrc = this->sizeRect();
 	qreal x = p.x(), y = p.y();
 	qreal r = sizePointRadius;
 

@@ -12,6 +12,7 @@ SOURCES += \
     dellitem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
+    dpolygon.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     dellitem.h \
     dlinebase.h \
     dlineitem.h \
+    dpolygon.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \

@@ -28,6 +28,7 @@ private slots:
 	void addRoundRect();
 	void addEll();
 	void addText();
+    void addTri();
 
 	void rotateCW();
 	void rotateCCW();
