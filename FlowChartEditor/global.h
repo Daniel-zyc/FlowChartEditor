@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Qt>
+#include <QtCore>
+#include <QGraphicsItem>
 
 // 圆周率 PI
 const qreal PI = 3.14159265358979323;
@@ -13,3 +14,15 @@ qreal radToDeg(qreal rad);
 
 // 将角度规范到 [0, 360]
 qreal degMod(qreal deg);
+
+// 本值每个图形都应不同
+enum UserTypes
+{
+	DShapeBaseType = QGraphicsItem::UserType + 1,
+	DTextItemType = QGraphicsItem::UserType + 2,
+	DLineBaseType = QGraphicsItem::UserType + 3,
+	DRectItemType = QGraphicsItem::UserType + 4,
+	DEllItemType = QGraphicsItem::UserType + 5,
+	DRoundRectItemType = QGraphicsItem::UserType + 6,
+	DLineItemType = QGraphicsItem::UserType + 7
+};

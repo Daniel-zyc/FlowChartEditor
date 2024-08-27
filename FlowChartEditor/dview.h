@@ -42,6 +42,13 @@ public:
 
 	void updateTransMatrix();
 
+protected:
+	void mousePressEvent(QMouseEvent *event) override
+	{
+		qDebug() << "view press";
+		QGraphicsView::mousePressEvent(event);
+	}
+
 private:
 	qreal scale, rotation;
 

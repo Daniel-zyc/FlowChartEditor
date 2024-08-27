@@ -14,12 +14,12 @@ DEllItem::DEllItem(qreal w, qreal h, QGraphicsItem *parent)
 
 void DEllItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if(rect.width() > 0 && rect.height() > 0)
-	{
-		painter->setBrush(brush());
-		painter->setPen(pen());
-		painter->drawEllipse(rect);
-	}
+	Q_UNUSED(option); Q_UNUSED(widget);
+
+	setBrush(QBrush(Qt::transparent));
+	painter->setBrush(brush());
+	painter->setPen(pen());
+	painter->drawEllipse(rect);
 }
 
 QRectF DEllItem::sizeRect() const
@@ -32,4 +32,15 @@ QPainterPath DEllItem::shapeNormal() const
 	QPainterPath pth;
 	pth.addEllipse(rect);
 	return pth;
+}
+
+void DEllItem::resizeToRect(QRectF nrect)
+{
+	rect = nrect;
+}
+
+void DEllItem::modifyToPoint(QPointF p, int id)
+{
+	Q_UNUSED(p); Q_UNUSED(id);
+	return;
 }

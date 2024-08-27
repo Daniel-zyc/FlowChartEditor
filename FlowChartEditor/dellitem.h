@@ -6,15 +6,18 @@
 class DEllItem : public DShapeBase
 {
 public:
+	enum { Type = UserTypes::DEllItemType };
 	DEllItem(QGraphicsItem *parent = nullptr);
 	DEllItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
-	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+public:
+	int type() const override { return Type; }
 
-	QRectF sizeRect() const;
-	void resizeToRect(QRectF nrect) { rect = nrect; }
-
-	QPainterPath shapeNormal() const;
+	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+	QRectF sizeRect() const override;
+	QPainterPath shapeNormal() const override;
+	void resizeToRect(QRectF nrect) override;
+	void modifyToPoint(QPointF p, int id) override;
 
 private:
 	QRectF rect;

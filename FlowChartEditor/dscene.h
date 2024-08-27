@@ -15,6 +15,12 @@ enum class SceneState
 	INSERTLINE
 };
 
+enum class ModifyType
+{
+	NONE = 0,
+	SIZE, MODI
+};
+
 class DScene : public QGraphicsScene
 {
 	Q_OBJECT
@@ -48,6 +54,7 @@ public:
 
 	void addTextItem();
 	void addRectItem();
+	void addRoundRectItem();
 	void addEllItem();
 	void addLineItem();
 
@@ -67,9 +74,11 @@ private:
 	static qreal defaultMoveDist;
 
 	SceneState state = SceneState::NONE;
+	ModifyType moditype = ModifyType::NONE;
 
-	DShapeBase *modifiedShape = nullptr, *startItem;
+	DShapeBase *modifiedShape = nullptr;
+	MagPoint *endMag;
 	QMenu *menu = nullptr;
-	QPointF startPoint;
+	QPointF endPoint;
 };
 

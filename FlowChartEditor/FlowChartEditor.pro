@@ -10,23 +10,31 @@ CONFIG += c++17
 
 SOURCES += \
     dellitem.cpp \
+    dlinebase.cpp \
     dlineitem.cpp \
     drectitem.cpp \
+    droundrectitem.cpp \
     dscene.cpp \
     dshapebase.cpp \
+    dtextitem.cpp \
     dview.cpp \
     global.cpp \
+    magpoint.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     dellitem.h \
+    dlinebase.h \
     dlineitem.h \
     drectitem.h \
+    droundrectitem.h \
     dscene.h \
     dshapebase.h \
+    dtextitem.h \
     dview.h \
     global.h \
+    magpoint.h \
     mainwindow.h
 
 FORMS += \

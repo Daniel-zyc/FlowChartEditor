@@ -2,6 +2,7 @@
 #include "dscene.h"
 #include "dshapebase.h"
 #include "drectitem.h"
+#include "droundrectitem.h"
 #include "dellitem.h"
 #include "dlineitem.h"
 
@@ -82,6 +83,13 @@ void DScene::addRectItem()
 	addItem(item);
 }
 
+void DScene::addRoundRectItem()
+{
+	qDebug() << "add round rectangle";
+	DRoundRectItem *item = new DRoundRectItem(200, 200);
+	addItem(item);
+}
+
 void DScene::addEllItem()
 {
 	qDebug() << "add ellipse";
@@ -113,14 +121,24 @@ void DScene::delSelectedItem()
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+	qDebug() << "scene press";
 	QPointF p = event->scenePos();
 	QList<QGraphicsItem *> items = this->items(p);
 
 	if(state == SceneState::INSERTLINE)
 	{
 		event->accept();
-		if(items.empty()) startPoint = p, startItem = nullptr;
-		else startItem = dynamic_cast<DShapeBase*>(items.first());
+		items = this->items(p);
+		endPoint = p, endMag = nullptr;
+		if(!items.empty())
+		{
+			DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
+			if(item->checkMagPoint(p))
+			{
+				endMag = item->getMagPoint(p);
+			}
+		}
+		qDebug() << endMag;
 		return;
 	}
 
@@ -140,11 +158,21 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 	if((modifiedShape = dynamic_cast<DShapeBase*>(item)) != nullptr)
 	{
-		if(modifiedShape->checkInteractPoint(modifiedShape->mapFromScene(p)))
+		if(modifiedShape->checkModiPoint(p))
 		{
-			modifiedShape->setActiveInteractPoint(modifiedShape->mapFromScene(p));
+			modifiedShape->setModiPoint(p);
+			moditype = ModifyType::MODI;
 		}
-		else modifiedShape = nullptr;
+		else if(modifiedShape->checkSizePoint(p))
+		{
+			modifiedShape->setSizePoint(p);
+			moditype = ModifyType::SIZE;
+		}
+		else
+		{
+			modifiedShape = nullptr;
+			moditype = ModifyType::NONE;
+		}
 	}
 
 	QGraphicsScene::mousePressEvent(event);
@@ -154,36 +182,59 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	QPointF p = event->scenePos();
 
-	if(modifiedShape != nullptr)
+	if(state == SceneState::INSERTLINE)
 	{
 		event->accept();
-		modifiedShape->resizeToPoint(modifiedShape->mapFromScene(p));
 		return;
 	}
+
+	if(moditype == ModifyType::MODI)
+	{
+		event->accept();
+		modifiedShape->modiToPoint(p);
+		return;
+	}
+	else if(moditype == ModifyType::SIZE)
+	{
+		event->accept();
+		modifiedShape->resizeToPoint(p);
+		return;
+	}
+
 	QGraphicsScene::mouseMoveEvent(event);
 }
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+	moditype = ModifyType::NONE;
 	modifiedShape = nullptr;
 
 	if(state==SceneState::INSERTLINE)
 	{
+		event->accept();
 		QPointF p = event->scenePos();
 		QList<QGraphicsItem *> items = this->items(p);
-		DShapeBase *endItem = items.empty() ? nullptr : dynamic_cast<DShapeBase* >(items.first());
-		QRectF rc(this->startPoint, p);
+		MagPoint *startMag = nullptr;
+		if(!items.empty())
+		{
+			qDebug() << items;
+			DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
+			qDebug() << item;
+			if(item->checkMagPoint(p))
+				startMag = item->getMagPoint(p);
+		}
+		qDebug() << endMag << " " << startMag;
 		DLineItem *line = new DLineItem();
-		line->setLine(rc.width()/2, rc.height()/2, -rc.width()/2, -rc.height()/2);
-		line->setPos(rc.center());
+		line->setLine(QLineF(p, endPoint));
 		line->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-		line->startShape = endItem;
-		line->endShape = startItem;
-		if(endItem) endItem->arrows.append(line);
-		if(startItem) startItem->arrows.append(line);
+		line->startMag = startMag;
+		line->endMag = endMag;
+		if(endMag) endMag->addLine(line);
+		if(startMag) startMag->addLine(line);
 		line->updatePosition();
 		addItem(line);
 		state = SceneState::NONE;
+		return;
 	}
 	QGraphicsScene::mouseReleaseEvent(event);
 }

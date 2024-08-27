@@ -3,12 +3,12 @@
 #include "dshapebase.h"
 #include <QRectF>
 
-class DRectItem : public DShapeBase
+class DRoundRectItem : public DShapeBase
 {
 public:
-	enum { Type = UserTypes::DRectItemType };
-	DRectItem(QGraphicsItem *parent = nullptr);
-	DRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = UserTypes::DRoundRectItemType };
+	DRoundRectItem(QGraphicsItem *parent = nullptr);
+	DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }
@@ -20,6 +20,7 @@ public:
 	void modifyToPoint(QPointF p, int id) override;
 
 private:
-	QRectF rect;
+	QRectF rect = QRectF(0, 0, 0, 0);
+	qreal radiusx = 0, radiusy = 0;
 };
 

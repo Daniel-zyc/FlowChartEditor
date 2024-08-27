@@ -14,15 +14,33 @@ DRectItem::DRectItem(qreal w, qreal h, QGraphicsItem *parent)
 
 void DRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if(rect.width() > 0 && rect.height() > 0)
-	{
-		painter->setBrush(brush());
-		painter->setPen(pen());
-		painter->drawRect(rect);
-	}
+	Q_UNUSED(option); Q_UNUSED(widget);
+
+	setBrush(QBrush(Qt::transparent));
+	painter->setBrush(brush());
+	painter->setPen(pen());
+	painter->drawRect(rect);
 }
 
 QRectF DRectItem::sizeRect() const
 {
 	return rect;
+}
+
+QPainterPath DRectItem::shapeNormal() const
+{
+	QPainterPath pth;
+	pth.addRect(rect);
+	return pth;
+}
+
+void DRectItem::resizeToRect(QRectF nrect)
+{
+	rect = nrect;
+}
+
+void DRectItem::modifyToPoint(QPointF p, int id)
+{
+	Q_UNUSED(p); Q_UNUSED(id);
+	return;
 }

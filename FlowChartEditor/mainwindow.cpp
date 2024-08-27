@@ -111,12 +111,14 @@ void MainWindow::createToolBar()
 	ui->headToolBar->addAction(ui->actAddRect);
 	ui->headToolBar->addAction(ui->actAddEll);
 	ui->headToolBar->addAction(ui->actAddText);
+	ui->headToolBar->addAction(ui->actAddRoundRect);
 }
 
 void MainWindow::bindAction()
 {
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
+	connect(ui->actAddRoundRect, SIGNAL(triggered(bool)), this, SLOT(addRoundRect()));
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
 
@@ -164,6 +166,11 @@ void MainWindow::addRect()
 	// DRect *rect = new DRect(-100, -100, 200, 200);
 	// rect->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 	// scene->addItem(rect);
+}
+
+void MainWindow::addRoundRect()
+{
+	scene->addRoundRectItem();
 }
 
 void MainWindow::addEll()

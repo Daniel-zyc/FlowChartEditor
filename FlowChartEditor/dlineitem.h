@@ -1,7 +1,7 @@
 #pragma once
 
-#include "dshapebase.h"
 #include "global.h"
+#include "dlinebase.h"
 
 #include <QGraphicsLineItem>
 #include <QPainter>
@@ -11,10 +11,13 @@
 
 class DShapeBase;
 
-class DLineItem : public QGraphicsLineItem
+class DLineItem : public DLineBase
 {
 public:
+	enum { Type = UserTypes::DShapeBaseType };
 	DLineItem();
+
+	int type() const override { return Type; }
 
 	QRectF boundingRect() const override;
 
@@ -33,62 +36,60 @@ public:
 		return path;
 	}
 
-	void updatePosition();
-
-	DShapeBase *startShape = nullptr, *endShape = nullptr;
+	void updatePosition() override;
 
 	int pressPoint = 0;
 
 protected:
-	void mousePressEvent(QGraphicsSceneMouseEvent *event) override
-	{
-		QPointF p = event->pos();
-		if(QRectF(p.x() - 5, p.y() - 5, 10, 10).contains(line().p1()))
-		{
-			event->accept();
-			pressPoint = 1;
-			return;
-		}
+	// void mousePressEvent(QGraphicsSceneMouseEvent *event) override
+	// {
+	// 	QPointF p = event->pos();
+	// 	if(QRectF(p.x() - 5, p.y() - 5, 10, 10).contains(line().p1()))
+	// 	{
+	// 		event->accept();
+	// 		pressPoint = 1;
+	// 		return;
+	// 	}
 
-		if(QRectF(p.x() - 5, p.y() - 5, 10, 10).contains(line().p2()))
-		{
-			event->accept();
-			pressPoint = 2;
-			return;
-		}
+	// 	if(QRectF(p.x() - 5, p.y() - 5, 10, 10).contains(line().p2()))
+	// 	{
+	// 		event->accept();
+	// 		pressPoint = 2;
+	// 		return;
+	// 	}
 
-		QGraphicsLineItem::mousePressEvent(event);
-	}
+	// 	QGraphicsLineItem::mousePressEvent(event);
+	// }
 
-	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override
-	{
-		QPointF p = event->pos();
-		if(pressPoint == 1)
-		{
-			startShape = nullptr;
-			event->accept();
-			QLineF tmp = line();
-			tmp.setP1(p);
-			setLine(tmp);
-			return;
-		}
-		if(pressPoint == 2)
-		{
-			endShape = nullptr;
-			event->accept();
-			QLineF tmp = line();
-			tmp.setP2(p);
-			setLine(tmp);
-			return;
-		}
+	// void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override
+	// {
+	// 	QPointF p = event->pos();
+	// 	if(pressPoint == 1)
+	// 	{
+	// 		startShape = nullptr;
+	// 		event->accept();
+	// 		QLineF tmp = line();
+	// 		tmp.setP1(p);
+	// 		setLine(tmp);
+	// 		return;
+	// 	}
+	// 	if(pressPoint == 2)
+	// 	{
+	// 		endShape = nullptr;
+	// 		event->accept();
+	// 		QLineF tmp = line();
+	// 		tmp.setP2(p);
+	// 		setLine(tmp);
+	// 		return;
+	// 	}
 
-		QGraphicsLineItem::mouseMoveEvent(event);
-	}
+	// 	QGraphicsLineItem::mouseMoveEvent(event);
+	// }
 
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override
-	{
-		pressPoint = 0;
-		QGraphicsLineItem::mouseReleaseEvent(event);
-	}
+	// void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override
+	// {
+	// 	pressPoint = 0;
+	// 	QGraphicsLineItem::mouseReleaseEvent(event);
+	// }
 };
 

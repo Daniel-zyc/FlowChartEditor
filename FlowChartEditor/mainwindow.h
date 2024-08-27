@@ -25,6 +25,7 @@ private:
 private slots:
 	void addLine();
 	void addRect();
+	void addRoundRect();
 	void addEll();
 	void addText();
 

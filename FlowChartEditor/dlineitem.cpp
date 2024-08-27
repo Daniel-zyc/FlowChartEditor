@@ -6,7 +6,7 @@
 #include <QBrush>
 
 DLineItem::DLineItem()
-	: QGraphicsLineItem()
+	: DLineBase()
 {
 
 }
@@ -56,7 +56,7 @@ void DLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 void DLineItem::updatePosition()
 {
 	QPointF pa = line().p1(), pb = line().p2();
-	if(startShape) pa = mapFromItem(startShape, 0, 0);
-	if(endShape) pb = mapFromItem(endShape, 0, 0);
+	if(startMag) pa = startMag->mapToItem(this);
+	if(endMag) pb = endMag->mapToItem(this);
 	setLine(QLineF(pa, pb));
 }
