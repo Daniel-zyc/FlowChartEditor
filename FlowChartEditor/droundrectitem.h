@@ -20,6 +20,9 @@ public:
 	void modifyToPoint(QPointF p, int id) override;
 
 private:
+	void updateMagPoint();
+	void updateModiPoint();
+
 	QRectF rect = QRectF(0, 0, 0, 0);
 	qreal radiusx = 0, radiusy = 0;
 };

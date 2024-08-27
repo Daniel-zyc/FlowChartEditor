@@ -9,15 +9,16 @@ DRoundRectItem::DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DRoundRectItem(parent)
 {
 	rect = QRectF(-w/2, -h/2, w, h);
-
 	radiusx = 30; radiusy = 30;
-	modis.push_back({-w/2 + 30, -h/2});
-	modis.push_back({-w/2, -h/2 + 30});
 
-	mags.push_back(MagPoint(-w/2, 0, this));
-	mags.push_back(MagPoint(w/2, 0, this));
-	mags.push_back(MagPoint(0, -h/2, this));
-	mags.push_back(MagPoint(0, h/2, this));
+	modis.resize(2);
+	updateModiPoint();
+
+	mags.push_back(MagPoint(this));
+	mags.push_back(MagPoint(this));
+	mags.push_back(MagPoint(this));
+	mags.push_back(MagPoint(this));
+	updateMagPoint();
 }
 
 void DRoundRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -42,20 +43,33 @@ QPainterPath DRoundRectItem::shapeNormal() const
 	return pth;
 }
 
-void DRoundRectItem::resizeToRect(QRectF nrect)
+void DRoundRectItem::updateMagPoint()
 {
-	rect = nrect;
+	mags[0].x = rect.left();
+	mags[0].y = 0;
+	mags[1].x = rect.right();
+	mags[1].y = 0;
 
+	mags[2].x = 0;
+	mags[2].y = rect.top();
+	mags[3].x = 0;
+	mags[3].y = rect.bottom();
+}
+
+void DRoundRectItem::updateModiPoint()
+{
 	modis[0].setX(rect.left() + radiusx);
 	modis[0].setY(rect.top());
 
 	modis[1].setX(rect.left());
 	modis[1].setY(rect.top() + radiusy);
+}
 
-	mags[0].x = rect.left();
-	mags[1].x = rect.right();
-	mags[2].y = rect.top();
-	mags[3].y = rect.bottom();
+void DRoundRectItem::resizeToRect(QRectF nrect)
+{
+	rect = nrect;
+	updateModiPoint();
+	updateMagPoint();
 }
 
 void DRoundRectItem::modifyToPoint(QPointF p, int id)
@@ -65,12 +79,12 @@ void DRoundRectItem::modifyToPoint(QPointF p, int id)
 		case 0:
 			radiusx = qAbs(rect.left() - p.x());
 			radiusx = qMin(radiusx, rect.width() / 2);
-			modis[id].setX(rect.left() + radiusx);
+			updateModiPoint();
 			break;
 		case 1:
 			radiusy = qAbs(rect.top() - p.y());
 			radiusy = qMin(radiusy, rect.height() / 2);
-			modis[id].setY(rect.top() + radiusy);
+			updateModiPoint();
 			break;
 	}
 

@@ -20,6 +20,8 @@ public:
 	void modifyToPoint(QPointF p, int id) override;
 
 private:
+	void updateMagPoint();
+
 	QRectF rect;
 };
 
