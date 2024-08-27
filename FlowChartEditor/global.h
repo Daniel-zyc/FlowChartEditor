@@ -24,5 +24,6 @@ enum UserTypes
 	DRectItemType = QGraphicsItem::UserType + 4,
 	DEllItemType = QGraphicsItem::UserType + 5,
 	DRoundRectItemType = QGraphicsItem::UserType + 6,
-	DLineItemType = QGraphicsItem::UserType + 7
+	DLineItemType = QGraphicsItem::UserType + 7,
+	DPolygonBaseType = QGraphicsItem::UserType + 8
 };

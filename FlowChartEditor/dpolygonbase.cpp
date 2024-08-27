@@ -1,29 +1,29 @@
-#include "dpolygon.h"
+#include "dpolygonbase.h"
 
-DPolygon::DPolygon(QGraphicsItem *parent)
+DPolygonBase::DPolygonBase(QGraphicsItem *parent)
     :DShapeBase(parent)
 {
 }
 
-DPolygon::DPolygon(QPolygonF polygon, QGraphicsItem *parent)
-    :DPolygon(parent)
+DPolygonBase::DPolygonBase(QPolygonF polygon, QGraphicsItem *parent)
+    :DPolygonBase(parent)
 {
     this->polygon = polygon;
 }
 
-void DPolygon::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setPen(pen());
     painter->setBrush(brush());
     painter->drawPolygon(polygon);
 }
 
-QRectF DPolygon::sizeRect() const
+QRectF DPolygonBase::sizeRect() const
 {
     return polygon.boundingRect();
 }
 
-void DPolygon::resizeToRect(QRectF nrect)
+void DPolygonBase::resizeToRect(QRectF nrect)
 {
     QPolygonF poly;
     QRectF rect = sizeRect();
@@ -35,9 +35,15 @@ void DPolygon::resizeToRect(QRectF nrect)
     polygon.swap(poly);
 }
 
-QPainterPath DPolygon::shapeNormal() const
+QPainterPath DPolygonBase::shapeNormal() const
 {
     QPainterPath pth;
     pth.addPolygon(polygon);
     return pth;
+}
+
+void DPolygonBase::modifyToPoint(QPointF p, int id)
+{
+	Q_UNUSED(p); Q_UNUSED(id);
+	return;
 }

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "dscene.h"
 #include "dshapebase.h"
-#include "dpolygon.h"
+#include "dpolygonbase.h"
 #include "drectitem.h"
 #include "droundrectitem.h"
 #include "dellitem.h"
@@ -113,8 +113,8 @@ void DScene::addTriItem()
 {
     qDebug() << "add Triangle";
     QPolygonF poly;
-    poly << QPointF(0, -10) << QPointF(10, 10) << QPointF(-10, 10);
-    DPolygon *polygon = new DPolygon(poly);
+	poly << QPointF(0, -100) << QPointF(100, 100) << QPointF(-100, 100);
+	DPolygonBase *polygon = new DPolygonBase(poly);
     addItem(polygon);
 }
 
@@ -131,7 +131,6 @@ void DScene::delSelectedItem()
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	qDebug() << "scene press";
 	QPointF p = event->scenePos();
 	QList<QGraphicsItem *> items = this->items(p);
 
@@ -148,7 +147,6 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 				endMag = item->getMagPoint(p);
 			}
 		}
-		qDebug() << endMag;
 		return;
 	}
 
@@ -227,13 +225,10 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		MagPoint *startMag = nullptr;
 		if(!items.empty())
 		{
-			qDebug() << items;
 			DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
-			qDebug() << item;
 			if(item->checkMagPoint(p))
 				startMag = item->getMagPoint(p);
 		}
-		qDebug() << endMag << " " << startMag;
 		DLineItem *line = new DLineItem();
 		line->setLine(QLineF(p, endPoint));
 		line->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
