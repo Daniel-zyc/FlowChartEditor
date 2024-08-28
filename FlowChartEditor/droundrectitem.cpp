@@ -1,24 +1,18 @@
 #include "droundrectitem.h"
+#include "magpoint.h"
 
 DRoundRectItem::DRoundRectItem(QGraphicsItem *parent)
-	: DShapeBase(parent)
-{
-}
+	: DShapeBase(parent) {}
 
 DRoundRectItem::DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DRoundRectItem(parent)
 {
-	rect = QRectF(-w/2, -h/2, w, h);
-	radiusx = 30; radiusy = 30;
-
 	modis.resize(2);
-	updateModiPoint();
-
-	// mags.push_back(MagPoint(this));
-	// mags.push_back(MagPoint(this));
-	// mags.push_back(MagPoint(this));
-	// mags.push_back(MagPoint(this));
-	updateMagPoint();
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	setRect(QRectF(-w/2, -h/2, w, h));
 }
 
 void DRoundRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -39,33 +33,28 @@ QRectF DRoundRectItem::sizeRect() const
 QPainterPath DRoundRectItem::shapeNormal() const
 {
 	QPainterPath pth;
-	pth.addRect(rect);
+	pth.addRoundedRect(rect, radiusx, radiusy);
 	return pth;
 }
 
 void DRoundRectItem::updateMagPoint()
 {
-	// mags[0].pos = {rect.left(), 0};
-	// mags[1].pos = {rect.right(), 0};
+	(*mags)[0]->pos = {rect.left(), 0};
+	(*mags)[1]->pos = {rect.right(), 0};
 
-	// mags[2].pos = {0, rect.top()};
-	// mags[3].pos = {0, rect.bottom()};
+	(*mags)[2]->pos = {0, rect.top()};
+	(*mags)[3]->pos = {0, rect.bottom()};
 }
 
 void DRoundRectItem::updateModiPoint()
 {
-	modis[0].setX(rect.left() + radiusx);
-	modis[0].setY(rect.top());
-
-	modis[1].setX(rect.left());
-	modis[1].setY(rect.top() + radiusy);
+	modis[0] = {rect.left() + radiusx, rect.top()};
+	modis[1] = {rect.left(), rect.top() + radiusy};
 }
 
 void DRoundRectItem::sizeToRect(QRectF nrect)
 {
-	rect = nrect;
-	updateModiPoint();
-	updateMagPoint();
+	setRect(nrect);
 }
 
 void DRoundRectItem::modiToPoint(QPointF p, int id)
@@ -83,6 +72,13 @@ void DRoundRectItem::modiToPoint(QPointF p, int id)
 			updateModiPoint();
 			break;
 	}
-
 	return;
+}
+
+void DRoundRectItem::setRect(const QRectF &nrect)
+{
+	rect = nrect;
+	sizeRectUpdated();
+	updateMagPoint();
+	updateModiPoint();
 }

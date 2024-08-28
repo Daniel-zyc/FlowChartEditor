@@ -6,6 +6,7 @@
 #include "droundrectitem.h"
 #include "dellitem.h"
 #include "dlineitem.h"
+#include "dtextitem.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -81,6 +82,7 @@ void DScene::addRectItem()
 {
 	qDebug() << "add rectangle";
 	DRectItem *item = new DRectItem(200, 200);
+	item->textItem = new DTextItem(100, 100, "hello world!", item);
 	addItem(item);
 }
 
@@ -88,6 +90,7 @@ void DScene::addRoundRectItem()
 {
 	qDebug() << "add round rectangle";
 	DRoundRectItem *item = new DRoundRectItem(200, 200);
+	item->textItem = new DTextItem(100, 100, "hello world!", item);
 	addItem(item);
 }
 
@@ -95,6 +98,7 @@ void DScene::addEllItem()
 {
 	qDebug() << "add ellipse";
 	DEllItem *item = new DEllItem(200, 200);
+	item->textItem = new DTextItem(100, 100, "hello world!", item);
 	addItem(item);
 }
 

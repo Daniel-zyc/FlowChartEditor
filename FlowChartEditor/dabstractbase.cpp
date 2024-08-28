@@ -22,11 +22,15 @@ QPainterPath DAbstractBase::shape() const
 void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	paintShape(painter, option, widget);
-	if(isSelected()) paintSelected(painter, option, widget);
+	if(isSelected())
+	{
+		paintSelected(painter, option, widget);
+		paintModiPoint(painter, option, widget);
+	}
 	if(showMagPoint) paintMagPoint(painter, option, widget);
 }
 
-void DAbstractBase::paintModifyPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DAbstractBase::paintModiPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 

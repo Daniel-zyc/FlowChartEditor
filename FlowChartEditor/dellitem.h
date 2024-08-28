@@ -20,6 +20,8 @@ public:
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
 
+	void setRect(const QRectF &nrect);
+
 private:
 	void updateMagPoint();
 

@@ -36,7 +36,7 @@ public:
 	//==========================================================================
 
 protected:
-	virtual void paintModifyPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+	virtual void paintModiPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 	virtual void paintSizePoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 	virtual void paintMagPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 

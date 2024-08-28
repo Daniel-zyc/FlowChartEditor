@@ -19,11 +19,13 @@ public:
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
 
+	void setRect(const QRectF &nrect);
+
 private:
 	void updateMagPoint();
 	void updateModiPoint();
 
 	QRectF rect;
-	qreal radiusx = 0, radiusy = 0;
+	qreal radiusx = 30, radiusy = 30;
 };
 

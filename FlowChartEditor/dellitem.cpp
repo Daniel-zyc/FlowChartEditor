@@ -2,22 +2,16 @@
 #include "magpoint.h"
 
 DEllItem::DEllItem(QGraphicsItem *parent)
-	: DShapeBase(parent)
-{
-
-}
+	: DShapeBase(parent) {}
 
 DEllItem::DEllItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DEllItem(parent)
 {
-	rect = QRectF(-w/2, -h/2, w, h);
-	sizeRectUpdated();
-
 	mags->push_back(new MagPoint(this));
 	mags->push_back(new MagPoint(this));
 	mags->push_back(new MagPoint(this));
 	mags->push_back(new MagPoint(this));
-	updateMagPoint();
+	setRect(QRectF(-w/2, -h/2, w, h));
 }
 
 void DEllItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -53,12 +47,18 @@ void DEllItem::updateMagPoint()
 
 void DEllItem::sizeToRect(QRectF nrect)
 {
-	rect = nrect;
-	updateMagPoint();
+	setRect(nrect);
 }
 
 void DEllItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(p); Q_UNUSED(id);
 	return;
+}
+
+void DEllItem::setRect(const QRectF &nrect)
+{
+	rect = nrect;
+	sizeRectUpdated();
+	updateMagPoint();
 }

@@ -23,12 +23,13 @@ namespace DConst
 		DAbstractBase = QGraphicsItem::UserType + 1,
 		DShapeBaseType = QGraphicsItem::UserType + 1,
 		DLineBaseType = QGraphicsItem::UserType + 2,
-		DTextItemType = QGraphicsItem::UserType + 3,
-		DRectItemType = QGraphicsItem::UserType + 4,
-		DEllItemType = QGraphicsItem::UserType + 5,
-		DRoundRectItemType = QGraphicsItem::UserType + 6,
-		DLineItemType = QGraphicsItem::UserType + 7,
-		DPolygonBaseType = QGraphicsItem::UserType + 8
+		DTextBaseType = QGraphicsItem::UserType + 3,
+		DTextItemType = QGraphicsItem::UserType + 4,
+		DRectItemType = QGraphicsItem::UserType + 5,
+		DEllItemType = QGraphicsItem::UserType + 6,
+		DRoundRectItemType = QGraphicsItem::UserType + 7,
+		DLineItemType = QGraphicsItem::UserType + 8,
+		DPolygonBaseType = QGraphicsItem::UserType + 9
 	};
 	
 	enum None

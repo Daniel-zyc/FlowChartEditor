@@ -1,9 +1,8 @@
 #include "dshapebase.h"
 #include "dabstractbase.h"
-#include "dtextitem.h"
 
 DShapeBase::DShapeBase(QGraphicsItem *parent)
-	:DAbstractBase(parent), textItem(this)
+	: DAbstractBase(parent)
 {
 	maxPointRadius = qMax(maxPointRadius, rotPointRadius);
 }

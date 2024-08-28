@@ -2,7 +2,8 @@
 
 #include "global.h"
 #include "dabstractbase.h"
-#include "dtextitem.h"
+
+class DTextItem;
 
 class DShapeBase : public DAbstractBase
 {
@@ -53,10 +54,12 @@ protected:
 private:
 	QRectF getResizeRect(const QPointF &p, int id);
 
+public:
+	DTextItem *textItem = nullptr;
+
 protected:
 	qreal rotPointRadius = 5, rotPointMargin = 30;
 	QPointF rotPoint = {0, 0};
-	DTextItem textItem = DTextItem(this);
 	
 protected:
 	QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);

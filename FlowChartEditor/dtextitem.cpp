@@ -1,52 +1,59 @@
 #include "dtextitem.h"
+#include "dshapebase.h"
+#include "magpoint.h"
 
-DTextItem::DTextItem(QGraphicsItem *parent)
+#include <QStyleOptionGraphicsItem>
+
+DTextBase::DTextBase(QGraphicsItem *parent)
 	: QGraphicsTextItem(parent)
 {
-	init();
+	setFlags(QGraphicsItem::ItemIsSelectable);
 }
 
-DTextItem::DTextItem(const QString &text, QGraphicsItem *parent)
-	: QGraphicsTextItem(text, parent)
+DTextBase::DTextBase(const QString &text, QGraphicsItem *parent)
+	: DTextBase(parent)
 {
-	init();
+	setPlainText(text);
 }
 
-void DTextItem::startEdit()
-{
-	if(textInteractionFlags() == Qt::NoTextInteraction)
-		setTextInteractionFlags(Qt::TextEditorInteraction);
-}
-
-void DTextItem::endEdit()
-{
-	setTextInteractionFlags(Qt::NoTextInteraction);
-}
-
-void DTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DTextBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	focusToCenter();
-	QGraphicsTextItem::paint(painter, option, widget);
+	QStyleOptionGraphicsItem nOption(*option);
+	nOption.state &= ~QStyle::State_HasFocus;
+	nOption.state &= ~QStyle::State_Selected;
+	QGraphicsTextItem::paint(painter, &nOption, widget);
 }
 
-void DTextItem::focusOutEvent(QFocusEvent *event)
+void DTextBase::focusOutEvent(QFocusEvent *event)
 {
 	endEdit();
-	QGraphicsTextItem::focusInEvent(event);
+	QGraphicsTextItem::focusOutEvent(event);
 }
 
-void DTextItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void DTextBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	QGraphicsTextItem::mousePressEvent(event);
+}
+
+void DTextBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
 	startEdit();
 	QGraphicsTextItem::mouseDoubleClickEvent(event);
 }
 
-void DTextItem::init()
+void DTextBase::startEdit()
 {
-	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsMovable);
+	parentItem()->setSelected(true);
+	setTextInteractionFlags(Qt::TextEditorInteraction);
 }
 
-void DTextItem::focusToCenter()
+void DTextBase::endEdit()
+{
+	setTextInteractionFlags(Qt::NoTextInteraction);
+}
+
+void DTextBase::focusToCenter()
 {
 	QPointF cent = this->boundingRect().center();
 	if(cent == curCent) return;
@@ -55,4 +62,65 @@ void DTextItem::focusToCenter()
 	QTransform trans; trans.translate(-cent.x(), -cent.y());
 	this->setTransform(trans);
 	curCent = cent;
+}
+
+//==============================================================================
+
+DTextItem::DTextItem(QGraphicsItem *parent)
+	: DShapeBase(parent) {}
+
+DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent)
+	: DShapeBase(parent)
+{
+	textBase.setPlainText(text);
+
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	setRect(QRect(-w/2, -h/2, w, h));
+}
+
+void DTextItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+}
+
+QRectF DTextItem::sizeRect() const
+{
+	return rect;
+}
+
+QPainterPath DTextItem::shapeNormal() const
+{
+	QPainterPath pth;
+	pth.addRect(rect);
+	return pth;
+}
+
+void DTextItem::updateMagPoint()
+{
+	(*mags)[0]->pos = {rect.left(), 0};
+	(*mags)[1]->pos = {rect.right(), 0};
+
+	(*mags)[2]->pos = {0, rect.top()};
+	(*mags)[3]->pos = {0, rect.bottom()};
+}
+
+void DTextItem::sizeToRect(QRectF nrect)
+{
+	setRect(nrect);
+}
+
+void DTextItem::modiToPoint(QPointF p, int id)
+{
+	Q_UNUSED(p); Q_UNUSED(id);
+	return;
+}
+
+void DTextItem::setRect(const QRectF &nrect)
+{
+	rect = nrect;
+	textBase.setTextWidth(rect.width());
+	sizeRectUpdated();
+	updateMagPoint();
 }
