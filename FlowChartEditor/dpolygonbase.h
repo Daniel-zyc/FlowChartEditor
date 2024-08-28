@@ -1,5 +1,4 @@
-#ifndef DPOLYGONBASE_H
-#define DPOLYGONBASE_H
+#pragma once
 
 #include "dshapebase.h"
 #include <QPolygonF>
@@ -23,6 +22,3 @@ public:
 protected:
 	QPolygonF polygon;
 };
-
-
-#endif // DPOLYGONBASE_H

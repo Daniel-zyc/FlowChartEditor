@@ -23,6 +23,8 @@ QRectF DLineItem::boundingRect() const
 
 void DLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	Q_UNUSED(option); Q_UNUSED(widget);
+
 	qreal arrowSize = 20;
 
 	double angle = std::atan2(-line().dy(), line().dx());
