@@ -142,7 +142,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		if(!items.empty())
 		{
 			DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
-			if(item->checkMagPoint(p))
+			if(item && item->checkMagPoint(p))
 			{
 				endMag = item->getMagPoint(p);
 			}
@@ -226,7 +226,7 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		if(!items.empty())
 		{
 			DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
-			if(item->checkMagPoint(p))
+			if(item && item->checkMagPoint(p))
 				startMag = item->getMagPoint(p);
 		}
 		DLineItem *line = new DLineItem();
