@@ -1,28 +1,34 @@
 #pragma once
 
 #include "global.h"
-#include "magpoint.h"
-#include "dshapebase.h"
+#include "dabstractbase.h"
 
-#include <QGraphicsLineItem>
+#include <QGraphicsItem>
 #include <QLineF>
 
-class DShapeBase;
 class MagPoint;
 
-class DLineBase : public QGraphicsLineItem
+class DLineBase : public DAbstractBase
 {
 public:
-	enum { Type = UserTypes::DLineBaseType };
+	enum { Type = DConst::DLineBaseType };
 	DLineBase(QGraphicsItem *parent = nullptr);
 	~DLineBase() = default;
 
 public:
 	int type() const override { return Type; }
 
-	// virtual void resetLine(QLineF nline) = 0;
 	virtual void updatePosition() = 0;
 
-	MagPoint *startMag = nullptr, *endMag = nullptr;
+protected:
+	static QBrush selectedRectBrush;
+	static QPen selectedRectPen;
+	static QBrush sizePointBrush;
+	static QPen sizePointPen;
+	
+	QVector<QPointF> modis;
+
+	QLineF line;
+	MagPoint *startMag, *endMag;
 };
 

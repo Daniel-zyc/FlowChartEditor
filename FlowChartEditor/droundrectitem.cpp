@@ -14,10 +14,10 @@ DRoundRectItem::DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent)
 	modis.resize(2);
 	updateModiPoint();
 
-	mags.push_back(MagPoint(this));
-	mags.push_back(MagPoint(this));
-	mags.push_back(MagPoint(this));
-	mags.push_back(MagPoint(this));
+	// mags.push_back(MagPoint(this));
+	// mags.push_back(MagPoint(this));
+	// mags.push_back(MagPoint(this));
+	// mags.push_back(MagPoint(this));
 	updateMagPoint();
 }
 
@@ -45,15 +45,11 @@ QPainterPath DRoundRectItem::shapeNormal() const
 
 void DRoundRectItem::updateMagPoint()
 {
-	mags[0].x = rect.left();
-	mags[0].y = 0;
-	mags[1].x = rect.right();
-	mags[1].y = 0;
+	// mags[0].pos = {rect.left(), 0};
+	// mags[1].pos = {rect.right(), 0};
 
-	mags[2].x = 0;
-	mags[2].y = rect.top();
-	mags[3].x = 0;
-	mags[3].y = rect.bottom();
+	// mags[2].pos = {0, rect.top()};
+	// mags[3].pos = {0, rect.bottom()};
 }
 
 void DRoundRectItem::updateModiPoint()
@@ -65,14 +61,14 @@ void DRoundRectItem::updateModiPoint()
 	modis[1].setY(rect.top() + radiusy);
 }
 
-void DRoundRectItem::resizeToRect(QRectF nrect)
+void DRoundRectItem::sizeToRect(QRectF nrect)
 {
 	rect = nrect;
 	updateModiPoint();
 	updateMagPoint();
 }
 
-void DRoundRectItem::modifyToPoint(QPointF p, int id)
+void DRoundRectItem::modiToPoint(QPointF p, int id)
 {
 	switch(id)
 	{

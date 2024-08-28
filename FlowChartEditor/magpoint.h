@@ -1,22 +1,19 @@
 #pragma once
 
-#include "dlinebase.h"
-#include "dshapebase.h"
-
-#include <QtCore>
 #include <QGraphicsItem>
+#include <QPointF>
 
 class DLineBase;
-class DShapeBase;
 
-// 磁吸点类，作为 DShapeBase 的辅助类
+// 磁吸点类，作为 DAbstractBase 的辅助类
 class MagPoint
 {
 public:
-	MagPoint(DShapeBase* parent) : parent(parent) {}
-	MagPoint(qreal x, qreal y, DShapeBase* parent) : x(x), y(y), parent(parent) {}
+	MagPoint(QGraphicsItem* parent);
+	MagPoint(const QPointF &p, QGraphicsItem* parent);
+	MagPoint(qreal x, qreal y, QGraphicsItem* parent);
 
-	~MagPoint() = default;
+	~MagPoint();
 
 	// 更新与其相连的所有 DLineBase 的位置
 	void updateLines() const;
@@ -33,10 +30,10 @@ public:
 	QPointF mapToItem(QGraphicsItem *item);
 
 	// x, y 表示在 DShapeBase 中的坐标
-	qreal x = 0, y = 0;
-	// parent 指向挂载到的 DShapeBase
-	DShapeBase* parent;
+	QPointF pos = {0, 0};
+	// parent 指向挂载到的 DAbstractBase
+	QGraphicsItem *parent = nullptr;
 	// lines 存储与其相连的 DLineBase 的指针
-	QList<DLineBase*> lines = QList<DLineBase*>();
+	QList<DLineBase*> *lines = nullptr;
 };
 

@@ -1,12 +1,14 @@
 #pragma once
 
 #include "dshapebase.h"
+#include "magpoint.h"
+
 #include <QPolygonF>
 
 class DPolygonBase : public DShapeBase
 {
 public:
-	enum { Type = UserTypes::DPolygonBaseType };
+	enum { Type = DConst::DPolygonBaseType };
 	DPolygonBase(QGraphicsItem *parent = nullptr);
 	DPolygonBase(QPolygonF polygon, QGraphicsItem *parent = nullptr);
 
@@ -16,8 +18,8 @@ public:
 
 	QRectF sizeRect() const override;
 	QPainterPath shapeNormal() const override;
-	virtual void resizeToRect(QRectF nrect) override;
-	virtual void modifyToPoint(QPointF p, int id) override;
+	virtual void sizeToRect(QRectF nrect) override;
+	virtual void modiToPoint(QPointF p, int id) override;
 
 protected:
 	QPolygonF polygon;

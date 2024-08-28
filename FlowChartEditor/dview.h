@@ -45,7 +45,6 @@ public:
 protected:
 	void mousePressEvent(QMouseEvent *event) override
 	{
-		qDebug() << "view press";
 		QGraphicsView::mousePressEvent(event);
 	}
 

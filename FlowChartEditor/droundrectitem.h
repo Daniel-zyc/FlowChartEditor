@@ -6,7 +6,7 @@
 class DRoundRectItem : public DShapeBase
 {
 public:
-	enum { Type = UserTypes::DRoundRectItemType };
+	enum { Type = DConst::DRoundRectItemType };
 	DRoundRectItem(QGraphicsItem *parent = nullptr);
 	DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -16,14 +16,14 @@ public:
 
 	QRectF sizeRect() const override;
 	QPainterPath shapeNormal() const override;
-	void resizeToRect(QRectF nrect) override;
-	void modifyToPoint(QPointF p, int id) override;
+	void sizeToRect(QRectF nrect) override;
+	void modiToPoint(QPointF p, int id) override;
 
 private:
 	void updateMagPoint();
 	void updateModiPoint();
 
-	QRectF rect = QRectF(0, 0, 0, 0);
+	QRectF rect;
 	qreal radiusx = 0, radiusy = 0;
 };
 

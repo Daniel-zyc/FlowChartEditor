@@ -24,7 +24,7 @@ QRectF DPolygonBase::sizeRect() const
     return polygon.boundingRect();
 }
 
-void DPolygonBase::resizeToRect(QRectF nrect)
+void DPolygonBase::sizeToRect(QRectF nrect)
 {
     QPolygonF poly;
     QRectF rect = sizeRect();
@@ -43,7 +43,7 @@ QPainterPath DPolygonBase::shapeNormal() const
     return pth;
 }
 
-void DPolygonBase::modifyToPoint(QPointF p, int id)
+void DPolygonBase::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(p); Q_UNUSED(id);
 	return;

@@ -3,10 +3,12 @@
 #include "dshapebase.h"
 #include <QRectF>
 
+class DShapeBase;
+
 class DRectItem : public DShapeBase
 {
 public:
-	enum { Type = UserTypes::DRectItemType };
+	enum { Type = DConst::DRectItemType };
 	DRectItem(QGraphicsItem *parent = nullptr);
 	DRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -16,12 +18,12 @@ public:
 
 	QRectF sizeRect() const override;
 	QPainterPath shapeNormal() const override;
-	void resizeToRect(QRectF nrect) override;
-	void modifyToPoint(QPointF p, int id) override;
+	void sizeToRect(QRectF nrect) override;
+	void modiToPoint(QPointF p, int id) override;
 
 private:
 	void updateMagPoint();
 
-	QRectF rect;
+	QRectF rect = QRectF(0, 0, 0, 0);
 };
 

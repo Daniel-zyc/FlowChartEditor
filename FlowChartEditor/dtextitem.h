@@ -12,7 +12,7 @@ class DTextItem : public QGraphicsTextItem
 	Q_OBJECT
 
 public:
-	enum { Type = UserTypes::DTextItemType };
+	enum { Type = DConst::DTextItemType };
 	DTextItem(QGraphicsItem *parent = nullptr);
 	DTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 

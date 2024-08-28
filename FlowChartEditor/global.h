@@ -16,14 +16,42 @@ qreal radToDeg(qreal rad);
 qreal degMod(qreal deg);
 
 // 本值每个图形都应不同
-enum UserTypes
+namespace DConst
 {
-	DShapeBaseType = QGraphicsItem::UserType + 1,
-	DTextItemType = QGraphicsItem::UserType + 2,
-	DLineBaseType = QGraphicsItem::UserType + 3,
-	DRectItemType = QGraphicsItem::UserType + 4,
-	DEllItemType = QGraphicsItem::UserType + 5,
-	DRoundRectItemType = QGraphicsItem::UserType + 6,
-	DLineItemType = QGraphicsItem::UserType + 7,
-	DPolygonBaseType = QGraphicsItem::UserType + 8
+	enum UserTypes
+	{
+		DAbstractBase = QGraphicsItem::UserType + 1,
+		DShapeBaseType = QGraphicsItem::UserType + 1,
+		DLineBaseType = QGraphicsItem::UserType + 2,
+		DTextItemType = QGraphicsItem::UserType + 3,
+		DRectItemType = QGraphicsItem::UserType + 4,
+		DEllItemType = QGraphicsItem::UserType + 5,
+		DRoundRectItemType = QGraphicsItem::UserType + 6,
+		DLineItemType = QGraphicsItem::UserType + 7,
+		DPolygonBaseType = QGraphicsItem::UserType + 8
+	};
+	
+	enum None
+	{
+		NONE = 0
+	};
+
+	enum InteractType
+	{
+		MODI = 1,
+		SIZE = 2,
+		ROT = 3
+	};
+
+	enum Magnet
+	{
+		MAG = 4
+	};
+
+	enum Orient
+	{
+		T = 1, B = 2, L = 3, R = 4,
+		TL = 5, TR = 6,
+		BL = 7, BR = 8
+	};
 };

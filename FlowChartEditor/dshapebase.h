@@ -1,40 +1,13 @@
 #pragma once
 
 #include "global.h"
-#include "magpoint.h"
+#include "dabstractbase.h"
 #include "dtextitem.h"
 
-#include <QVector>
-#include <QAbstractGraphicsShapeItem>
-#include <QStyleOptionGraphicsItem>
-#include <QGraphicsSceneMouseEvent>
-#include <QRectF>
-#include <QPainterPath>
-#include <QStyle>
-#include <QPainter>
-#include <QBrush>
-#include <QPen>
-
-class DLineItem;
-class MagPoint;
-
-enum class ResizeOrient
-{
-	NONE = 0,
-	T, B, L, R,
-	TL, TR, BL, BR
-};
-
-enum class InteractPoint
-{
-	NONE = 0,
-	SIZE = 1, MAG = 2, MODIFY = 4
-};
-
-class DShapeBase : public QAbstractGraphicsShapeItem
+class DShapeBase : public DAbstractBase
 {
 public:
-	enum { Type = UserTypes::DShapeBaseType };
+	enum { Type = DConst::DShapeBaseType };
 	DShapeBase(QGraphicsItem *parent = nullptr);
 	~DShapeBase() = default;
 
@@ -42,70 +15,56 @@ public:
 	int type() const override { return Type; }
 
 	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
 
-	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+	//==========================================================================
+	virtual void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override = 0;
+	//==========================================================================
 
-	//--------------------------------------------------------------------------
-	virtual void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) = 0;
-	//--------------------------------------------------------------------------
-
+	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual void paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
-	virtual void paintSizePoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
-	virtual void paintMagPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
-	virtual void paintModifyPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+	virtual void paintRotPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 
 public:
-	bool checkModiPoint(QPointF p, bool isItemCord = false) const;
-	bool setModiPoint(QPointF p, bool isItemCord = false);
-
-	bool checkSizePoint(QPointF p, bool isItemCord = false) const;
-	bool setSizePoint(QPointF p, bool isItemCord = false);
-
-	bool checkMagPoint(QPointF p, bool isItemCord = false) const;
-	void setShowMagPoint(bool show = true);
-	MagPoint* getMagPoint(QPointF p, bool isItemCord = false);
-
-	void resizeToPoint(QPointF p, bool isItemCord = false);
-	void modiToPoint(QPointF p, bool isItemCord = false);
+	virtual int checkInterPoint(QPointF p) const override;
+	virtual int setInterPoint(QPointF p) override;
+	virtual void interToPoint(QPointF p) override;
 
 protected:
-	QPainterPath shapeSelected() const;
+	virtual bool checkRotPoint(QPointF p) const;
+	virtual bool setRotPoint(QPointF p);
 
-	//--------------------------------------------------------------------------
+	virtual void sizeToPoint(QPointF p, int id) override;
+	virtual void rotToPoint(QPointF p);
+	virtual void sizeRectUpdated();
+
+protected:
+	virtual QPainterPath shapeSelected() const override;
+	virtual QPainterPath shapeShowMaged() const override;
+
+	//==========================================================================
 	virtual QRectF sizeRect() const = 0;
-	virtual QPainterPath shapeNormal() const = 0;
-	virtual void resizeToRect(QRectF nrect) = 0;
-	virtual void modifyToPoint(QPointF p, int id) = 0;
-	//--------------------------------------------------------------------------
+	virtual QPainterPath shapeNormal() const override = 0;
+	virtual void sizeToRect(QRectF nrect) = 0;
+	virtual void modiToPoint(QPointF p, int id) override = 0;
+	//==========================================================================
 
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
-	QRectF getResizeRect(const QPointF &p);
-	void updateAllLinkLines();
+	QRectF getResizeRect(const QPointF &p, int id);
 
 protected:
-	qreal maxPointRadius;
-	qreal sizePointRadius = 5, magPointRadius = 5, modiPointRadius = 5;
-	QVector<MagPoint> mags;
-	QVector<QPointF> modis;
+	qreal rotPointRadius = 5, rotPointMargin = 30;
+	QPointF rotPoint = {0, 0};
+	DTextItem textItem = DTextItem(this);
+	
+protected:
+	QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
+	QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
+	QBrush selectRectBrush = QBrush(Qt::transparent, Qt::SolidPattern);
+	QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
 	
 private:
-	static QBrush selectedRectBrush;
-	static QPen selectedRectPen;
-	static QBrush sizePointBrush;
-	static QPen sizePointPen;
-	static QBrush magPointBrush;
-	static QPen magPointPen;
-	static QBrush modiPointBrush;
-	static QPen modiPointPen;
-
-	bool showMagPoint = false;
-	ResizeOrient resizeOrient = ResizeOrient::NONE;
-	int modiPointId = -1;
-	InteractPoint activeInteractType = InteractPoint::NONE;
-
-	DTextItem textItem;
+	int interactType = DConst::NONE;
 };
 

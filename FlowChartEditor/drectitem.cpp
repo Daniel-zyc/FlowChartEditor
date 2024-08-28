@@ -1,20 +1,19 @@
 #include "drectitem.h"
+#include "magpoint.h"
 
 DRectItem::DRectItem(QGraphicsItem *parent)
-	: DShapeBase(parent), rect(0, 0, 0, 0)
-{
-
-}
+	: DShapeBase(parent) {}
 
 DRectItem::DRectItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DRectItem(parent)
 {
 	rect = QRectF(-w/2, -h/2, w, h);
+	sizeRectUpdated();
 
-	mags.push_back(MagPoint(this));
-	mags.push_back(MagPoint(this));
-	mags.push_back(MagPoint(this));
-	mags.push_back(MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
+	mags->push_back(new MagPoint(this));
 	updateMagPoint();
 }
 
@@ -42,24 +41,20 @@ QPainterPath DRectItem::shapeNormal() const
 
 void DRectItem::updateMagPoint()
 {
-	mags[0].x = rect.left();
-	mags[0].y = 0;
-	mags[1].x = rect.right();
-	mags[1].y = 0;
+	(*mags)[0]->pos = {rect.left(), 0};
+	(*mags)[1]->pos = {rect.right(), 0};
 
-	mags[2].x = 0;
-	mags[2].y = rect.top();
-	mags[3].x = 0;
-	mags[3].y = rect.bottom();
+	(*mags)[2]->pos = {0, rect.top()};
+	(*mags)[3]->pos = {0, rect.bottom()};
 }
 
-void DRectItem::resizeToRect(QRectF nrect)
+void DRectItem::sizeToRect(QRectF nrect)
 {
 	rect = nrect;
 	updateMagPoint();
 }
 
-void DRectItem::modifyToPoint(QPointF p, int id)
+void DRectItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(p); Q_UNUSED(id);
 	return;
