@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -335,9 +335,9 @@
     <string>S</string>
    </property>
   </action>
-  <action name="actFind">
+  <action name="actFindandReplace">
    <property name="text">
-    <string>查找</string>
+    <string>查找和替换</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
