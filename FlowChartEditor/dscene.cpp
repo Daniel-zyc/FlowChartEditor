@@ -7,6 +7,7 @@
 #include "dellitem.h"
 #include "dlineitem.h"
 #include "dtextitem.h"
+#include "dtriangle.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -115,11 +116,10 @@ void DScene::addLineItem()
 
 void DScene::addTriItem()
 {
-    qDebug() << "add Triangle";
-    QPolygonF poly;
-	poly << QPointF(0, -100) << QPointF(100, 100) << QPointF(-100, 100);
-	DPolygonBase *polygon = new DPolygonBase(poly);
-    addItem(polygon);
+	qDebug() << "add Triangle";
+	DTriangle *item = new DTriangle(100, 100);
+	// item->textItem = new DTextItem(100, 100, "hello world", item);
+	addItem(item);
 }
 
 void DScene::delSelectedItem()

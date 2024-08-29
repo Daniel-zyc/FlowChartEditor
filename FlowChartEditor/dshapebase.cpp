@@ -19,6 +19,7 @@ void DShapeBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem
 	paintSelectRect(painter, option, widget);
 	paintSizePoint(painter, option, widget);
 	paintRotPoint(painter, option, widget);
+	paintModiPoint(painter, option, widget);
 }
 
 void DShapeBase::paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

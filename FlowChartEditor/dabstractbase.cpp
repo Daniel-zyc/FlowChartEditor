@@ -22,11 +22,7 @@ QPainterPath DAbstractBase::shape() const
 void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	paintShape(painter, option, widget);
-	if(isSelected())
-	{
-		paintSelected(painter, option, widget);
-		paintModiPoint(painter, option, widget);
-	}
+	if(isSelected()) paintSelected(painter, option, widget);
 	if(showMagPoint) paintMagPoint(painter, option, widget);
 }
 

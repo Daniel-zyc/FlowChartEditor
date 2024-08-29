@@ -1,22 +1,16 @@
 #include "dpolygonbase.h"
 
 DPolygonBase::DPolygonBase(QGraphicsItem *parent)
-    :DShapeBase(parent)
-{
-}
-
-DPolygonBase::DPolygonBase(QPolygonF polygon, QGraphicsItem *parent)
-    :DPolygonBase(parent)
-{
-    this->polygon = polygon;
-}
+	: DShapeBase(parent) {}
 
 void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
-    painter->setPen(pen());
-    painter->setBrush(brush());
-    painter->drawPolygon(polygon);
+
+	setBrush(QBrush(Qt::transparent));
+	painter->setPen(pen());
+	painter->setBrush(brush());
+	painter->drawPolygon(polygon);
 }
 
 QRectF DPolygonBase::sizeRect() const
@@ -26,25 +20,26 @@ QRectF DPolygonBase::sizeRect() const
 
 void DPolygonBase::sizeToRect(QRectF nrect)
 {
-    QPolygonF poly;
-    QRectF rect = sizeRect();
-    double x_ratio = nrect.width() / rect.width();
-    double y_ratio = nrect.height() / rect.height();
-    for(int i = 0; i < polygon.size(); i++) {
-        poly << QPointF(polygon.at(i).x() * x_ratio, polygon.at(i).y() * y_ratio);
-    }
-    polygon.swap(poly);
+	QPolygonF poly;
+	QRectF rect = sizeRect();
+	double x_ratio = nrect.width() / rect.width();
+	double y_ratio = nrect.height() / rect.height();
+	for(int i = 0; i < polygon.size(); i++)
+		poly << QPointF(polygon.at(i).x() * x_ratio, polygon.at(i).y() * y_ratio);
+	setPoly(poly);
 }
 
 QPainterPath DPolygonBase::shapeNormal() const
 {
-    QPainterPath pth;
-    pth.addPolygon(polygon);
-    return pth;
+	QPainterPath pth;
+	pth.addPolygon(polygon);
+	return pth;
 }
 
-void DPolygonBase::modiToPoint(QPointF p, int id)
+void DPolygonBase::setPoly(const QPolygonF &npoly)
 {
-	Q_UNUSED(p); Q_UNUSED(id);
-	return;
+	polygon = npoly;
+	sizeRectUpdated();
+	updateMagPoint();
+	updateModiPoint();
 }

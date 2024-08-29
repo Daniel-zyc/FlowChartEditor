@@ -16,7 +16,7 @@ public:
 	~DLineBase() = default;
 
 public:
-	int type() const override { return Type; }
+	virtual int type() const override { return Type; }
 
 	virtual void updatePosition() = 0;
 
