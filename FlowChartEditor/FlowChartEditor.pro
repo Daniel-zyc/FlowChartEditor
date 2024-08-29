@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     dabstractbase.cpp \
     dellitem.cpp \
+    dfinddialog.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
 HEADERS += \
     dabstractbase.h \
     dellitem.h \
+    dfinddialog.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \

@@ -2,6 +2,7 @@
 
 #include "dscene.h"
 #include "dview.h"
+#include "dfinddialog.h"
 
 #include <QMainWindow>
 
@@ -56,6 +57,7 @@ private slots:
 	void editMoveRight() { scene->moveRight(); }
 	void editMoveUp() { scene->moveUp(); }
 	void editMoveDown() { scene->moveDown(); }
+    void findandReplace();
 
 	void delSelectedItem();
 
@@ -64,4 +66,5 @@ private:
 
 	DScene *scene;
 	DView *view;
+    DFindDialog *findDia;
 };

@@ -2,6 +2,7 @@
 #include "dshapebase.h"
 #include "magpoint.h"
 
+#include <QTextDocument>
 #include <QStyleOptionGraphicsItem>
 
 DTextBase::DTextBase(QGraphicsItem *parent)
@@ -13,7 +14,7 @@ DTextBase::DTextBase(QGraphicsItem *parent)
 DTextBase::DTextBase(const QString &text, QGraphicsItem *parent)
 	: DTextBase(parent)
 {
-	setPlainText(text);
+    this->document()->setPlainText(text);
 }
 
 void DTextBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -72,7 +73,7 @@ DTextItem::DTextItem(QGraphicsItem *parent)
 DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
-	textBase.setPlainText(text);
+    textBase.document()->setPlainText(text);
 
 	mags->push_back(new MagPoint(this));
 	mags->push_back(new MagPoint(this));

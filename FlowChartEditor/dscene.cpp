@@ -76,6 +76,9 @@ void DScene::moveSelected(qreal distx, qreal disty)
 
 void DScene::addTextItem()
 {
+    qDebug() << "add textitem";
+    DTextItem *item = new DTextItem(100, 100, "hello world!");
+    addItem(item);
 }
 
 void DScene::addRectItem()

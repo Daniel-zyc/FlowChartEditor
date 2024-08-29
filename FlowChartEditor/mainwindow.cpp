@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-// #include "dtext.h"
-// #include "drect.h"
-// #include "dshape.h"
-// #include "dellipse.h"
+#include <QSvgGenerator>
+// #include <QPainter>
+#include "dtextitem.h"
+#include "dshapebase.h"
 
 #include <QGraphicsRectItem>
 
@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actAddEll);
 	m->addAction(ui->actAddLine);
 
+    findDia = new DFindDialog();
 
 	scene->setMenu(m);
 	scene->addLine(-1000, 0, 1000, 0);
@@ -57,8 +58,8 @@ void MainWindow::createMenu()
 	ui->editMenu->addAction(ui->actCopy);
 	ui->editMenu->addAction(ui->actCut);
 	ui->editMenu->addAction(ui->actPaste);
-	ui->editMenu->addAction(ui->actFind);
-	ui->editMenu->addAction(ui->actReplace);
+    ui->editMenu->addAction(ui->actFindandReplace);
+    // ui->editMenu->addAction(ui->actReplace);
 
 	// ui->editMenu->addAction(ui->actEditEnlarge);
 	// ui->editMenu->addAction(ui->actEditShrink);
@@ -141,6 +142,7 @@ void MainWindow::bindAction()
 	connect(ui->actEditMoveRight, SIGNAL(triggered(bool)), this, SLOT(editMoveRight()));
 	connect(ui->actEditMoveUp, SIGNAL(triggered(bool)), this, SLOT(editMoveUp()));
 	connect(ui->actEditMoveDown, SIGNAL(triggered(bool)), this, SLOT(editMoveDown()));
+    connect(ui->actFindandReplace, SIGNAL(triggered(bool)), this, SLOT(findandReplace()));
 
 	connect(ui->actRotateCW, SIGNAL(triggered(bool)), this, SLOT(rotateCW()));
 	connect(ui->actRotateCCW, SIGNAL(triggered(bool)), this, SLOT(rotateCCW()));
@@ -258,6 +260,25 @@ void MainWindow::moveDown()
 		view->moveDown();
 	else
 		scene->moveDown();
+}
+
+void MainWindow::findandReplace()
+{
+    qDebug() << "f1";
+    findDia->docs.clear();
+    qDebug() << "f2";
+    QList<QGraphicsItem *> items = scene->items();
+    for(QGraphicsItem *item : items){
+        qDebug() << "f3";
+        DTextBase *text = dynamic_cast<DTextBase *>(item);
+        if(text != nullptr){
+            QTextDocument *doc0= text->document();
+            findDia->docs.push_back(doc0);
+            qDebug() << "text";
+        }
+    }
+    qDebug() << "f4";
+    findDia->show();
 }
 
 void MainWindow::delSelectedItem()
