@@ -1,13 +1,12 @@
 #include "global.h"
 #include "dscene.h"
 #include "dshapebase.h"
-#include "dpolygonbase.h"
 #include "drectitem.h"
 #include "droundrectitem.h"
 #include "dellitem.h"
 #include "dlineitem.h"
 #include "dtextitem.h"
-#include "dtriangle.h"
+#include "dtriitem.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -107,17 +106,15 @@ void DScene::addLineItem()
 {
 	qDebug() << "add line";
 	state = SceneState::INSERTLINE;
-	// DLineItem *item = new DLineItem();
-	// item->setLine(-100, -100, 100, 100);
-	// item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// addItem(item);
+	DLineItem *item = new DLineItem({-100, 0}, {100, 0});
+	addItem(item);
 
 }
 
 void DScene::addTriItem()
 {
 	qDebug() << "add Triangle";
-	DTriangle *item = new DTriangle(100, 100);
+	DTriItem *item = new DTriItem(100, 100);
 	// item->textItem = new DTextItem(100, 100, "hello world", item);
 	addItem(item);
 }
@@ -154,6 +151,8 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	// 	return;
 	// }
 
+	qDebug() << items;
+
 	if(items.empty())
 	{
 		QGraphicsScene::mousePressEvent(event);
@@ -168,10 +167,14 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
-	if((modifiedShape = dynamic_cast<DShapeBase*>(item)) != nullptr)
+	qDebug() << item;
+
+	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
 	{
+		qDebug() << "modifiedShape";
 		if(modifiedShape->checkInterPoint(p))
 		{
+			qDebug() << "modi";
 			modifiedShape->setInterPoint(p);
 			moditype = ModifyType::MODI;
 		}
@@ -194,15 +197,16 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	QPointF p = event->scenePos();
 
-	if(state == SceneState::INSERTLINE)
-	{
-		event->accept();
-		return;
-	}
+	// if(state == SceneState::INSERTLINE)
+	// {
+	// 	event->accept();
+	// 	return;
+	// }
 
 	if(moditype == ModifyType::MODI)
 	{
 		event->accept();
+		qDebug() << "inter";
 		modifiedShape->interToPoint(p);
 		return;
 	}

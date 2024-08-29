@@ -35,21 +35,22 @@ void DShapeBase::paintRotPoint(QPainter *painter, const QStyleOptionGraphicsItem
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
+	painter->setBrush(selectRectBrush);
+	painter->setPen(selectRectPen);
+
+	painter->drawLine(sizes[DConst::T - 1], rotPoint);
+
 	painter->setBrush(rotPointBrush);
 	painter->setPen(rotPointPen);
 
 	qreal r = rotPointRadius;
 	painter->drawEllipse(rotPoint, r, r);
-
-	painter->setBrush(selectRectBrush);
-	painter->setPen(selectRectPen);
-
-	painter->drawLine(sizes[0], rotPoint);
 }
 
 int DShapeBase::checkInterPoint(QPointF p) const
 {
 	p = mapFromScene(p);
+	if(!isSelected()) return DConst::NONE;
 	if(checkModiPoint(p) != -1) return DConst::MODI;
 	if(checkSizePoint(p) != -1) return DConst::SIZE;
 	if(checkRotPoint(p)) return DConst::ROT;
@@ -59,14 +60,16 @@ int DShapeBase::checkInterPoint(QPointF p) const
 int DShapeBase::setInterPoint(QPointF p)
 {
 	p = mapFromScene(p);
+	if(!isSelected()) return interactType = DConst::NONE;
 	if(setModiPoint(p)) return interactType = DConst::MODI;
 	if(setSizePoint(p)) return interactType = DConst::SIZE;
 	if(setRotPoint(p)) return interactType = DConst::ROT;
 	return interactType = DConst::NONE;
 }
 
-void DShapeBase::interToPoint(QPointF p)
+void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 {
+	Q_UNUSED(mp);
 	switch(interactType)
 	{
 		case DConst::MODI:
@@ -94,8 +97,9 @@ bool DShapeBase::setRotPoint(QPointF p)
 	return checkSizePoint(p);
 }
 
-void DShapeBase::sizeToPoint(QPointF p, int id)
+void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 {
+	Q_UNUSED(mp);
 	QRectF nrect = getResizeRect(p, id);
 	QPointF cent = mapToParent(nrect.center());
 	nrect.moveCenter({0, 0});

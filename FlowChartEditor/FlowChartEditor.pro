@@ -19,7 +19,7 @@ SOURCES += \
     dscene.cpp \
     dshapebase.cpp \
     dtextitem.cpp \
-    dtriangle.cpp \
+    dtriitem.cpp \
     dview.cpp \
     global.cpp \
     magpoint.cpp \
@@ -37,7 +37,7 @@ HEADERS += \
     dscene.h \
     dshapebase.h \
     dtextitem.h \
-    dtriangle.h \
+    dtriitem.h \
     dview.h \
     global.h \
     magpoint.h \

@@ -1,64 +1,46 @@
-// #include "dlineitem.h"
-// #include "global.h"
+#include "dlineitem.h"
 
-// #include <QLine>
-// #include <QPen>
-// #include <QBrush>
+DLineItem::DLineItem(QGraphicsItem *parent)
+	: DLineBase(parent) {}
 
-// DLineItem::DLineItem()
-// 	: DLineBase()
-// {
+DLineItem::DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
+	: DLineBase(parent)
+{
+	beginPoint = begin; endPoint = end;
+	updatePosition();
+}
 
-// }
+QRectF DLineItem::boundingRect() const
+{
+	qreal r = maxPointRadius;
+	QSizeF sz(endPoint.x() - beginPoint.x(), endPoint.y() - beginPoint.y());
+	qDebug() << QRectF(beginPoint, sz).normalized().adjusted(-r, -r, r, r);
+	return QRectF(beginPoint, sz).normalized().adjusted(-r, -r, r, r);
+}
 
-// QRectF DLineItem::boundingRect() const
-// {
-// 	qreal extra = 20;
+void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	Q_UNUSED(option); Q_UNUSED(widget);
 
-// 	return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
-// 									  line().p2().y() - line().p1().y()))
-// 		.normalized()
-// 		.adjusted(-extra, -extra, extra, extra);
-// }
+	setBrush(QBrush(Qt::black));
+	painter->setBrush(brush());
+	painter->setPen(pen());
 
-// void DLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-// {
-// 	Q_UNUSED(option); Q_UNUSED(widget);
+	painter->drawLine(QLineF(beginPoint, endPoint));
+}
 
-// 	qreal arrowSize = 20;
+void DLineItem::modiToPoint(QPointF p, int id)
+{
+	Q_UNUSED(p); Q_UNUSED(id);
+}
 
-// 	double angle = std::atan2(-line().dy(), line().dx());
+QPainterPath DLineItem::shapeNormal() const
+{
+	QGraphicsLineItem item(QLineF(beginPoint, endPoint));
+	return item.shape();
+}
 
-// 	QPointF arrowP1 = line().p1() + QPointF(sin(angle + PI / 3) * arrowSize, cos(angle + PI / 3) * arrowSize);
-// 	QPointF arrowP2 = line().p1() + QPointF(sin(angle + PI - PI / 3) * arrowSize, cos(angle + PI - PI / 3) * arrowSize);
-
-// 	QPolygonF arrowHead;
-// 	arrowHead << line().p1() << arrowP1 << arrowP2;
-
-// 	painter->setBrush(QBrush(Qt::black));
-// 	painter->setPen(pen());
-
-// 	painter->drawLine(line());
-// 	painter->drawPolygon(arrowHead);
-
-// 	if (isSelected()) {
-// 		painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
-// 		QLineF myLine = line();
-// 		myLine.translate(0, 4.0);
-// 		painter->drawLine(myLine);
-// 		myLine.translate(0,-8.0);
-// 		painter->drawLine(myLine);
-// 		painter->setPen(QPen(Qt::black, 2, Qt::SolidLine));
-// 		painter->setBrush(QBrush(Qt::white));
-// 		painter->drawEllipse(line().p1(), 5, 5);
-// 		painter->drawEllipse(line().p2(), 5, 5);
-// 	}
-// }
-
-// void DLineItem::updatePosition()
-// {
-// 	QPointF pa = line().p1(), pb = line().p2();
-// 	if(startMag) pa = startMag->mapToItem(this);
-// 	if(endMag) pb = endMag->mapToItem(this);
-// 	setLine(QLineF(pa, pb));
-// }
+void DLineItem::updateLine()
+{
+	return;
+}

@@ -83,6 +83,7 @@ DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *paren
 
 void DTextItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	Q_UNUSED(painter); Q_UNUSED(option); Q_UNUSED(widget);
 }
 
 QRectF DTextItem::sizeRect() const

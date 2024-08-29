@@ -2,12 +2,12 @@
 
 #include "dpolygonbase.h"
 
-class DTriangle : public DPolygonBase
+class DTriItem : public DPolygonBase
 {
 public:
-	enum { Type = DConst::DPolygonBaseType };
-	DTriangle(QGraphicsItem *parent = nullptr);
-	DTriangle(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DConst::DTriItemType };
+	DTriItem(QGraphicsItem *parent = nullptr);
+	DTriItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }

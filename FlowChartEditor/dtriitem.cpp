@@ -1,10 +1,10 @@
-#include "dtriangle.h"
+#include "dtriitem.h"
 #include "magpoint.h"
 
-DTriangle::DTriangle(QGraphicsItem *parent)
+DTriItem::DTriItem(QGraphicsItem *parent)
 	: DPolygonBase(parent) {}
 
-DTriangle::DTriangle(qreal w, qreal h, QGraphicsItem *parent)
+DTriItem::DTriItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DPolygonBase(parent)
 {
 	modis.resize(1);
@@ -17,7 +17,7 @@ DTriangle::DTriangle(qreal w, qreal h, QGraphicsItem *parent)
 	setPoly(poly);
 }
 
-void DTriangle::modiToPoint(QPointF p, int id)
+void DTriItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(id);
 	QRectF rc = sizeRect();
@@ -28,14 +28,14 @@ void DTriangle::modiToPoint(QPointF p, int id)
 	setPoly(poly);
 }
 
-void DTriangle::updateMagPoint()
+void DTriItem::updateMagPoint()
 {
 	(*mags)[0]->pos = (polygon[0] + polygon[1]) / 2;
 	(*mags)[1]->pos = (polygon[1] + polygon[2]) / 2;
 	(*mags)[2]->pos = (polygon[2] + polygon[0]) / 2;
 }
 
-void DTriangle::updateModiPoint()
+void DTriItem::updateModiPoint()
 {
 	qDebug() << "update";
 	modis[0] = polygon[0];

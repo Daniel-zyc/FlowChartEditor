@@ -77,7 +77,7 @@ private:
 	SceneState state = SceneState::NONE;
 	ModifyType moditype = ModifyType::NONE;
 
-	DShapeBase *modifiedShape = nullptr;
+	DAbstractBase *modifiedShape = nullptr;
 	MagPoint *endMag;
 	QMenu *menu = nullptr;
 	QPointF endPoint;

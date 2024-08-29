@@ -18,17 +18,37 @@ public:
 public:
 	virtual int type() const override { return Type; }
 
-	virtual void updatePosition() = 0;
+public:
+	virtual int checkInterPoint(QPointF p) const override;
+	virtual int setInterPoint(QPointF p) override;
+	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
+
+	virtual void linkBegin(MagPoint *mp);
+	virtual void linkEnd(MagPoint *mp);
+
+	virtual void unlinkBegin();
+	virtual void unlinkEnd();
+
+	virtual void updatePosition();
 
 protected:
-	static QBrush selectedRectBrush;
-	static QPen selectedRectPen;
-	static QBrush sizePointBrush;
-	static QPen sizePointPen;
-	
-	QVector<QPointF> modis;
+	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+	virtual QPainterPath shapeSelected() const override;
+	virtual QPainterPath shapeShowMaged() const override;
 
-	QLineF line;
-	MagPoint *startMag, *endMag;
+	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) override;
+
+	//==========================================================================
+	virtual void updateLine() = 0;
+	//==========================================================================
+
+protected:
+	QPointF beginPoint = QPoint(0, 0), endPoint = QPointF(0, 0);
+	MagPoint *beginMag = nullptr, *endMag = nullptr;
+
+	int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
+
+private:
+	int interactType = DConst::NONE;
 };
 

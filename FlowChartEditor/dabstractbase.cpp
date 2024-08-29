@@ -75,12 +75,12 @@ void DAbstractBase::modiToPointPre(QPointF p)
 	update();
 }
 
-void DAbstractBase::sizeToPointPre(QPointF p)
+void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
 {
 	if(sizePointId == -1) return;
 
 	prepareGeometryChange();
-	sizeToPoint(p, sizePointId);
+	sizeToPoint(p, sizePointId, mp);
 	updateAllLinkLines();
 	update();
 }

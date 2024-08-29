@@ -41,7 +41,7 @@ public:
 	// 根据 scene 坐标系下 p 点设置当前交互状态和交互点
 	virtual int setInterPoint(QPointF p) = 0;
 	// 依据之前设置的状态，调整交互点的参数和图形的状态，其中 p 为 scene 坐标系下
-	virtual void interToPoint(QPointF p) = 0;
+	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
 
 protected:
@@ -63,13 +63,13 @@ protected:
 	// 准备将选中的调整点设置到 p 位置，p 为 item 坐标系下
 	virtual void modiToPointPre(QPointF P);
 	// 准备将选中的大小点设置到 p 位置，p 为 item 坐标系下
-	virtual void sizeToPointPre(QPointF p);
+	virtual void sizeToPointPre(QPointF p, MagPoint *mp = nullptr);
 	
 	//==========================================================================
 	// 将选中的调整点 id，设置到 p 位置，p 为 item 坐标系下
 	virtual void modiToPoint(QPointF p, int id) = 0;
 	// 将选中的大小点 id，设置到 p 位置，p 为 item 坐标系下
-	virtual void sizeToPoint(QPointF p, int id) = 0;
+	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
 
 	// 检查是否与调整点碰撞，p 为 item 坐标系下

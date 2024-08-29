@@ -30,7 +30,7 @@ namespace DConst
 		DRoundRectItemType = QGraphicsItem::UserType + 7,
 		DLineItemType = QGraphicsItem::UserType + 8,
 		DTextItemType = QGraphicsItem::UserType + 9,
-		DTriangleType = QGraphicsItem::UserType + 10
+		DTriItemType = QGraphicsItem::UserType + 10
 	};
 	
 	enum None
@@ -55,5 +55,17 @@ namespace DConst
 		T = 1, B = 2, L = 3, R = 4,
 		TL = 5, TR = 6,
 		BL = 7, BR = 8
+	};
+
+	enum LineOrient
+	{
+		ST = 1, ED = 2
+	};
+
+	enum LineArrowType
+	{
+		ARROW = 1, OPENARROW = 2,
+		DOVETAILARROW = 3,
+		DIAMONDARROW = 4, ROUNDARROW = 5
 	};
 };

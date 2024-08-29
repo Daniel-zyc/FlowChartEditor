@@ -39,8 +39,8 @@ public:
 	virtual int checkInterPoint(QPointF p) const override;
 	// 设置当前交互点为某交互点，p 为 scene 坐标系下
 	virtual int setInterPoint(QPointF p) override;
-	// 根据 p 点来对当前交互点进行调整，p 为 seene 坐标系下
-	virtual void interToPoint(QPointF p) override;
+	// 根据 p 点来对当前交互点进行调整，p 为 scene 坐标系下
+	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
 protected:
 	// 检查是否与旋转点碰撞，p 为 item 坐标系下
@@ -49,7 +49,7 @@ protected:
 	virtual bool setRotPoint(QPointF p);
 
 	// 根据 p 和 id 来调整图形的大小和位置，p 为 item 坐标系下，此函数内部会调用 sizeRectUpdated 来进行刷新
-	virtual void sizeToPoint(QPointF p, int id) override;
+	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) override;
 	// 根据向量 p 来调整图形角度
 	virtual void rotToPoint(QPointF p);
 	// 更新图形的大小点和旋转点坐标，如果图形的大小改变需要调用此函数进行刷新

@@ -4,5 +4,118 @@
 DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
 {
+	sizes.resize(2);
+}
 
+void DLineBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	paintSizePoint(painter, option, widget);
+	paintModiPoint(painter, option, widget);
+}
+
+QPainterPath DLineBase::shapeSelected() const
+{
+	QPainterPath pth; pth.setFillRule(Qt::WindingFill);
+
+	qreal r = sizePointRadius;
+	for(const QPointF &mp : sizes) pth.addEllipse(mp, r, r);
+
+	r = modiPointRadius;
+	for(const QPointF &mp : modis) pth.addEllipse(mp, r, r);
+	return pth;
+}
+
+QPainterPath DLineBase::shapeShowMaged() const
+{
+	QPainterPath pth; pth.setFillRule(Qt::WindingFill);
+
+	qreal r = magPointCollideRadius;
+	for(MagPoint *mp : *mags) pth.addEllipse(mp->pos, r, r);
+	return pth;
+}
+
+int DLineBase::checkInterPoint(QPointF p) const
+{
+	p = mapFromScene(p);
+	if(!isSelected()) return DConst::NONE;
+	if(checkModiPoint(p)) return DConst::MODI;
+	if(checkSizePoint(p)) return DConst::SIZE;
+	return DConst::NONE;
+}
+
+int DLineBase::setInterPoint(QPointF p)
+{
+	p = mapFromScene(p);
+	if(!isSelected()) return interactType = DConst::NONE;
+	if(setModiPoint(p)) return interactType = DConst::MODI;
+	if(setSizePoint(p)) return interactType = DConst::SIZE;
+	return interactType = DConst::NONE;
+}
+
+void DLineBase::interToPoint(QPointF p, MagPoint *mp)
+{
+	qDebug() << p;
+	switch(interactType)
+	{
+		case DConst::MODI:
+			modiToPointPre(mapFromScene(p));
+			break;
+		case DConst::SIZE:
+			sizeToPointPre(mapFromScene(p), mp);
+			break;
+	}
+}
+
+void DLineBase::linkBegin(MagPoint *mp)
+{
+	beginMag = mp;
+	updatePosition();
+}
+
+void DLineBase::linkEnd(MagPoint *mp)
+{
+	endMag = mp;
+	updatePosition();
+}
+
+void DLineBase::unlinkBegin()
+{
+	beginPoint = beginMag->mapToItem(this);
+	beginMag = nullptr;
+	updatePosition();
+}
+
+void DLineBase::unlinkEnd()
+{
+	endPoint = endMag->mapToItem(this);
+	endMag = nullptr;
+	updatePosition();
+}
+
+void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
+{
+	qDebug() << "id: " << id;
+	switch(id)
+	{
+		case DConst::ST - 1 :
+			beginMag = mp;
+			beginPoint = p;
+			break;
+		case DConst::ED - 1 :
+			endMag = mp;
+			endPoint = p;
+			break;
+	}
+	updatePosition();
+}
+
+void DLineBase::updatePosition()
+{
+	if(beginMag) beginPoint = beginMag->mapToItem(this);
+	if(endMag) endPoint = endMag->mapToItem(this);
+	sizes[DConst::ST - 1] = beginPoint;
+	sizes[DConst::ED - 1] = endPoint;
+	prepareGeometryChange();
+	updateLine();
+	update();
 }
