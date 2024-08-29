@@ -58,7 +58,7 @@ void DFindDialog::findFirst()
 {
     QMessageBox msgBox;
 
-    if(!curs.empty()) curs[index].setCharFormat(QTextCharFormat());
+    for(QTextCursor cursor : curs) cursor.setCharFormat(QTextCharFormat());
     searchstr = searchEdit->text();
     index = 0;
     num = 0;
@@ -123,7 +123,7 @@ void DFindDialog::findDown()
 
 void DFindDialog::replace()
 {
-    if(index == 0) DFindDialog::findFirst();
+    if(searchstr != searchEdit->text()) DFindDialog::findFirst();
     curs[index].setCharFormat(QTextCharFormat());
     curs[index].insertText(replaceEdit->text());
     curs.removeAt(index);
@@ -137,16 +137,13 @@ void DFindDialog::replace()
         msgBox.exec();
         return;
     }
-    qDebug() << "4";
     if(index >= num - 1 || index < 0) {
-        qDebug() << "5";
         index = 0;
         QTextCharFormat highlight;
         highlight.setBackground(Qt::cyan);
         curs[0].setCharFormat(highlight);
     }
     else DFindDialog::findDown();
-    qDebug() << "6";
 }
 
 void DFindDialog::repalceAll()
@@ -160,12 +157,6 @@ void DFindDialog::repalceAll()
         int ret = msgBox.exec();
         if(ret == QMessageBox::Cancel) return;
     }
-    // if(curs.empty()) {
-    //     QMessageBox msgBox;
-    //     msgBox.setText("无可替换对象");
-    //     msgBox.exec();
-    //     return;
-    // }
     DFindDialog::findFirst();
     QString replaceStr = replaceEdit->text();
     for(QTextCursor cursor : curs) {
