@@ -264,20 +264,20 @@ void MainWindow::moveDown()
 
 void MainWindow::findandReplace()
 {
-    qDebug() << "f1";
+	// qDebug() << "f1";
     findDia->docs.clear();
-    qDebug() << "f2";
+	// qDebug() << "f2";
     QList<QGraphicsItem *> items = scene->items();
     for(QGraphicsItem *item : items){
-        qDebug() << "f3";
+		// qDebug() << "f3";
         DTextBase *text = dynamic_cast<DTextBase *>(item);
         if(text != nullptr){
             QTextDocument *doc0= text->document();
             findDia->docs.push_back(doc0);
-            qDebug() << "text";
+			// qDebug() << "text";
         }
     }
-    qDebug() << "f4";
+	// qDebug() << "f4";
     findDia->show();
 }
 

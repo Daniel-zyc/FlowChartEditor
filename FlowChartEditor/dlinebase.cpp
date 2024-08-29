@@ -54,7 +54,6 @@ int DLineBase::setInterPoint(QPointF p)
 
 void DLineBase::interToPoint(QPointF p, MagPoint *mp)
 {
-	qDebug() << p;
 	switch(interactType)
 	{
 		case DConst::MODI:
@@ -94,7 +93,6 @@ void DLineBase::unlinkEnd()
 
 void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 {
-	qDebug() << "id: " << id;
 	switch(id)
 	{
 		case DConst::ST - 1 :

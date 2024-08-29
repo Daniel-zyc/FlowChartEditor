@@ -154,7 +154,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	// 	return;
 	// }
 
-	qDebug() << items;
+	// qDebug() << items;
 
 	if(items.empty())
 	{
@@ -170,14 +170,14 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
-	qDebug() << item;
+	// qDebug() << item;
 
 	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
 	{
-		qDebug() << "modifiedShape";
+		// qDebug() << "modifiedShape";
 		if(modifiedShape->checkInterPoint(p))
 		{
-			qDebug() << "modi";
+			// qDebug() << "modi";
 			modifiedShape->setInterPoint(p);
 			moditype = ModifyType::MODI;
 		}
@@ -209,7 +209,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	if(moditype == ModifyType::MODI)
 	{
 		event->accept();
-		qDebug() << "inter";
+		// qDebug() << "inter";
 		modifiedShape->interToPoint(p);
 		return;
 	}

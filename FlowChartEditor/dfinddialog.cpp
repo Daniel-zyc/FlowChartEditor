@@ -1,6 +1,4 @@
 #include "dfinddialog.h"
-#include "dshapebase.h"
-#include "dtextitem.h"
 #include <QList>
 #include <QMessageBox>
 #include <QTextCharFormat>
@@ -81,7 +79,7 @@ void DFindDialog::findFirst()
         msgBox.exec();
         return;
     }
-    qDebug() << "num:" << num;
+	// qDebug() << "num:" << num;
     highlight.setBackground(Qt::cyan);
     curs[0].setCharFormat(highlight);
     // index++;
@@ -129,8 +127,8 @@ void DFindDialog::replace()
     curs.removeAt(index);
     num--;
     index--;
-    qDebug() << "num:" << num;
-    qDebug() << "index:" << index;
+	// qDebug() << "num:" << num;
+	// qDebug() << "index:" << index;
     if(num == 0) {
         QMessageBox msgBox;
         msgBox.setText("无可查找对象");
@@ -193,6 +191,7 @@ void DFindDialog::findNextBtn_Click()
 
 void DFindDialog::closeEvent(QCloseEvent *event)
 {
+	Q_UNUSED(event);
     if(searchEdit->text() != "") searchEdit->clear();
     if(replaceEdit->text() != "") replaceEdit->clear();
     for(QTextCursor cursor : curs)

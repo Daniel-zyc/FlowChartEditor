@@ -14,7 +14,6 @@ QRectF DLineItem::boundingRect() const
 {
 	qreal r = maxPointRadius;
 	QSizeF sz(endPoint.x() - beginPoint.x(), endPoint.y() - beginPoint.y());
-	qDebug() << QRectF(beginPoint, sz).normalized().adjusted(-r, -r, r, r);
 	return QRectF(beginPoint, sz).normalized().adjusted(-r, -r, r, r);
 }
 
