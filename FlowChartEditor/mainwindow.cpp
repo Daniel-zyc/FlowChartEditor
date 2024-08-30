@@ -1,11 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QSvgGenerator>
-// #include <QPainter>
+#include <QPainter>
+#include <QFileDialog>
 #include "dlineitem.h"
 #include "dshapebase.h"
 
-
+#include <QSize>
 #include <QColor>
 #include <QGraphicsRectItem>
 
@@ -39,14 +40,11 @@ MainWindow::MainWindow(QWidget *parent)
     colorDia = new QColorDialog(Qt::blue, this);
     colorDia->setOption(QColorDialog::ShowAlphaChannel);
     colorDia->setOption(QColorDialog::DontUseNativeDialog);
-    // colorDia->show();
-    // color = QColorDialog::getColor(Qt::green, this, "颜色选择器");
 
     fontDia = new QFontDialog(this);
     // fontDia->setOption(QFontDialog::DontUseNativeDialog);
     fontDia->setOption(QFontDialog::ScalableFonts);
     fontDia->setOption(QFontDialog::ProportionalFonts);
-    // fontDia->show();
 
 	scene->setMenu(m);
 	scene->addLine(-1000, 0, 1000, 0);
@@ -69,7 +67,7 @@ void MainWindow::createMenu()
 	ui->fileMenu->addAction(ui->actNewFile);
 	ui->fileMenu->addAction(ui->actOpenFile);
 	ui->fileMenu->addAction(ui->actSaveFile);
-	ui->fileMenu->addAction(ui->actExportFile);
+    ui->fileMenu->addAction(ui->actSvgFile);
 	ui->fileMenu->addAction(ui->actExit);
 
 	ui->editMenu->addAction(ui->actUndo);
@@ -138,6 +136,8 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
+
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
 	connect(ui->actAddRoundRect, SIGNAL(triggered(bool)), this, SLOT(addRoundRect()));
@@ -180,6 +180,21 @@ void MainWindow::bindAction()
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
 	connect(ui->actCombine, SIGNAL(triggered(bool)), this, SLOT(combineSelected()));
 	connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
+}
+
+void MainWindow::saveAsSvg()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file");
+    if(filePath == "") return;
+    QSvgGenerator generator;
+    generator.setFileName(filePath);
+    generator.setSize(QSize(this->width(), this->height()));
+    generator.setViewBox(QRect(0, 0, this->width(), this->height()));
+
+    QPainter painter;
+    painter.begin(&generator);
+    view->render(&painter);
+    painter.end();
 }
 
 void MainWindow::addLine()

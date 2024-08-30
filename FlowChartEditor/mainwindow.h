@@ -28,6 +28,8 @@ private:
 	void bindAction();
 
 private slots:
+    void saveAsSvg();
+
 	void addLine();
 	void addRect();
 	void addRoundRect();

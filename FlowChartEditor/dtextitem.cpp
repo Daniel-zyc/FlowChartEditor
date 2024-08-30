@@ -114,6 +114,7 @@ QPainterPath DTextItem::shapeNormal() const
 
 void DTextItem::updateMagPoint()
 {
+    if(mags->size() == 0) return;
 	(*mags)[0]->pos = {rect.left(), 0};
 	(*mags)[1]->pos = {rect.right(), 0};
 

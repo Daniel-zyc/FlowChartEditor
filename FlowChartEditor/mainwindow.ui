@@ -90,9 +90,9 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actExportFile">
+  <action name="actSvgFile">
    <property name="text">
-    <string>导出</string>
+    <string>导出Svg</string>
    </property>
   </action>
   <action name="actExit">

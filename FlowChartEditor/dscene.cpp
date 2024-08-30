@@ -127,7 +127,7 @@ void DScene::addTriItem()
 
 void DScene::combineSelected()
 {
-	int cnt=selectedItems().count();
+    int cnt = selectedItems().count();
 	if (cnt>1)
 	{
 		QGraphicsItemGroup* group = new QGraphicsItemGroup;  //创建组合
@@ -136,10 +136,13 @@ void DScene::combineSelected()
 
 		for (int i=0;i<cnt;i++)     //将选择的图形项添加到组合中
 		{
+            qDebug() << selectedItems().count();
 			QGraphicsItem* item=selectedItems().at(0);
+            qDebug() << item;
 			item->setSelected(false);    //取消选择
 			item->clearFocus();          //清除焦点状态
-			if(item->parentItem() != nullptr) continue;
+            qDebug() << selectedItems().count();
+            if(item->parentItem() != nullptr) continue;
 			group->addToGroup(item);     //添加到组合
 		}
 	}
