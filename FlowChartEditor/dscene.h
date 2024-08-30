@@ -1,5 +1,6 @@
 #pragma once
 
+#include "global.h"
 #include "dshapebase.h"
 
 #include <QGraphicsScene>
@@ -13,12 +14,6 @@ enum class SceneState
 {
 	NONE = 0,
 	INSERTLINE
-};
-
-enum class ModifyType
-{
-	NONE = 0,
-	SIZE, MODI
 };
 
 class DScene : public QGraphicsScene
@@ -75,7 +70,7 @@ private:
 	static qreal defaultMoveDist;
 
 	SceneState state = SceneState::NONE;
-	ModifyType moditype = ModifyType::NONE;
+	int moditype = DConst::NONE;
 
 	DAbstractBase *modifiedShape = nullptr;
 	MagPoint *endMag;

@@ -70,10 +70,16 @@ void DTextBase::focusToCenter()
 DTextItem::DTextItem(QGraphicsItem *parent)
 	: DShapeBase(parent) {}
 
+DTextItem::DTextItem(const QString &text, QGraphicsItem *parent)
+	: DShapeBase(parent)
+{
+	textBase.document()->setPlainText(text);
+}
+
 DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
-    textBase.document()->setPlainText(text);
+	textBase.document()->setPlainText(text);
 
 	mags->push_back(new MagPoint(this));
 	mags->push_back(new MagPoint(this));
@@ -117,6 +123,11 @@ void DTextItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(p); Q_UNUSED(id);
 	return;
+}
+
+void DTextItem::deleteMagPoint()
+{
+	mags->clear();
 }
 
 void DTextItem::setRect(const QRectF &nrect)

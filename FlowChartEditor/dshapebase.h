@@ -13,6 +13,7 @@ class DShapeBase : public DAbstractBase
 public:
 	enum { Type = DConst::DShapeBaseType };
 	DShapeBase(QGraphicsItem *parent = nullptr);
+	DShapeBase(const QString &str, QGraphicsItem *parent = nullptr);
 	~DShapeBase() = default;
 
 public:

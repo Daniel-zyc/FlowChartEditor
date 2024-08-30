@@ -86,6 +86,7 @@ void DScene::addRectItem()
 	qDebug() << "add rectangle";
 	DRectItem *item = new DRectItem(200, 200);
 	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -94,6 +95,7 @@ void DScene::addRoundRectItem()
 	qDebug() << "add round rectangle";
 	DRoundRectItem *item = new DRoundRectItem(200, 200);
 	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -102,6 +104,7 @@ void DScene::addEllItem()
 	qDebug() << "add ellipse";
 	DEllItem *item = new DEllItem(200, 200);
 	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -178,9 +181,9 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		if(modifiedShape->checkInterPoint(p))
 		{
 			// qDebug() << "modi";
-			modifiedShape->setInterPoint(p);
-			moditype = ModifyType::MODI;
+			moditype = modifiedShape->setInterPoint(p);
 		}
+		else moditype = DConst::NONE;
 		// else if(modifiedShape->checkSizePoint(p))
 		// {
 		// 	modifiedShape->setSizePoint(p);
@@ -206,11 +209,28 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	// 	return;
 	// }
 
-	if(moditype == ModifyType::MODI)
+	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
+	qDebug() << items;
+
+	MagPoint *magPoint = nullptr;
+	for(QGraphicsItem *item : items)
+	{
+		DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
+		qDebug() << item << " " << shape;
+		if(!shape) continue;
+		if(shape->checkMagPoint(p))
+		{
+			magPoint = shape->getMagPoint(p);
+			qDebug() << magPoint;
+			break;
+		}
+	}
+
+	if(moditype != DConst::NONE)
 	{
 		event->accept();
 		// qDebug() << "inter";
-		modifiedShape->interToPoint(p);
+		modifiedShape->interToPoint(p, magPoint);
 		return;
 	}
 	// else if(moditype == ModifyType::SIZE)
@@ -225,7 +245,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	moditype = ModifyType::NONE;
+	moditype = DConst::NONE;
 	modifiedShape = nullptr;
 
 	// if(state==SceneState::INSERTLINE)

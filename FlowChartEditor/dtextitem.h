@@ -40,6 +40,7 @@ class DTextItem : public DShapeBase
 public:
 	enum { Type = DConst::DTextItemType };
 	DTextItem(QGraphicsItem *parent = nullptr);
+	DTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 	DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent = nullptr);
 
 	int type() const override { return Type; }
@@ -51,6 +52,7 @@ public:
 	QPainterPath shapeNormal() const override;
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
+	void deleteMagPoint();
 
 private:
 	void setRect(const QRectF &nrect);
