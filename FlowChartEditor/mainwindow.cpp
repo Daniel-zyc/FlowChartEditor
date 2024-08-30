@@ -191,6 +191,11 @@ void MainWindow::saveAsSvg()
     generator.setSize(QSize(this->width(), this->height()));
     generator.setViewBox(QRect(0, 0, this->width(), this->height()));
 
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    for(QGraphicsItem *item : items) {
+        item->setSelected(false);
+    }
+
     QPainter painter;
     painter.begin(&generator);
     view->render(&painter);
