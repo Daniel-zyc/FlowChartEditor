@@ -40,3 +40,12 @@ void DTriItem::updateModiPoint()
 	// qDebug() << "update";
 	modis[0] = polygon[0];
 }
+
+//===================================
+void DTriItem::serialize(QDataStream &out) const{
+    DPolygonBase::serialize(out);
+}
+
+void DTriItem::deserialize(QDataStream &in){
+    DPolygonBase::deserialize(in);
+}

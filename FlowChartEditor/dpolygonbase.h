@@ -24,4 +24,14 @@ protected:
 	virtual void updateModiPoint() = 0;
 
 	QPolygonF polygon;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> polygon
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };

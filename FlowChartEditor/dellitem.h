@@ -25,5 +25,13 @@ private:
 	void updateMagPoint();
 
 	QRectF rect = QRectF(0, 0, 0, 0);
-};
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect
+     */
+    void serialize(QDataStream &out) const;
 
+    void deserialize(QDataStream &in);
+};

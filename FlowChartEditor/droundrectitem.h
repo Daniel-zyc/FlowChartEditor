@@ -26,5 +26,15 @@ private:
 
 	QRectF rect;
 	qreal radiusx = 30, radiusy = 30;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

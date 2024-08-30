@@ -69,7 +69,6 @@ public:
 	// 依据之前设置的状态，调整交互点的参数和图形的状态，其中 p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
-
 protected:
 	// 检查是否与调整点碰撞，p 为 item 坐标系下
 	virtual int checkModiPoint(QPointF p) const;
@@ -108,5 +107,15 @@ private:
 	int modiPointId = -1, sizePointId = -1;
 	// 是否显示磁吸点
 	bool showMagPoint = false;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化方法：this地址 -> magPoint列表大小 -> magPoint地址列表
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

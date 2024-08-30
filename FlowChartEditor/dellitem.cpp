@@ -18,7 +18,6 @@ void DEllItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *opt
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-	// setBrush(QBrush(Qt::transparent));
 	painter->setBrush(brush());
 	painter->setPen(pen());
 	painter->drawEllipse(rect);
@@ -61,4 +60,18 @@ void DEllItem::setRect(const QRectF &nrect)
 	rect = nrect;
 	sizeRectUpdated();
 	updateMagPoint();
+}
+
+//======================================
+
+void DEllItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << rect;
+}
+
+void DEllItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> rect;
 }

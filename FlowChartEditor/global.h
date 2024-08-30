@@ -128,3 +128,5 @@ namespace DConst
 		INSERT_SHAPE = 2
 	};
 };
+
+const int DataStreamVersion = QDataStream::Qt_5_15;

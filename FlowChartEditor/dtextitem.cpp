@@ -45,6 +45,13 @@ void DTextBase::focusToCenter()
 	setTransformOriginPoint(cent);
 }
 
+void DTextBase::serialize(QDataStream &out) const{
+    out << curCent;
+}
+
+void DTextBase::deserialize(QDataStream &in){
+    in >> curCent;
+}
 //==============================================================================
 
 DTextItem::DTextItem(QGraphicsItem *parent)
@@ -130,4 +137,18 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 		if(!isSelected()) textBase.endEdit();
 	}
 	return QGraphicsItem::itemChange(change, value);
+void DTextItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    textBase.serialize(out);
+
+    out << rect;
+}
+
+void DTextItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    textBase.deserialize(in);
+
+    in >> rect;
 }

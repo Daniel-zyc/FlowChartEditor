@@ -136,3 +136,23 @@ void DLineBase::updatePosition()
 	updateLine();
 	update();
 }
+
+//===========================================
+
+void DLineBase::serialize(QDataStream &out) const{
+    DAbstractBase::serialize(out);
+
+    out << beginPoint;
+    out << endPoint;
+
+    out << beginArrowType << endArrowType;
+}
+
+void DLineBase::deserialize(QDataStream &in){
+    DAbstractBase::deserialize(in);
+
+    in >> beginPoint;
+    in >> endPoint;
+
+    in >> beginArrowType >> endArrowType;
+}

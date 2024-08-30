@@ -26,6 +26,16 @@ public:
 	void endEdit();
 
 	void focusToCenter();
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：curCent
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 
 class DTextItem : public DShapeBase
@@ -61,5 +71,15 @@ public:
 
 private:
 	QRectF rect = QRectF(0, 0, 0, 0);
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> textBase -> rect
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

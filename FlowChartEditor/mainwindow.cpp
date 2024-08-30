@@ -1,10 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QSvgGenerator>
-// #include <QPainter>
-#include "dtextitem.h"
+#include <QPainter>
+#include <QFileDialog>
+#include "dlineitem.h"
 #include "dshapebase.h"
 
+#include <QSize>
+#include <QColor>
 #include <QGraphicsRectItem>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -27,8 +30,21 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
 	m->addAction(ui->actAddLine);
+    m->addAction(ui->actSelectFrameCol);
+    m->addAction(ui->actSelectFillCol);
+    m->addAction(ui->actSelectTextCol);
+    m->addAction(ui->actSelectTextFont);
 
     findDia = new DFindDialog();
+
+    colorDia = new QColorDialog(Qt::blue, this);
+    colorDia->setOption(QColorDialog::ShowAlphaChannel);
+    colorDia->setOption(QColorDialog::DontUseNativeDialog);
+
+    fontDia = new QFontDialog(this);
+    // fontDia->setOption(QFontDialog::DontUseNativeDialog);
+    fontDia->setOption(QFontDialog::ScalableFonts);
+    fontDia->setOption(QFontDialog::ProportionalFonts);
 
 	scene->setMenu(m);
 	scene->addLine(-1000, 0, 1000, 0);
@@ -51,7 +67,7 @@ void MainWindow::createMenu()
 	ui->fileMenu->addAction(ui->actNewFile);
 	ui->fileMenu->addAction(ui->actOpenFile);
 	ui->fileMenu->addAction(ui->actSaveFile);
-	ui->fileMenu->addAction(ui->actExportFile);
+    ui->fileMenu->addAction(ui->actSvgFile);
 	ui->fileMenu->addAction(ui->actExit);
 
 	ui->editMenu->addAction(ui->actUndo);
@@ -120,12 +136,18 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
+
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
 	connect(ui->actAddRoundRect, SIGNAL(triggered(bool)), this, SLOT(addRoundRect()));
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
+    connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
+    connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
+    connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
+    connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(selectTextFont()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -160,6 +182,26 @@ void MainWindow::bindAction()
 	connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
 }
 
+void MainWindow::saveAsSvg()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file");
+    if(filePath == "") return;
+    QSvgGenerator generator;
+    generator.setFileName(filePath);
+    generator.setSize(QSize(this->width(), this->height()));
+    generator.setViewBox(QRect(0, 0, this->width(), this->height()));
+
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    for(QGraphicsItem *item : items) {
+        item->setSelected(false);
+    }
+
+    QPainter painter;
+    painter.begin(&generator);
+    view->render(&painter);
+    painter.end();
+}
+
 void MainWindow::addLine()
 {
 	scene->addLineItem();
@@ -189,6 +231,112 @@ void MainWindow::addTri()
 {
     scene->addTriItem();
 }
+
+QSet<DTextBase *> MainWindow::getTextBases()
+{
+    QSet<DTextBase *> texts;
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    for(QGraphicsItem *item : items) {
+        DTextItem *textitem = dynamic_cast<DTextItem *>(item);
+        if(textitem != nullptr) {
+            texts.insert(&(textitem->textBase));
+            continue;
+        }
+        DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
+        if(shape != nullptr) {
+            texts.insert(&(shape->textItem->textBase));
+            continue;
+        }
+        DTextBase *textbase = dynamic_cast<DTextBase *>(item);
+        if(textbase != nullptr) {
+            // qDebug() << "text not null";
+            texts.insert(textbase);
+        }
+    }
+    return texts;
+}
+
+void MainWindow::selectFrameCol()
+{
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    QColor color = colorDia->getColor(Qt::white, this);
+    for(QGraphicsItem *item : items) {
+        DLineItem *line = dynamic_cast<DLineItem *>(item);
+        if(line != nullptr) {
+            QPen npen = line->pen();
+            npen.setColor(color);
+            line->setPen(npen);
+            continue;
+        }
+        DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
+        if(shape != nullptr) {
+            DTextItem *text = dynamic_cast<DTextItem *>(shape);
+            if(text != nullptr) continue;
+            QPen npen = shape->pen();
+            npen.setColor(color);
+            shape->setPen(npen);
+        }
+    }
+}
+
+void MainWindow::selectFillCol()
+{
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    QColor color = colorDia->getColor(Qt::white, this);
+    // qDebug() << items;
+    // qDebug() << color;
+    for(QGraphicsItem *item : items) {
+        DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
+        if(shape != nullptr) {
+            DTextItem *text = dynamic_cast<DTextItem *>(shape);
+            if(text != nullptr) continue;
+            QBrush nbrush = shape->brush();
+            nbrush.setColor(color);
+            shape->setBrush(nbrush);
+        }
+    }
+}
+
+void MainWindow::selectTextCol()
+{
+    QSet<DTextBase *> texts = getTextBases();
+    QColor color = colorDia->getColor(Qt::white, this);
+    // qDebug() << items;
+    // qDebug() << color;
+
+    QTextCharFormat charformat;
+    charformat.setForeground(color);
+    // charformat.setForeground(color);
+    for(DTextBase *tbase : texts) {
+        QTextCursor cursor(tbase->document());
+        // if(cursor.hasSelection()) {
+        //     // qDebug() << "has selection";
+        //     cursor.mergeCharFormat(charformat);
+        // }
+        // cursor.beginEditBlock();
+        cursor.movePosition(QTextCursor::Start);
+        while(!cursor.isNull() && !cursor.atEnd()) {
+            cursor.select(QTextCursor::BlockUnderCursor);
+            cursor.mergeCharFormat(charformat);
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+        // cursor.endEditBlock();
+    }
+}
+
+void MainWindow::selectTextFont()
+{
+    QSet<DTextBase *> texts = getTextBases();
+    bool flag = true;
+    QFont font = fontDia->getFont(&flag, this);
+    if(flag) {
+        for(DTextBase *tbase : texts) {
+            tbase->document()->setDefaultFont(font);
+        }
+    }
+}
+
+
 
 void MainWindow::rotateCW()
 {
@@ -256,20 +404,15 @@ void MainWindow::moveDown()
 
 void MainWindow::findandReplace()
 {
-	// qDebug() << "f1";
     findDia->docs.clear();
-	// qDebug() << "f2";
     QList<QGraphicsItem *> items = scene->items();
     for(QGraphicsItem *item : items){
-		// qDebug() << "f3";
         DTextBase *text = dynamic_cast<DTextBase *>(item);
         if(text != nullptr){
             QTextDocument *doc0= text->document();
             findDia->docs.push_back(doc0);
-			// qDebug() << "text";
         }
     }
-	// qDebug() << "f4";
     findDia->show();
 }
 

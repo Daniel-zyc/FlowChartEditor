@@ -25,7 +25,8 @@ SOURCES += \
     global.cpp \
     magpoint.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    serializer.cpp
 
 HEADERS += \
     dabstractbase.h \
@@ -43,7 +44,8 @@ HEADERS += \
     dview.h \
     global.h \
     magpoint.h \
-    mainwindow.h
+    mainwindow.h \
+    serializer.h
 
 FORMS += \
     mainwindow.ui
@@ -52,3 +54,5 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES +=
