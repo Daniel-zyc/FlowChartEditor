@@ -65,6 +65,13 @@ void DTextBase::focusToCenter()
 	curCent = cent;
 }
 
+void DTextBase::serialize(QDataStream &out) const{
+    out << curCent;
+}
+
+void DTextBase::deserialize(QDataStream &in){
+    in >> curCent;
+}
 //==============================================================================
 
 DTextItem::DTextItem(QGraphicsItem *parent)
@@ -136,4 +143,20 @@ void DTextItem::setRect(const QRectF &nrect)
 	textBase.setTextWidth(rect.width());
 	sizeRectUpdated();
 	updateMagPoint();
+}
+
+void DTextItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    textBase.serialize(out);
+
+    out << rect;
+}
+
+void DTextItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    textBase.deserialize(in);
+
+    in >> rect;
 }

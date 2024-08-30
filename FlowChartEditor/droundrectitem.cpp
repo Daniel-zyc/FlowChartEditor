@@ -82,3 +82,19 @@ void DRoundRectItem::setRect(const QRectF &nrect)
 	updateMagPoint();
 	updateModiPoint();
 }
+
+//====================================
+
+void DRoundRectItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << rect;
+    out << radiusx << radiusy;
+}
+
+void DRoundRectItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> rect;
+    in >> radiusx >> radiusy;
+}

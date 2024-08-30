@@ -16,5 +16,15 @@ public:
 protected:
 	void updateMagPoint() override;
 	void updateModiPoint() override;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DPolygonBase
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

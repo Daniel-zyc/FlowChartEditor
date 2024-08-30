@@ -46,3 +46,13 @@ void DLineItem::updateLine()
 {
 	return;
 }
+
+//================================
+
+void DLineItem::serialize(QDataStream &out) const{
+    DLineBase::serialize(out);
+}
+
+void DLineItem::deserialize(QDataStream &in){
+    DLineBase::deserialize(in);
+}

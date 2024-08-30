@@ -62,3 +62,17 @@ void DEllItem::setRect(const QRectF &nrect)
 	sizeRectUpdated();
 	updateMagPoint();
 }
+
+//======================================
+
+void DEllItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << rect;
+}
+
+void DEllItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> rect;
+}

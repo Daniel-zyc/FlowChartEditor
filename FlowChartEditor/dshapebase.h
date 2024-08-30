@@ -100,5 +100,15 @@ protected:
 private:
 	// 当前的交互类型
 	int interactType = DConst::NONE;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

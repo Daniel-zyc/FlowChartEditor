@@ -195,3 +195,12 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 	}
 	return nrc;
 }
+
+//===========================================
+void DShapeBase::serialize(QDataStream &out) const{
+    DAbstractBase::serialize(out);
+}
+
+void DShapeBase::deserialize(QDataStream &in){
+    DAbstractBase::deserialize(in);
+}

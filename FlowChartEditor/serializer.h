@@ -37,7 +37,7 @@ private:
 
     void loadFromFile();
 
-    void serializeSceneItems(QGraphicsScene *scene);
+    void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
 
     //===============================================================
     template <typename T>

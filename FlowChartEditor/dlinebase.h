@@ -50,5 +50,15 @@ protected:
 
 private:
 	int interactType = DConst::NONE;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：父类DAbstractBase序列化 -> beginPoint -> endPoint -> beginArrowType -> endArrowType
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

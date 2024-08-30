@@ -43,3 +43,16 @@ void DPolygonBase::setPoly(const QPolygonF &npoly)
 	updateMagPoint();
 	updateModiPoint();
 }
+
+//==============================================
+void DPolygonBase::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << polygon;
+}
+
+void DPolygonBase::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> polygon;
+}

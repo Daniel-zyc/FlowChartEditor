@@ -120,5 +120,15 @@ private:
 	bool showMagPoint = false;
 	// 选中的调整点、大小点 Id
     int modiPointId = -1, sizePointId = -1;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化方法：this地址 -> magPoint列表大小 -> magPoint地址列表
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 
