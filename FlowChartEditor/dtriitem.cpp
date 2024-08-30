@@ -13,7 +13,7 @@ DTriItem::DTriItem(qreal w, qreal h, QGraphicsItem *parent)
 	mags->push_back(new MagPoint(this));
 
 	QPolygonF poly;
-	poly << QPointF(0, -h/2) << QPointF(-w/2, h/2) << QPointF(w/2, h/2);
+	poly << QPointF(0, -h/2) << QPointF(w/2, h/2) << QPointF(-w/2, h/2);
 	setPoly(poly);
 }
 
@@ -37,6 +37,6 @@ void DTriItem::updateMagPoint()
 
 void DTriItem::updateModiPoint()
 {
-	qDebug() << "update";
+	// qDebug() << "update";
 	modis[0] = polygon[0];
 }

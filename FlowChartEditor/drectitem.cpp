@@ -18,7 +18,7 @@ void DRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-	setBrush(QBrush(Qt::transparent));
+	// setBrush(QBrush(Qt::transparent));
 	painter->setBrush(brush());
 	painter->setPen(pen());
 	painter->drawRect(rect);
