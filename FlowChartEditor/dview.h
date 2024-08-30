@@ -15,9 +15,9 @@ public:
 	void resetRotation() { setRotation(0.0); }
 	void setRotation(qreal angle = 0.0);
 	void rotateCW(qreal deg = DView::defaultRotateDelta)
-	{ setRotation(degMod(rotation - deg)); }
+	{ setRotation(DTool::degMod(rotation - deg)); }
 	void rotateCCW(qreal deg = DView::defaultRotateDelta)
-	{ setRotation(degMod(rotation + deg)); }
+	{ setRotation(DTool::degMod(rotation + deg)); }
 
 	void resetScale() { setScale(1.0); }
 	void setScale(qreal scale = 1.0);

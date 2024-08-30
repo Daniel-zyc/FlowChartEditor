@@ -7,7 +7,7 @@
 class DPolygonBase : public DShapeBase
 {
 public:
-	enum { Type = DConst::DPolygonBaseType };
+	enum { Type = DPolygonBaseType };
 	DPolygonBase(QGraphicsItem *parent = nullptr);
 
 public:

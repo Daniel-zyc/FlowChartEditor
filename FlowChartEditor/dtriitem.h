@@ -5,7 +5,7 @@
 class DTriItem : public DPolygonBase
 {
 public:
-	enum { Type = DConst::DTriItemType };
+	enum { Type = DTriItemType };
 	DTriItem(QGraphicsItem *parent = nullptr);
 	DTriItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

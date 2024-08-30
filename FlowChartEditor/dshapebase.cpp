@@ -1,17 +1,15 @@
 #include "dshapebase.h"
 #include "dabstractbase.h"
 #include "dtextitem.h"
+#include "magpoint.h"
 
 DShapeBase::DShapeBase(QGraphicsItem *parent)
-	: DAbstractBase(parent)
-{
-	maxPointRadius = qMax(maxPointRadius, rotPointRadius);
-}
+	: DAbstractBase(parent) {}
 
-DShapeBase::DShapeBase(const QString &str, QGraphicsItem *parent)
+DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
-	textItem = new DTextItem(str, this);
+	textItem = new DTextItem(text, this);
 }
 
 QRectF DShapeBase::boundingRect() const
@@ -24,9 +22,8 @@ QRectF DShapeBase::boundingRect() const
 void DShapeBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	paintSelectRect(painter, option, widget);
-	paintSizePoint(painter, option, widget);
+	DAbstractBase::paintSelected(painter, option, widget);
 	paintRotPoint(painter, option, widget);
-	paintModiPoint(painter, option, widget);
 }
 
 void DShapeBase::paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -86,17 +83,15 @@ void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 			sizeToPointPre(mapFromScene(p));
 			break;
 		case DConst::ROT:
-			QPointF c = mapToScene({0, 0});
-			rotToPoint(p - c);
+			rotToPoint(p - mapToScene({0, 0}));
 			break;
 	}
 }
 
 bool DShapeBase::checkRotPoint(QPointF p) const
 {
-	qreal r = rotPointRadius;
-	QPointF rp = rotPoint;
-	return QRectF(rp.x()-r, rp.y()-r, 2*r, 2*r).contains(p);
+	qreal r = rotPointRadius; QPointF rp = rotPoint;
+	return DTool::inCircle(rp, r, p);
 }
 
 bool DShapeBase::setRotPoint(QPointF p)
@@ -121,41 +116,34 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 void DShapeBase::rotToPoint(QPointF p)
 {
-	qreal deg = radToDeg(atan2(p.x(), -p.y()));
+	qreal deg = DTool::radToDeg(atan2(p.x(), -p.y()));
 	setRotation(deg);
 }
 
 void DShapeBase::sizeRectUpdated()
 {
 	QRectF rc = sizeRect();
-	qreal minx = rc.left(), maxx = rc.right(), midx = rc.center().x();
-	qreal miny = rc.top(), maxy = rc.bottom(), midy = rc.center().y();
+	qreal minx = rc.left(), maxx = rc.right();
+	qreal miny = rc.top(), maxy = rc.bottom();
 	
 	sizes.resize(8);
-	sizes[DConst::T - 1] = {midx, miny};
-	sizes[DConst::B - 1] = {midx, maxy};
-	sizes[DConst::L - 1] = {minx, midy};
-	sizes[DConst::R - 1] = {maxx, midy};
+	sizes[DConst::T - 1] = {0, miny};
+	sizes[DConst::B - 1] = {0, maxy};
+	sizes[DConst::L - 1] = {minx, 0};
+	sizes[DConst::R - 1] = {maxx, 0};
 	sizes[DConst::TL - 1] = {minx, miny};
 	sizes[DConst::TR - 1] = {maxx, miny};
 	sizes[DConst::BL - 1] = {minx, maxy};
 	sizes[DConst::BR - 1] = {maxx, maxy};
 
-	rotPoint = {midx, miny - rotPointMargin};
+	rotPoint = {0, miny - rotPointMargin};
 }
 
 QPainterPath DShapeBase::shapeSelected() const
 {
-	QPainterPath pth;
-	pth.addRect(boundingRect());
-	return pth;
-}
-
-QPainterPath DShapeBase::shapeShowMaged() const
-{
-	QPainterPath pth;
-	qreal r = magPointCollideRadius;
-	pth.addRect(sizeRect().adjusted(-r, -r, r, r));
+	QPainterPath pth = DAbstractBase::shapeSelected();
+	qreal r = rotPointRadius;
+	pth.addEllipse(rotPoint, r, r);
 	return pth;
 }
 

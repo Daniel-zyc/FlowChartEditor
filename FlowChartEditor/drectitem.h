@@ -8,7 +8,7 @@ class DShapeBase;
 class DRectItem : public DShapeBase
 {
 public:
-	enum { Type = DConst::DRectItemType };
+	enum { Type = DRectItemType };
 	DRectItem(QGraphicsItem *parent = nullptr);
 	DRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

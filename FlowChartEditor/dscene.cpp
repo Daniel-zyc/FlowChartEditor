@@ -42,7 +42,7 @@ void DScene::setRotation(qreal angle)
 void DScene::rotateSelected(qreal deg)
 {
 	for(QGraphicsItem *item : selectedItems())
-		item->setRotation(degMod(item->rotation() + deg));
+		item->setRotation(DTool::degMod(item->rotation() + deg));
 }
 
 void DScene::setScale(qreal scale)
@@ -85,7 +85,7 @@ void DScene::addRectItem()
 {
 	qDebug() << "add rectangle";
 	DRectItem *item = new DRectItem(200, 200);
-	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem = new DTextItem(100, 100, "", item);
 	item->textItem->deleteMagPoint();
 	addItem(item);
 }
@@ -219,6 +219,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		if(modifiedShape->checkInterPoint(p))
 		{
 			// qDebug() << "modi";
+			// qDebug() << modifiedShape->checkInterPoint(p);
 			moditype = modifiedShape->setInterPoint(p);
 		}
 		else moditype = DConst::NONE;

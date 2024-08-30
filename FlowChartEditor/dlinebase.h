@@ -11,7 +11,7 @@ class MagPoint;
 class DLineBase : public DAbstractBase
 {
 public:
-	enum { Type = DConst::DLineBaseType };
+	enum { Type = DLineBaseType };
 	DLineBase(QGraphicsItem *parent = nullptr);
 	~DLineBase() = default;
 

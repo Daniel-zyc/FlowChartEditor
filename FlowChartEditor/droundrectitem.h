@@ -6,7 +6,7 @@
 class DRoundRectItem : public DShapeBase
 {
 public:
-	enum { Type = DConst::DRoundRectItemType };
+	enum { Type = DRoundRectItemType };
 	DRoundRectItem(QGraphicsItem *parent = nullptr);
 	DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

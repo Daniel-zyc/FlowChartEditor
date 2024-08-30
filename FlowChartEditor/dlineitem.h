@@ -8,7 +8,7 @@ class DShapeBase;
 class DLineItem : public DLineBase
 {
 public:
-	enum { Type = DConst::DLineItemType };
+	enum { Type = DLineItemType };
 	DLineItem(QGraphicsItem *parent = nullptr);
 	DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent = nullptr);
 

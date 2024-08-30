@@ -11,9 +11,9 @@ class DTextItem;
 class DShapeBase : public DAbstractBase
 {
 public:
-	enum { Type = DConst::DShapeBaseType };
+	enum { Type = DShapeBaseType };
 	DShapeBase(QGraphicsItem *parent = nullptr);
-	DShapeBase(const QString &str, QGraphicsItem *parent = nullptr);
+	DShapeBase(const QString &text, QGraphicsItem *parent = nullptr);
 	~DShapeBase() = default;
 
 public:
@@ -28,7 +28,7 @@ public:
 	virtual void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override = 0;
 	//==========================================================================
 
-	// 绘制选中时的图形，顺序为selectedRect, sizePoint, rotPoint, modiPoint
+	// 绘制选中时的图形，顺序为 selectedRect, sizePoint, modiPoint, rotPoint
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	// 绘制图形的正常包围框
 	virtual void paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -57,10 +57,8 @@ protected:
 	virtual void sizeRectUpdated();
 
 protected:
-	// 被选中时的碰撞范围，默认设置为图形的 boundingRect()
+	// 被选中时多出的碰撞框，与父类相比多出了旋转点
 	virtual QPainterPath shapeSelected() const override;
-	// 绘制磁吸点时的碰撞范围，默认为 sizeRect 放大磁吸点半径大小
-	virtual QPainterPath shapeShowMaged() const override;
 
 	//==========================================================================
 	// 图形的大小框
@@ -89,13 +87,6 @@ protected:
 	qreal rotPointRadius = 5, rotPointMargin = 30;
 	// 旋转点位置
 	QPointF rotPoint = {0, 0};
-	
-protected:
-	// 相关画刷
-	QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
-	QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
-	QBrush selectRectBrush = QBrush(Qt::transparent, Qt::SolidPattern);
-	QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
 	
 private:
 	// 当前的交互类型
