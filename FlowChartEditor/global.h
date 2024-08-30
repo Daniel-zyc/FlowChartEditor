@@ -74,3 +74,5 @@ namespace DConst
 
 	};
 };
+
+const int DataStreamVersion = QDataStream::Qt_5_15;

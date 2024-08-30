@@ -43,7 +43,6 @@ public:
 	// 依据之前设置的状态，调整交互点的参数和图形的状态，其中 p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
-
 protected:
 	// 绘制调整点
 	virtual void paintModiPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -89,7 +88,7 @@ protected:
 	// 被选中下的碰撞范围
 	virtual QPainterPath shapeSelected() const = 0;
 	// 正常情况下的碰撞范围
-	virtual QPainterPath shapeNormal() const = 0;
+    virtual QPainterPath shapeNormal() const = 0;
 	// 显示磁吸点时的碰撞范围
 	virtual QPainterPath shapeShowMaged() const = 0;
 	//==========================================================================
@@ -120,6 +119,6 @@ private:
 	// 是否显示磁吸点
 	bool showMagPoint = false;
 	// 选中的调整点、大小点 Id
-	int modiPointId = -1, sizePointId = -1;
+    int modiPointId = -1, sizePointId = -1;
 };
 

@@ -25,7 +25,8 @@ SOURCES += \
     global.cpp \
     magpoint.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    serializer.cpp
 
 HEADERS += \
     dabstractbase.h \
@@ -43,7 +44,8 @@ HEADERS += \
     dview.h \
     global.h \
     magpoint.h \
-    mainwindow.h
+    mainwindow.h \
+    serializer.h
 
 FORMS += \
     mainwindow.ui
