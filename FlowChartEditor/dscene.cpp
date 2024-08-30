@@ -86,6 +86,7 @@ void DScene::addRectItem()
 	qDebug() << "add rectangle";
 	DRectItem *item = new DRectItem(200, 200);
 	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -94,6 +95,7 @@ void DScene::addRoundRectItem()
 	qDebug() << "add round rectangle";
 	DRoundRectItem *item = new DRoundRectItem(200, 200);
 	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -102,6 +104,7 @@ void DScene::addEllItem()
 	qDebug() << "add ellipse";
 	DEllItem *item = new DEllItem(200, 200);
 	item->textItem = new DTextItem(100, 100, "hello world!", item);
+	item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -122,6 +125,37 @@ void DScene::addTriItem()
 	addItem(item);
 }
 
+void DScene::combineSelected()
+{
+	int cnt=selectedItems().count();
+	if (cnt>1)
+	{
+		QGraphicsItemGroup* group = new QGraphicsItemGroup;  //创建组合
+		group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+		addItem(group);      //添加到场景中
+
+		for (int i=0;i<cnt;i++)     //将选择的图形项添加到组合中
+		{
+			QGraphicsItem* item=selectedItems().at(0);
+			item->setSelected(false);    //取消选择
+			item->clearFocus();          //清除焦点状态
+			if(item->parentItem() != nullptr) continue;
+			group->addToGroup(item);     //添加到组合
+		}
+	}
+}
+
+void DScene::seperateSelected()
+{
+	int cnt=selectedItems().count();
+	if (cnt==1)
+	{
+		QGraphicsItemGroup  *group = dynamic_cast<QGraphicsItemGroup*>(selectedItems().at(0));
+		if(!group) return;
+		destroyItemGroup(group); //打散组合
+	}
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected";
@@ -135,6 +169,13 @@ void DScene::delSelectedItem()
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+	qDebug() << event->button();
+	if(event->button() != Qt::LeftButton)
+	{
+		QGraphicsScene::mousePressEvent(event);
+		return;
+	}
+
 	QPointF p = event->scenePos();
 	QList<QGraphicsItem *> items = this->items(p);
 
@@ -178,9 +219,9 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		if(modifiedShape->checkInterPoint(p))
 		{
 			// qDebug() << "modi";
-			modifiedShape->setInterPoint(p);
-			moditype = ModifyType::MODI;
+			moditype = modifiedShape->setInterPoint(p);
 		}
+		else moditype = DConst::NONE;
 		// else if(modifiedShape->checkSizePoint(p))
 		// {
 		// 	modifiedShape->setSizePoint(p);
@@ -198,6 +239,13 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+	// qDebug() << event->button();
+	// if(event->button() != Qt::LeftButton)
+	// {
+
+	// 	QGraphicsScene::mouseMoveEvent(event);
+	// 	return;
+	// }
 	QPointF p = event->scenePos();
 
 	// if(state == SceneState::INSERTLINE)
@@ -206,11 +254,33 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	// 	return;
 	// }
 
-	if(moditype == ModifyType::MODI)
+	if(showMagedItem)
+	{
+		showMagedItem->setShowMagPoint(false);
+		showMagedItem = nullptr;
+	}
+
+	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
+
+	MagPoint *magPoint = nullptr;
+	for(QGraphicsItem *item : items)
+	{
+		DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
+		if(!shape) continue;
+		if(shape->checkMagPoint(p))
+		{
+			shape->setShowMagPoint(true);
+			showMagedItem = shape;
+			magPoint = shape->getMagPoint(p);
+			break;
+		}
+	}
+
+	if(moditype != DConst::NONE)
 	{
 		event->accept();
 		// qDebug() << "inter";
-		modifiedShape->interToPoint(p);
+		modifiedShape->interToPoint(p, magPoint);
 		return;
 	}
 	// else if(moditype == ModifyType::SIZE)
@@ -225,7 +295,14 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	moditype = ModifyType::NONE;
+	qDebug() << event->button();
+	if(event->button() != Qt::LeftButton)
+	{
+		QGraphicsScene::mouseReleaseEvent(event);
+		return;
+	}
+
+	moditype = DConst::NONE;
 	modifiedShape = nullptr;
 
 	// if(state==SceneState::INSERTLINE)

@@ -18,8 +18,6 @@ void DRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-    // setBrush(QBrush(Qt::transparent));
-    // qDebug() << brush();
 	painter->setBrush(brush());
 	painter->setPen(pen());
 	painter->drawRect(rect);
@@ -62,4 +60,18 @@ void DRectItem::setRect(const QRectF &nrect)
 	rect = nrect;
 	sizeRectUpdated();
 	updateMagPoint();
+}
+
+//========================================
+
+void DRectItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << rect;
+}
+
+void DRectItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> rect;
 }

@@ -65,15 +65,28 @@ void DTextBase::focusToCenter()
 	curCent = cent;
 }
 
+void DTextBase::serialize(QDataStream &out) const{
+    out << curCent;
+}
+
+void DTextBase::deserialize(QDataStream &in){
+    in >> curCent;
+}
 //==============================================================================
 
 DTextItem::DTextItem(QGraphicsItem *parent)
 	: DShapeBase(parent) {}
 
+DTextItem::DTextItem(const QString &text, QGraphicsItem *parent)
+	: DShapeBase(parent)
+{
+	textBase.document()->setPlainText(text);
+}
+
 DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
-    textBase.document()->setPlainText(text);
+	textBase.document()->setPlainText(text);
 
 	mags->push_back(new MagPoint(this));
 	mags->push_back(new MagPoint(this));
@@ -119,10 +132,31 @@ void DTextItem::modiToPoint(QPointF p, int id)
 	return;
 }
 
+void DTextItem::deleteMagPoint()
+{
+	mags->clear();
+}
+
 void DTextItem::setRect(const QRectF &nrect)
 {
 	rect = nrect;
 	textBase.setTextWidth(rect.width());
 	sizeRectUpdated();
 	updateMagPoint();
+}
+
+void DTextItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    textBase.serialize(out);
+
+    out << rect;
+}
+
+void DTextItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    textBase.deserialize(in);
+
+    in >> rect;
 }

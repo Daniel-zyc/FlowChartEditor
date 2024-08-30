@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QMenu *m = new QMenu();
 	m->addAction(ui->actDelSelectedItem);
+	m->addAction(ui->actCombine);
+	m->addAction(ui->actSeperate);
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
 	m->addAction(ui->actAddLine);
@@ -176,22 +178,18 @@ void MainWindow::bindAction()
 	connect(ui->actMoveDown, SIGNAL(triggered(bool)), this, SLOT(moveDown()));
 
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
+	connect(ui->actCombine, SIGNAL(triggered(bool)), this, SLOT(combineSelected()));
+	connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
 }
 
 void MainWindow::addLine()
 {
 	scene->addLineItem();
-	// DText *text = new DText("Hello World");
-	// text->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(text);
 }
 
 void MainWindow::addRect()
 {
 	scene->addRectItem();
-	// DRect *rect = new DRect(-100, -100, 200, 200);
-	// rect->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(rect);
 }
 
 void MainWindow::addRoundRect()
@@ -202,17 +200,11 @@ void MainWindow::addRoundRect()
 void MainWindow::addEll()
 {
 	scene->addEllItem();
-	// DShape *ell = new DShape();
-	// ell->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(ell);
 }
 
 void MainWindow::addText()
 {
 	scene->addTextItem();
-	// DText *text = new DText("Hello World");
-	// text->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(text);
 }
 
 void MainWindow::addTri()
@@ -407,4 +399,14 @@ void MainWindow::findandReplace()
 void MainWindow::delSelectedItem()
 {
 	scene->delSelectedItem();
+}
+
+void MainWindow::combineSelected()
+{
+	scene->combineSelected();
+}
+
+void MainWindow::seperateSelected()
+{
+	scene->seperateSelected();
 }

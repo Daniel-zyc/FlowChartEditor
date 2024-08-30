@@ -33,6 +33,16 @@ private:
 	void focusToCenter();
 
 	QPointF curCent = {0, 0};
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：curCent
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 
 class DTextItem : public DShapeBase
@@ -40,6 +50,7 @@ class DTextItem : public DShapeBase
 public:
 	enum { Type = DConst::DTextItemType };
 	DTextItem(QGraphicsItem *parent = nullptr);
+	DTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 	DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent = nullptr);
 
 	int type() const override { return Type; }
@@ -51,6 +62,7 @@ public:
 	QPainterPath shapeNormal() const override;
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
+	void deleteMagPoint();
 
 private:
 	void setRect(const QRectF &nrect);
@@ -61,5 +73,15 @@ public:
 
 private:
 	QRectF rect = QRectF(0, 0, 0, 0);
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> textBase -> rect
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

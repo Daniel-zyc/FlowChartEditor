@@ -1,6 +1,8 @@
 #include "magpoint.h"
 #include "dabstractbase.h"
 
+#include "serializer.h"
+
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
@@ -17,6 +19,7 @@ QPainterPath DAbstractBase::shape() const
 	pth.addPath(shapeNormal());
 	if(isSelected()) pth.addPath(shapeSelected());
 	if(showMagPoint) pth.addPath(shapeShowMaged());
+	qDebug() << pth;
 	return pth;
 }
 
@@ -165,9 +168,9 @@ bool DAbstractBase::checkMagPoint(QPointF p) const
 	{
 		const QPointF& mp = (*mags)[i]->pos;
 		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
-			return i;
+			return true;
 	}
-	return -1;
+	return false;
 }
 
 MagPoint* DAbstractBase::getMagPoint(QPointF p)
@@ -194,5 +197,35 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 
 void DAbstractBase::updateAllLinkLines()
 {
+	// qDebug() << "updateLines";
 	for(MagPoint* mag : *mags) mag->updateLines();
+}
+
+//=======================================
+
+void DAbstractBase::serialize(QDataStream &out) const{
+    out << reinterpret_cast<qintptr>(this);
+
+    if(mags == nullptr) out << static_cast<quint32>(0);
+    else{
+
+        out << static_cast<quint32>(mags->size());
+        for(MagPoint *magPoint : *mags){
+            out << reinterpret_cast<qintptr>(magPoint);
+        }
+    }
+}
+
+void DAbstractBase::deserialize(QDataStream &in){
+    qintptr thisPtr;
+    in >> thisPtr;
+    Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
+
+    quint32 magPointCount;
+    in >> magPointCount;
+    for(quint32 i = 0; i < magPointCount; i++){
+        qintptr magPointPtr;
+        in >> magPointPtr;
+        Serializer::instance().DAbstractBaseToMagsPtr.insert(this, magPointPtr);
+    }
 }

@@ -7,7 +7,6 @@ void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem 
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-    // setBrush(QBrush(Qt::transparent));
 	painter->setPen(pen());
 	painter->setBrush(brush());
 	painter->drawPolygon(polygon);
@@ -42,4 +41,17 @@ void DPolygonBase::setPoly(const QPolygonF &npoly)
 	sizeRectUpdated();
 	updateMagPoint();
 	updateModiPoint();
+}
+
+//==============================================
+void DPolygonBase::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << polygon;
+}
+
+void DPolygonBase::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> polygon;
 }

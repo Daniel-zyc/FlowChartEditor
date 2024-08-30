@@ -68,26 +68,36 @@ void DLineBase::interToPoint(QPointF p, MagPoint *mp)
 void DLineBase::linkBegin(MagPoint *mp)
 {
 	beginMag = mp;
+	mp->addLine(this);
 	updatePosition();
 }
 
 void DLineBase::linkEnd(MagPoint *mp)
 {
 	endMag = mp;
+	mp->addLine(this);
 	updatePosition();
 }
 
 void DLineBase::unlinkBegin()
 {
-	beginPoint = beginMag->mapToItem(this);
-	beginMag = nullptr;
+	if(beginMag)
+	{
+		beginPoint = beginMag->mapToItem(this);
+		if(beginMag) beginMag->deleteLine(this);
+		beginMag = nullptr;
+	}
 	updatePosition();
 }
 
 void DLineBase::unlinkEnd()
 {
-	endPoint = endMag->mapToItem(this);
-	endMag = nullptr;
+	if(endMag)
+	{
+		endPoint = endMag->mapToItem(this);
+		endMag->deleteLine(this);
+		endMag = nullptr;
+	}
 	updatePosition();
 }
 
@@ -96,12 +106,20 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 	switch(id)
 	{
 		case DConst::ST - 1 :
-			beginMag = mp;
-			beginPoint = p;
+			if(mp) linkBegin(mp);
+			else
+			{
+				unlinkBegin();
+				beginPoint = p;
+			}
 			break;
 		case DConst::ED - 1 :
-			endMag = mp;
-			endPoint = p;
+			if(mp) linkEnd(mp);
+			else
+			{
+				unlinkEnd();
+				endPoint = p;
+			}
 			break;
 	}
 	updatePosition();
@@ -109,6 +127,7 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 void DLineBase::updatePosition()
 {
+	// qDebug() << beginMag << " " << endMag;
 	if(beginMag) beginPoint = beginMag->mapToItem(this);
 	if(endMag) endPoint = endMag->mapToItem(this);
 	sizes[DConst::ST - 1] = beginPoint;
@@ -116,4 +135,24 @@ void DLineBase::updatePosition()
 	prepareGeometryChange();
 	updateLine();
 	update();
+}
+
+//===========================================
+
+void DLineBase::serialize(QDataStream &out) const{
+    DAbstractBase::serialize(out);
+
+    out << beginPoint;
+    out << endPoint;
+
+    out << beginArrowType << endArrowType;
+}
+
+void DLineBase::deserialize(QDataStream &in){
+    DAbstractBase::deserialize(in);
+
+    in >> beginPoint;
+    in >> endPoint;
+
+    in >> beginArrowType >> endArrowType;
 }

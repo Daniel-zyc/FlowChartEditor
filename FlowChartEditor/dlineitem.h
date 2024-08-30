@@ -26,4 +26,14 @@ protected:
 	QPainterPath shapeNormal() const override;
 
 	void updateLine() override;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：父类DLineBase序列化
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };

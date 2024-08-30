@@ -13,6 +13,7 @@ class DShapeBase : public DAbstractBase
 public:
 	enum { Type = DConst::DShapeBaseType };
 	DShapeBase(QGraphicsItem *parent = nullptr);
+	DShapeBase(const QString &str, QGraphicsItem *parent = nullptr);
 	~DShapeBase() = default;
 
 public:
@@ -99,5 +100,15 @@ protected:
 private:
 	// 当前的交互类型
 	int interactType = DConst::NONE;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：
+     */
+    void serialize(QDataStream &out) const;
+
+    void deserialize(QDataStream &in);
 };
 

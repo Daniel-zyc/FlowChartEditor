@@ -68,4 +68,11 @@ namespace DConst
 		DOVETAILARROW = 3,
 		DIAMONDARROW = 4, ROUNDARROW = 5
 	};
+
+	enum Scene
+	{
+
+	};
 };
+
+const int DataStreamVersion = QDataStream::Qt_5_15;

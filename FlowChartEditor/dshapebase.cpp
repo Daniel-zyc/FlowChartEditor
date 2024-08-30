@@ -1,10 +1,17 @@
 #include "dshapebase.h"
 #include "dabstractbase.h"
+#include "dtextitem.h"
 
 DShapeBase::DShapeBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
 {
 	maxPointRadius = qMax(maxPointRadius, rotPointRadius);
+}
+
+DShapeBase::DShapeBase(const QString &str, QGraphicsItem *parent)
+	: DShapeBase(parent)
+{
+	textItem = new DTextItem(str, this);
 }
 
 QRectF DShapeBase::boundingRect() const
@@ -155,7 +162,9 @@ QPainterPath DShapeBase::shapeShowMaged() const
 QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
 	if(change == QGraphicsItem::ItemPositionHasChanged
-	   || change == QGraphicsItem::ItemTransformHasChanged)
+	   || change == QGraphicsItem::ItemTransformHasChanged
+	   || change == QGraphicsItem::ItemRotationHasChanged
+	   || change == QGraphicsItem::ItemScaleHasChanged)
 		updateAllLinkLines();
 
 	return value;
@@ -185,4 +194,13 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 		case DConst::NONE: break;
 	}
 	return nrc;
+}
+
+//===========================================
+void DShapeBase::serialize(QDataStream &out) const{
+    DAbstractBase::serialize(out);
+}
+
+void DShapeBase::deserialize(QDataStream &in){
+    DAbstractBase::deserialize(in);
 }

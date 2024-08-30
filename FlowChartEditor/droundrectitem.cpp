@@ -19,7 +19,6 @@ void DRoundRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsIte
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-    // setBrush(QBrush(Qt::transparent));
 	painter->setBrush(brush());
 	painter->setPen(pen());
 	painter->drawRoundedRect(rect, radiusx, radiusy);
@@ -81,4 +80,20 @@ void DRoundRectItem::setRect(const QRectF &nrect)
 	sizeRectUpdated();
 	updateMagPoint();
 	updateModiPoint();
+}
+
+//====================================
+
+void DRoundRectItem::serialize(QDataStream &out) const{
+    DShapeBase::serialize(out);
+
+    out << rect;
+    out << radiusx << radiusy;
+}
+
+void DRoundRectItem::deserialize(QDataStream &in){
+    DShapeBase::deserialize(in);
+
+    in >> rect;
+    in >> radiusx >> radiusy;
 }
