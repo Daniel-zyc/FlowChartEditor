@@ -60,7 +60,6 @@ void DLineBase::interToPoint(QPointF p, MagPoint *mp)
 			modiToPointPre(mapFromScene(p));
 			break;
 		case DConst::SIZE:
-			qDebug() << "SIZE";
 			sizeToPointPre(mapFromScene(p), mp);
 			break;
 	}

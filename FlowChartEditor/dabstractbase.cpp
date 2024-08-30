@@ -8,7 +8,6 @@ DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
 			 | QGraphicsItem::ItemSendsGeometryChanges);
 	mags = new QList<MagPoint*>();
-	showMagPoint = true;
 }
 
 QPainterPath DAbstractBase::shape() const
@@ -194,6 +193,6 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 
 void DAbstractBase::updateAllLinkLines()
 {
-	qDebug() << "updateLines";
+	// qDebug() << "updateLines";
 	for(MagPoint* mag : *mags) mag->updateLines();
 }

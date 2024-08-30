@@ -138,6 +138,13 @@ void DScene::delSelectedItem()
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+	qDebug() << event->button();
+	if(event->button() != Qt::LeftButton)
+	{
+		QGraphicsScene::mousePressEvent(event);
+		return;
+	}
+
 	QPointF p = event->scenePos();
 	QList<QGraphicsItem *> items = this->items(p);
 
@@ -201,6 +208,13 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+	// qDebug() << event->button();
+	// if(event->button() != Qt::LeftButton)
+	// {
+
+	// 	QGraphicsScene::mouseMoveEvent(event);
+	// 	return;
+	// }
 	QPointF p = event->scenePos();
 
 	// if(state == SceneState::INSERTLINE)
@@ -209,19 +223,24 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	// 	return;
 	// }
 
+	if(showMagedItem)
+	{
+		showMagedItem->setShowMagPoint(false);
+		showMagedItem = nullptr;
+	}
+
 	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
-	qDebug() << items;
 
 	MagPoint *magPoint = nullptr;
 	for(QGraphicsItem *item : items)
 	{
 		DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
-		qDebug() << item << " " << shape;
 		if(!shape) continue;
 		if(shape->checkMagPoint(p))
 		{
+			shape->setShowMagPoint(true);
+			showMagedItem = shape;
 			magPoint = shape->getMagPoint(p);
-			qDebug() << magPoint;
 			break;
 		}
 	}
@@ -245,6 +264,13 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+	qDebug() << event->button();
+	if(event->button() != Qt::LeftButton)
+	{
+		QGraphicsScene::mouseReleaseEvent(event);
+		return;
+	}
+
 	moditype = DConst::NONE;
 	modifiedShape = nullptr;
 

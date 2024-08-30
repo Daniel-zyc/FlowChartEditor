@@ -72,6 +72,7 @@ private:
 	SceneState state = SceneState::NONE;
 	int moditype = DConst::NONE;
 
+	DAbstractBase *showMagedItem = nullptr;
 	DAbstractBase *modifiedShape = nullptr;
 	MagPoint *endMag;
 	QMenu *menu = nullptr;
