@@ -4,6 +4,7 @@
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
+    setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
 	maxPointRadius = qMax(qMax(magPointRadius,sizePointRadius), qMax(magPointCollideRadius, modiPointRadius));
 	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
 			 | QGraphicsItem::ItemSendsGeometryChanges);

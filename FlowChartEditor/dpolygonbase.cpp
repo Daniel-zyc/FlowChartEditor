@@ -7,7 +7,7 @@ void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem 
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-	setBrush(QBrush(Qt::transparent));
+    // setBrush(QBrush(Qt::transparent));
 	painter->setPen(pen());
 	painter->setBrush(brush());
 	painter->drawPolygon(polygon);

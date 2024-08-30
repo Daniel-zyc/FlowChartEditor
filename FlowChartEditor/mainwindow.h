@@ -3,7 +3,11 @@
 #include "dscene.h"
 #include "dview.h"
 #include "dfinddialog.h"
+#include "dtextitem.h"
 
+#include <QSet>
+#include <QColorDialog>
+#include <QFontDialog>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +34,12 @@ private slots:
 	void addEll();
 	void addText();
     void addTri();
+
+    QSet<DTextBase *> getTextBases();
+    void selectFrameCol();
+    void selectFillCol();
+    void selectTextCol();
+    void selectTextFont();
 
 	void rotateCW();
 	void rotateCCW();
@@ -67,4 +77,6 @@ private:
 	DScene *scene;
 	DView *view;
     DFindDialog *findDia;
+    QColorDialog *colorDia;
+    QFontDialog *fontDia;
 };

@@ -16,7 +16,7 @@ QRectF DShapeBase::boundingRect() const
 
 void DShapeBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	paintSelectRect(painter, option, widget);
+    paintSelectRect(painter, option, widget);
 	paintSizePoint(painter, option, widget);
 	paintRotPoint(painter, option, widget);
 	paintModiPoint(painter, option, widget);
