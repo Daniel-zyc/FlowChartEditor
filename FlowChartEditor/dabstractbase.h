@@ -79,7 +79,7 @@ protected:
 	
 	// 检查是否与大小点碰撞，p 为 item 坐标系下
 	virtual int checkSizePoint(QPointF p) const;
-	// 设置与 p 碰撞的最近的大小点，p 为 item 坐标系下
+	// 设置与 p 碰撞的最近的大小点=，p 为 item 坐标系下
 	virtual bool setSizePoint(QPointF p);
 
 	// 更新所有连接的线条

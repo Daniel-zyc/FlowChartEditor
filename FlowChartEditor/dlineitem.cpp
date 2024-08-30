@@ -21,7 +21,10 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-	setBrush(QBrush(Qt::black));
+	QBrush qbrush = painter->brush();
+	qbrush.setColor(pen().color());
+	setBrush(qbrush);
+
 	painter->setBrush(brush());
 	painter->setPen(pen());
 

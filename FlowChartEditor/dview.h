@@ -23,7 +23,6 @@ public:
 	void setScale(qreal scale = 1.0);
 	void enlarge(qreal ratio = DView::defaultScaleRatio)
 	{
-		qDebug() << "enlarge";
 		setScale(scale * ratio);
 	}
 	void shrink(qreal ratio = 1.0 / DView::defaultScaleRatio)
@@ -41,12 +40,6 @@ public:
 	{ verticalScrollBar()->setValue(verticalScrollBar()->value() + pixs); }
 
 	void updateTransMatrix();
-
-protected:
-	void mousePressEvent(QMouseEvent *event) override
-	{
-		QGraphicsView::mousePressEvent(event);
-	}
 
 private:
 	qreal scale, rotation;

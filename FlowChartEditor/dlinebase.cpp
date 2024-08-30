@@ -127,7 +127,7 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 void DLineBase::updatePosition()
 {
-	qDebug() << beginMag << " " << endMag;
+	// qDebug() << beginMag << " " << endMag;
 	if(beginMag) beginPoint = beginMag->mapToItem(this);
 	if(endMag) endPoint = endMag->mapToItem(this);
 	sizes[DConst::ST - 1] = beginPoint;

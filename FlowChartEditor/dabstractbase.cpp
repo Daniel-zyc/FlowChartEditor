@@ -16,6 +16,7 @@ QPainterPath DAbstractBase::shape() const
 	pth.addPath(shapeNormal());
 	if(isSelected()) pth.addPath(shapeSelected());
 	if(showMagPoint) pth.addPath(shapeShowMaged());
+	qDebug() << pth;
 	return pth;
 }
 

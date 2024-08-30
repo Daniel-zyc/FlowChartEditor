@@ -163,17 +163,11 @@ void MainWindow::bindAction()
 void MainWindow::addLine()
 {
 	scene->addLineItem();
-	// DText *text = new DText("Hello World");
-	// text->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(text);
 }
 
 void MainWindow::addRect()
 {
 	scene->addRectItem();
-	// DRect *rect = new DRect(-100, -100, 200, 200);
-	// rect->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(rect);
 }
 
 void MainWindow::addRoundRect()
@@ -184,17 +178,11 @@ void MainWindow::addRoundRect()
 void MainWindow::addEll()
 {
 	scene->addEllItem();
-	// DShape *ell = new DShape();
-	// ell->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(ell);
 }
 
 void MainWindow::addText()
 {
 	scene->addTextItem();
-	// DText *text = new DText("Hello World");
-	// text->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// scene->addItem(text);
 }
 
 void MainWindow::addTri()
