@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QMenu *m = new QMenu();
 	m->addAction(ui->actDelSelectedItem);
+	m->addAction(ui->actCombine);
+	m->addAction(ui->actSeperate);
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
 	m->addAction(ui->actAddLine);
@@ -154,6 +156,8 @@ void MainWindow::bindAction()
 	connect(ui->actMoveDown, SIGNAL(triggered(bool)), this, SLOT(moveDown()));
 
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
+	connect(ui->actCombine, SIGNAL(triggered(bool)), this, SLOT(combineSelected()));
+	connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
 }
 
 void MainWindow::addLine()
@@ -284,4 +288,14 @@ void MainWindow::findandReplace()
 void MainWindow::delSelectedItem()
 {
 	scene->delSelectedItem();
+}
+
+void MainWindow::combineSelected()
+{
+	scene->combineSelected();
+}
+
+void MainWindow::seperateSelected()
+{
+	scene->seperateSelected();
 }

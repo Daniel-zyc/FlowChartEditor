@@ -125,6 +125,37 @@ void DScene::addTriItem()
 	addItem(item);
 }
 
+void DScene::combineSelected()
+{
+	int cnt=selectedItems().count();
+	if (cnt>1)
+	{
+		QGraphicsItemGroup* group = new QGraphicsItemGroup;  //创建组合
+		group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+		addItem(group);      //添加到场景中
+
+		for (int i=0;i<cnt;i++)     //将选择的图形项添加到组合中
+		{
+			QGraphicsItem* item=selectedItems().at(0);
+			item->setSelected(false);    //取消选择
+			item->clearFocus();          //清除焦点状态
+			if(item->parentItem() != nullptr) continue;
+			group->addToGroup(item);     //添加到组合
+		}
+	}
+}
+
+void DScene::seperateSelected()
+{
+	int cnt=selectedItems().count();
+	if (cnt==1)
+	{
+		QGraphicsItemGroup  *group = dynamic_cast<QGraphicsItemGroup*>(selectedItems().at(0));
+		if(!group) return;
+		destroyItemGroup(group); //打散组合
+	}
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected";

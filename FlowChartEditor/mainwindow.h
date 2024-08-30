@@ -60,6 +60,8 @@ private slots:
     void findandReplace();
 
 	void delSelectedItem();
+	void combineSelected();
+	void seperateSelected();
 
 private:
 	Ui::MainWindow *ui;

@@ -54,6 +54,9 @@ public:
 	void addLineItem();
     void addTriItem();
 
+	void combineSelected();
+	void seperateSelected();
+
 	void delSelectedItem();
 
 	void setMenu(QMenu *m) { menu = m; }
@@ -74,8 +77,6 @@ private:
 
 	DAbstractBase *showMagedItem = nullptr;
 	DAbstractBase *modifiedShape = nullptr;
-	MagPoint *endMag;
 	QMenu *menu = nullptr;
-	QPointF endPoint;
 };
 
