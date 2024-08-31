@@ -207,6 +207,7 @@ void DAbstractBase::serialize(QDataStream &out) const{
         out << static_cast<quint32>(mags->size());
         for(MagPoint *magPoint : *mags){
             magPoint->serialize(out);
+		}
 	}
 }
 
