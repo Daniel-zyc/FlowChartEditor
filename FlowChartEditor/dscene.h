@@ -53,6 +53,8 @@ public:
 	void addEllItem();
 	void addLineItem();
     void addTriItem();
+    void addDiaItem();
+    void addTrapItem();
 
 	void combineSelected();
 	void seperateSelected();

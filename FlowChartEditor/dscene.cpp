@@ -7,6 +7,10 @@
 #include "dlineitem.h"
 #include "dtextitem.h"
 #include "dtriitem.h"
+#include "ddiaitem.h"
+#include "dtrapitem.h"
+
+
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -125,6 +129,24 @@ void DScene::addTriItem()
 	addItem(item);
 }
 
+void DScene::addDiaItem()
+{
+    qDebug() << "add Diamond";
+    DDiaItem *item = new DDiaItem(100, 100);
+    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addTrapItem()
+{
+    qDebug() << "add Document";
+//    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    DTrapItem *item = new DTrapItem(80,100,80);
+    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
 void DScene::combineSelected()
 {
 	int cnt=selectedItems().count();

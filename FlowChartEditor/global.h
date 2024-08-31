@@ -30,7 +30,9 @@ namespace DConst
 		DRoundRectItemType = QGraphicsItem::UserType + 7,
 		DLineItemType = QGraphicsItem::UserType + 8,
 		DTextItemType = QGraphicsItem::UserType + 9,
-		DTriItemType = QGraphicsItem::UserType + 10
+        DTriItemType = QGraphicsItem::UserType + 10,
+        DDiaItemType=QGraphicsItem::UserType + 13,
+        DTrapItemType=QGraphicsItem::UserType + 14
 	};
 	
 	enum None

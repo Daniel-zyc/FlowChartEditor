@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     dabstractbase.cpp \
+    ddiaitem.cpp \
     dellitem.cpp \
     dfinddialog.cpp \
     dlinebase.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
     dscene.cpp \
     dshapebase.cpp \
     dtextitem.cpp \
+    dtrapitem.cpp \
     dtriitem.cpp \
     dview.cpp \
     global.cpp \
@@ -29,6 +31,7 @@ SOURCES += \
 
 HEADERS += \
     dabstractbase.h \
+    ddiaitem.h \
     dellitem.h \
     dfinddialog.h \
     dlinebase.h \
@@ -39,6 +42,7 @@ HEADERS += \
     dscene.h \
     dshapebase.h \
     dtextitem.h \
+    dtrapitem.h \
     dtriitem.h \
     dview.h \
     global.h \

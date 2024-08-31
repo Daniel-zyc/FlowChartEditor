@@ -90,8 +90,10 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddPargram);
 	ui->addMenu->addAction(ui->actAddRhom);
 	ui->addMenu->addAction(ui->actAddTrap);
-	ui->addMenu->addAction(ui->actAddTri);
+    ui->addMenu->addAction(ui->actAddTri);
 	ui->addMenu->addAction(ui->actAddText);
+
+
 
 	ui->addMenu->addAction(ui->actSetTextFont);
 	ui->addMenu->addAction(ui->actSetTextColor);
@@ -116,6 +118,8 @@ void MainWindow::createToolBar()
 	ui->headToolBar->addAction(ui->actAddText);
 	ui->headToolBar->addAction(ui->actAddRoundRect);
     ui->headToolBar->addAction(ui->actAddTri);
+    ui->headToolBar->addAction(ui->actAddRhom);
+    ui->headToolBar->addAction(ui->actAddTrap);
 }
 
 void MainWindow::bindAction()
@@ -126,6 +130,9 @@ void MainWindow::bindAction()
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
+    connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
+    connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
+
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -200,6 +207,15 @@ void MainWindow::addText()
 void MainWindow::addTri()
 {
     scene->addTriItem();
+}
+
+void MainWindow::addDia()
+{
+    scene->addDiaItem();
+}
+void MainWindow::addTrap()
+{
+    scene->addTrapItem();
 }
 
 void MainWindow::rotateCW()
