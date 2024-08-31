@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
 	m->addAction(ui->actAddLine);
+    m->addAction(ui->actAddPargram);
+    m->addAction(ui->actAddDoc);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
@@ -137,6 +139,8 @@ void MainWindow::createToolBar()
 	ui->headToolBar->addAction(ui->actAddText);
 	ui->headToolBar->addAction(ui->actAddRoundRect);
     ui->headToolBar->addAction(ui->actAddTri);
+    ui->headToolBar->addAction(ui->actAddPargram);
+    ui->headToolBar->addAction(ui->actAddDoc);
 }
 
 void MainWindow::bindAction()
@@ -152,6 +156,9 @@ void MainWindow::bindAction()
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
+    connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
+    connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
+
     connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
     connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
     connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
@@ -238,6 +245,16 @@ void MainWindow::addText()
 void MainWindow::addTri()
 {
     scene->addTriItem();
+}
+
+void MainWindow::addParallegram()
+{
+    scene->addParallegramItem();
+}
+
+void MainWindow::addDocShape()
+{
+    scene->addDocItem();
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()
