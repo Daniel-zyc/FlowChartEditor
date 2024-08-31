@@ -166,7 +166,8 @@ void DScene::delSelectedItem()
 	QList<QGraphicsItem*> items = selectedItems();
 	for(QGraphicsItem *item : items)
 	{
-		this->removeItem(item);
+        if(item->parentItem() != nullptr) qDebug() << item;
+        // this->removeItem(item);
 		delete item;
 	}
 }
