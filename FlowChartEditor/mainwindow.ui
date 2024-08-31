@@ -513,6 +513,17 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="actAddDoc">
+   <property name="text">
+    <string>文档图形</string>
+   </property>
+   <property name="toolTip">
+    <string>文档图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

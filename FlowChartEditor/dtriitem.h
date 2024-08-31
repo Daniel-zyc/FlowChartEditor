@@ -5,7 +5,7 @@
 class DTriItem : public DPolygonBase
 {
 public:
-	enum { Type = DConst::DTriItemType };
+	enum { Type = DTriItemType };
 	DTriItem(QGraphicsItem *parent = nullptr);
 	DTriItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -23,8 +23,8 @@ public:
      * @param out
      * 序列化：DPolygonBase
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
 };
 

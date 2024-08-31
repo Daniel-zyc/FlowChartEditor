@@ -12,6 +12,7 @@ SOURCES += \
     dabstractbase.cpp \
     dellitem.cpp \
     dfinddialog.cpp \
+    ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
@@ -26,12 +27,16 @@ SOURCES += \
     magpoint.cpp \
     main.cpp \
     mainwindow.cpp \
-    serializer.cpp
+    saveandloadmanager.cpp \
+    serializer.cpp \
+    dparallelogramitem.cpp \
+    ddocitem.cpp
 
 HEADERS += \
     dabstractbase.h \
     dellitem.h \
     dfinddialog.h \
+    ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
@@ -45,7 +50,10 @@ HEADERS += \
     global.h \
     magpoint.h \
     mainwindow.h \
-    serializer.h
+    saveandloadmanager.h \
+    serializer.h \
+    dparallelogramitem.h \
+    ddocitem.h
 
 FORMS += \
     mainwindow.ui

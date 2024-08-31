@@ -13,7 +13,7 @@ class DTextBase : public QGraphicsTextItem
 	Q_OBJECT
 
 public:
-	enum { Type = DConst::DTextBaseType };
+	enum { Type = DTextBaseType };
 	DTextBase(QGraphicsItem *parent = nullptr);
 	DTextBase(const QString &text, QGraphicsItem *parent = nullptr);
 
@@ -22,17 +22,10 @@ public:
 
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-protected:
-	void focusOutEvent(QFocusEvent *event) override;
-	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-
-private:
 	void startEdit();
 	void endEdit();
-	void focusToCenter();
 
-	QPointF curCent = {0, 0};
+	void focusToCenter();
 
 public:
     /**
@@ -48,7 +41,7 @@ public:
 class DTextItem : public DShapeBase
 {
 public:
-	enum { Type = DConst::DTextItemType };
+	enum { Type = DTextItemType };
 	DTextItem(QGraphicsItem *parent = nullptr);
 	DTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 	DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent = nullptr);
@@ -63,6 +56,11 @@ public:
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
 	void deleteMagPoint();
+
+protected:
+	void focusOutEvent(QFocusEvent *event) override;
+	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
 	void setRect(const QRectF &nrect);
@@ -80,8 +78,8 @@ public:
      * @param out
      * 序列化：DShapeBase -> textBase -> rect
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
 };
 

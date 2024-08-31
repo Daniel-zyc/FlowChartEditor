@@ -20,13 +20,28 @@ public:
         return instance;
     }
 
+    // 原地址 -- MagPoint
     QMap<qintptr, MagPoint*> PtrToMagPoint;
+    // 原地址 -- LineBase
     QMap<qintptr, DLineBase*> PtrToLineBase;
+    // 原地址 -- QGraphicsItem
     QMap<qintptr, QGraphicsItem*> PtrToQGraphicsItem;
+    // 原地址 -- TextItem
+    QMap<qintptr, DTextItem*> PtrToTextItem;
 
+
+    // MagPoint -- lines原地址地址
     QMap<MagPoint*, qintptr> MagPointToLinesPtr;
+    // MagPoint -- parent原地址
     QMap<MagPoint*, qintptr> MagPointToParentPtr;
+    // DAbstractBase -- Mags原地址
     QMap<DAbstractBase*, qintptr> DAbstractBaseToMagsPtr;
+    // DShapeBase -- TextItem原地址
+    QMap<DShapeBase*, qintptr> DShapeBaseToTextItem;
+
+    void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
+
+    void deserializeSceneItems(QDataStream &in, QGraphicsScene *scene);
 
 private:
     Serializer() = default;
@@ -35,30 +50,9 @@ private:
 
     void linkAll();
 
-    void loadFromFile();
+    void clearMap();
 
-    void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
-
-    //===============================================================
-    template <typename T>
-    void serializeMap(QDataStream &out, const QMap<qintptr, T*> &map) const;
-
-    template <typename T>
-    void serializeMap(QDataStream &out, const QMap<T*, qintptr> &map) const;
-
-    template <typename T>
-    void deserializeMap(QDataStream &in, QMap<qintptr, T*> &map);
-
-    template <typename T>
-    void deserializeMap(QDataStream &in, QMap<T*, qintptr> &map);
-
-    void serializeAllMap(QFile &file);
-
-    void serializeAllMap(QDataStream &out);
-
-    void deserializeAllMap(QFile &file);
-
-    void deserializeAllMap(QDataStream &in);
+    void printMapSize();
 };
 
 #endif // SERIALIZER_H

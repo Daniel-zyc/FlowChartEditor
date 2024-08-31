@@ -7,7 +7,7 @@
 class DPolygonBase : public DShapeBase
 {
 public:
-	enum { Type = DConst::DPolygonBaseType };
+	enum { Type = DPolygonBaseType };
 	DPolygonBase(QGraphicsItem *parent = nullptr);
 
 public:
@@ -17,9 +17,9 @@ public:
 	QRectF sizeRect() const override;
 	QPainterPath shapeNormal() const override;
 	virtual void sizeToRect(QRectF nrect) override;
+	void setPoly(const QPolygonF &npoly);
 
 protected:
-	void setPoly(const QPolygonF &npoly);
 	virtual void updateMagPoint() = 0;
 	virtual void updateModiPoint() = 0;
 
@@ -31,7 +31,7 @@ public:
      * @param out
      * 序列化：DShapeBase -> polygon
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
 };

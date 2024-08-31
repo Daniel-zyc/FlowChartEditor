@@ -11,9 +11,9 @@ class DTextItem;
 class DShapeBase : public DAbstractBase
 {
 public:
-	enum { Type = DConst::DShapeBaseType };
+	enum { Type = DShapeBaseType };
 	DShapeBase(QGraphicsItem *parent = nullptr);
-	DShapeBase(const QString &str, QGraphicsItem *parent = nullptr);
+	DShapeBase(const QString &text, QGraphicsItem *parent = nullptr);
 	~DShapeBase() = default;
 
 public:
@@ -28,7 +28,7 @@ public:
 	virtual void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override = 0;
 	//==========================================================================
 
-	// 绘制选中时的图形，顺序为selectedRect, sizePoint, rotPoint, modiPoint
+	// 绘制选中时的图形，顺序为 selectedRect, sizePoint, modiPoint, rotPoint
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	// 绘制图形的正常包围框
 	virtual void paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -42,6 +42,15 @@ public:
 	virtual int setInterPoint(QPointF p) override;
 	// 根据 p 点来对当前交互点进行调整，p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
+
+	// 设置为正在插入这个腿型
+	virtual void setInsertItem() override;
+
+public:
+	//==========================================================================
+	// 图形的大小框
+	virtual QRectF sizeRect() const = 0;
+	//==========================================================================
 
 protected:
 	// 检查是否与旋转点碰撞，p 为 item 坐标系下
@@ -57,14 +66,10 @@ protected:
 	virtual void sizeRectUpdated();
 
 protected:
-	// 被选中时的碰撞范围，默认设置为图形的 boundingRect()
+	// 被选中时多出的碰撞框，与父类相比多出了旋转点
 	virtual QPainterPath shapeSelected() const override;
-	// 绘制磁吸点时的碰撞范围，默认为 sizeRect 放大磁吸点半径大小
-	virtual QPainterPath shapeShowMaged() const override;
 
 	//==========================================================================
-	// 图形的大小框
-	virtual QRectF sizeRect() const = 0;
 	// 图形的正常碰撞范围
 	virtual QPainterPath shapeNormal() const override = 0;
 	// 将图形 sizeRect 设置到与 nrect 大小相同，保证 nrect 中心点为 (0, 0)
@@ -90,13 +95,6 @@ protected:
 	// 旋转点位置
 	QPointF rotPoint = {0, 0};
 	
-protected:
-	// 相关画刷
-	QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
-	QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
-	QBrush selectRectBrush = QBrush(Qt::transparent, Qt::SolidPattern);
-	QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
-	
 private:
 	// 当前的交互类型
 	int interactType = DConst::NONE;
@@ -105,10 +103,12 @@ public:
     /**
      * @brief serialize
      * @param out
-     * 序列化：
+     * 序列化：DAbstractBase -> textPtr
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
+
+    void linkTextItem(DTextItem* item);
 };
 

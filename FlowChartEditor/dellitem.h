@@ -7,7 +7,7 @@ class DShapeBase;
 class DEllItem : public DShapeBase
 {
 public:
-	enum { Type = DConst::DEllItemType };
+	enum { Type = DEllItemType };
 	DEllItem(QGraphicsItem *parent = nullptr);
 	DEllItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -31,7 +31,7 @@ public:
      * @param out
      * 序列化：DShapeBase -> rect
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
 };

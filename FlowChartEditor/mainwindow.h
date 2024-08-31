@@ -42,6 +42,8 @@ private slots:
 	void addEll();
 	void addText();
     void addTri();
+    void addParallegram();
+    void addDocShape();
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -81,6 +83,8 @@ private slots:
 	void combineSelected();
 	void seperateSelected();
 
+    void saveFile();
+    void loadFile();
 private:
 	Ui::MainWindow *ui;
 
