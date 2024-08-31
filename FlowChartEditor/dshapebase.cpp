@@ -163,7 +163,6 @@ QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)
 		updateAllLinkLines();
-
 	return value;
 }
 

@@ -28,6 +28,8 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->setBrush(brush());
 	painter->setPen(pen());
 
+	// 此处应加入根据不同箭头类型进行绘制的代码
+
 	painter->drawLine(QLineF(beginPoint, endPoint));
 }
 

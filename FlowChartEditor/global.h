@@ -133,4 +133,4 @@ namespace DConst
 	};
 };
 
-const int DataStreamVersion = QDataStream::Qt_5_15;
+const int DataStreamVersion = QDataStream::Qt_6_7;

@@ -7,6 +7,7 @@
 #include "dlineitem.h"
 #include "dtextitem.h"
 #include "dtriitem.h"
+#include "ditemgroup.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -137,7 +138,7 @@ void DScene::combineSelected()
     }
 	if(cnt <= 1) return;
 
-    QGraphicsItemGroup* group = new QGraphicsItemGroup;  //创建组合
+	DItemGroup* group = new DItemGroup;  //创建组合
     group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     addItem(group);      //添加到场景中
 
@@ -155,7 +156,7 @@ void DScene::seperateSelected()
 	int cnt=selectedItems().count();
 	if (cnt==1)
 	{
-		QGraphicsItemGroup *group = dynamic_cast<QGraphicsItemGroup*>(selectedItems().at(0));
+		DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
 		if(!group) return;
 		destroyItemGroup(group);
 		QList<QGraphicsItem*> items = this->items();

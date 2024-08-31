@@ -12,6 +12,7 @@ SOURCES += \
     dabstractbase.cpp \
     dellitem.cpp \
     dfinddialog.cpp \
+    ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     dabstractbase.h \
     dellitem.h \
     dfinddialog.h \
+    ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \

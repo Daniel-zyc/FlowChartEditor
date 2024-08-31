@@ -147,6 +147,18 @@ void DLineBase::updatePosition()
 	update();
 }
 
+void DLineBase::setBeginArrowType(int type)
+{
+	beginArrowType = type;
+	update();
+}
+
+void DLineBase::setEndArrowType(int type)
+{
+	endArrowType = type;
+	update();
+}
+
 //===========================================
 
 void DLineBase::serialize(QDataStream &out) const{

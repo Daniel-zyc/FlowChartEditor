@@ -33,6 +33,9 @@ public:
 
 	virtual void updatePosition();
 
+	virtual void setBeginArrowType(int type);
+	virtual void setEndArrowType(int type);
+
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;

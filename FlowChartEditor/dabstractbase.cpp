@@ -215,7 +215,7 @@ void DAbstractBase::serialize(QDataStream &out) const{
         for(MagPoint *magPoint : *mags){
             out << reinterpret_cast<qintptr>(magPoint);
         }
-    }
+	}
 }
 
 void DAbstractBase::deserialize(QDataStream &in){
