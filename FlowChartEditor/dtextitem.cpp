@@ -146,6 +146,18 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 	if (change == QGraphicsItem::ItemSelectedHasChanged) {
 		if(!isSelected()) textBase.endEdit();
 	}
+	if (change == QGraphicsItem::ItemPositionHasChanged) {
+		if(dynamic_cast<DShapeBase*>(parentItem()))
+		{
+			DShapeBase* shape = dynamic_cast<DShapeBase*>(parentItem());
+			QPointF p = pos(); QRectF rc = sizeRect(), prc = shape->sizeRect();
+			p.setX(qMin(qMax(0.0, prc.right() - rc.width()/2), p.x()));
+			p.setX(qMax(qMin(0.0, prc.left() + rc.width()/2), p.x()));
+			p.setY(qMin(qMax(0.0, prc.bottom() - rc.height()/2), p.y()));
+			p.setY(qMax(qMin(0.0, prc.top() + rc.height()/2), p.y()));
+			if(p != pos()) setPos(p);
+		}
+	}
 	return QGraphicsItem::itemChange(change, value);
 }
 
@@ -170,9 +182,6 @@ void DTextItem::deserialize(QDataStream &in){
 
     textBase.deserialize(in);
 
-	QPointF pos;
-	in >> pos;
-	setPos(pos);
-    in >> rect;
-	setRect(rect);
+	QPointF pos; in >> pos; setPos(pos);
+	in >> rect; setRect(rect);
 }

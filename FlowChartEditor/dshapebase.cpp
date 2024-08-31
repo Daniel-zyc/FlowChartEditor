@@ -213,8 +213,9 @@ void DShapeBase::deserialize(QDataStream &in){
     if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
 }
 
-void DShapeBase::linkTextItem(DTextItem*item){
+void DShapeBase::linkTextItem(DTextItem* item){
     qDebug() << "link shapebase and textItem";
     textItem = item;
 	textItem->setParentItem(this);
+	qDebug() << textItem->pos() << " " << textItem->parentItem();
 }

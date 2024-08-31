@@ -90,7 +90,7 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
 	linkAll();
 
     for(auto it = PtrToQGraphicsItem.cbegin(); it != PtrToQGraphicsItem.cend(); ++it){
-		qDebug() << it.value()->pos();
+		if(it.value()->parentItem() != nullptr) continue;
 		scene->addItem(it.value());
     }
 

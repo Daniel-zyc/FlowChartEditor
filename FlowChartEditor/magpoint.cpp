@@ -22,6 +22,7 @@ MagPoint::~MagPoint()
 
 void MagPoint::updateLines() const
 {
+	qDebug() << lines->size();
 	for(DLineBase *line : *lines) line->updatePosition();
 }
 
@@ -88,5 +89,6 @@ void MagPoint::linkParent(QGraphicsItem * item){
 }
 
 void MagPoint::linkLine(DLineBase *line){
-    lines->append(line);
+	// qDebug() << "add";
+	addLine(line);
 }
