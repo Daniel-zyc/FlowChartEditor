@@ -182,14 +182,25 @@ void DScene::seperateSelected()
 	}
 }
 
+QList<QGraphicsItem *> DScene::getAllParent()
+{
+    QList<QGraphicsItem*> items = selectedItems();
+    QList<QGraphicsItem*> parents;
+    for(QGraphicsItem *item : items) {
+        if(item->parentItem() == nullptr) {
+            parents.push_back(item);
+        }
+    }
+    return parents;
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected";
-	QList<QGraphicsItem*> items = selectedItems();
+    QList<QGraphicsItem*> items = getAllParent();
 	for(QGraphicsItem *item : items)
 	{
-        if(item->parentItem() != nullptr) qDebug() << item;
-        // this->removeItem(item);
+        this->removeItem(item);
 		delete item;
 	}
 }

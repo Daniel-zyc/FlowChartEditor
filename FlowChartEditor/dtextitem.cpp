@@ -34,7 +34,7 @@ void DTextBase::startEdit()
 void DTextBase::endEdit()
 {
 	QTextCursor tmpCursor = textCursor();
-	tmpCursor.clearSelection();
+    tmpCursor.clearSelection();
 	setTextCursor(tmpCursor);
 	setTextInteractionFlags(Qt::NoTextInteraction);
 }

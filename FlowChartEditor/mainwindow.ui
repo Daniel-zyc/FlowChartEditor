@@ -477,6 +477,9 @@
    <property name="toolTip">
     <string>删除选中元素</string>
    </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
