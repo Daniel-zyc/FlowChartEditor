@@ -11,7 +11,7 @@ class MagPoint;
 class DLineBase : public DAbstractBase
 {
 public:
-	enum { Type = DConst::DLineBaseType };
+	enum { Type = DLineBaseType };
 	DLineBase(QGraphicsItem *parent = nullptr);
 	~DLineBase() = default;
 
@@ -23,6 +23,8 @@ public:
 	virtual int setInterPoint(QPointF p) override;
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
+	virtual void setInsertItem() override;
+
 	virtual void linkBegin(MagPoint *mp);
 	virtual void linkEnd(MagPoint *mp);
 
@@ -30,6 +32,9 @@ public:
 	virtual void unlinkEnd();
 
 	virtual void updatePosition();
+
+	virtual void setBeginArrowType(int type);
+	virtual void setEndArrowType(int type);
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -50,5 +55,15 @@ protected:
 
 private:
 	int interactType = DConst::NONE;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：父类DAbstractBase序列化 -> beginPoint -> endPoint -> beginArrowType -> endArrowType
+     */
+    void serialize(QDataStream &out) const override;
+
+    void deserialize(QDataStream &in) override;
 };
 

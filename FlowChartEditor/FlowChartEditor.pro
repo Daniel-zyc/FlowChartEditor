@@ -13,6 +13,7 @@ SOURCES += \
     ddiaitem.cpp \
     dellitem.cpp \
     dfinddialog.cpp \
+    ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
@@ -27,13 +28,18 @@ SOURCES += \
     global.cpp \
     magpoint.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    saveandloadmanager.cpp \
+    serializer.cpp \
+    dparallelogramitem.cpp \
+    ddocitem.cpp
 
 HEADERS += \
     dabstractbase.h \
     ddiaitem.h \
     dellitem.h \
     dfinddialog.h \
+    ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
@@ -47,7 +53,11 @@ HEADERS += \
     dview.h \
     global.h \
     magpoint.h \
-    mainwindow.h
+    mainwindow.h \
+    saveandloadmanager.h \
+    serializer.h \
+    dparallelogramitem.h \
+    ddocitem.h
 
 FORMS += \
     mainwindow.ui
@@ -56,3 +66,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    icon.qrc

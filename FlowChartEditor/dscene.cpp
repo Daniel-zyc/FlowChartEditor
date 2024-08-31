@@ -11,6 +11,9 @@
 #include "dtrapitem.h"
 
 
+#include "dparallelogramitem.h"
+#include "ddocitem.h"
+#include "ditemgroup.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -46,7 +49,7 @@ void DScene::setRotation(qreal angle)
 void DScene::rotateSelected(qreal deg)
 {
 	for(QGraphicsItem *item : selectedItems())
-		item->setRotation(degMod(item->rotation() + deg));
+		item->setRotation(DTool::degMod(item->rotation() + deg));
 }
 
 void DScene::setScale(qreal scale)
@@ -80,53 +83,70 @@ void DScene::moveSelected(qreal distx, qreal disty)
 
 void DScene::addTextItem()
 {
-    qDebug() << "add textitem";
-    DTextItem *item = new DTextItem(100, 100, "hello world!");
-    addItem(item);
+	qDebug() << "add textitem";
+
+	DTextItem *item = new DTextItem();
+	state = DConst::INSERT_TEXT;
+	modifiedShape = item;
 }
 
 void DScene::addRectItem()
 {
 	qDebug() << "add rectangle";
-	DRectItem *item = new DRectItem(200, 200);
-	item->textItem = new DTextItem(100, 100, "hello world!", item);
-	item->textItem->deleteMagPoint();
-	addItem(item);
+
+	DRectItem *item = new DRectItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addRoundRectItem()
 {
 	qDebug() << "add round rectangle";
-	DRoundRectItem *item = new DRoundRectItem(200, 200);
-	item->textItem = new DTextItem(100, 100, "hello world!", item);
-	item->textItem->deleteMagPoint();
-	addItem(item);
+	DRoundRectItem *item = new DRoundRectItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addEllItem()
 {
 	qDebug() << "add ellipse";
-	DEllItem *item = new DEllItem(200, 200);
-	item->textItem = new DTextItem(100, 100, "hello world!", item);
-	item->textItem->deleteMagPoint();
-	addItem(item);
+	DEllItem *item = new DEllItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addLineItem()
 {
 	qDebug() << "add line";
-	state = SceneState::INSERTLINE;
-	DLineItem *item = new DLineItem({-100, 0}, {100, 0});
-	addItem(item);
-
+	DLineItem *item = new DLineItem();
+	state = DConst::INSERT_LINE;
+	modifiedShape = item;
 }
 
 void DScene::addTriItem()
 {
 	qDebug() << "add Triangle";
-	DTriItem *item = new DTriItem(100, 100);
-	// item->textItem = new DTextItem(100, 100, "hello world", item);
-	addItem(item);
+	DTriItem *item = new DTriItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
+}
+
+void DScene::addParallegramItem()
+{
+    qDebug() << "add Parallegram";
+    DParallegramItem *item = new DParallegramItem(200, 200);
+    item->textItem = new DTextItem(100, 100, "hello world!", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addDocItem()
+{
+    qDebug() << "add Parallegram";
+    DDocItem *item = new DDocItem(200, 200);
+    item->textItem = new DTextItem(100, 100, "hello world!", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
 }
 
 void DScene::addDiaItem()
@@ -149,22 +169,26 @@ void DScene::addTrapItem()
 }
 void DScene::combineSelected()
 {
-	int cnt=selectedItems().count();
-	if (cnt>1)
-	{
-		QGraphicsItemGroup* group = new QGraphicsItemGroup;  //创建组合
-		group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-		addItem(group);      //添加到场景中
+    QList<QGraphicsItem*> items = selectedItems();
+    int cnt = 0;
+    for(QGraphicsItem* item : items)
+    {
+        if(item->parentItem() != nullptr) continue;
+        cnt++;
+    }
+	if(cnt <= 1) return;
 
-		for (int i=0;i<cnt;i++)     //将选择的图形项添加到组合中
-		{
-			QGraphicsItem* item=selectedItems().at(0);
-			item->setSelected(false);    //取消选择
-			item->clearFocus();          //清除焦点状态
-			if(item->parentItem() != nullptr) continue;
-			group->addToGroup(item);     //添加到组合
-		}
-	}
+	DItemGroup* group = new DItemGroup;  //创建组合
+    group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    addItem(group);      //添加到场景中
+
+    for(QGraphicsItem* item : items)
+    {
+        if(item->parentItem() != nullptr) continue;
+        group->addToGroup(item);
+    }
+
+    group->setSelected(false);
 }
 
 void DScene::seperateSelected()
@@ -172,9 +196,11 @@ void DScene::seperateSelected()
 	int cnt=selectedItems().count();
 	if (cnt==1)
 	{
-		QGraphicsItemGroup  *group = dynamic_cast<QGraphicsItemGroup*>(selectedItems().at(0));
+		DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
 		if(!group) return;
-		destroyItemGroup(group); //打散组合
+		destroyItemGroup(group);
+		QList<QGraphicsItem*> items = this->items();
+		for(QGraphicsItem* item : items) item->setSelected(false);
 	}
 }
 
@@ -184,40 +210,35 @@ void DScene::delSelectedItem()
 	QList<QGraphicsItem*> items = selectedItems();
 	for(QGraphicsItem *item : items)
 	{
-		this->removeItem(item);
+        if(item->parentItem() != nullptr) qDebug() << item;
+        // this->removeItem(item);
 		delete item;
 	}
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	qDebug() << event->button();
-	if(event->button() != Qt::LeftButton)
+    if(event->button() != Qt::LeftButton)
+    {
+        QGraphicsScene::mousePressEvent(event);
+        return;
+    }
+
+	QPointF p = event->scenePos();
+
+	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_LINE
+	   || state == DConst::INSERT_TEXT)
 	{
-		QGraphicsScene::mousePressEvent(event);
+		event->accept();
+		addItem(modifiedShape);
+		modifiedShape->setInsertItem();
+		modifiedShape->setPos(p);
+		state = state + 1;
+		moditype = DConst::SIZE;
 		return;
 	}
 
-	QPointF p = event->scenePos();
 	QList<QGraphicsItem *> items = this->items(p);
-
-	// if(state == SceneState::INSERTLINE)
-	// {
-	// 	event->accept();
-	// 	items = this->items(p);
-	// 	endPoint = p, endMag = nullptr;
-	// 	if(!items.empty())
-	// 	{
-	// 		DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
-	// 		if(item && item->checkMagPoint(p))
-	// 		{
-	// 			endMag = item->getMagPoint(p);
-	// 		}
-	// 	}
-	// 	return;
-	// }
-
-	// qDebug() << items;
 
 	if(items.empty())
 	{
@@ -225,56 +246,30 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
-	QGraphicsItem *item = items.first();
+    QGraphicsItem *item = items.first();
 
-	if(!item->isSelected())
-	{
+    if(!item->isSelected())
+    {
 		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
-
-	// qDebug() << item;
+        return;
+    }
 
 	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
 	{
-		// qDebug() << "modifiedShape";
 		if(modifiedShape->checkInterPoint(p))
 		{
-			// qDebug() << "modi";
 			moditype = modifiedShape->setInterPoint(p);
 		}
 		else moditype = DConst::NONE;
-		// else if(modifiedShape->checkSizePoint(p))
-		// {
-		// 	modifiedShape->setSizePoint(p);
-		// 	moditype = ModifyType::SIZE;
-		// }
-		// else
-		// {
-		// 	modifiedShape = nullptr;
-		// 	moditype = ModifyType::NONE;
-		// }
 	}
 
-	QGraphicsScene::mousePressEvent(event);
+    QGraphicsScene::mousePressEvent(event);
 }
+
 
 void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-	// qDebug() << event->button();
-	// if(event->button() != Qt::LeftButton)
-	// {
-
-	// 	QGraphicsScene::mouseMoveEvent(event);
-	// 	return;
-	// }
 	QPointF p = event->scenePos();
-
-	// if(state == SceneState::INSERTLINE)
-	// {
-	// 	event->accept();
-	// 	return;
-	// }
 
 	if(showMagedItem)
 	{
@@ -282,75 +277,57 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		showMagedItem = nullptr;
 	}
 
-	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
-
 	MagPoint *magPoint = nullptr;
-	for(QGraphicsItem *item : items)
+	if(dynamic_cast<DLineBase*>(modifiedShape))
 	{
-		DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
-		if(!shape) continue;
-		if(shape->checkMagPoint(p))
+		QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
+
+		for(QGraphicsItem *item : items)
 		{
-			shape->setShowMagPoint(true);
-			showMagedItem = shape;
-			magPoint = shape->getMagPoint(p);
-			break;
+			DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
+			if(!shape) continue;
+			if(shape->checkMagPoint(p))
+			{
+				shape->setShowMagPoint(true);
+				showMagedItem = shape;
+				magPoint = shape->getMagPoint(p);
+				break;
+			}
 		}
 	}
 
 	if(moditype != DConst::NONE)
 	{
 		event->accept();
-		// qDebug() << "inter";
+		// qDebug() << modifiedShape;
 		modifiedShape->interToPoint(p, magPoint);
+		if(state == DConst::AFTER_INSERT_SHAPE)
+		{
+			DShapeBase *shape = dynamic_cast<DShapeBase*>(modifiedShape);
+			// qDebug() << shape;
+			QRectF rc = shape->sizeRect();
+			rc.setRect(rc.left()/2, rc.top()/2, rc.width()/2, rc.height()/2);
+			shape->textItem->sizeToRect(rc);
+		}
 		return;
 	}
-	// else if(moditype == ModifyType::SIZE)
-	// {
-	// 	event->accept();
-	// 	modifiedShape->resizeToPoint(p);
-	// 	return;
-	// }
 
 	QGraphicsScene::mouseMoveEvent(event);
 }
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	qDebug() << event->button();
+
 	if(event->button() != Qt::LeftButton)
 	{
 		QGraphicsScene::mouseReleaseEvent(event);
 		return;
 	}
 
+	state = DConst::NONE;
 	moditype = DConst::NONE;
 	modifiedShape = nullptr;
 
-	// if(state==SceneState::INSERTLINE)
-	// {
-	// 	event->accept();
-	// 	QPointF p = event->scenePos();
-	// 	QList<QGraphicsItem *> items = this->items(p);
-	// 	MagPoint *startMag = nullptr;
-	// 	if(!items.empty())
-	// 	{
-	// 		DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
-	// 		if(item && item->checkMagPoint(p))
-	// 			startMag = item->getMagPoint(p);
-	// 	}
-	// 	DLineItem *line = new DLineItem();
-	// 	line->setLine(QLineF(p, endPoint));
-	// 	line->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// 	line->startMag = startMag;
-	// 	line->endMag = endMag;
-	// 	if(endMag) endMag->addLine(line);
-	// 	if(startMag) startMag->addLine(line);
-	// 	line->updatePosition();
-	// 	addItem(line);
-	// 	state = SceneState::NONE;
-	// 	return;
-	// }
 	QGraphicsScene::mouseReleaseEvent(event);
 }
 

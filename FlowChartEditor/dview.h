@@ -15,15 +15,14 @@ public:
 	void resetRotation() { setRotation(0.0); }
 	void setRotation(qreal angle = 0.0);
 	void rotateCW(qreal deg = DView::defaultRotateDelta)
-	{ setRotation(degMod(rotation - deg)); }
+	{ setRotation(DTool::degMod(rotation - deg)); }
 	void rotateCCW(qreal deg = DView::defaultRotateDelta)
-	{ setRotation(degMod(rotation + deg)); }
+	{ setRotation(DTool::degMod(rotation + deg)); }
 
 	void resetScale() { setScale(1.0); }
 	void setScale(qreal scale = 1.0);
 	void enlarge(qreal ratio = DView::defaultScaleRatio)
 	{
-		qDebug() << "enlarge";
 		setScale(scale * ratio);
 	}
 	void shrink(qreal ratio = 1.0 / DView::defaultScaleRatio)
@@ -41,12 +40,6 @@ public:
 	{ verticalScrollBar()->setValue(verticalScrollBar()->value() + pixs); }
 
 	void updateTransMatrix();
-
-protected:
-	void mousePressEvent(QMouseEvent *event) override
-	{
-		QGraphicsView::mousePressEvent(event);
-	}
 
 private:
 	qreal scale, rotation;

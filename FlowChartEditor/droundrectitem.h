@@ -6,7 +6,7 @@
 class DRoundRectItem : public DShapeBase
 {
 public:
-	enum { Type = DConst::DRoundRectItemType };
+	enum { Type = DRoundRectItemType };
 	DRoundRectItem(QGraphicsItem *parent = nullptr);
 	DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -26,5 +26,15 @@ private:
 
 	QRectF rect;
 	qreal radiusx = 30, radiusy = 30;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+     */
+    void serialize(QDataStream &out) const override;
+
+    void deserialize(QDataStream &in) override;
 };
 

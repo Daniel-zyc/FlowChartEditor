@@ -8,7 +8,7 @@ class DShapeBase;
 class DRectItem : public DShapeBase
 {
 public:
-	enum { Type = DConst::DRectItemType };
+	enum { Type = DRectItemType };
 	DRectItem(QGraphicsItem *parent = nullptr);
 	DRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -26,5 +26,15 @@ private:
 	void updateMagPoint();
 
 	QRectF rect = QRectF(0, 0, 0, 0);
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect
+     */
+    void serialize(QDataStream &out) const override;
+
+    void deserialize(QDataStream &in) override;
 };
 

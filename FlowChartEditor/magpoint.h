@@ -41,5 +41,23 @@ public:
 	QGraphicsItem *parent = nullptr;
 	// lines 存储与其相连的 DLineBase 的指针
 	QList<DLineBase*> *lines = nullptr;
+
+    //=====================================
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：this地址 -> parent地址 -> lines大小 -> lines地址
+     */
+    void serialize(QDataStream &out) const;
+    /**
+     * @brief deserialize
+     * @param in
+     * 反序列化: -> this地址 -> parent地址 -> lines大小 -> lines地址
+     */
+    void deserialize(QDataStream &in);
+
+    void linkParent(QGraphicsItem *parent);
+
+    void linkLine(DLineBase* line);
 };
 

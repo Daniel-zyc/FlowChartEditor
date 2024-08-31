@@ -90,9 +90,9 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actExportFile">
+  <action name="actSvgFile">
    <property name="text">
-    <string>导出</string>
+    <string>导出Svg</string>
    </property>
   </action>
   <action name="actExit">
@@ -479,6 +479,49 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actSelectFrameCol">
+   <property name="text">
+    <string>选择边框颜色</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actSelectFillCol">
+   <property name="text">
+    <string>选择填充颜色</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actSelectTextCol">
+   <property name="text">
+    <string>选择文字颜色</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actSelectTextFont">
+   <property name="text">
+    <string>选择文字字体</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actAddDoc">
+   <property name="text">
+    <string>文档图形</string>
+   </property>
+   <property name="toolTip">
+    <string>文档图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
  </widget>

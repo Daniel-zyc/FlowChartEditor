@@ -21,9 +21,14 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
-	setBrush(QBrush(Qt::black));
+	QBrush qbrush = painter->brush();
+	qbrush.setColor(pen().color());
+	setBrush(qbrush);
+
 	painter->setBrush(brush());
 	painter->setPen(pen());
+
+	// 此处应加入根据不同箭头类型进行绘制的代码
 
 	painter->drawLine(QLineF(beginPoint, endPoint));
 }
@@ -42,4 +47,16 @@ QPainterPath DLineItem::shapeNormal() const
 void DLineItem::updateLine()
 {
 	return;
+}
+
+//================================
+
+void DLineItem::serialize(QDataStream &out) const{
+    qDebug() << "DLineItem serializing";
+    DLineBase::serialize(out);
+}
+
+void DLineItem::deserialize(QDataStream &in){
+    qDebug() << "DLineItem deserializing";
+    DLineBase::deserialize(in);
 }

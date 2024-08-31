@@ -1,13 +1,20 @@
 #include "magpoint.h"
 #include "dabstractbase.h"
 
+#include "serializer.h"
+
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
-	maxPointRadius = qMax(qMax(magPointRadius,sizePointRadius), qMax(magPointCollideRadius, modiPointRadius));
+	setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
 	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
 			 | QGraphicsItem::ItemSendsGeometryChanges);
 	mags = new QList<MagPoint*>();
+}
+
+DAbstractBase::~DAbstractBase()
+{
+	delete mags;
 }
 
 QPainterPath DAbstractBase::shape() const
@@ -19,11 +26,35 @@ QPainterPath DAbstractBase::shape() const
 	return pth;
 }
 
+QPainterPath DAbstractBase::shapeSelected() const
+{
+	QPainterPath pth; pth.setFillRule(Qt::WindingFill);
+	qreal r = modiPointRadius;
+	for(const QPointF& pt : modis) pth.addEllipse(pt, r, r);
+	r = sizePointRadius;
+	for(const QPointF& pt : sizes) pth.addEllipse(pt, r, r);
+	return pth;
+}
+
+QPainterPath DAbstractBase::shapeShowMaged() const
+{
+	QPainterPath pth;
+	qreal r = magPointCollideRadius;
+	for(MagPoint* mag : *mags) pth.addEllipse(mag->pos, r, r);
+	return pth;
+}
+
 void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	paintShape(painter, option, widget);
 	if(isSelected()) paintSelected(painter, option, widget);
 	if(showMagPoint) paintMagPoint(painter, option, widget);
+}
+
+void DAbstractBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	paintSizePoint(painter, option, widget);
+	paintModiPoint(painter, option, widget);
 }
 
 void DAbstractBase::paintModiPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -68,32 +99,20 @@ void DAbstractBase::paintMagPoint(QPainter *painter, const QStyleOptionGraphicsI
 void DAbstractBase::modiToPointPre(QPointF p)
 {
 	if(modiPointId == -1) return;
-	
-	prepareGeometryChange();
 	modiToPoint(p, modiPointId);
-	updateAllLinkLines();
-	update();
 }
 
 void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
 {
 	if(sizePointId == -1) return;
-
-	prepareGeometryChange();
 	sizeToPoint(p, sizePointId, mp);
-	updateAllLinkLines();
-	update();
 }
 
 int DAbstractBase::checkModiPoint(QPointF p) const
 {
 	qreal r = modiPointRadius;
-	for(int i = 0; i < modis.size(); i++)
-	{
-		const QPointF& mp = modis[i];
-		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
-			return i;
-	}
+	for(int i = 0; i < modis.size(); i++) if(DTool::inCircle(modis[i], r, p))
+		return i;
 	return -1;
 }
 
@@ -103,15 +122,11 @@ bool DAbstractBase::setModiPoint(QPointF p)
 	modiPointId = -1;
 	for(int i = 0; i < modis.size(); i++)
 	{
-		const QPointF& mp = modis[i];
-		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
+		qreal dist = DTool::dist(p, modis[i]);
+		if(dist <= r && (modiPointId == -1 || minDist > dist))
 		{
-			qreal dist = QLineF(p, mp).length();
-			if(modiPointId == -1 || minDist > dist)
-			{
-				modiPointId = i;
-				minDist = dist;
-			}
+			modiPointId = i;
+			minDist = dist;
 		}
 	}
 	return modiPointId != -1;
@@ -120,12 +135,8 @@ bool DAbstractBase::setModiPoint(QPointF p)
 int DAbstractBase::checkSizePoint(QPointF p) const
 {
 	qreal r = modiPointRadius;
-	for(int i = 0; i < sizes.size(); i++)
-	{
-		const QPointF& mp = sizes[i];
-		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
-			return i;
-	}
+	for(int i = 0; i < sizes.size(); i++) if(DTool::inCircle(sizes[i], r, p))
+		return i;
 	return -1;
 }
 
@@ -135,15 +146,11 @@ bool DAbstractBase::setSizePoint(QPointF p)
 	sizePointId = -1;
 	for(int i = 0; i < sizes.size(); i++)
 	{
-		const QPointF& mp = sizes[i];
-		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
+		qreal dist = DTool::dist(p, sizes[i]);
+		if(dist < r && (sizePointId == -1 || minDist > dist))
 		{
-			qreal dist = QLineF(p, mp).length();
-			if(sizePointId == -1 || minDist > dist)
-			{
-				sizePointId = i;
-				minDist = dist;
-			}
+			sizePointId = i;
+			minDist = dist;
 		}
 	}
 	return sizePointId != -1;
@@ -151,7 +158,6 @@ bool DAbstractBase::setSizePoint(QPointF p)
 
 void DAbstractBase::setShowMagPoint(bool show)
 {
-	prepareGeometryChange();
 	showMagPoint = show;
 	update();
 }
@@ -160,12 +166,8 @@ bool DAbstractBase::checkMagPoint(QPointF p) const
 {
 	p = mapFromScene(p);
 	qreal r = magPointCollideRadius;
-	for(int i = 0; i < mags->size(); i++)
-	{
-		const QPointF& mp = (*mags)[i]->pos;
-		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
-			return true;
-	}
+	for(int i = 0; i < mags->size(); i++) if(DTool::inCircle((*mags)[i]->pos, r, p))
+		return true;
 	return false;
 }
 
@@ -173,26 +175,64 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 {
 	p = mapFromScene(p);
 	qreal r = magPointCollideRadius, minDist = 0;
-	int tmpId = -1;
+	MagPoint *ptr = nullptr;
 	for(int i = 0; i < mags->size(); i++)
 	{
-		const QPointF& mp = (*mags)[i]->pos;
-		if(QRectF(mp.x() - r, mp.y() - r, 2*r, 2*r).contains(p))
+		qreal dist = DTool::dist(p, (*mags)[i]->pos);
+		if(dist <= r && (ptr == nullptr || minDist > dist))
 		{
-			qreal dist = QLineF(p, mp).length();
-			if(tmpId == -1 || minDist > dist)
-			{
-				tmpId = i;
-				minDist = dist;
-			}
+			ptr = (*mags)[i];
+			minDist = dist;
 		}
 	}
-	if(tmpId != -1) return (*mags)[tmpId];
-	else return nullptr;
+	return ptr;
 }
 
 void DAbstractBase::updateAllLinkLines()
 {
-	// qDebug() << "updateLines";
 	for(MagPoint* mag : *mags) mag->updateLines();
+}
+
+//=======================================
+
+void DAbstractBase::serialize(QDataStream &out) const{
+    qDebug() << "abstract base serializing";
+	out << reinterpret_cast<qintptr>(this);
+	qDebug() << pos();
+	out << pos() << rotation() << scale();
+	out << brush() << pen();
+    if(mags == nullptr) out << static_cast<quint32>(0);
+    else{
+        out << static_cast<quint32>(mags->size());
+        for(MagPoint *magPoint : *mags){
+            out << reinterpret_cast<qintptr>(magPoint);
+            magPoint->serialize(out);
+			qDebug() << magPoint->pos;
+        }
+	}
+}
+
+void DAbstractBase::deserialize(QDataStream &in){
+    qDebug() << "abstract base deserializing";
+
+	qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
+
+	QPointF pos; in >> pos; setPos(pos);
+	qreal rot; in >> rot; setRotation(rot);
+	qreal scl; in >> scl; setScale(scl);
+
+	QBrush qb; in >> qb; setBrush(qb);
+	QPen qp; in >> qp; setPen(qp);
+
+	quint32 magPointCount; in >> magPointCount;
+	for(quint32 i = 0; i < magPointCount; i++) {
+		qintptr magPointPtr; in >> magPointPtr;
+		Serializer::instance().DAbstractBaseToMagsPtr.insert(this, magPointPtr);
+
+		(*mags)[i]->deserialize(in);
+	}
+}
+
+void DAbstractBase::linkMags(MagPoint* point){
+    mags->append(point);
 }

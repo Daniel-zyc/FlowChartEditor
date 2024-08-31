@@ -3,7 +3,16 @@
 #include "dscene.h"
 #include "dview.h"
 #include "dfinddialog.h"
+#include "dtextitem.h"
 
+#include <QSet>
+#include <QColorDialog>
+#include <QFontDialog>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QSplitter>
+#include <QWidget>
+#include <QPushButton>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -22,8 +31,11 @@ private:
 	void createMenu();
 	void createToolBar();
 	void bindAction();
+    void initUi();
 
 private slots:
+    void saveAsSvg();
+
 	void addLine();
 	void addRect();
 	void addRoundRect();
@@ -32,6 +44,14 @@ private slots:
     void addTri();
     void addDia();
     void addTrap();
+    void addParallegram();
+    void addDocShape();
+
+    QSet<DTextBase *> getTextBases();
+    void selectFrameCol();
+    void selectFillCol();
+    void selectTextCol();
+    void selectTextFont();
 
 	void rotateCW();
 	void rotateCCW();
@@ -65,10 +85,31 @@ private slots:
 	void combineSelected();
 	void seperateSelected();
 
+    void saveFile();
+    void loadFile();
 private:
 	Ui::MainWindow *ui;
 
 	DScene *scene;
 	DView *view;
     DFindDialog *findDia;
+    QColorDialog *colorDia;
+    QFontDialog *fontDia;
+
+    QSplitter *mainsplitter;
+    QWidget *leftw;
+    QGridLayout *leftGrid;
+    QVBoxLayout *leftUpV;
+
+    QPushButton *rectBtn;
+    QPushButton *roundRectBtn;
+    QPushButton *ellipseBtn;
+    QPushButton *lineBtn;
+    QPushButton *parellgramBtn;
+    QPushButton *trapBtn;
+    QPushButton *rhomBtn;
+    QPushButton *fileBtn;
+    QPushButton *triBtn;
+    QPushButton *textBtn;
+
 };

@@ -1,17 +1,18 @@
 #include "dshapebase.h"
 #include "dabstractbase.h"
 #include "dtextitem.h"
+#include "magpoint.h"
+
+#include "serializer.h"
 
 DShapeBase::DShapeBase(QGraphicsItem *parent)
-	: DAbstractBase(parent)
-{
-	maxPointRadius = qMax(maxPointRadius, rotPointRadius);
-}
+	: DAbstractBase(parent) {}
 
-DShapeBase::DShapeBase(const QString &str, QGraphicsItem *parent)
+DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
-	textItem = new DTextItem(str, this);
+	textItem = new DTextItem(text, this);
+	textItem->deleteMagPoint();
 }
 
 QRectF DShapeBase::boundingRect() const
@@ -24,9 +25,8 @@ QRectF DShapeBase::boundingRect() const
 void DShapeBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	paintSelectRect(painter, option, widget);
-	paintSizePoint(painter, option, widget);
+	DAbstractBase::paintSelected(painter, option, widget);
 	paintRotPoint(painter, option, widget);
-	paintModiPoint(painter, option, widget);
 }
 
 void DShapeBase::paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -77,6 +77,9 @@ int DShapeBase::setInterPoint(QPointF p)
 void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 {
 	Q_UNUSED(mp);
+	if(interactType == DConst::NONE) return;
+
+	prepareGeometryChange();
 	switch(interactType)
 	{
 		case DConst::MODI:
@@ -86,22 +89,28 @@ void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 			sizeToPointPre(mapFromScene(p));
 			break;
 		case DConst::ROT:
-			QPointF c = mapToScene({0, 0});
-			rotToPoint(p - c);
+			rotToPoint(p - mapToScene({0, 0}));
 			break;
 	}
+	updateAllLinkLines();
+	update();
+}
+
+void DShapeBase::setInsertItem()
+{
+	interactType = DConst::SIZE;
+	sizePointId = DConst::BR - 1;
 }
 
 bool DShapeBase::checkRotPoint(QPointF p) const
 {
-	qreal r = rotPointRadius;
-	QPointF rp = rotPoint;
-	return QRectF(rp.x()-r, rp.y()-r, 2*r, 2*r).contains(p);
+	qreal r = rotPointRadius; QPointF rp = rotPoint;
+	return DTool::inCircle(rp, r, p);
 }
 
 bool DShapeBase::setRotPoint(QPointF p)
 {
-	return checkSizePoint(p);
+	return checkRotPoint(p);
 }
 
 void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
@@ -111,51 +120,41 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 	QPointF cent = mapToParent(nrect.center());
 	nrect.moveCenter({0, 0});
 
-	prepareGeometryChange();
 	sizeToRect(nrect);
 	sizeRectUpdated();
 	setPos(cent);
-	updateAllLinkLines();
-	update();
 }
 
 void DShapeBase::rotToPoint(QPointF p)
 {
-	qreal deg = radToDeg(atan2(p.x(), -p.y()));
+	qreal deg = DTool::radToDeg(atan2(p.x(), -p.y()));
 	setRotation(deg);
 }
 
 void DShapeBase::sizeRectUpdated()
 {
 	QRectF rc = sizeRect();
-	qreal minx = rc.left(), maxx = rc.right(), midx = rc.center().x();
-	qreal miny = rc.top(), maxy = rc.bottom(), midy = rc.center().y();
+	qreal minx = rc.left(), maxx = rc.right();
+	qreal miny = rc.top(), maxy = rc.bottom();
 	
 	sizes.resize(8);
-	sizes[DConst::T - 1] = {midx, miny};
-	sizes[DConst::B - 1] = {midx, maxy};
-	sizes[DConst::L - 1] = {minx, midy};
-	sizes[DConst::R - 1] = {maxx, midy};
+	sizes[DConst::T - 1] = {0, miny};
+	sizes[DConst::B - 1] = {0, maxy};
+	sizes[DConst::L - 1] = {minx, 0};
+	sizes[DConst::R - 1] = {maxx, 0};
 	sizes[DConst::TL - 1] = {minx, miny};
 	sizes[DConst::TR - 1] = {maxx, miny};
 	sizes[DConst::BL - 1] = {minx, maxy};
 	sizes[DConst::BR - 1] = {maxx, maxy};
 
-	rotPoint = {midx, miny - rotPointMargin};
+	rotPoint = {0, miny - rotPointMargin};
 }
 
 QPainterPath DShapeBase::shapeSelected() const
 {
-	QPainterPath pth;
-	pth.addRect(boundingRect());
-	return pth;
-}
-
-QPainterPath DShapeBase::shapeShowMaged() const
-{
-	QPainterPath pth;
-	qreal r = magPointCollideRadius;
-	pth.addRect(sizeRect().adjusted(-r, -r, r, r));
+	QPainterPath pth = DAbstractBase::shapeSelected();
+	qreal r = rotPointRadius;
+	pth.addEllipse(rotPoint, r, r);
 	return pth;
 }
 
@@ -166,7 +165,6 @@ QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)
 		updateAllLinkLines();
-
 	return value;
 }
 
@@ -174,12 +172,11 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 {
     QRectF nrc = this->sizeRect();
 	qreal x = p.x(), y = p.y();
-	qreal r = sizePointRadius;
 
-	auto resizeT = [&](){ if(y < nrc.bottom() - 4*r) nrc.setTop(y); };
-	auto resizeB = [&](){ if(y > nrc.top() + 4*r) nrc.setBottom(y); };
-	auto resizeL = [&](){ if(x < nrc.right() - 4*r) nrc.setLeft(x); };
-	auto resizeR = [&](){ if(x > nrc.left() + 4*r) nrc.setRight(x); };
+	auto resizeT = [&](){ if(y < nrc.bottom() - minRectSize) nrc.setTop(y); };
+	auto resizeB = [&](){ if(y > nrc.top() + minRectSize) nrc.setBottom(y); };
+	auto resizeL = [&](){ if(x < nrc.right() - minRectSize) nrc.setLeft(x); };
+	auto resizeR = [&](){ if(x > nrc.left() + minRectSize) nrc.setRight(x); };
 
 	switch(id + 1)
 	{
@@ -194,4 +191,30 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 		case DConst::NONE: break;
 	}
 	return nrc;
+}
+
+//===========================================
+void DShapeBase::serialize(QDataStream &out) const{
+    qDebug() << "shape base serializing";
+    DAbstractBase::serialize(out);
+
+    qintptr textItemPtr = (textItem != nullptr) ? reinterpret_cast<qintptr>(textItem) : qintptr(-1);
+    out << textItemPtr;
+}
+
+void DShapeBase::deserialize(QDataStream &in){
+    qDebug() << "shape base deserializing";
+    DAbstractBase::deserialize(in);
+
+	if(textItem) delete textItem;
+
+	qintptr textItemPtr; in >> textItemPtr;
+
+    if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
+}
+
+void DShapeBase::linkTextItem(DTextItem*item){
+    qDebug() << "link shapebase and textItem";
+    textItem = item;
+	textItem->setParentItem(this);
 }
