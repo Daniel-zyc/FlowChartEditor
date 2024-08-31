@@ -26,6 +26,7 @@ SOURCES += \
     magpoint.cpp \
     main.cpp \
     mainwindow.cpp \
+    saveandloadmanager.cpp \
     serializer.cpp
 
 HEADERS += \
@@ -45,6 +46,7 @@ HEADERS += \
     global.h \
     magpoint.h \
     mainwindow.h \
+    saveandloadmanager.h \
     serializer.h
 
 FORMS += \

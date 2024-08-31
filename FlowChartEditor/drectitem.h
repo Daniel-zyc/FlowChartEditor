@@ -33,8 +33,8 @@ public:
      * @param out
      * 序列化：DShapeBase -> rect
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
 };
 

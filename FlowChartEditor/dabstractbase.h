@@ -114,8 +114,10 @@ public:
      * @param out
      * 序列化方法：this地址 -> magPoint列表大小 -> magPoint地址列表
      */
-    void serialize(QDataStream &out) const;
+    virtual void serialize(QDataStream &out) const;
 
-    void deserialize(QDataStream &in);
+    virtual void deserialize(QDataStream &in);
+
+    void linkMags(MagPoint*);
 };
 

@@ -86,3 +86,11 @@ void MagPoint::deserialize(QDataStream &in){
         Serializer::instance().MagPointToLinesPtr.insert(this,linePtr);
     }
 }
+
+void MagPoint::linkParent(QGraphicsItem * item){
+    parent = item;
+}
+
+void MagPoint::linkLine(DLineBase *line){
+    lines->append(line);
+}

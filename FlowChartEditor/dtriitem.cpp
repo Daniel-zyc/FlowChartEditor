@@ -43,9 +43,11 @@ void DTriItem::updateModiPoint()
 
 //===================================
 void DTriItem::serialize(QDataStream &out) const{
+    qDebug() << "DTriItem serializing";
     DPolygonBase::serialize(out);
 }
 
 void DTriItem::deserialize(QDataStream &in){
+    qDebug() << "DTriItem deserializing";
     DPolygonBase::deserialize(in);
 }

@@ -50,9 +50,11 @@ void DLineItem::updateLine()
 //================================
 
 void DLineItem::serialize(QDataStream &out) const{
+    qDebug() << "DLineItem serializing";
     DLineBase::serialize(out);
 }
 
 void DLineItem::deserialize(QDataStream &in){
+    qDebug() << "DLineItem deserializing";
     DLineBase::deserialize(in);
 }

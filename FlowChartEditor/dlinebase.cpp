@@ -1,5 +1,6 @@
 #include "dlinebase.h"
 #include "magpoint.h"
+#include "serializer.h"
 
 DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
@@ -140,7 +141,10 @@ void DLineBase::updatePosition()
 //===========================================
 
 void DLineBase::serialize(QDataStream &out) const{
+    qDebug() << "line base serializing";
     DAbstractBase::serialize(out);
+
+    out << reinterpret_cast<qintptr>(this);
 
     out << beginPoint;
     out << endPoint;
@@ -149,7 +153,14 @@ void DLineBase::serialize(QDataStream &out) const{
 }
 
 void DLineBase::deserialize(QDataStream &in){
+    qDebug() << "line base deserializing";
     DAbstractBase::deserialize(in);
+
+    qintptr thisPtr;
+
+    in >> thisPtr;
+
+    Serializer::instance().PtrToLineBase.insert(thisPtr, this);
 
     in >> beginPoint;
     in >> endPoint;

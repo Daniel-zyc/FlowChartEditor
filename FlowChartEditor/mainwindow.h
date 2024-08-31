@@ -75,6 +75,8 @@ private slots:
 	void combineSelected();
 	void seperateSelected();
 
+    void saveFile();
+    void loadFile();
 private:
 	Ui::MainWindow *ui;
 

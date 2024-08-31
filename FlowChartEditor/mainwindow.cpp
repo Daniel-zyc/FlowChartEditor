@@ -6,6 +6,8 @@
 #include "dlineitem.h"
 #include "dshapebase.h"
 
+#include "saveandloadmanager.h"
+
 #include <QSize>
 #include <QColor>
 #include <QGraphicsRectItem>
@@ -21,7 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 	bindAction();
 
+    // 绑定序列化管理
 	scene = new DScene(this);
+
+    SaveAndLoadManager::instance().bindScene(scene);
 
 	QMenu *m = new QMenu();
 	m->addAction(ui->actDelSelectedItem);
@@ -136,6 +141,9 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
+    connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
+
     connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
 
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
@@ -429,4 +437,23 @@ void MainWindow::combineSelected()
 void MainWindow::seperateSelected()
 {
 	scene->seperateSelected();
+}
+
+void MainWindow::saveFile(){
+    QString filePath = QFileDialog::getSaveFileName(this, "save");
+    if(filePath == "") return;
+
+    QList<QGraphicsItem *> items = scene->selectedItems();
+    for(QGraphicsItem *item : items) {
+        item->setSelected(false);
+    }
+
+    SaveAndLoadManager::instance().saveToFile(filePath);
+}
+
+void MainWindow::loadFile(){
+    QString filePath = QFileDialog::getOpenFileName(this, "load");
+    if(filePath == "") return;
+
+    SaveAndLoadManager::instance().loadFromFile(filePath);
 }

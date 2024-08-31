@@ -3,6 +3,8 @@
 #include "dtextitem.h"
 #include "magpoint.h"
 
+#include "serializer.h"
+
 DShapeBase::DShapeBase(QGraphicsItem *parent)
 	: DAbstractBase(parent) {}
 
@@ -186,9 +188,24 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 
 //===========================================
 void DShapeBase::serialize(QDataStream &out) const{
+    qDebug() << "shape base serializing";
     DAbstractBase::serialize(out);
+
+    qintptr textItemPtr = (textItem != nullptr) ? reinterpret_cast<qintptr>(textItem) : qintptr(-1);
+    out << textItemPtr;
 }
 
 void DShapeBase::deserialize(QDataStream &in){
+    qDebug() << "shape base deserializing";
     DAbstractBase::deserialize(in);
+
+    qintptr textItemPtr;
+    in >> textItemPtr;
+
+    if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
+}
+
+void DShapeBase::linkTextItem(DTextItem*item){
+    qDebug() << "link shapebase and textItem";
+    textItem = item;
 }

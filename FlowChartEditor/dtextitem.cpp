@@ -5,6 +5,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QStyleOptionGraphicsItem>
+#include "serializer.h"
 
 DTextBase::DTextBase(QGraphicsItem *parent)
 	: QGraphicsTextItem(parent) {}
@@ -46,11 +47,11 @@ void DTextBase::focusToCenter()
 }
 
 void DTextBase::serialize(QDataStream &out) const{
-    out << curCent;
+    return;
 }
 
 void DTextBase::deserialize(QDataStream &in){
-    in >> curCent;
+    return;
 }
 //==============================================================================
 
@@ -137,18 +138,28 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 		if(!isSelected()) textBase.endEdit();
 	}
 	return QGraphicsItem::itemChange(change, value);
+}
 void DTextItem::serialize(QDataStream &out) const{
+    qDebug() << "DTextIetm serializing";
     DShapeBase::serialize(out);
 
     textBase.serialize(out);
 
     out << rect;
+
+    out << reinterpret_cast<qintptr>(this);
 }
 
 void DTextItem::deserialize(QDataStream &in){
+    qDebug() << "DTextItem deserializing";
     DShapeBase::deserialize(in);
 
     textBase.deserialize(in);
 
     in >> rect;
+
+    qintptr thisPtr;
+    in >> thisPtr;
+
+    Serializer::instance().PtrToTextItem.insert(thisPtr,this);
 }

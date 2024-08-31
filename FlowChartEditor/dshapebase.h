@@ -96,10 +96,12 @@ public:
     /**
      * @brief serialize
      * @param out
-     * 序列化：
+     * 序列化：DAbstractBase -> textPtr
      */
-    void serialize(QDataStream &out) const;
+    void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in);
+    void deserialize(QDataStream &in) override;
+
+    void linkTextItem(DTextItem* item);
 };
 

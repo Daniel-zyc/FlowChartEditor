@@ -85,8 +85,8 @@ void DScene::addRectItem()
 {
 	qDebug() << "add rectangle";
 	DRectItem *item = new DRectItem(200, 200);
-	item->textItem = new DTextItem(100, 100, "", item);
-	item->textItem->deleteMagPoint();
+    // item->textItem = new DTextItem(100, 100, "", item);
+    // item->textItem->deleteMagPoint();
 	addItem(item);
 }
 
@@ -173,73 +173,74 @@ void DScene::delSelectedItem()
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	qDebug() << event->button();
-	if(event->button() != Qt::LeftButton)
-	{
-		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
+    qDebug() << event->button();
+    if(event->button() != Qt::LeftButton)
+    {
+        QGraphicsScene::mousePressEvent(event);
+        return;
+    }
 
-	QPointF p = event->scenePos();
-	QList<QGraphicsItem *> items = this->items(p);
+    QPointF p = event->scenePos();
+    QList<QGraphicsItem *> items = this->items(p);
+    // qDebug() << items.size();
 
-	// if(state == SceneState::INSERTLINE)
-	// {
-	// 	event->accept();
-	// 	items = this->items(p);
-	// 	endPoint = p, endMag = nullptr;
-	// 	if(!items.empty())
-	// 	{
-	// 		DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
-	// 		if(item && item->checkMagPoint(p))
-	// 		{
-	// 			endMag = item->getMagPoint(p);
-	// 		}
-	// 	}
-	// 	return;
-	// }
+    // if(state == SceneState::INSERTLINE)
+    // {
+    // 	event->accept();
+    // 	items = this->items(p);
+    // 	endPoint = p, endMag = nullptr;
+    // 	if(!items.empty())
+    // 	{
+    // 		DShapeBase *item = dynamic_cast<DShapeBase*>(items.first());
+    // 		if(item && item->checkMagPoint(p))
+    // 		{
+    // 			endMag = item->getMagPoint(p);
+    // 		}
+    // 	}
+    // 	return;
+    // }
 
-	// qDebug() << items;
+    // qDebug() << items;
 
-	if(items.empty())
-	{
-		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
+    if(items.empty())
+    {
+        QGraphicsScene::mousePressEvent(event);
+        return;
+    }
 
-	QGraphicsItem *item = items.first();
+    QGraphicsItem *item = items.first();
 
-	if(!item->isSelected())
-	{
-		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
+    if(!item->isSelected())
+    {
+        QGraphicsScene::mousePressEvent(event); // ??
+        return;
+    }
 
-	// qDebug() << item;
+    // qDebug() << item;
 
-	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
-	{
-		// qDebug() << "modifiedShape";
-		if(modifiedShape->checkInterPoint(p))
-		{
-			// qDebug() << "modi";
-			// qDebug() << modifiedShape->checkInterPoint(p);
-			moditype = modifiedShape->setInterPoint(p);
-		}
-		else moditype = DConst::NONE;
-		// else if(modifiedShape->checkSizePoint(p))
-		// {
-		// 	modifiedShape->setSizePoint(p);
-		// 	moditype = ModifyType::SIZE;
-		// }
-		// else
-		// {
-		// 	modifiedShape = nullptr;
-		// 	moditype = ModifyType::NONE;
-		// }
-	}
+    if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
+    {
 
-	QGraphicsScene::mousePressEvent(event);
+        // qDebug() << "modifiedShape";
+        if(modifiedShape->checkInterPoint(p))
+        {
+            // qDebug() << "modi";
+            // qDebug() << modifiedShape->checkInterPoint(p);
+            moditype = modifiedShape->setInterPoint(p);
+        }
+        else moditype = DConst::NONE;
+        // else if(modifiedShape->checkSizePoint(p))
+        // {
+        // 	modifiedShape->setSizePoint(p);
+        // 	moditype = ModifyType::SIZE;
+        // }
+        // else
+        // {
+        // 	modifiedShape = nullptr;
+        // 	moditype = ModifyType::NONE;
+        // }
+    }
+    QGraphicsScene::mousePressEvent(event);
 }
 
 void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -300,7 +301,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	qDebug() << event->button();
+    // qDebug() << event->button();
 	if(event->button() != Qt::LeftButton)
 	{
 		QGraphicsScene::mouseReleaseEvent(event);
