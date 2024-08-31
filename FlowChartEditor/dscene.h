@@ -47,6 +47,8 @@ public:
 	void addEllItem();
 	void addLineItem();
     void addTriItem();
+    void addParallegramItem();
+    void addDocItem();
 
 	void combineSelected();
 	void seperateSelected();

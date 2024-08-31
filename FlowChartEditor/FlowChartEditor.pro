@@ -28,7 +28,9 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     saveandloadmanager.cpp \
-    serializer.cpp
+    serializer.cpp \
+    dparallelogramitem.cpp \
+    ddocitem.cpp
 
 HEADERS += \
     dabstractbase.h \
@@ -49,7 +51,9 @@ HEADERS += \
     magpoint.h \
     mainwindow.h \
     saveandloadmanager.h \
-    serializer.h
+    serializer.h \
+    dparallelogramitem.h \
+    ddocitem.h
 
 FORMS += \
     mainwindow.ui

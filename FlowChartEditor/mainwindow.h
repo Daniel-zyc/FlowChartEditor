@@ -36,6 +36,8 @@ private slots:
 	void addEll();
 	void addText();
     void addTri();
+    void addParallegram();
+    void addDocShape();
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();

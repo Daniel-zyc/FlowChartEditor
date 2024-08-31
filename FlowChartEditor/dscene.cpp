@@ -7,6 +7,8 @@
 #include "dlineitem.h"
 #include "dtextitem.h"
 #include "dtriitem.h"
+#include "dparallelogramitem.h"
+#include "ddocitem.h"
 #include "ditemgroup.h"
 
 qreal DScene::defaultRotateDelta = 10;
@@ -123,6 +125,24 @@ void DScene::addTriItem()
 	DTriItem *item = new DTriItem();
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
+}
+
+void DScene::addParallegramItem()
+{
+    qDebug() << "add Parallegram";
+    DParallegramItem *item = new DParallegramItem(200, 200);
+    item->textItem = new DTextItem(100, 100, "hello world!", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addDocItem()
+{
+    qDebug() << "add Parallegram";
+    DDocItem *item = new DDocItem(200, 200);
+    item->textItem = new DTextItem(100, 100, "hello world!", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
 }
 
 void DScene::combineSelected()
