@@ -20,9 +20,9 @@ public:
     QPainterPath shapeNormal() const override;
     void sizeToRect(QRectF nrect) override;
     void modiToPoint(QPointF p, int id) override;
+	void setRect(const QRectF &nrect);
 
 private:
-    void setRect(const QRectF &nrect);
     void updateMagPoint();
     void updateModiPoint();
     QPainterPath addParallelogram(const QRectF &rect, qreal skew) const;

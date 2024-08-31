@@ -206,6 +206,8 @@ void DShapeBase::deserialize(QDataStream &in){
     qDebug() << "shape base deserializing";
     DAbstractBase::deserialize(in);
 
+	if(textItem) delete textItem;
+
 	qintptr textItemPtr; in >> textItemPtr;
 
     if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
@@ -214,4 +216,5 @@ void DShapeBase::deserialize(QDataStream &in){
 void DShapeBase::linkTextItem(DTextItem*item){
     qDebug() << "link shapebase and textItem";
     textItem = item;
+	textItem->setParentItem(this);
 }

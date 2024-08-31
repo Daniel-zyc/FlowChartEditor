@@ -87,13 +87,14 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
         // printMapSize();
     }
 
-    // linkAll();
+	linkAll();
 
     for(auto it = PtrToQGraphicsItem.cbegin(); it != PtrToQGraphicsItem.cend(); ++it){
-        scene->addItem(it.value());
+		qDebug() << it.value()->pos();
+		scene->addItem(it.value());
     }
 
-	qDebug() << scene;
+	// qDebug() << scene;
 }
 
 
@@ -108,21 +109,24 @@ void Serializer::linkAll(){
         }
     }
 
-    for(auto it = MagPointToParentPtr.cbegin(); it != MagPointToParentPtr.cend(); ++it){
-        MagPoint * magPoint = it.key();
-        qintptr parentPtr = it.value();
-        if(PtrToQGraphicsItem.contains(parentPtr)){
-            magPoint->linkParent(PtrToQGraphicsItem[parentPtr]);
-        }
-    }
+	// for(auto it = MagPointToParentPtr.cbegin(); it != MagPointToParentPtr.cend(); ++it){
+	//     MagPoint * magPoint = it.key();
+	//     qintptr parentPtr = it.value();
+	//     if(PtrToQGraphicsItem.contains(parentPtr)){
+	//         magPoint->linkParent(PtrToQGraphicsItem[parentPtr]);
+	//     }
+	// }
 
-    for(auto it = DAbstractBaseToMagsPtr.cbegin(); it != DAbstractBaseToMagsPtr.cend(); ++it){
-        DAbstractBase * dabstractBase = it.key();
-        qintptr magPtr = it.value();
-        if(PtrToMagPoint.contains(magPtr)){
-            dabstractBase->linkMags(PtrToMagPoint[magPtr]);
-        }
-    }
+	// for(auto it = DAbstractBaseToMagsPtr.cbegin(); it != DAbstractBaseToMagsPtr.cend(); ++it){
+	//     DAbstractBase * dabstractBase = it.key();
+	//     qintptr magPtr = it.value();
+	//     if(PtrToMagPoint.contains(magPtr)){
+	//         dabstractBase->linkMags(PtrToMagPoint[magPtr]);
+	//     }
+	// }
+
+	// qDebug() << DShapeBaseToTextItem;
+	// qDebug() << PtrToTextItem;
 
     for(auto it = DShapeBaseToTextItem.cbegin(); it != DShapeBaseToTextItem.cend(); ++it){
         DShapeBase * dshapeBase = it.key();
