@@ -8,7 +8,7 @@ class DShapeBase;
 class DParallegramItem : public DShapeBase
 {
 public:
-    enum { Type = DConst::DParallegramItemType };
+    enum { Type = DParallegramItemType };
     DParallegramItem(QGraphicsItem *parent = nullptr);
     DParallegramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
