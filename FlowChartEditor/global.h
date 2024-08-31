@@ -73,7 +73,9 @@ enum UserTypes
 	DLineItemType = QGraphicsItem::UserType + 9,
 	DTriItemType = QGraphicsItem::UserType + 10,
     DParallegramItemType = QGraphicsItem::UserType + 11,
-    DDocItemType = QGraphicsItem::UserType + 12
+    DDocItemType = QGraphicsItem::UserType + 12,
+	DDiaItemType=QGraphicsItem::UserType + 13,
+	DTrapItemType=QGraphicsItem::UserType + 14
 };
 
 // 常量

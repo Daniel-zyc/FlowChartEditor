@@ -47,6 +47,8 @@ public:
 	void addEllItem();
 	void addLineItem();
     void addTriItem();
+    void addDiaItem();
+    void addTrapItem();
     void addParallegramItem();
     void addDocItem();
 

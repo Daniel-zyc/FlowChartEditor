@@ -157,6 +157,7 @@ void DTextItem::serialize(QDataStream &out) const{
 
     textBase.serialize(out);
 
+	out << pos();
     out << rect;
 }
 
@@ -169,6 +170,9 @@ void DTextItem::deserialize(QDataStream &in){
 
     textBase.deserialize(in);
 
+	QPointF pos;
+	in >> pos;
+	setPos(pos);
     in >> rect;
 	setRect(rect);
 }

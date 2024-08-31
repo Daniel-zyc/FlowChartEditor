@@ -111,11 +111,8 @@ void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
 int DAbstractBase::checkModiPoint(QPointF p) const
 {
 	qreal r = modiPointRadius;
-	for(int i = 0; i < modis.size(); i++)
-	{
-		if(DTool::inCircle(modis[i], r, p))
-			return i;
-	}
+	for(int i = 0; i < modis.size(); i++) if(DTool::inCircle(modis[i], r, p))
+		return i;
 	return -1;
 }
 
@@ -138,11 +135,8 @@ bool DAbstractBase::setModiPoint(QPointF p)
 int DAbstractBase::checkSizePoint(QPointF p) const
 {
 	qreal r = modiPointRadius;
-	for(int i = 0; i < sizes.size(); i++)
-	{
-		if(DTool::inCircle(sizes[i], r, p))
-			return i;
-	}
+	for(int i = 0; i < sizes.size(); i++) if(DTool::inCircle(sizes[i], r, p))
+		return i;
 	return -1;
 }
 
@@ -164,7 +158,6 @@ bool DAbstractBase::setSizePoint(QPointF p)
 
 void DAbstractBase::setShowMagPoint(bool show)
 {
-	prepareGeometryChange();
 	showMagPoint = show;
 	update();
 }
@@ -173,11 +166,8 @@ bool DAbstractBase::checkMagPoint(QPointF p) const
 {
 	p = mapFromScene(p);
 	qreal r = magPointCollideRadius;
-	for(int i = 0; i < mags->size(); i++)
-	{
-		if(DTool::inCircle((*mags)[i]->pos, r, p))
-			return true;
-	}
+	for(int i = 0; i < mags->size(); i++) if(DTool::inCircle((*mags)[i]->pos, r, p))
+		return true;
 	return false;
 }
 
@@ -208,13 +198,16 @@ void DAbstractBase::updateAllLinkLines()
 void DAbstractBase::serialize(QDataStream &out) const{
     qDebug() << "abstract base serializing";
 	out << reinterpret_cast<qintptr>(this);
-	out << pos() << brush() << pen();
+	qDebug() << pos();
+	out << pos() << rotation() << scale();
+	out << brush() << pen();
     if(mags == nullptr) out << static_cast<quint32>(0);
     else{
         out << static_cast<quint32>(mags->size());
         for(MagPoint *magPoint : *mags){
             out << reinterpret_cast<qintptr>(magPoint);
             magPoint->serialize(out);
+			qDebug() << magPoint->pos;
         }
 	}
 }
@@ -225,19 +218,18 @@ void DAbstractBase::deserialize(QDataStream &in){
 	qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
 
 	QPointF pos; in >> pos; setPos(pos);
+	qreal rot; in >> rot; setRotation(rot);
+	qreal scl; in >> scl; setScale(scl);
 
-	QBrush qb; in >> qb;
-	QPen qp; in >> qp;
+	QBrush qb; in >> qb; setBrush(qb);
+	QPen qp; in >> qp; setPen(qp);
 
-	setBrush(qb); setPen(qp);
-
-	quint32 magPointCount; in >> magPointCount; mags->clear();
+	quint32 magPointCount; in >> magPointCount;
 	for(quint32 i = 0; i < magPointCount; i++) {
 		qintptr magPointPtr; in >> magPointPtr;
 		Serializer::instance().DAbstractBaseToMagsPtr.insert(this, magPointPtr);
 
-		mags->push_back(new MagPoint(this));
-		mags->back()->deserialize(in);
+		(*mags)[i]->deserialize(in);
 	}
 }
 

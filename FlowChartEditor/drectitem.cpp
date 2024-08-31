@@ -74,5 +74,4 @@ void DRectItem::deserialize(QDataStream &in){
 
     in >> rect;
 	setRect(rect);
-	mags->clear();
 }

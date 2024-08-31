@@ -27,6 +27,7 @@ void MagPoint::updateLines() const
 
 void MagPoint::addLine(DLineBase *line)
 {
+	for(DLineBase* l : *lines) if(l == line) continue;
 	lines->append(line);
 }
 
@@ -50,8 +51,8 @@ QPointF MagPoint::mapToItem(QGraphicsItem *item)
 void MagPoint::serialize(QDataStream &out) const{
     out << reinterpret_cast<qintptr>(this);
     out << pos;
-    qintptr parentPtr = (parent != nullptr) ? reinterpret_cast<qintptr>(parent) : qintptr(-1);
-    out << parentPtr;
+	// qintptr parentPtr = (parent != nullptr) ? reinterpret_cast<qintptr>(parent) : qintptr(-1);
+	// out << parentPtr;
 
     if(lines == nullptr){
         out << static_cast<quint32>(0);
@@ -64,24 +65,20 @@ void MagPoint::serialize(QDataStream &out) const{
 }
 
 void MagPoint::deserialize(QDataStream &in){
-    qintptr thisPtr;
-    in >> thisPtr;
-
+	qintptr thisPtr; in >> thisPtr;
     Serializer::instance().PtrToMagPoint.insert(thisPtr, this);
 
     in >> this->pos;
 
-    qintptr parentPtr;
-    in >> parentPtr;
+	// qintptr parentPtr;
+	// in >> parentPtr;
 
-    if(parentPtr != -1) Serializer::instance().MagPointToParentPtr.insert(this, parentPtr);
+	// if(parentPtr != -1) Serializer::instance().MagPointToParentPtr.insert(this, parentPtr);
 
-    quint32 lineCount;
-    in >> lineCount;
+	quint32 lineCount; in >> lineCount;
     for(quint32 i = 0; i < lineCount; i++)
     {
-        qintptr linePtr;
-        in >> linePtr;
+		qintptr linePtr; in >> linePtr;
         Serializer::instance().MagPointToLinesPtr.insert(this,linePtr);
     }
 }
