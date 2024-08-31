@@ -163,18 +163,23 @@ void DLineBase::setEndArrowType(int type)
 //===========================================
 
 void DLineBase::serialize(QDataStream &out) const{
-    qDebug() << "line base serializing";
+    // qDebug() << "line base serializing";
     DAbstractBase::serialize(out);
 
     out << reinterpret_cast<qintptr>(this);
 
 	out << beginArrowType << endArrowType;
 	out << beginPoint << endPoint;
-	out << brush() << pen();
+
+    out << brush() << pen();
+
+    qintptr beginPtr = beginMag != nullptr? reinterpret_cast<qintptr>(beginMag) : qintptr(-1);
+    qintptr endPtr = endMag != nullptr? reinterpret_cast<qintptr>(endMag) : qintptr(-1);
+    out << beginPtr << endPtr;
 }
 
 void DLineBase::deserialize(QDataStream &in){
-    qDebug() << "line base deserializing";
+    // qDebug() << "line base deserializing";
     DAbstractBase::deserialize(in);
 
 	qintptr thisPtr; in >> thisPtr;
@@ -186,4 +191,10 @@ void DLineBase::deserialize(QDataStream &in){
 
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
+
+    qintptr beginptr,endptr;
+    in >> beginptr >> endptr;
+
+    if(beginptr != -1) Serializer::instance().LineBaseToEndMagPoint.insert(this,beginptr);
+    if(endptr != -1) Serializer::instance().LineBaseToBeginMagPonint.insert(this,endptr);
 }

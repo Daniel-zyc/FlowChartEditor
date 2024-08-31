@@ -203,7 +203,7 @@ void DShapeBase::serialize(QDataStream &out) const{
 }
 
 void DShapeBase::deserialize(QDataStream &in){
-    qDebug() << "shape base deserializing";
+    // qDebug() << "shape base deserializing";
     DAbstractBase::deserialize(in);
 
 	if(textItem) delete textItem;
@@ -214,7 +214,7 @@ void DShapeBase::deserialize(QDataStream &in){
 }
 
 void DShapeBase::linkTextItem(DTextItem*item){
-    qDebug() << "link shapebase and textItem";
+    // qDebug() << "link shapebase and textItem";
     textItem = item;
 	textItem->setParentItem(this);
 }

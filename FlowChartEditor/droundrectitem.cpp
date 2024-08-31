@@ -83,14 +83,14 @@ void DRoundRectItem::setRect(const QRectF &nrect)
 //====================================
 
 void DRoundRectItem::serialize(QDataStream &out) const{
-    qDebug() << "DRoundRectItem serializing";
+    // qDebug() << "DRoundRectItem serializing";
     DShapeBase::serialize(out);
 
 	out << rect << radiusx << radiusy;
 }
 
 void DRoundRectItem::deserialize(QDataStream &in){
-    qDebug() << "DRoundRectItem deserializing";
+    // qDebug() << "DRoundRectItem deserializing";
     DShapeBase::deserialize(in);
 
 	in >> rect >> radiusx >> radiusy;

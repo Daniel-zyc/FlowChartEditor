@@ -6,7 +6,7 @@
 class DTrapItem : public DShapeBase
 {
 public:
-    enum { Type = DConst::DTrapItemType };
+    enum { Type = DTrapItemType };
     DTrapItem(QGraphicsItem *parent = nullptr);
     DTrapItem(qreal topWidth, qreal bottomWidth, qreal height, QGraphicsItem *parent = nullptr);
 

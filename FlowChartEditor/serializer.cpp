@@ -30,12 +30,9 @@ void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
 
 void Serializer::printMapSize(){
     qDebug() << "size of six map"
-             << PtrToMagPoint.size()
              << PtrToLineBase.size()
              << PtrToQGraphicsItem.size()
-             << MagPointToLinesPtr.size()
-             << MagPointToParentPtr.size()
-             << DAbstractBaseToMagsPtr.size();
+             << MagPointToLinesPtr.size();
 }
 
 void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
@@ -84,7 +81,6 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
                 qDebug() << "fail to deserialize";
             }
         }
-        // printMapSize();
     }
 
 	linkAll();
@@ -93,8 +89,6 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
 		qDebug() << it.value()->pos();
 		scene->addItem(it.value());
     }
-
-	// qDebug() << scene;
 }
 
 
@@ -109,25 +103,6 @@ void Serializer::linkAll(){
         }
     }
 
-	// for(auto it = MagPointToParentPtr.cbegin(); it != MagPointToParentPtr.cend(); ++it){
-	//     MagPoint * magPoint = it.key();
-	//     qintptr parentPtr = it.value();
-	//     if(PtrToQGraphicsItem.contains(parentPtr)){
-	//         magPoint->linkParent(PtrToQGraphicsItem[parentPtr]);
-	//     }
-	// }
-
-	// for(auto it = DAbstractBaseToMagsPtr.cbegin(); it != DAbstractBaseToMagsPtr.cend(); ++it){
-	//     DAbstractBase * dabstractBase = it.key();
-	//     qintptr magPtr = it.value();
-	//     if(PtrToMagPoint.contains(magPtr)){
-	//         dabstractBase->linkMags(PtrToMagPoint[magPtr]);
-	//     }
-	// }
-
-	// qDebug() << DShapeBaseToTextItem;
-	// qDebug() << PtrToTextItem;
-
     for(auto it = DShapeBaseToTextItem.cbegin(); it != DShapeBaseToTextItem.cend(); ++it){
         DShapeBase * dshapeBase = it.key();
         qintptr textItemPtr = it.value();
@@ -136,15 +111,27 @@ void Serializer::linkAll(){
         }
     }
 
+    for(auto it = LineBaseToBeginMagPonint.cbegin(); it != LineBaseToBeginMagPonint.cend(); ++ it){
+        DLineBase * dlineBase = it.key();
+        qintptr beginMag = it.value();
+        if(PtrToMagPoint.contains(beginMag)){
+            dlineBase->linkBegin(PtrToMagPoint[beginMag]);
+        }
+    }
+
+    for(auto it = LineBaseToEndMagPoint.cbegin(); it != LineBaseToEndMagPoint.cend(); ++ it){
+        DLineBase * dlineBase = it.key();
+        qintptr endMag = it.value();
+        if(PtrToMagPoint.contains(endMag)){
+            dlineBase->linkBegin(PtrToMagPoint[endMag]);
+        }
+    }
     return;
 }
 
 void Serializer::clearMap(){
-    PtrToMagPoint.clear();
     PtrToLineBase.clear();
     PtrToQGraphicsItem.clear();
 
     MagPointToLinesPtr.clear();
-    MagPointToParentPtr.clear();
-    DAbstractBaseToMagsPtr.clear();
 }

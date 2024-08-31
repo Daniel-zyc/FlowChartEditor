@@ -62,14 +62,14 @@ void DEllItem::setRect(const QRectF &nrect)
 //======================================
 
 void DEllItem::serialize(QDataStream &out) const{
-    qDebug() << "DEllItem serializing";
+    // qDebug() << "DEllItem serializing";
     DShapeBase::serialize(out);
 
     out << rect;
 }
 
 void DEllItem::deserialize(QDataStream &in){
-    qDebug() << "DEllItem deserialing";
+    // qDebug() << "DEllItem deserialing";
     DShapeBase::deserialize(in);
 
     in >> rect;

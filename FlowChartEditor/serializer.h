@@ -20,24 +20,24 @@ public:
         return instance;
     }
 
-    // 原地址 -- MagPoint
-    QMap<qintptr, MagPoint*> PtrToMagPoint;
     // 原地址 -- LineBase
     QMap<qintptr, DLineBase*> PtrToLineBase;
     // 原地址 -- QGraphicsItem
     QMap<qintptr, QGraphicsItem*> PtrToQGraphicsItem;
     // 原地址 -- TextItem
     QMap<qintptr, DTextItem*> PtrToTextItem;
+    // 原地址 -- MagPoint
+    QMap<qintptr, MagPoint*> PtrToMagPoint;
 
-
-    // MagPoint -- lines原地址地址
+    // MagPoint -- lines原地址
     QMap<MagPoint*, qintptr> MagPointToLinesPtr;
-    // MagPoint -- parent原地址
-    QMap<MagPoint*, qintptr> MagPointToParentPtr;
-    // DAbstractBase -- Mags原地址
-    QMap<DAbstractBase*, qintptr> DAbstractBaseToMagsPtr;
     // DShapeBase -- TextItem原地址
     QMap<DShapeBase*, qintptr> DShapeBaseToTextItem;
+
+    // LineBase -- beginMagPoint原地址
+    QMap<DLineBase*, qintptr> LineBaseToBeginMagPonint;
+    // LineBase -- endMagPoint 原地址
+    QMap<DLineBase*, qintptr> LineBaseToEndMagPoint;
 
     void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
 
