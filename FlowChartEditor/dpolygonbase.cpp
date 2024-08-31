@@ -21,10 +21,10 @@ void DPolygonBase::sizeToRect(QRectF nrect)
 {
 	QPolygonF poly;
 	QRectF rect = sizeRect();
-	double x_ratio = nrect.width() / rect.width();
-	double y_ratio = nrect.height() / rect.height();
+	double ratiox = nrect.width() / rect.width();
+	double ratioy = nrect.height() / rect.height();
 	for(int i = 0; i < polygon.size(); i++)
-		poly << QPointF(polygon.at(i).x() * x_ratio, polygon.at(i).y() * y_ratio);
+		poly << QPointF(polygon[i].x() * ratiox, polygon[i].y() * ratioy);
 	setPoly(poly);
 }
 

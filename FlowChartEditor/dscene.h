@@ -10,12 +10,6 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
-enum class SceneState
-{
-	NONE = 0,
-	INSERTLINE
-};
-
 class DScene : public QGraphicsScene
 {
 	Q_OBJECT
@@ -72,7 +66,7 @@ private:
 	static qreal defaultScaleRatio;
 	static qreal defaultMoveDist;
 
-	SceneState state = SceneState::NONE;
+	int state = DConst::NONE;
 	int moditype = DConst::NONE;
 
 	DAbstractBase *showMagedItem = nullptr;

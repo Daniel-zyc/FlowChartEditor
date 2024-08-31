@@ -2,15 +2,12 @@
 #include "magpoint.h"
 
 DEllItem::DEllItem(QGraphicsItem *parent)
-	: DShapeBase(parent) {}
+	: DEllItem(minRectSize, minRectSize, parent) {}
 
 DEllItem::DEllItem(qreal w, qreal h, QGraphicsItem *parent)
-	: DEllItem(parent)
+	: DShapeBase(parent)
 {
-	mags->push_back(new MagPoint(this));
-	mags->push_back(new MagPoint(this));
-	mags->push_back(new MagPoint(this));
-	mags->push_back(new MagPoint(this));
+	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
 	setRect(QRectF(-w/2, -h/2, w, h));
 }
 

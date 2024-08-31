@@ -69,6 +69,9 @@ public:
 	// 依据之前设置的状态，调整交互点的参数和图形的状态，其中 p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
+
+	virtual void setInsertItem() = 0;
+
 protected:
 	// 检查是否与调整点碰撞，p 为 item 坐标系下
 	virtual int checkModiPoint(QPointF p) const;
@@ -101,8 +104,6 @@ protected:
 	// 图形的调整和大小点
 	QList<QPointF> modis = QList<QPointF>();
 	QList<QPointF> sizes = QList<QPointF>();
-
-private:
 	// 选中的调整点、大小点 Id
 	int modiPointId = -1, sizePointId = -1;
 	// 是否显示磁吸点

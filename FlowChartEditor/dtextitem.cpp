@@ -46,11 +46,11 @@ void DTextBase::focusToCenter()
 }
 
 void DTextBase::serialize(QDataStream &out) const{
-    out << curCent;
+	// out << curCent;
 }
 
 void DTextBase::deserialize(QDataStream &in){
-    in >> curCent;
+	// in >> curCent;
 }
 //==============================================================================
 
@@ -89,6 +89,7 @@ QPainterPath DTextItem::shapeNormal() const
 void DTextItem::updateMagPoint()
 {
 	if(mags->size() == 0) return;
+
 	(*mags)[0]->pos = {rect.left(), 0};
 	(*mags)[1]->pos = {rect.right(), 0};
 
@@ -114,7 +115,7 @@ void DTextItem::deleteMagPoint()
 void DTextItem::setRect(const QRectF &nrect)
 {
 	rect = nrect;
-	textBase.setTextWidth(rect.width());
+	textBase.setTextWidth(rect.width() - maxPointRadius*2);
 	sizeRectUpdated();
 	updateMagPoint();
 }
@@ -137,6 +138,8 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 		if(!isSelected()) textBase.endEdit();
 	}
 	return QGraphicsItem::itemChange(change, value);
+}
+
 void DTextItem::serialize(QDataStream &out) const{
     DShapeBase::serialize(out);
 

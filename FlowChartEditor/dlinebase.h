@@ -23,6 +23,8 @@ public:
 	virtual int setInterPoint(QPointF p) override;
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
+	virtual void setInsertItem() override;
+
 	virtual void linkBegin(MagPoint *mp);
 	virtual void linkEnd(MagPoint *mp);
 
