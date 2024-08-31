@@ -18,8 +18,7 @@ void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
     out << size;
     for (QGraphicsItem* item : items) {
         if (auto* abstractItem = dynamic_cast<DAbstractBase*>(item)) {
-            out << abstractItem->type();
-            out << item->pos();
+			out << abstractItem->type();
             abstractItem->serialize(out);
         } else if(auto* abstractItem = dynamic_cast<MagPoint*>(item)){
             qDebug() << "serializing MagPoint";
@@ -78,12 +77,8 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
         if (item) {
             // 反序列化图形项的状态
             DAbstractBase *abstractItem = dynamic_cast<DAbstractBase*>(item);
-            if (abstractItem) {
-                QPointF pos;
-                in >> pos;
-                abstractItem->deserialize(in);
-                item->setPos(pos);
-                // scene->addItem(item);
+			if (abstractItem) {
+				abstractItem->deserialize(in);
             } else {
                 delete item;
                 qDebug() << "fail to deserialize";
@@ -97,6 +92,8 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
     for(auto it = PtrToQGraphicsItem.cbegin(); it != PtrToQGraphicsItem.cend(); ++it){
         scene->addItem(it.value());
     }
+
+	qDebug() << scene;
 }
 
 

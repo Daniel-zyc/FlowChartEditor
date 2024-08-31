@@ -73,4 +73,6 @@ void DRectItem::deserialize(QDataStream &in){
     DShapeBase::deserialize(in);
 
     in >> rect;
+	setRect(rect);
+	mags->clear();
 }

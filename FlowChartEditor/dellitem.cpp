@@ -5,7 +5,7 @@ DEllItem::DEllItem(QGraphicsItem *parent)
 	: DEllItem(minRectSize, minRectSize, parent) {}
 
 DEllItem::DEllItem(qreal w, qreal h, QGraphicsItem *parent)
-	: DShapeBase(parent)
+	: DShapeBase("", parent)
 {
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
 	setRect(QRectF(-w/2, -h/2, w, h));
@@ -73,4 +73,5 @@ void DEllItem::deserialize(QDataStream &in){
     DShapeBase::deserialize(in);
 
     in >> rect;
+	setRect(rect);
 }

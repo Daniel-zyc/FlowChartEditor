@@ -207,15 +207,13 @@ void DAbstractBase::updateAllLinkLines()
 
 void DAbstractBase::serialize(QDataStream &out) const{
     qDebug() << "abstract base serializing";
-    out << reinterpret_cast<qintptr>(this);
-
+	out << reinterpret_cast<qintptr>(this);
+	out << pos() << brush() << pen();
     if(mags == nullptr) out << static_cast<quint32>(0);
     else{
-
         out << static_cast<quint32>(mags->size());
         for(MagPoint *magPoint : *mags){
             out << reinterpret_cast<qintptr>(magPoint);
-
             magPoint->serialize(out);
         }
 	}
@@ -223,20 +221,24 @@ void DAbstractBase::serialize(QDataStream &out) const{
 
 void DAbstractBase::deserialize(QDataStream &in){
     qDebug() << "abstract base deserializing";
-    qintptr thisPtr;
-    in >> thisPtr;
-    Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
 
-    quint32 magPointCount;
-    in >> magPointCount;
-    for(quint32 i = 0; i < magPointCount; i++){
-        qintptr magPointPtr;
-        in >> magPointPtr;
-        Serializer::instance().DAbstractBaseToMagsPtr.insert(this, magPointPtr);
+	qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
 
-        MagPoint magPoint = MagPoint(this);
-        magPoint.deserialize(in);
-    }
+	QPointF pos; in >> pos; setPos(pos);
+
+	QBrush qb; in >> qb;
+	QPen qp; in >> qp;
+
+	setBrush(qb); setPen(qp);
+
+	quint32 magPointCount; in >> magPointCount; mags->clear();
+	for(quint32 i = 0; i < magPointCount; i++) {
+		qintptr magPointPtr; in >> magPointPtr;
+		Serializer::instance().DAbstractBaseToMagsPtr.insert(this, magPointPtr);
+
+		mags->push_back(new MagPoint(this));
+		mags->back()->deserialize(in);
+	}
 }
 
 void DAbstractBase::linkMags(MagPoint* point){

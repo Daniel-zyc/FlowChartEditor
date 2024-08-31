@@ -78,8 +78,9 @@ void DScene::moveSelected(qreal distx, qreal disty)
 void DScene::addTextItem()
 {
 	qDebug() << "add textitem";
+
 	DTextItem *item = new DTextItem();
-	state = DConst::INSERT_SHAPE;
+	state = DConst::INSERT_TEXT;
 	modifiedShape = item;
 }
 
@@ -88,7 +89,6 @@ void DScene::addRectItem()
 	qDebug() << "add rectangle";
 
 	DRectItem *item = new DRectItem();
-	item->textItem = new DTextItem("", item);
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
@@ -97,7 +97,6 @@ void DScene::addRoundRectItem()
 {
 	qDebug() << "add round rectangle";
 	DRoundRectItem *item = new DRoundRectItem();
-	item->textItem = new DTextItem("", item);
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
@@ -106,7 +105,6 @@ void DScene::addEllItem()
 {
 	qDebug() << "add ellipse";
 	DEllItem *item = new DEllItem();
-	item->textItem = new DTextItem("", item);
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
@@ -123,7 +121,6 @@ void DScene::addTriItem()
 {
 	qDebug() << "add Triangle";
 	DTriItem *item = new DTriItem();
-	item->textItem = new DTextItem("", item);
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
@@ -178,7 +175,6 @@ void DScene::delSelectedItem()
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << event->button();
     if(event->button() != Qt::LeftButton)
     {
         QGraphicsScene::mousePressEvent(event);
@@ -187,13 +183,14 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 	QPointF p = event->scenePos();
 
-	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_LINE)
+	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_LINE
+	   || state == DConst::INSERT_TEXT)
 	{
 		event->accept();
 		addItem(modifiedShape);
 		modifiedShape->setInsertItem();
 		modifiedShape->setPos(p);
-		state = state + 2;
+		state = state + 1;
 		moditype = DConst::SIZE;
 		return;
 	}
@@ -210,7 +207,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if(!item->isSelected())
     {
-        QGraphicsScene::mousePressEvent(event); // ??
+		QGraphicsScene::mousePressEvent(event);
         return;
     }
 
@@ -222,25 +219,6 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		}
 		else moditype = DConst::NONE;
 	}
-
-        // qDebug() << "modifiedShape";
-        if(modifiedShape->checkInterPoint(p))
-        {
-            // qDebug() << "modi";
-            // qDebug() << modifiedShape->checkInterPoint(p);
-            moditype = modifiedShape->setInterPoint(p);
-        }
-        else moditype = DConst::NONE;
-        // else if(modifiedShape->checkSizePoint(p))
-        // {
-        // 	modifiedShape->setSizePoint(p);
-        // 	moditype = ModifyType::SIZE;
-        // }
-        // else
-        // {
-        // 	modifiedShape = nullptr;
-        // 	moditype = ModifyType::NONE;
-        // }
 
     QGraphicsScene::mousePressEvent(event);
 }
@@ -278,15 +256,14 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	if(moditype != DConst::NONE)
 	{
 		event->accept();
+		// qDebug() << modifiedShape;
 		modifiedShape->interToPoint(p, magPoint);
-		// qDebug() << moditype;
 		if(state == DConst::AFTER_INSERT_SHAPE)
 		{
 			DShapeBase *shape = dynamic_cast<DShapeBase*>(modifiedShape);
+			// qDebug() << shape;
 			QRectF rc = shape->sizeRect();
-			// qDebug() << rc;
 			rc.setRect(rc.left()/2, rc.top()/2, rc.width()/2, rc.height()/2);
-			// qDebug() << rc;
 			shape->textItem->sizeToRect(rc);
 		}
 		return;

@@ -168,24 +168,22 @@ void DLineBase::serialize(QDataStream &out) const{
 
     out << reinterpret_cast<qintptr>(this);
 
-    out << beginPoint;
-    out << endPoint;
-
-    out << beginArrowType << endArrowType;
+	out << beginArrowType << endArrowType;
+	out << beginPoint << endPoint;
+	out << brush() << pen();
 }
 
 void DLineBase::deserialize(QDataStream &in){
     qDebug() << "line base deserializing";
     DAbstractBase::deserialize(in);
 
-    qintptr thisPtr;
-
-    in >> thisPtr;
-
+	qintptr thisPtr; in >> thisPtr;
     Serializer::instance().PtrToLineBase.insert(thisPtr, this);
 
-    in >> beginPoint;
-    in >> endPoint;
+	in >> beginArrowType >> endArrowType;
+	in >> beginPoint >> endPoint;
+	updatePosition();
 
-    in >> beginArrowType >> endArrowType;
+	QBrush qb; in >> qb; setBrush(qb);
+	QPen qp; in >> qp; setPen(qp);
 }

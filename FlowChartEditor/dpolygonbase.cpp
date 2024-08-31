@@ -1,7 +1,7 @@
 #include "dpolygonbase.h"
 
 DPolygonBase::DPolygonBase(QGraphicsItem *parent)
-	: DShapeBase(parent) {}
+	: DShapeBase("", parent) {}
 
 void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

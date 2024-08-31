@@ -327,7 +327,7 @@ void MainWindow::selectTextCol()
             cursor.select(QTextCursor::BlockUnderCursor);
             cursor.mergeCharFormat(charformat);
             cursor.movePosition(QTextCursor::NextBlock);
-        }
+		}
         // cursor.endEditBlock();
     }
 }

@@ -49,9 +49,7 @@ QPointF MagPoint::mapToItem(QGraphicsItem *item)
 // 序列化与反序列化
 void MagPoint::serialize(QDataStream &out) const{
     out << reinterpret_cast<qintptr>(this);
-
     out << pos;
-
     qintptr parentPtr = (parent != nullptr) ? reinterpret_cast<qintptr>(parent) : qintptr(-1);
     out << parentPtr;
 
@@ -64,6 +62,7 @@ void MagPoint::serialize(QDataStream &out) const{
         }
     }
 }
+
 void MagPoint::deserialize(QDataStream &in){
     qintptr thisPtr;
     in >> thisPtr;

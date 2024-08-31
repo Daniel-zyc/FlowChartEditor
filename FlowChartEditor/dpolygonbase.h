@@ -17,9 +17,9 @@ public:
 	QRectF sizeRect() const override;
 	QPainterPath shapeNormal() const override;
 	virtual void sizeToRect(QRectF nrect) override;
+	void setPoly(const QPolygonF &npoly);
 
 protected:
-	void setPoly(const QPolygonF &npoly);
 	virtual void updateMagPoint() = 0;
 	virtual void updateModiPoint() = 0;
 

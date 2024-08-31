@@ -206,8 +206,7 @@ void DShapeBase::deserialize(QDataStream &in){
     qDebug() << "shape base deserializing";
     DAbstractBase::deserialize(in);
 
-    qintptr textItemPtr;
-    in >> textItemPtr;
+	qintptr textItemPtr; in >> textItemPtr;
 
     if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
 }

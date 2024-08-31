@@ -47,4 +47,5 @@ void DTriItem::serialize(QDataStream &out) const{
 void DTriItem::deserialize(QDataStream &in){
     qDebug() << "DTriItem deserializing";
     DPolygonBase::deserialize(in);
+	setPoly(polygon);
 }

@@ -5,7 +5,7 @@ DRoundRectItem::DRoundRectItem(QGraphicsItem *parent)
 	: DRoundRectItem(minRectSize, minRectSize, parent) {}
 
 DRoundRectItem::DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent)
-	: DShapeBase(parent)
+	: DShapeBase("", parent)
 {
 	modis.resize(2);
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
@@ -86,14 +86,13 @@ void DRoundRectItem::serialize(QDataStream &out) const{
     qDebug() << "DRoundRectItem serializing";
     DShapeBase::serialize(out);
 
-    out << rect;
-    out << radiusx << radiusy;
+	out << rect << radiusx << radiusy;
 }
 
 void DRoundRectItem::deserialize(QDataStream &in){
     qDebug() << "DRoundRectItem deserializing";
     DShapeBase::deserialize(in);
 
-    in >> rect;
-    in >> radiusx >> radiusy;
+	in >> rect >> radiusx >> radiusy;
+	setRect(rect);
 }
