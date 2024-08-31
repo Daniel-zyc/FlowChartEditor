@@ -6,7 +6,7 @@
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
-    setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
+	setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
 	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
 			 | QGraphicsItem::ItemSendsGeometryChanges);
 	mags = new QList<MagPoint*>();
@@ -99,21 +99,13 @@ void DAbstractBase::paintMagPoint(QPainter *painter, const QStyleOptionGraphicsI
 void DAbstractBase::modiToPointPre(QPointF p)
 {
 	if(modiPointId == -1) return;
-	
-	prepareGeometryChange();
 	modiToPoint(p, modiPointId);
-	updateAllLinkLines();
-	update();
 }
 
 void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
 {
 	if(sizePointId == -1) return;
-
-	prepareGeometryChange();
 	sizeToPoint(p, sizePointId, mp);
-	updateAllLinkLines();
-	update();
 }
 
 int DAbstractBase::checkModiPoint(QPointF p) const
@@ -226,7 +218,7 @@ void DAbstractBase::serialize(QDataStream &out) const{
 
             magPoint->serialize(out);
         }
-    }
+	}
 }
 
 void DAbstractBase::deserialize(QDataStream &in){

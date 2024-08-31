@@ -43,6 +43,15 @@ public:
 	// 根据 p 点来对当前交互点进行调整，p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
+	// 设置为正在插入这个腿型
+	virtual void setInsertItem() override;
+
+public:
+	//==========================================================================
+	// 图形的大小框
+	virtual QRectF sizeRect() const = 0;
+	//==========================================================================
+
 protected:
 	// 检查是否与旋转点碰撞，p 为 item 坐标系下
 	virtual bool checkRotPoint(QPointF p) const;
@@ -61,8 +70,6 @@ protected:
 	virtual QPainterPath shapeSelected() const override;
 
 	//==========================================================================
-	// 图形的大小框
-	virtual QRectF sizeRect() const = 0;
 	// 图形的正常碰撞范围
 	virtual QPainterPath shapeNormal() const override = 0;
 	// 将图形 sizeRect 设置到与 nrect 大小相同，保证 nrect 中心点为 (0, 0)

@@ -2,15 +2,13 @@
 #include "magpoint.h"
 
 DTriItem::DTriItem(QGraphicsItem *parent)
-	: DPolygonBase(parent) {}
+	: DTriItem(minRectSize, minRectSize, parent) {}
 
 DTriItem::DTriItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DPolygonBase(parent)
 {
 	modis.resize(1);
-	mags->push_back(new MagPoint(this));
-	mags->push_back(new MagPoint(this));
-	mags->push_back(new MagPoint(this));
+	for(int i = 0; i < 3; i++) mags->push_back(new MagPoint(this));
 
 	QPolygonF poly;
 	poly << QPointF(0, -h/2) << QPointF(w/2, h/2) << QPointF(-w/2, h/2);
@@ -37,7 +35,6 @@ void DTriItem::updateMagPoint()
 
 void DTriItem::updateModiPoint()
 {
-	// qDebug() << "update";
 	modis[0] = polygon[0];
 }
 

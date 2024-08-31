@@ -23,6 +23,7 @@ namespace DTool
 	// 平方
 	qreal sq(qreal x);
 
+	// p 是否在以 o 为半径 r 为圆心的圆中
 	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
 };
 
@@ -36,6 +37,7 @@ constexpr qreal rotPointMargin = 30;
 constexpr qreal maxPointRadius =
 	qMax(qMax(sizePointRadius, magPointRadius),
 		 qMax(magPointCollideRadius, modiPointRadius));
+constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
 
 // 各个图形以及边框的画笔和画刷
 const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
@@ -125,8 +127,10 @@ namespace DConst
 	enum Scene
 	{
 		INSERT_LINE = 1,
-		INSERT_SHAPE = 2
+		INSERT_SHAPE = 2,
+		AFTER_INSERT_LINE = 3,
+		AFTER_INSERT_SHAPE = 4
 	};
 };
 
-const int DataStreamVersion = QDataStream::Qt_5_15;
+const int DataStreamVersion = QDataStream::Qt_6_7;

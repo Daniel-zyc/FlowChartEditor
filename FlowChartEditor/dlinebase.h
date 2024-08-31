@@ -23,6 +23,8 @@ public:
 	virtual int setInterPoint(QPointF p) override;
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
+	virtual void setInsertItem() override;
+
 	virtual void linkBegin(MagPoint *mp);
 	virtual void linkEnd(MagPoint *mp);
 
@@ -30,6 +32,9 @@ public:
 	virtual void unlinkEnd();
 
 	virtual void updatePosition();
+
+	virtual void setBeginArrowType(int type);
+	virtual void setEndArrowType(int type);
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

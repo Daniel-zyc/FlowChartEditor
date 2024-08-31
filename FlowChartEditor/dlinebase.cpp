@@ -55,6 +55,9 @@ int DLineBase::setInterPoint(QPointF p)
 
 void DLineBase::interToPoint(QPointF p, MagPoint *mp)
 {
+	if(interactType == DConst::NONE) return;
+
+	prepareGeometryChange();
 	switch(interactType)
 	{
 		case DConst::MODI:
@@ -64,6 +67,13 @@ void DLineBase::interToPoint(QPointF p, MagPoint *mp)
 			sizeToPointPre(mapFromScene(p), mp);
 			break;
 	}
+	update();
+}
+
+void DLineBase::setInsertItem()
+{
+	interactType = DConst::SIZE;
+	sizePointId = DConst::ED - 1;
 }
 
 void DLineBase::linkBegin(MagPoint *mp)
@@ -135,6 +145,18 @@ void DLineBase::updatePosition()
 	sizes[DConst::ED - 1] = endPoint;
 	prepareGeometryChange();
 	updateLine();
+	update();
+}
+
+void DLineBase::setBeginArrowType(int type)
+{
+	beginArrowType = type;
+	update();
+}
+
+void DLineBase::setEndArrowType(int type)
+{
+	endArrowType = type;
 	update();
 }
 

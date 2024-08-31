@@ -12,6 +12,7 @@ DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
 	textItem = new DTextItem(text, this);
+	textItem->deleteMagPoint();
 }
 
 QRectF DShapeBase::boundingRect() const
@@ -76,6 +77,9 @@ int DShapeBase::setInterPoint(QPointF p)
 void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 {
 	Q_UNUSED(mp);
+	if(interactType == DConst::NONE) return;
+
+	prepareGeometryChange();
 	switch(interactType)
 	{
 		case DConst::MODI:
@@ -88,6 +92,14 @@ void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 			rotToPoint(p - mapToScene({0, 0}));
 			break;
 	}
+	updateAllLinkLines();
+	update();
+}
+
+void DShapeBase::setInsertItem()
+{
+	interactType = DConst::SIZE;
+	sizePointId = DConst::BR - 1;
 }
 
 bool DShapeBase::checkRotPoint(QPointF p) const
@@ -98,7 +110,7 @@ bool DShapeBase::checkRotPoint(QPointF p) const
 
 bool DShapeBase::setRotPoint(QPointF p)
 {
-	return checkSizePoint(p);
+	return checkRotPoint(p);
 }
 
 void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
@@ -108,12 +120,9 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 	QPointF cent = mapToParent(nrect.center());
 	nrect.moveCenter({0, 0});
 
-	prepareGeometryChange();
 	sizeToRect(nrect);
 	sizeRectUpdated();
 	setPos(cent);
-	updateAllLinkLines();
-	update();
 }
 
 void DShapeBase::rotToPoint(QPointF p)
@@ -156,7 +165,6 @@ QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)
 		updateAllLinkLines();
-
 	return value;
 }
 
@@ -164,12 +172,11 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 {
     QRectF nrc = this->sizeRect();
 	qreal x = p.x(), y = p.y();
-	qreal r = sizePointRadius;
 
-	auto resizeT = [&](){ if(y < nrc.bottom() - 4*r) nrc.setTop(y); };
-	auto resizeB = [&](){ if(y > nrc.top() + 4*r) nrc.setBottom(y); };
-	auto resizeL = [&](){ if(x < nrc.right() - 4*r) nrc.setLeft(x); };
-	auto resizeR = [&](){ if(x > nrc.left() + 4*r) nrc.setRight(x); };
+	auto resizeT = [&](){ if(y < nrc.bottom() - minRectSize) nrc.setTop(y); };
+	auto resizeB = [&](){ if(y > nrc.top() + minRectSize) nrc.setBottom(y); };
+	auto resizeL = [&](){ if(x < nrc.right() - minRectSize) nrc.setLeft(x); };
+	auto resizeR = [&](){ if(x > nrc.left() + minRectSize) nrc.setRight(x); };
 
 	switch(id + 1)
 	{
