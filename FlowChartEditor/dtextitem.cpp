@@ -34,7 +34,7 @@ void DTextBase::startEdit()
 void DTextBase::endEdit()
 {
 	QTextCursor tmpCursor = textCursor();
-	tmpCursor.clearSelection();
+    tmpCursor.clearSelection();
 	setTextCursor(tmpCursor);
 	setTextInteractionFlags(Qt::NoTextInteraction);
 }
@@ -162,7 +162,7 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 }
 
 void DTextItem::serialize(QDataStream &out) const{
-    qDebug() << "DTextIetm serializing";
+    // qDebug() << "DTextIetm serializing";
     DShapeBase::serialize(out);
 
 	out << reinterpret_cast<qintptr>(this);
@@ -174,7 +174,7 @@ void DTextItem::serialize(QDataStream &out) const{
 }
 
 void DTextItem::deserialize(QDataStream &in){
-    qDebug() << "DTextItem deserializing";
+    // qDebug() << "DTextItem deserializing";
     DShapeBase::deserialize(in);
 
 	qintptr thisPtr; in >> thisPtr;

@@ -197,7 +197,7 @@ void DAbstractBase::updateAllLinkLines()
 //=======================================
 
 void DAbstractBase::serialize(QDataStream &out) const{
-    qDebug() << "abstract base serializing";
+    // qDebug() << "abstract base serializing";
 	out << reinterpret_cast<qintptr>(this);
 	// qDebug() << pos();
 	out << pos() << rotation() << scale();
@@ -206,15 +206,12 @@ void DAbstractBase::serialize(QDataStream &out) const{
     else{
         out << static_cast<quint32>(mags->size());
         for(MagPoint *magPoint : *mags){
-            out << reinterpret_cast<qintptr>(magPoint);
             magPoint->serialize(out);
-			// qDebug() << magPoint->pos;
-        }
 	}
 }
 
 void DAbstractBase::deserialize(QDataStream &in){
-    qDebug() << "abstract base deserializing";
+    // qDebug() << "abstract base deserializing";
 
 	qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
 
@@ -227,10 +224,10 @@ void DAbstractBase::deserialize(QDataStream &in){
 
 	quint32 magPointCount; in >> magPointCount;
 	for(quint32 i = 0; i < magPointCount; i++) {
-		qintptr magPointPtr; in >> magPointPtr;
-		Serializer::instance().DAbstractBaseToMagsPtr.insert(this, magPointPtr);
 
-		(*mags)[i]->deserialize(in);
+        MagPoint *magPoint = new MagPoint(this);
+        magPoint->deserialize(in);
+        mags->append(magPoint);
 	}
 }
 

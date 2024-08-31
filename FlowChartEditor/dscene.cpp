@@ -7,6 +7,10 @@
 #include "dlineitem.h"
 #include "dtextitem.h"
 #include "dtriitem.h"
+#include "ddiaitem.h"
+#include "dtrapitem.h"
+
+
 #include "dparallelogramitem.h"
 #include "ddocitem.h"
 #include "ditemgroup.h"
@@ -145,6 +149,24 @@ void DScene::addDocItem()
     addItem(item);
 }
 
+void DScene::addDiaItem()
+{
+    qDebug() << "add Diamond";
+    DDiaItem *item = new DDiaItem(100, 100);
+    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addTrapItem()
+{
+    qDebug() << "add Document";
+//    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    DTrapItem *item = new DTrapItem(80,100,80);
+    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
 void DScene::combineSelected()
 {
     QList<QGraphicsItem*> items = selectedItems();
@@ -182,14 +204,25 @@ void DScene::seperateSelected()
 	}
 }
 
+QList<QGraphicsItem *> DScene::getAllParent()
+{
+    QList<QGraphicsItem*> items = selectedItems();
+    QList<QGraphicsItem*> parents;
+    for(QGraphicsItem *item : items) {
+        if(item->parentItem() == nullptr) {
+            parents.push_back(item);
+        }
+    }
+    return parents;
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected";
-	QList<QGraphicsItem*> items = selectedItems();
+    QList<QGraphicsItem*> items = getAllParent();
 	for(QGraphicsItem *item : items)
 	{
-        if(item->parentItem() != nullptr) qDebug() << item;
-        // this->removeItem(item);
+        this->removeItem(item);
 		delete item;
 	}
 }

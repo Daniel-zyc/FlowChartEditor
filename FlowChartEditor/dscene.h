@@ -47,12 +47,15 @@ public:
 	void addEllItem();
 	void addLineItem();
     void addTriItem();
+    void addDiaItem();
+    void addTrapItem();
     void addParallegramItem();
     void addDocItem();
 
 	void combineSelected();
 	void seperateSelected();
 
+    QList<QGraphicsItem *> getAllParent();
 	void delSelectedItem();
 
 	void setMenu(QMenu *m) { menu = m; }

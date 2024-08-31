@@ -56,8 +56,6 @@ public:
      */
     void deserialize(QDataStream &in);
 
-    void linkParent(QGraphicsItem *parent);
-
     void linkLine(DLineBase* line);
 };
 
