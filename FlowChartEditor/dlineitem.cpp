@@ -19,7 +19,7 @@ QRectF DLineItem::boundingRect() const
 
 void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	Q_UNUSED(option); Q_UNUSED(widget);
+    Q_UNUSED(option); Q_UNUSED(widget);
 
 	QBrush qbrush = painter->brush();
 	qbrush.setColor(pen().color());
@@ -28,9 +28,9 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->setBrush(brush());
 	painter->setPen(pen());
 
+    painter->drawLine(QLineF(beginPoint, endPoint));
 	// 此处应加入根据不同箭头类型进行绘制的代码
-
-	painter->drawLine(QLineF(beginPoint, endPoint));
+    drawArrow(painter, beginPoint, endPoint, endArrowType);
 }
 
 void DLineItem::modiToPoint(QPointF p, int id)
