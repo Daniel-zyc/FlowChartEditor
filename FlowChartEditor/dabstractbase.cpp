@@ -190,7 +190,7 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 
 void DAbstractBase::updateAllLinkLines()
 {
-	qDebug() << "update";
+	// qDebug() << "update";
 	for(MagPoint* mag : *mags) mag->updateLines();
 }
 

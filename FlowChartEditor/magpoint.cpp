@@ -22,7 +22,7 @@ MagPoint::~MagPoint()
 
 void MagPoint::updateLines() const
 {
-	qDebug() << lines->size();
+	// qDebug() << lines->size();
 	for(DLineBase *line : *lines) line->updatePosition();
 }
 

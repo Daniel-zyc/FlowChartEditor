@@ -217,5 +217,6 @@ void DShapeBase::linkTextItem(DTextItem* item){
     qDebug() << "link shapebase and textItem";
     textItem = item;
 	textItem->setParentItem(this);
-	qDebug() << textItem->pos() << " " << textItem->parentItem();
+	textItem->deleteMagPoint();
+	// qDebug() << textItem->pos() << " " << textItem->parentItem();
 }
