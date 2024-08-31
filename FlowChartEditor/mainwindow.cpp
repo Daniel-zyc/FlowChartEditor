@@ -14,14 +14,10 @@
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
-	, ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-
-	createMenu();
-	createToolBar();
-
-	bindAction();
+    setWindowTitle("Flowchart Editor");
 
     // 绑定序列化管理
 	scene = new DScene(this);
@@ -61,12 +57,69 @@ MainWindow::MainWindow(QWidget *parent)
 
 	view->setDragMode(QGraphicsView::RubberBandDrag);
 
-	setCentralWidget(view);
+    initUi();
+
+    createMenu();
+    // createToolBar();
+
+    bindAction();
+
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::initUi()
+{
+    mainsplitter = new QSplitter(Qt::Horizontal, this);
+    leftw = new QWidget();
+    leftUpV = new QVBoxLayout(leftw);
+    leftGrid = new QGridLayout();
+
+    rectBtn = new QPushButton();
+    roundRectBtn = new QPushButton();
+    ellipseBtn = new QPushButton();
+    lineBtn = new QPushButton();
+    parellgramBtn = new QPushButton();
+    trapBtn = new QPushButton();
+    rhomBtn = new QPushButton();
+    fileBtn = new QPushButton();
+    textBtn = new QPushButton();
+    triBtn = new QPushButton();
+
+    rectBtn->setIcon(QPixmap(":/icon/rect.png"));
+    roundRectBtn->setIcon(QPixmap(":/icon/roundrect.png"));
+    ellipseBtn->setIcon(QPixmap(":/icon/ellipse.png"));
+    lineBtn->setIcon(QPixmap(":/icon/line.png"));
+    parellgramBtn->setIcon(QPixmap(":/icon/parellgram.png"));
+    trapBtn->setIcon(QPixmap(":/icon/trapezoid.png"));
+    rhomBtn->setIcon(QPixmap(":/icon/rhombic.png"));
+    fileBtn->setIcon(QPixmap(":/icon/file.png"));
+    textBtn->setIcon(QPixmap(":/icon/text.png"));
+    triBtn->setIcon(QPixmap(":/icon/triangle.png"));
+
+    leftGrid->addWidget(rectBtn, 0, 0);
+    leftGrid->addWidget(roundRectBtn, 0, 1);
+    leftGrid->addWidget(ellipseBtn, 1, 0);
+    leftGrid->addWidget(lineBtn, 1, 1);
+    leftGrid->addWidget(parellgramBtn, 2, 0);
+    leftGrid->addWidget(trapBtn, 2, 1);
+    leftGrid->addWidget(rhomBtn, 3, 0);
+    leftGrid->addWidget(fileBtn, 3, 1);
+    leftGrid->addWidget(triBtn, 4, 0);
+    leftGrid->addWidget(textBtn, 4, 1);
+
+    leftUpV->addLayout(leftGrid);
+    leftUpV->addStretch();
+    leftw->setLayout(leftUpV);
+
+    mainsplitter->addWidget(leftw);
+    mainsplitter->addWidget(view);
+    mainsplitter->setStretchFactor(1, 1);
+
+    setCentralWidget(mainsplitter);
 }
 
 void MainWindow::createMenu()
@@ -194,7 +247,14 @@ void MainWindow::bindAction()
 
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
 	connect(ui->actCombine, SIGNAL(triggered(bool)), this, SLOT(combineSelected()));
-	connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
+    connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
+
+    connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
+    connect(lineBtn, &QPushButton::clicked, this, &MainWindow::addLine);
+    connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addRoundRect);
+    connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
+    connect(textBtn, &QPushButton::clicked, this, &MainWindow::addText);
+    connect(triBtn, &QPushButton::clicked, this, &MainWindow::addTri);
 }
 
 void MainWindow::saveAsSvg()

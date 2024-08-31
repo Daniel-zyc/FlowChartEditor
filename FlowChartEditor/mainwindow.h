@@ -8,6 +8,11 @@
 #include <QSet>
 #include <QColorDialog>
 #include <QFontDialog>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QSplitter>
+#include <QWidget>
+#include <QPushButton>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -26,6 +31,7 @@ private:
 	void createMenu();
 	void createToolBar();
 	void bindAction();
+    void initUi();
 
 private slots:
     void saveAsSvg();
@@ -87,4 +93,21 @@ private:
     DFindDialog *findDia;
     QColorDialog *colorDia;
     QFontDialog *fontDia;
+
+    QSplitter *mainsplitter;
+    QWidget *leftw;
+    QGridLayout *leftGrid;
+    QVBoxLayout *leftUpV;
+
+    QPushButton *rectBtn;
+    QPushButton *roundRectBtn;
+    QPushButton *ellipseBtn;
+    QPushButton *lineBtn;
+    QPushButton *parellgramBtn;
+    QPushButton *trapBtn;
+    QPushButton *rhomBtn;
+    QPushButton *fileBtn;
+    QPushButton *triBtn;
+    QPushButton *textBtn;
+
 };
