@@ -8,6 +8,8 @@
 
 #include "saveandloadmanager.h"
 
+#include <QShortcut>
+#include <QKeySequence>
 #include <QSize>
 #include <QColor>
 #include <QGraphicsRectItem>
@@ -255,6 +257,14 @@ void MainWindow::bindAction()
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
 	connect(ui->actCombine, SIGNAL(triggered(bool)), this, SLOT(combineSelected()));
     connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
+
+    QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
+    QShortcut *combinesc = new QShortcut(QKeySequence("ctrl+G"), this);
+    QShortcut *seperatesc = new QShortcut(QKeySequence("ctrl+shift+G"), this);
+
+    connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
+    connect(combinesc, SIGNAL(activated()), this, SLOT(combineSelected()));
+    connect(seperatesc, SIGNAL(activated()), this, SLOT(seperateSelected()));
 
     connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
     connect(lineBtn, &QPushButton::clicked, this, &MainWindow::addLine);

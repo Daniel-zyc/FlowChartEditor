@@ -55,6 +55,7 @@ public:
 	void combineSelected();
 	void seperateSelected();
 
+    QList<QGraphicsItem *> getAllParent();
 	void delSelectedItem();
 
 	void setMenu(QMenu *m) { menu = m; }
