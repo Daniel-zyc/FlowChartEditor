@@ -35,6 +35,7 @@ public:
 
 	virtual void setBeginArrowType(int type);
 	virtual void setEndArrowType(int type);
+    virtual void drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize = 10.0);
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -51,7 +52,7 @@ protected:
 	QPointF beginPoint = QPoint(0, 0), endPoint = QPointF(0, 0);
 	MagPoint *beginMag = nullptr, *endMag = nullptr;
 
-	int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
+    int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
 
 private:
 	int interactType = DConst::NONE;
