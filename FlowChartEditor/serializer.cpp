@@ -123,7 +123,7 @@ void Serializer::linkAll(){
         DLineBase * dlineBase = it.key();
         qintptr endMag = it.value();
         if(PtrToMagPoint.contains(endMag)){
-            dlineBase->linkBegin(PtrToMagPoint[endMag]);
+            dlineBase->linkEnd(PtrToMagPoint[endMag]);
         }
     }
     return;

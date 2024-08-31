@@ -195,6 +195,6 @@ void DLineBase::deserialize(QDataStream &in){
     qintptr beginptr,endptr;
     in >> beginptr >> endptr;
 
-    if(beginptr != -1) Serializer::instance().LineBaseToEndMagPoint.insert(this,beginptr);
-    if(endptr != -1) Serializer::instance().LineBaseToBeginMagPonint.insert(this,endptr);
+    if(beginptr != -1) Serializer::instance().LineBaseToBeginMagPonint.insert(this,beginptr);
+    if(endptr != -1) Serializer::instance().LineBaseToEndMagPoint.insert(this,endptr);
 }
