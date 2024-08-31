@@ -38,6 +38,8 @@ void Serializer::printMapSize(){
 void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
     scene->clear();  // 清除现有图形项
 
+	clearMap();
+
     qint32 size;
     in >> size;
     qDebug() << "反序列化项的数量:" << size;
@@ -132,6 +134,10 @@ void Serializer::linkAll(){
 void Serializer::clearMap(){
     PtrToLineBase.clear();
     PtrToQGraphicsItem.clear();
-
+	PtrToTextItem.clear();
+	PtrToMagPoint.clear();
+	DShapeBaseToTextItem.clear();
+	LineBaseToBeginMagPonint.clear();
+	LineBaseToEndMagPoint.clear();
     MagPointToLinesPtr.clear();
 }

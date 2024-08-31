@@ -194,6 +194,11 @@ void DAbstractBase::updateAllLinkLines()
 	for(MagPoint* mag : *mags) mag->updateLines();
 }
 
+void DAbstractBase::unLinkAllLines()
+{
+	for(MagPoint* mag : *mags) mag->deleteAllLines();
+}
+
 //=======================================
 
 void DAbstractBase::serialize(QDataStream &out) const{

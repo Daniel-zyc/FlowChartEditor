@@ -95,7 +95,7 @@ void DLineBase::unlinkBegin()
 	if(beginMag)
 	{
 		beginPoint = beginMag->mapToItem(this);
-		if(beginMag) beginMag->deleteLine(this);
+		beginMag->deleteLine(this);
 		beginMag = nullptr;
 	}
 	updatePosition();
@@ -107,6 +107,21 @@ void DLineBase::unlinkEnd()
 	{
 		endPoint = endMag->mapToItem(this);
 		endMag->deleteLine(this);
+		endMag = nullptr;
+	}
+	updatePosition();
+}
+
+void DLineBase::unlinkMag(MagPoint* mp)
+{
+	if(beginMag == mp)
+	{
+		beginPoint = beginMag->mapToItem(this);
+		beginMag = nullptr;
+	}
+	if(endMag == mp)
+	{
+		endPoint = endMag->mapToItem(this);
 		endMag = nullptr;
 	}
 	updatePosition();

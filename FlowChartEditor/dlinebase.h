@@ -30,6 +30,7 @@ public:
 
 	virtual void unlinkBegin();
 	virtual void unlinkEnd();
+	virtual void unlinkMag(MagPoint *mp);
 
 	virtual void updatePosition();
 

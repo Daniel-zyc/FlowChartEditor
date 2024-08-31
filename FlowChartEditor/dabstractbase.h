@@ -72,6 +72,10 @@ public:
 
 	virtual void setInsertItem() = 0;
 
+	// 更新所有连接的线条
+	virtual void updateAllLinkLines();
+	virtual void unLinkAllLines();
+
 protected:
 	// 检查是否与调整点碰撞，p 为 item 坐标系下
 	virtual int checkModiPoint(QPointF p) const;
@@ -94,9 +98,6 @@ protected:
 	// 将选中的大小点 id，设置到 p 位置，p 为 item 坐标系下
 	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
-
-	// 更新所有连接的线条
-	virtual void updateAllLinkLines();
 	
 protected:
 	// 图形所具有的磁吸点

@@ -39,6 +39,8 @@ void MagPoint::deleteLine(DLineBase *line)
 
 void MagPoint::deleteAllLines()
 {
+	for(DLineBase* l : *lines)
+		l->unlinkMag(this);
 	lines->clear();
 }
 
