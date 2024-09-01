@@ -9,7 +9,7 @@
 #include "dtriitem.h"
 #include "ddiaitem.h"
 #include "dtrapitem.h"
-
+#include "dlinebase.h"
 
 #include "dparallelogramitem.h"
 #include "ddocitem.h"
@@ -134,7 +134,7 @@ void DScene::addTriItem()
 void DScene::addParallegramItem()
 {
     qDebug() << "add Parallegram";
-    DParallegramItem *item = new DParallegramItem(200, 200);
+    DParallelogramItem *item = new DParallelogramItem(200, 200);
     item->textItem = new DTextItem(100, 100, "hello world!", item);
     item->textItem->deleteMagPoint();
     addItem(item);
@@ -223,6 +223,16 @@ void DScene::delSelectedItem()
 	for(QGraphicsItem *item : items)
 	{
         this->removeItem(item);
+		DShapeBase* shape;
+		DLineBase* line;
+		if((shape = dynamic_cast<DShapeBase*>(item)))
+			shape->unLinkAllLines();
+		else if((line = dynamic_cast<DLineBase*>(item)))
+		{
+			line->unlinkBegin();
+			line->unlinkEnd();
+		}
+
 		delete item;
 	}
 }

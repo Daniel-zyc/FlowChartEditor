@@ -5,12 +5,12 @@
 
 class DShapeBase;
 
-class DParallegramItem : public DShapeBase
+class DParallelogramItem : public DShapeBase
 {
 public:
     enum { Type = DParallegramItemType };
-    DParallegramItem(QGraphicsItem *parent = nullptr);
-    DParallegramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+    DParallelogramItem(QGraphicsItem *parent = nullptr);
+    DParallelogramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
@@ -20,14 +20,24 @@ public:
     QPainterPath shapeNormal() const override;
     void sizeToRect(QRectF nrect) override;
     void modiToPoint(QPointF p, int id) override;
-	void setRect(const QRectF &nrect);
 
 private:
+    void setRect(const QRectF &nrect);
     void updateMagPoint();
     void updateModiPoint();
     QPainterPath addParallelogram(const QRectF &rect, qreal skew) const;
 
     QRectF rect;
     qreal skew;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+     */
+    void serialize(QDataStream &out) const override;
+
+    void deserialize(QDataStream &in) override;
 };
 

@@ -22,6 +22,7 @@ MagPoint::~MagPoint()
 
 void MagPoint::updateLines() const
 {
+	// qDebug() << lines->size();
 	for(DLineBase *line : *lines) line->updatePosition();
 }
 
@@ -38,6 +39,8 @@ void MagPoint::deleteLine(DLineBase *line)
 
 void MagPoint::deleteAllLines()
 {
+	for(DLineBase* l : *lines)
+		l->unlinkMag(this);
 	lines->clear();
 }
 
@@ -77,5 +80,6 @@ void MagPoint::deserialize(QDataStream &in){
 }
 
 void MagPoint::linkLine(DLineBase *line){
-    lines->append(line);
+	// qDebug() << "add";
+	addLine(line);
 }

@@ -42,7 +42,8 @@ void Serializer::printMapSize(){
 QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
     QList<QGraphicsItem* > data;
 
-    clearMap();
+	clearMap();
+
     qint32 size;
     in >> size;
     qDebug() << "反序列化项的数量:" << size;
@@ -91,6 +92,7 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
 	linkAll();
     return data;
+
 }
 
 

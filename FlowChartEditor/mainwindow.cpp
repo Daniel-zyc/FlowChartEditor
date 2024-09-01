@@ -166,6 +166,7 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddRect);
 	ui->addMenu->addAction(ui->actAddRoundRect);
 	ui->addMenu->addAction(ui->actAddPargram);
+    ui->addMenu->addAction(ui->actAddDoc);
 	ui->addMenu->addAction(ui->actAddRhom);
 	ui->addMenu->addAction(ui->actAddTrap);
     ui->addMenu->addAction(ui->actAddTri);

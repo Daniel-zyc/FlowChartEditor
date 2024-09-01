@@ -190,7 +190,13 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 
 void DAbstractBase::updateAllLinkLines()
 {
+	// qDebug() << "update";
 	for(MagPoint* mag : *mags) mag->updateLines();
+}
+
+void DAbstractBase::unLinkAllLines()
+{
+	for(MagPoint* mag : *mags) mag->deleteAllLines();
 }
 
 //=======================================
@@ -198,7 +204,7 @@ void DAbstractBase::updateAllLinkLines()
 void DAbstractBase::serialize(QDataStream &out) const{
     // qDebug() << "abstract base serializing";
 	out << reinterpret_cast<qintptr>(this);
-	qDebug() << pos();
+	// qDebug() << pos();
 	out << pos() << rotation() << scale();
 	out << brush() << pen();
     if(mags == nullptr) out << static_cast<quint32>(0);
@@ -206,8 +212,7 @@ void DAbstractBase::serialize(QDataStream &out) const{
         out << static_cast<quint32>(mags->size());
         for(MagPoint *magPoint : *mags){
             magPoint->serialize(out);
-            qDebug() << magPoint->pos;
-        }
+		}
 	}
 }
 

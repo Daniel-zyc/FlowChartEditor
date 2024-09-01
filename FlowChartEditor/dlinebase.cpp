@@ -95,7 +95,7 @@ void DLineBase::unlinkBegin()
 	if(beginMag)
 	{
 		beginPoint = beginMag->mapToItem(this);
-		if(beginMag) beginMag->deleteLine(this);
+		beginMag->deleteLine(this);
 		beginMag = nullptr;
 	}
 	updatePosition();
@@ -107,6 +107,21 @@ void DLineBase::unlinkEnd()
 	{
 		endPoint = endMag->mapToItem(this);
 		endMag->deleteLine(this);
+		endMag = nullptr;
+	}
+	updatePosition();
+}
+
+void DLineBase::unlinkMag(MagPoint* mp)
+{
+	if(beginMag == mp)
+	{
+		beginPoint = beginMag->mapToItem(this);
+		beginMag = nullptr;
+	}
+	if(endMag == mp)
+	{
+		endPoint = endMag->mapToItem(this);
 		endMag = nullptr;
 	}
 	updatePosition();
@@ -160,26 +175,80 @@ void DLineBase::setEndArrowType(int type)
 	update();
 }
 
+void DLineBase::drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize)
+{
+
+
+    QLineF line(startPoint, endPoint);
+    double angle = atan2(line.dy(), line.dx());
+
+    QPointF arrowP1 = endPoint - QPointF(cos(angle + DConst::PI / 6) * arrowSize,
+                                         sin(angle + DConst::PI / 6) * arrowSize);
+    QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
+                                         sin(angle - DConst::PI / 6) * arrowSize);
+
+    switch (arrowType) {
+    case DConst::NONE: {
+        break;
+    }
+    case DConst::ARROW: {
+        QPolygonF arrow;
+        arrow << endPoint << arrowP1 << arrowP2;
+        painter->drawPolygon(arrow);
+        break;
+    }
+    case DConst::OPEN_ARROW: {
+        painter->drawLine(endPoint, arrowP1);
+        painter->drawLine(endPoint, arrowP2);
+        break;
+    }
+    case DConst::DOVETAIL_ARROW: {
+        QPointF dovetailTip = endPoint - QPointF(cos(angle) * arrowSize,
+                                                sin(angle) * arrowSize);
+        QPointF dovetailP1 = arrowP1 - QPointF(cos(angle) * arrowSize / 2,
+                                              sin(angle) * arrowSize / 2);
+        QPointF dovetailP2 = arrowP2 - QPointF(cos(angle) * arrowSize / 2,
+                                              sin(angle) * arrowSize / 2);
+        QPolygonF dovetail;
+        dovetail << endPoint << dovetailP1 << dovetailTip << dovetailP2;
+        painter->drawPolygon(dovetail);
+        break;
+    }
+    case DConst::DIAMOND_ARROW: {
+        QPointF diamondTip = endPoint - QPointF(cos(angle) * arrowSize,
+                                                sin(angle) * arrowSize);
+        QPointF diamondP1 = endPoint - QPointF(cos(angle + DConst::PI / 4) * arrowSize / sqrt(2),
+                                             sin(angle + DConst::PI / 4) * arrowSize / sqrt(2));
+        QPointF diamondP2 = endPoint - QPointF(cos(angle - DConst::PI / 4) * arrowSize / sqrt(2),
+                                             sin(angle - DConst::PI / 4) * arrowSize / sqrt(2));
+        QPolygonF diamond;
+        diamond << endPoint << diamondP1 << diamondTip << diamondP2;
+        painter->drawPolygon(diamond);
+        break;
+    }
+    case DConst::ROUND_ARROW: {
+        painter->drawEllipse(endPoint, arrowSize / 2, arrowSize / 2);
+        break;
+    }
+    default: break;
+    }
+}
+
 //===========================================
 
 void DLineBase::serialize(QDataStream &out) const{
-    // qDebug() << "line base serializing";
+    qDebug() << "line base serializing";
     DAbstractBase::serialize(out);
 
     out << reinterpret_cast<qintptr>(this);
 
 	out << beginArrowType << endArrowType;
 	out << beginPoint << endPoint;
-
-    out << brush() << pen();
-
-    qintptr beginPtr = beginMag != nullptr? reinterpret_cast<qintptr>(beginMag) : qintptr(-1);
-    qintptr endPtr = endMag != nullptr? reinterpret_cast<qintptr>(endMag) : qintptr(-1);
-    out << beginPtr << endPtr;
+	out << brush() << pen();
 }
 
 void DLineBase::deserialize(QDataStream &in){
-    // qDebug() << "line base deserializing";
+    qDebug() << "line base deserializing";
     DAbstractBase::deserialize(in);
 
 	qintptr thisPtr; in >> thisPtr;
@@ -191,10 +260,4 @@ void DLineBase::deserialize(QDataStream &in){
 
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
-
-    qintptr beginptr,endptr;
-    in >> beginptr >> endptr;
-
-    if(beginptr != -1) Serializer::instance().LineBaseToBeginMagPonint.insert(this,beginptr);
-    if(endptr != -1) Serializer::instance().LineBaseToEndMagPoint.insert(this,endptr);
 }
