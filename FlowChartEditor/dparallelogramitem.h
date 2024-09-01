@@ -5,12 +5,12 @@
 
 class DShapeBase;
 
-class DParallegramItem : public DShapeBase
+class DParallelogramItem : public DShapeBase
 {
 public:
     enum { Type = DParallegramItemType };
-    DParallegramItem(QGraphicsItem *parent = nullptr);
-    DParallegramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+    DParallelogramItem(QGraphicsItem *parent = nullptr);
+    DParallelogramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
