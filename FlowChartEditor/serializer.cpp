@@ -98,7 +98,7 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
 
 void Serializer::linkAll(){
-    printMapSize();
+    // printMapSize();
     for(auto it = MagPointToLinesPtr.cbegin(); it != MagPointToLinesPtr.cend(); ++it){
         MagPoint* magPoint = it.key();
         qintptr linePtr = it.value();

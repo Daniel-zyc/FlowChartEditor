@@ -12,6 +12,8 @@
 #include "dtrapitem.h"
 #include "dlinebase.h"
 
+#include "undomanager.h"
+
 #include "dparallelogramitem.h"
 #include "ddocitem.h"
 #include "ditemgroup.h"
@@ -234,7 +236,7 @@ void DScene::delSelectedItem()
 			line->unlinkBegin();
 			line->unlinkEnd();
 		}
-	}
+    }
 	for(QGraphicsItem *item : items) delete item;
 }
 
@@ -373,9 +375,16 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
+    if((!selectedItems().empty()
+        || state != DConst::NONE)
+        && SHOT_STATE == DConst::CHANGED){
+        shot();
+    }
+
 	state = DConst::NONE;
 	moditype = DConst::NONE;
 	modifiedShape = nullptr;
+
 
 	QGraphicsScene::mouseReleaseEvent(event);
 }
@@ -383,4 +392,14 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void DScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
 	menu->popup(event->screenPos());
+}
+
+void DScene::shot(){
+    UndoManager::instance().shot();
+}
+
+void DScene::clear(){
+    QGraphicsScene::clear();
+    addLine(-1000, 0, 1000, 0);
+    addLine(0, -1000, 0, 1000);
 }

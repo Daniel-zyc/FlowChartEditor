@@ -149,4 +149,18 @@ namespace DConst
     {
         DATA_STREAM_VERSION = QDataStream::Qt_6_7
     };
+
+    enum RedoAndUndoStackSize
+    {
+        MAX_UNDO_STACK_SIZE = 25,
+        MAX_REDO_STACK_SIZE = 25
+    };
+
+    enum ITEM_CHANGE
+    {
+        CHANGED = 0,
+        UNCHANGED = 1
+    };
 };
+
+extern int SHOT_STATE;

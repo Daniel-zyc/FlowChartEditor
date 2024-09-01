@@ -2,7 +2,7 @@
 
 #include <QFile>
 
-void SaveAndLoadManager::bindScene(QGraphicsScene *scene){
+void SaveAndLoadManager::bindScene(DScene *scene){
     this -> scene = scene;
 }
 
@@ -12,7 +12,7 @@ bool SaveAndLoadManager::saveToFile(const QString &path){
     return true;
 }
 
-bool SaveAndLoadManager::saveToFile(const QString &path, QGraphicsScene *scene){
+bool SaveAndLoadManager::saveToFile(const QString &path, DScene *scene){
     QFile file(path);
     if(!file.open(QIODevice::WriteOnly)){
         qDebug() << "unable to open file" << file.errorString();
@@ -28,7 +28,7 @@ bool SaveAndLoadManager::saveToFile(const QString &path, QGraphicsScene *scene){
     return true;
 }
 
-bool SaveAndLoadManager::loadFromFile(const QString &path, QGraphicsScene *scene){
+bool SaveAndLoadManager::loadFromFile(const QString &path, DScene *scene){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)){
         qDebug() << "unable to open file" << file.errorString();
@@ -57,7 +57,7 @@ bool SaveAndLoadManager::loadFromFile(const QString &path){
     return true;
 }
 
-bool SaveAndLoadManager::copySelectedItems(QGraphicsScene *scene){
+bool SaveAndLoadManager::copySelectedItems(DScene *scene){
     if(temFile != nullptr) {
         temFile -> close();
         delete temFile;
@@ -85,7 +85,7 @@ bool SaveAndLoadManager::copySelectedItems(){
     return true;
 }
 
-bool SaveAndLoadManager::pasteSelectedItems(QGraphicsScene *scene){
+bool SaveAndLoadManager::pasteSelectedItems(DScene *scene){
     if(!temFile || !temFile->isOpen()) return false;
     temFile->seek(0);
     QDataStream in(temFile);

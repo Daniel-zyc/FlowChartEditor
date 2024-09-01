@@ -32,7 +32,8 @@ SOURCES += \
     saveandloadmanager.cpp \
     serializer.cpp \
     dparallelogramitem.cpp \
-    ddocitem.cpp
+    ddocitem.cpp \
+    undomanager.cpp
 
 HEADERS += \
     dabstractbase.h \
@@ -57,7 +58,8 @@ HEADERS += \
     saveandloadmanager.h \
     serializer.h \
     dparallelogramitem.h \
-    ddocitem.h
+    ddocitem.h \
+    undomanager.h
 
 FORMS += \
     mainwindow.ui

@@ -65,6 +65,8 @@ public:
 
 	void setMenu(QMenu *m) { menu = m; }
 
+    void clear();
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -82,5 +84,7 @@ private:
 	DAbstractBase *showMagedItem = nullptr;
 	DAbstractBase *modifiedShape = nullptr;
 	QMenu *menu = nullptr;
+
+    void shot();
 };
 

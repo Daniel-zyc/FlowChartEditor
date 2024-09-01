@@ -37,3 +37,5 @@ void DTool::moveItems(QList<QGraphicsItem *> items){
         }
     }
 }
+
+int SHOT_STATE = DConst::UNCHANGED;
