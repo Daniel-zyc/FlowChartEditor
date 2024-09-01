@@ -7,6 +7,7 @@
 #include "dshapebase.h"
 
 #include "saveandloadmanager.h"
+#include "undomanager.h"
 
 #include <QShortcut>
 #include <QKeySequence>
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     // 绑定序列化管理
 	scene = new DScene(this);
 
+    UndoManager::instance().bindScene(scene);
     SaveAndLoadManager::instance().bindScene(scene);
 
 	QMenu *m = new QMenu();
@@ -205,6 +207,9 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
+    connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
+
     connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
     connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
 
@@ -571,4 +576,11 @@ void MainWindow::copy(){
 
 void MainWindow::paste(){
     SaveAndLoadManager::instance().pasteSeletedItems();
+}
+
+void MainWindow::redo(){
+    UndoManager::instance().redo();
+}
+void MainWindow::undo(){
+    UndoManager::instance().undo();
 }

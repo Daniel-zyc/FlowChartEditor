@@ -160,6 +160,7 @@ QPainterPath DShapeBase::shapeSelected() const
 
 QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    SHOT_STATE = DConst::CHANGED;
 	if(change == QGraphicsItem::ItemPositionHasChanged
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)

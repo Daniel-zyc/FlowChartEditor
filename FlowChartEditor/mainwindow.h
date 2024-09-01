@@ -90,6 +90,9 @@ private slots:
 
     void copy();
     void paste();
+
+    void redo();
+    void undo();
 private:
 	Ui::MainWindow *ui;
 
@@ -114,5 +117,4 @@ private:
     QPushButton *fileBtn;
     QPushButton *triBtn;
     QPushButton *textBtn;
-
 };

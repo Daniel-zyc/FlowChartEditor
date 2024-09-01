@@ -34,8 +34,8 @@ void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
 
 void Serializer::printMapSize(){
     qDebug() << "size of six map"
-             << PtrToLineBase.size()
-             << PtrToQGraphicsItem.size()
+             << LineBaseToBeginMagPonint.size()
+            <<LineBaseToEndMagPoint.size()
              << MagPointToLinesPtr.size();
 }
 
@@ -100,7 +100,7 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
 
 void Serializer::linkAll(){
-
+    // printMapSize();
     for(auto it = MagPointToLinesPtr.cbegin(); it != MagPointToLinesPtr.cend(); ++it){
         MagPoint* magPoint = it.key();
         qintptr linePtr = it.value();

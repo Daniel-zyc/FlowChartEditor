@@ -229,6 +229,7 @@ void DAbstractBase::deserialize(QDataStream &in){
 	QPen qp; in >> qp; setPen(qp);
 
 	quint32 magPointCount; in >> magPointCount;
+    mags->clear();
 	for(quint32 i = 0; i < magPointCount; i++) {
 
         MagPoint *magPoint = new MagPoint(this);
