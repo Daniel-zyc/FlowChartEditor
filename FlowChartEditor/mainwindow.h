@@ -82,8 +82,8 @@ private slots:
     void findandReplace();
 
 	void delSelectedItem();
-	void combineSelected();
-	void seperateSelected();
+	// void combineSelected();
+	// void seperateSelected();
 
     void saveFile();
     void loadFile();

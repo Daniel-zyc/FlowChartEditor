@@ -191,12 +191,12 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 void DAbstractBase::updateAllLinkLines()
 {
 	// qDebug() << "update";
-	for(MagPoint* mag : *mags) mag->updateLines();
+	for(MagPoint* mag : *mags) mag->updateAllLinkLines();
 }
 
 void DAbstractBase::unLinkAllLines()
 {
-	for(MagPoint* mag : *mags) mag->deleteAllLines();
+	for(MagPoint* mag : *mags) mag->unlinkAllLines();
 }
 
 //=======================================

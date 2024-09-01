@@ -101,13 +101,13 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
 void Serializer::linkAll(){
     // printMapSize();
-    for(auto it = MagPointToLinesPtr.cbegin(); it != MagPointToLinesPtr.cend(); ++it){
-        MagPoint* magPoint = it.key();
-        qintptr linePtr = it.value();
-        if(PtrToLineBase.contains(linePtr)){
-            magPoint->linkLine(PtrToLineBase[linePtr]);
-        }
-    }
+	// for(auto it = MagPointToLinesPtr.cbegin(); it != MagPointToLinesPtr.cend(); ++it){
+	//     MagPoint* magPoint = it.key();
+	//     qintptr linePtr = it.value();
+	//     if(PtrToLineBase.contains(linePtr)){
+	//         magPoint->linkLine(PtrToLineBase[linePtr]);
+	//     }
+	// }
 
     for(auto it = DShapeBaseToTextItem.cbegin(); it != DShapeBaseToTextItem.cend(); ++it){
         DShapeBase * dshapeBase = it.key();
