@@ -5,6 +5,8 @@
 #include "droundrectitem.h"
 #include "dlineitem.h"
 #include "dtriitem.h"
+#include "ddocitem.h"
+#include "dtrapitem.h"
 
 void Serializer::serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> items){
     // 输出数量
@@ -73,6 +75,12 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
             break;
         case DTriItem::Type:
             item = new DTriItem();
+            break;
+        case DDocItem::Type:
+            item = new DDocItem();
+            break;
+        case DTrapItem::Type:
+            item = new DTrapItem();
             break;
         default:
             qDebug() << "unknown type:" << type;

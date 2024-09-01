@@ -315,7 +315,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	QPointF p = event->scenePos();
 
 	if(showMagedItem)
-	{
+    {
 		showMagedItem->setShowMagPoint(false);
 		showMagedItem = nullptr;
 	}
