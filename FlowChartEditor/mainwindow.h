@@ -47,6 +47,9 @@ private slots:
     void addParallegram();
     void addDocShape();
 
+    void changeLineType(Qt::PenStyle linestyle);
+    void changeEndArrow(DConst::LineArrowType endArrowType);
+
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
     void selectFillCol();

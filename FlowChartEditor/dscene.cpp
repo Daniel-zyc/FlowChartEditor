@@ -2,6 +2,8 @@
 #include "dscene.h"
 #include "undomanager.h"
 
+#include <QMessageBox>
+
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
 qreal DScene::defaultMoveDist = 50;
@@ -242,6 +244,63 @@ DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
 DAbstractBase* DScene::getInterItemOnPoint(QPointF p)
 {
 	return nullptr;
+}
+
+void DScene::changeLineType(Qt::PenStyle linestyle)
+{
+    qDebug() << "change Line Type";
+    QList<QGraphicsItem*> items = selectedItems();
+    QMessageBox msgBox;
+    msgBox.setText("提示");
+
+    if(items.count() < 1) {
+        msgBox.setInformativeText("无选中元素");
+        msgBox.exec();
+        return;
+    }
+    if(items.count() > 1) {
+        msgBox.setInformativeText("请选择单条线条");
+        msgBox.exec();
+        return;
+    }
+
+    DLineItem *line = dynamic_cast<DLineItem*>(items[0]);
+    if(!line) {
+        msgBox.setInformativeText("请选中线条");
+        msgBox.exec();
+        return;
+    }
+    QPen npen = line->pen();
+    npen.setStyle(linestyle);
+    line->setPen(npen);
+    // update();
+}
+
+void DScene::changeEndArrow(DConst::LineArrowType endArrowType)
+{
+    qDebug() << "change Line endArrow";
+    QList<QGraphicsItem*> items = selectedItems();
+    QMessageBox msgBox;
+    msgBox.setText("提示");
+
+    if(items.count() < 1) {
+        msgBox.setInformativeText("无选中元素");
+        msgBox.exec();
+        return;
+    }
+    if(items.count() > 1) {
+        msgBox.setInformativeText("请选择单条线条");
+        msgBox.exec();
+        return;
+    }
+
+    DLineItem *line = dynamic_cast<DLineItem*>(items[0]);
+    if(!line) {
+        msgBox.setInformativeText("请选中线条");
+        msgBox.exec();
+        return;
+    }
+    line->endArrowType = endArrowType;
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

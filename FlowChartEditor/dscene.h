@@ -23,6 +23,8 @@ public:
 	DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
 
 public:
+    QMenu *menu = nullptr;
+
 	void resetRotation() { setRotation(0.0); }
 	void setRotation(qreal angle = 0.0);
 	void rotateSelected(qreal deg = DScene::defaultRotateDelta);
@@ -67,6 +69,9 @@ public:
 
     void clear();
 
+    void changeLineType(Qt::PenStyle linestyle);
+    void changeEndArrow(DConst::LineArrowType endArrowType);
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -83,7 +88,6 @@ private:
 
 	DAbstractBase *showMagedItem = nullptr;
 	DAbstractBase *modifiedShape = nullptr;
-	QMenu *menu = nullptr;
 
     void shot();
 };

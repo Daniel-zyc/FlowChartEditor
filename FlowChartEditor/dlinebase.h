@@ -19,6 +19,8 @@ public:
 	virtual int type() const override { return Type; }
 
 public:
+    int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
+
 	virtual int checkInterPoint(QPointF p) const override;
 	virtual int setInterPoint(QPointF p) override;
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
@@ -56,7 +58,6 @@ protected:
 	QPointF beginPoint = QPoint(0, 0), endPoint = QPointF(0, 0);
 	MagPoint *beginMag = nullptr, *endMag = nullptr;
 
-    int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
 
 private:
 	int interactType = DConst::NONE;

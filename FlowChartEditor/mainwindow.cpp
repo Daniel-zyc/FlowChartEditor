@@ -9,6 +9,7 @@
 #include "saveandloadmanager.h"
 #include "undomanager.h"
 
+#include <QActionGroup>
 #include <QShortcut>
 #include <QKeySequence>
 #include <QSize>
@@ -128,6 +129,43 @@ void MainWindow::initUi()
 
 void MainWindow::createMenu()
 {
+    QMenu *lineType = new QMenu("线条");
+
+    QMenu *arrowTypeM = new QMenu("箭头类型");
+    arrowTypeM->addAction(ui->actNoArrow);
+    arrowTypeM->addAction(ui->actArrow);
+    arrowTypeM->addAction(ui->actOpenArrow);
+    arrowTypeM->addAction(ui->actDovetailArrow);
+    arrowTypeM->addAction(ui->actDiaArrow);
+    arrowTypeM->addAction(ui->actRoundArrow);
+    QActionGroup *arrowGroup = new QActionGroup(lineType);
+    arrowGroup->setExclusive(true);
+    arrowGroup->addAction(ui->actNoArrow);
+    arrowGroup->addAction(ui->actArrow);
+    arrowGroup->addAction(ui->actOpenArrow);
+    arrowGroup->addAction(ui->actDovetailArrow);
+    arrowGroup->addAction(ui->actDiaArrow);
+    arrowGroup->addAction(ui->actRoundArrow);
+
+    QMenu *lineTypeM = new QMenu("线条类型");
+    lineTypeM->addAction(ui->actSolidLine);
+    lineTypeM->addAction(ui->actDashLine);
+    lineTypeM->addAction(ui->actDotLine);
+    lineTypeM->addAction(ui->actDashDotLine);
+    lineTypeM->addAction(ui->actDashDDLine);
+    QActionGroup *lineGroup = new QActionGroup(lineType);
+    lineGroup->setExclusive(true);
+    lineGroup->addAction(ui->actSolidLine);
+    lineGroup->addAction(ui->actDashLine);
+    lineGroup->addAction(ui->actDotLine);
+    lineGroup->addAction(ui->actDashDotLine);
+    lineGroup->addAction(ui->actDashDDLine);
+
+    lineType->addMenu(arrowTypeM);
+    lineType->addMenu(lineTypeM);
+    // ui->styleMenu->addMenu(lineType);
+    scene->menu->addMenu(lineType);
+
 	ui->fileMenu->addAction(ui->actNewFile);
 	ui->fileMenu->addAction(ui->actOpenFile);
 	ui->fileMenu->addAction(ui->actSaveFile);
@@ -281,6 +319,44 @@ void MainWindow::bindAction()
     connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
     connect(textBtn, &QPushButton::clicked, this, &MainWindow::addText);
     connect(triBtn, &QPushButton::clicked, this, &MainWindow::addTri);
+    connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
+    connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
+    connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+
+    connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::SolidLine);
+    });
+    connect(ui->actDashLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashLine);
+    });
+    connect(ui->actDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DotLine);
+    });
+    connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotLine);
+    });
+    connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotDotLine);
+    });
+
+    connect(ui->actNoArrow, &QAction::triggered, this, [this]() {
+        changeEndArrow(static_cast<DConst::LineArrowType>(0));
+    });
+    connect(ui->actArrow, &QAction::triggered, this, [this]() {
+        changeEndArrow(static_cast<DConst::LineArrowType>(1));
+    });
+    connect(ui->actOpenArrow, &QAction::triggered, this, [this]() {
+        changeEndArrow(static_cast<DConst::LineArrowType>(2));
+    });
+    connect(ui->actDovetailArrow, &QAction::triggered, this, [this]() {
+        changeEndArrow(static_cast<DConst::LineArrowType>(3));
+    });
+    connect(ui->actDiaArrow, &QAction::triggered, this, [this]() {
+        changeEndArrow(static_cast<DConst::LineArrowType>(4));
+    });
+    connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
+        changeEndArrow(static_cast<DConst::LineArrowType>(5));
+    });
 }
 
 void MainWindow::saveAsSvg()
@@ -350,6 +426,16 @@ void MainWindow::addParallegram()
 void MainWindow::addDocShape()
 {
     scene->addDocItem();
+}
+
+void MainWindow::changeLineType(Qt::PenStyle linestyle)
+{
+    scene->changeLineType(linestyle);
+}
+
+void MainWindow::changeEndArrow(DConst::LineArrowType endArrowType)
+{
+    scene->changeEndArrow(endArrowType);
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()
