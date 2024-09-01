@@ -39,9 +39,11 @@ public:
     // LineBase -- endMagPoint 原地址
     QMap<DLineBase*, qintptr> LineBaseToEndMagPoint;
 
+
+    void serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> items);
     void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
 
-    void deserializeSceneItems(QDataStream &in, QGraphicsScene *scene);
+    QList<QGraphicsItem *> deserializeSceneItems(QDataStream &in);
 
 private:
     Serializer() = default;

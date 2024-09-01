@@ -24,7 +24,9 @@ namespace DTool
 	qreal sq(qreal x);
 
 	// p 是否在以 o 为半径 r 为圆心的圆中
-	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
+    bool inCircle(const QPointF& o, qreal r, const QPointF& p);
+
+    void moveItems(QList<QGraphicsItem*> items);
 };
 
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
@@ -136,7 +138,15 @@ namespace DConst
 		AFTER_INSERT_SHAPE = 4,
 		INSERT_TEXT = 5,
 		AFTER_INSERT_TEXT = 6
-	};
-};
+    };
 
-const int DataStreamVersion = QDataStream::Qt_6_7;
+    enum PasteShift
+    {
+        MAX_DISTANCE = 50
+    };
+
+    enum DataStreamVersion
+    {
+        DATA_STREAM_VERSION = QDataStream::Qt_6_7
+    };
+};

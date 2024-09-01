@@ -1,6 +1,5 @@
 #ifndef SAVEANDLOADMANAGER_H
 #define SAVEANDLOADMANAGER_H
-
 #include <QString>
 #include "serializer.h"
 
@@ -21,12 +20,21 @@ public:
     bool loadFromFile(const QString &fileName);
     bool loadFromFile(const QString &fileName, QGraphicsScene *scene);
 
+    bool copySelectedItems();
+    bool copySelectedItems(QGraphicsScene *scene);
+    bool pasteSeletedItems();
+    bool pasteSelectedItems(QGraphicsScene *scene);
+
     void bindScene(QGraphicsScene *scene);
 
 private:
     SaveAndLoadManager() = default;
 
     QGraphicsScene *scene;
+
+    bool ifCanSave;
+
+    QTemporaryFile *temFile = nullptr;
 };
 
 #endif // SAVEANDLOADMANAGER_H
