@@ -1,20 +1,6 @@
-#include "global.h"
+#include "dallitems.h"
 #include "dscene.h"
-#include "dabstractbase.h"
-#include "dshapebase.h"
-#include "drectitem.h"
-#include "droundrectitem.h"
-#include "dellitem.h"
-#include "dlineitem.h"
-#include "dtextitem.h"
-#include "dtriitem.h"
-#include "ddiaitem.h"
-#include "dtrapitem.h"
-#include "dlinebase.h"
 
-#include "dparallelogramitem.h"
-#include "ddocitem.h"
-#include "ditemgroup.h"
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
@@ -168,28 +154,29 @@ void DScene::addTrapItem()
     item->textItem->deleteMagPoint();
     addItem(item);
 }
+
 void DScene::combineSelected()
 {
-    QList<QGraphicsItem*> items = selectedItems();
-    int cnt = 0;
-    for(QGraphicsItem* item : items)
-    {
-        if(item->parentItem() != nullptr) continue;
-        cnt++;
-    }
+	QList<QGraphicsItem*> items = selectedItems();
+	int cnt = 0;
+	for(QGraphicsItem* item : items)
+	{
+		if(item->parentItem() != nullptr) continue;
+		cnt++;
+	}
 	if(cnt <= 1) return;
 
-	DItemGroup* group = new DItemGroup;  //创建组合
-    group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-    addItem(group);      //添加到场景中
+	DItemGroup* group = new DItemGroup();  //创建组合
+	// group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	addItem(group);      //添加到场景中
 
-    for(QGraphicsItem* item : items)
-    {
-        if(item->parentItem() != nullptr) continue;
-        group->addToGroup(item);
-    }
+	for(QGraphicsItem* item : items)
+	{
+		if(item->parentItem() != nullptr) continue;
+		group->addToGroup(item);
+	}
 
-    group->setSelected(false);
+	// group->setSelected(false);
 }
 
 void DScene::seperateSelected()
@@ -201,7 +188,7 @@ void DScene::seperateSelected()
 		if(!group) return;
 		destroyItemGroup(group);
 		QList<QGraphicsItem*> items = this->items();
-		for(QGraphicsItem* item : items) item->setSelected(false);
+		// for(QGraphicsItem* item : items) item->setSelected(false);
 	}
 }
 

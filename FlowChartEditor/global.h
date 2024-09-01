@@ -57,8 +57,11 @@ const QPen magPointColidePen(Qt::gray, Qt::SolidLine);
 const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
 const QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
 
-const QBrush selectRectBrush = QBrush(Qt::transparent, Qt::SolidPattern);
+const QBrush selectRectBrush = QBrush(Qt::NoBrush);
 const QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
+
+const QBrush groupRectBrush = QBrush(Qt::NoBrush);
+const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -76,8 +79,9 @@ enum UserTypes
 	DTriItemType = QGraphicsItem::UserType + 10,
     DParallegramItemType = QGraphicsItem::UserType + 11,
     DDocItemType = QGraphicsItem::UserType + 12,
-	DDiaItemType=QGraphicsItem::UserType + 13,
-	DTrapItemType=QGraphicsItem::UserType + 14
+	DDiaItemType = QGraphicsItem::UserType + 13,
+	DTrapItemType = QGraphicsItem::UserType + 14,
+	DItemGroupType = QGraphicsItem::UserType + 15
 };
 
 // 常量

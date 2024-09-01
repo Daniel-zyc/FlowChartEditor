@@ -53,6 +53,8 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
         in >> type;
         QGraphicsItem *item = nullptr;
 
+		qDebug() << "Type: " << type;
+
         switch (type) {
         case DTextItem::Type:
             item = new DTextItem();

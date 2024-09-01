@@ -36,6 +36,7 @@ SOURCES += \
 
 HEADERS += \
     dabstractbase.h \
+    dallitems.h \
     ddiaitem.h \
     dellitem.h \
     dfinddialog.h \

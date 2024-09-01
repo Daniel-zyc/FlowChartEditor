@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	QMenu *m = new QMenu();
 	m->addAction(ui->actDelSelectedItem);
-	m->addAction(ui->actCombine);
-	m->addAction(ui->actSeperate);
+	// m->addAction(ui->actCombine);
+	// m->addAction(ui->actSeperate);
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
 	m->addAction(ui->actAddLine);
@@ -536,15 +536,15 @@ void MainWindow::delSelectedItem()
 	scene->delSelectedItem();
 }
 
-void MainWindow::combineSelected()
-{
-	scene->combineSelected();
-}
+// void MainWindow::combineSelected()
+// {
+// 	scene->combineSelected();
+// }
 
-void MainWindow::seperateSelected()
-{
-	scene->seperateSelected();
-}
+// void MainWindow::seperateSelected()
+// {
+// 	scene->seperateSelected();
+// }
 
 void MainWindow::saveFile(){
     QString filePath = QFileDialog::getSaveFileName(this, "save");

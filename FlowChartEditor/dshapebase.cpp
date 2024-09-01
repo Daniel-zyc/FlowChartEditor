@@ -161,7 +161,6 @@ QPainterPath DShapeBase::shapeSelected() const
 QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
 	if(change == QGraphicsItem::ItemPositionHasChanged
-	   || change == QGraphicsItem::ItemTransformHasChanged
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)
 		updateAllLinkLines();
