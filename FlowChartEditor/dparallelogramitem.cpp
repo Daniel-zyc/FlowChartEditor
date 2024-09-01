@@ -113,3 +113,20 @@ void DParallegramItem::setRect(const QRectF &nrect)
     updateMagPoint();
     updateModiPoint();
 }
+
+//====================================
+
+void DParallegramItem::serialize(QDataStream &out) const{
+    qDebug() << "DParallegramItem serializing";
+    DShapeBase::serialize(out);
+
+    out << rect << skew;
+}
+
+void DParallegramItem::deserialize(QDataStream &in){
+    qDebug() << "DParallegramItem deserializing";
+    DShapeBase::deserialize(in);
+
+    in >> rect >> skew;
+    setRect(rect);
+}
