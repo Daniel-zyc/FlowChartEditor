@@ -87,6 +87,9 @@ private slots:
 
     void saveFile();
     void loadFile();
+
+    void copy();
+    void paste();
 private:
 	Ui::MainWindow *ui;
 

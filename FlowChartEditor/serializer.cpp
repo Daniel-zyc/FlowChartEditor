@@ -6,8 +6,7 @@
 #include "dlineitem.h"
 #include "dtriitem.h"
 
-void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
-    QList<QGraphicsItem *> items = scene->items();
+void Serializer::serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> items){
     // 输出数量
     qint32 size = 0;
     for (QGraphicsItem *item : items) {
@@ -18,7 +17,7 @@ void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
     out << size;
     for (QGraphicsItem* item : items) {
         if (auto* abstractItem = dynamic_cast<DAbstractBase*>(item)) {
-			out << abstractItem->type();
+            out << abstractItem->type();
             abstractItem->serialize(out);
         } else if(auto* abstractItem = dynamic_cast<MagPoint*>(item)){
             qDebug() << "serializing MagPoint";
@@ -28,6 +27,11 @@ void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
     }
 }
 
+void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
+    QList<QGraphicsItem *> items = scene->items();
+    serializeSceneItems(out, items);
+}
+
 void Serializer::printMapSize(){
     qDebug() << "size of six map"
              << PtrToLineBase.size()
@@ -35,8 +39,8 @@ void Serializer::printMapSize(){
              << MagPointToLinesPtr.size();
 }
 
-void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
-    scene->clear();  // 清除现有图形项
+QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
+    QList<QGraphicsItem* > data;
 
 	clearMap();
 
@@ -78,6 +82,7 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
             DAbstractBase *abstractItem = dynamic_cast<DAbstractBase*>(item);
 			if (abstractItem) {
 				abstractItem->deserialize(in);
+                data.append(abstractItem);
             } else {
                 delete item;
                 qDebug() << "fail to deserialize";
@@ -86,11 +91,8 @@ void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
     }
 
 	linkAll();
+    return data;
 
-    for(auto it = PtrToQGraphicsItem.cbegin(); it != PtrToQGraphicsItem.cend(); ++it){
-		if(it.value()->parentItem() != nullptr) continue;
-		scene->addItem(it.value());
-    }
 }
 
 
@@ -134,10 +136,12 @@ void Serializer::linkAll(){
 void Serializer::clearMap(){
     PtrToLineBase.clear();
     PtrToQGraphicsItem.clear();
-	PtrToTextItem.clear();
-	PtrToMagPoint.clear();
-	DShapeBaseToTextItem.clear();
-	LineBaseToBeginMagPonint.clear();
-	LineBaseToEndMagPoint.clear();
+    PtrToTextItem.clear();
+    PtrToMagPoint.clear();
+
     MagPointToLinesPtr.clear();
+    DShapeBaseToTextItem.clear();
+
+    LineBaseToBeginMagPonint.clear();
+    LineBaseToEndMagPoint.clear();
 }

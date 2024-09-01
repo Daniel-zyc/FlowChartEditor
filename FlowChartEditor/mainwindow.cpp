@@ -208,6 +208,9 @@ void MainWindow::bindAction()
     connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
     connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
 
+    connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
+    connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
+
     connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
 
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
@@ -560,4 +563,12 @@ void MainWindow::loadFile(){
     if(filePath == "") return;
 
     SaveAndLoadManager::instance().loadFromFile(filePath);
+}
+
+void MainWindow::copy(){
+    SaveAndLoadManager::instance().copySelectedItems();
+}
+
+void MainWindow::paste(){
+    SaveAndLoadManager::instance().pasteSeletedItems();
 }
