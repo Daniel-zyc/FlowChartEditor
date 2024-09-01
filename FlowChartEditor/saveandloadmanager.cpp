@@ -13,8 +13,6 @@ bool SaveAndLoadManager::saveToFile(const QString &path){
 }
 
 bool SaveAndLoadManager::saveToFile(const QString &path, QGraphicsScene *scene){
-    if(ifCanSave == false) return false;
-    ifCanSave = false;
     QFile file(path);
     if(!file.open(QIODevice::WriteOnly)){
         qDebug() << "unable to open file" << file.errorString();
@@ -27,7 +25,6 @@ bool SaveAndLoadManager::saveToFile(const QString &path, QGraphicsScene *scene){
     Serializer::instance().serializeSceneItems(out, scene);
 
     file.close();
-    ifCanSave = true;
     return true;
 }
 

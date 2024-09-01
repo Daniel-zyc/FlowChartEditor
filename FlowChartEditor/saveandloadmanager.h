@@ -32,8 +32,6 @@ private:
 
     QGraphicsScene *scene;
 
-    bool ifCanSave;
-
     QTemporaryFile *temFile = nullptr;
 };
 
