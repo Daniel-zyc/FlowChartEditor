@@ -30,4 +30,14 @@ private:
 
     QRectF rect;
 
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> topWidth -> bottomWidth -> height -> c -> rect
+     */
+    void serialize(QDataStream &out) const override;
+
+    void deserialize(QDataStream &in ) override;
+
 };
