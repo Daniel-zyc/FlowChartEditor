@@ -134,7 +134,7 @@ void DScene::addTriItem()
 void DScene::addParallegramItem()
 {
     qDebug() << "add Parallegram";
-    DParallegramItem *item = new DParallegramItem(200, 200);
+    DParallelogramItem *item = new DParallelogramItem(200, 200);
     item->textItem = new DTextItem(100, 100, "hello world!", item);
     item->textItem->deleteMagPoint();
     addItem(item);
