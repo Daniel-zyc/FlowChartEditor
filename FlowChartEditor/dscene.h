@@ -1,7 +1,6 @@
 #pragma once
 
 #include "global.h"
-#include "dshapebase.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -9,6 +8,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
+
+class DAbstractBase;
+class MagPoint;
 
 class DScene : public QGraphicsScene
 {
@@ -55,8 +57,11 @@ public:
 	void combineSelected();
 	void seperateSelected();
 
-    QList<QGraphicsItem *> getAllParent();
+	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
+
+	DAbstractBase* getMagItemOnPoint(QPointF p);
+	DAbstractBase* getInterItemOnPoint(QPointF p);
 
 	void setMenu(QMenu *m) { menu = m; }
 

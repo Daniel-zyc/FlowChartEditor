@@ -23,17 +23,23 @@ MagPoint::~MagPoint()
 void MagPoint::updateLines() const
 {
 	// qDebug() << lines->size();
-	for(DLineBase *line : *lines) line->updatePosition();
+	for(DLineBase *line : *lines)
+	{
+		// qDebug() << "update";
+		line->updatePosition();
+	}
 }
 
 void MagPoint::addLine(DLineBase *line)
 {
-	for(DLineBase* l : *lines) if(l == line) continue;
+	for(DLineBase* l : *lines) if(l == line) return;
+	// qDebug() << "add";
 	lines->append(line);
 }
 
 void MagPoint::deleteLine(DLineBase *line)
 {
+	// qDebug() << "delete";
 	lines->removeAll(line);
 }
 

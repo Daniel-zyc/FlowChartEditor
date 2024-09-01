@@ -1,5 +1,6 @@
 #include "global.h"
 #include "dscene.h"
+#include "dabstractbase.h"
 #include "dshapebase.h"
 #include "drectitem.h"
 #include "droundrectitem.h"
@@ -204,27 +205,28 @@ void DScene::seperateSelected()
 	}
 }
 
-QList<QGraphicsItem *> DScene::getAllParent()
+QList<QGraphicsItem *> DScene::getDelete()
 {
-    QList<QGraphicsItem*> items = selectedItems();
-    QList<QGraphicsItem*> parents;
-    for(QGraphicsItem *item : items) {
-        if(item->parentItem() == nullptr) {
-            parents.push_back(item);
-        }
+	QList<QGraphicsItem*> items = selectedItems();
+	QSet<QGraphicsItem*> S;
+	for(QGraphicsItem* item : items) S.insert(item);
+	items.clear();
+	for(QGraphicsItem *item : S) {
+		if(S.contains(item->parentItem())) continue;
+		items.push_back(item);
     }
-    return parents;
+	return items;
 }
 
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected";
-    QList<QGraphicsItem*> items = getAllParent();
+	QList<QGraphicsItem*> items = getDelete();
+	qDebug() << items;
 	for(QGraphicsItem *item : items)
 	{
         this->removeItem(item);
-		DShapeBase* shape;
-		DLineBase* line;
+		DShapeBase* shape; DLineBase* line;
 		if((shape = dynamic_cast<DShapeBase*>(item)))
 			shape->unLinkAllLines();
 		else if((line = dynamic_cast<DLineBase*>(item)))
@@ -232,9 +234,27 @@ void DScene::delSelectedItem()
 			line->unlinkBegin();
 			line->unlinkEnd();
 		}
-
-		delete item;
 	}
+	for(QGraphicsItem *item : items) delete item;
+}
+
+DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
+{
+	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
+
+	for(QGraphicsItem *item : items)
+	{
+		DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
+		if(!shape) continue;
+		if(shape->checkMagPoint(p))
+			return shape;
+	}
+	return nullptr;
+}
+
+DAbstractBase* DScene::getInterItemOnPoint(QPointF p)
+{
+	return nullptr;
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -252,10 +272,25 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	{
 		event->accept();
 		addItem(modifiedShape);
-		modifiedShape->setInsertItem();
-		modifiedShape->setPos(p);
-		state = state + 1;
+		if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_TEXT)
+		{
+			DShapeBase* shape = dynamic_cast<DShapeBase*>(modifiedShape);
+			shape->setInsertItem();
+			shape->setPos(p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2));
+		}
+		else
+		{
+			DLineBase* line = dynamic_cast<DLineBase*>(modifiedShape);
+			DAbstractBase* shape = getMagItemOnPoint(p);
+			if(shape)
+				line->linkBegin(shape->getMagPoint(p));
+			else
+				line->setBeginPoint(p);
+			line->setEndPoint(p);
+			line->setInsertItem();
+		}
 		moditype = DConst::SIZE;
+		state = state + 1;
 		return;
 	}
 
@@ -301,19 +336,12 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	MagPoint *magPoint = nullptr;
 	if(dynamic_cast<DLineBase*>(modifiedShape))
 	{
-		QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
-
-		for(QGraphicsItem *item : items)
+		DAbstractBase* shape = getMagItemOnPoint(p);
+		if(shape)
 		{
-			DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
-			if(!shape) continue;
-			if(shape->checkMagPoint(p))
-			{
-				shape->setShowMagPoint(true);
-				showMagedItem = shape;
-				magPoint = shape->getMagPoint(p);
-				break;
-			}
+			magPoint = shape->getMagPoint(p);
+			shape->setShowMagPoint(true);
+			showMagedItem = shape;
 		}
 	}
 

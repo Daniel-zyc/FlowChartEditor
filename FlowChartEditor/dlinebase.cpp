@@ -79,6 +79,7 @@ void DLineBase::setInsertItem()
 void DLineBase::linkBegin(MagPoint *mp)
 {
 	beginMag = mp;
+	qDebug() << mp;
 	mp->addLine(this);
 	updatePosition();
 }
@@ -132,17 +133,19 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 	switch(id)
 	{
 		case DConst::ST - 1 :
-			if(mp) linkBegin(mp);
+			if(mp && mp != endMag) linkBegin(mp);
 			else
 			{
+				// qDebug() << "unlinkBegin";
 				unlinkBegin();
 				beginPoint = p;
 			}
 			break;
 		case DConst::ED - 1 :
-			if(mp) linkEnd(mp);
+			if(mp && mp != beginMag) linkEnd(mp);
 			else
 			{
+				// qDebug() << "unlinkEnd";
 				unlinkEnd();
 				endPoint = p;
 			}
@@ -232,6 +235,18 @@ void DLineBase::drawArrow(QPainter *painter, const QPointF &startPoint, const QP
     }
     default: break;
     }
+}
+
+void DLineBase::setBeginPoint(QPointF p)
+{
+	p = mapFromScene(p);
+	sizeToPoint(p, DConst::ST-1);
+}
+
+void DLineBase::setEndPoint(QPointF p)
+{
+	p = mapFromScene(p);
+	sizeToPoint(p, DConst::ED-1);
 }
 
 //===========================================

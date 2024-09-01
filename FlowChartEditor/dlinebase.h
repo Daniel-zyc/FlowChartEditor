@@ -38,6 +38,9 @@ public:
 	virtual void setEndArrowType(int type);
     virtual void drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize = 10.0);
 
+	virtual void setBeginPoint(QPointF p);
+	virtual void setEndPoint(QPointF p);
+
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;
