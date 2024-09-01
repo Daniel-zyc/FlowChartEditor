@@ -31,7 +31,7 @@ bool DTool::inCircle(const QPointF& o, qreal r, const QPointF& p)
 void DTool::moveItems(QList<QGraphicsItem *> items){
     int randomInt = QRandomGenerator::global()->bounded(DConst::MAX_DISTANCE);
     for (QGraphicsItem* item : items) {
-        if (item) {
+        if (item && item->parentItem() == nullptr) {
             QPointF currentPos = item->pos();
             item->setPos(currentPos.x() + randomInt, currentPos.y() - randomInt);
         }
