@@ -19,22 +19,32 @@ public:
 	virtual int type() const override { return Type; }
 
 public:
+    int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
+
 	virtual int checkInterPoint(QPointF p) const override;
 	virtual int setInterPoint(QPointF p) override;
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
 	virtual void setInsertItem() override;
 
+	virtual void linkBeginUpdate(MagPoint *mp);
+	virtual void linkEndUpdate(MagPoint *mp);
+
 	virtual void linkBegin(MagPoint *mp);
 	virtual void linkEnd(MagPoint *mp);
 
 	virtual void unlinkBegin();
 	virtual void unlinkEnd();
+	virtual void unlinkMag(MagPoint *mp);
 
 	virtual void updatePosition();
 
 	virtual void setBeginArrowType(int type);
 	virtual void setEndArrowType(int type);
+    virtual void drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize = 10.0);
+
+	virtual void setBeginPoint(QPointF p);
+	virtual void setEndPoint(QPointF p);
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -51,19 +61,17 @@ protected:
 	QPointF beginPoint = QPoint(0, 0), endPoint = QPointF(0, 0);
 	MagPoint *beginMag = nullptr, *endMag = nullptr;
 
-	int beginArrowType = DConst::NONE, endArrowType = DConst::NONE;
 
 private:
 	int interactType = DConst::NONE;
 
 public:
-    /**
-     * @brief serialize
-     * @param out
-     * 序列化：父类DAbstractBase序列化 -> beginPoint -> endPoint -> beginArrowType -> endArrowType
-     */
-    void serialize(QDataStream &out) const override;
-
-    void deserialize(QDataStream &in) override;
+	/**
+	 * @brief serialize
+	 * @param out
+	 * 序列化：父类DAbstractBase序列化 -> beginPoint -> endPoint -> beginArrowType -> endArrowType
+	 */
+	void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
 };
 

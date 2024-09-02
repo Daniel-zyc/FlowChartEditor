@@ -13,6 +13,12 @@
 #include <QSplitter>
 #include <QWidget>
 #include <QPushButton>
+#include <QToolButton>
+#include <QFormLayout>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QRadioButton>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -46,6 +52,12 @@ private slots:
     void addTrap();
     void addParallegram();
     void addDocShape();
+    void addPolyLine();
+
+    void changeLineType(Qt::PenStyle linestyle);
+    void changeEndArrow(int endArrowType);
+    void changeLineStyle();
+    void setSceneBg(QString path);
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -82,11 +94,17 @@ private slots:
     void findandReplace();
 
 	void delSelectedItem();
-	void combineSelected();
-	void seperateSelected();
+	// void combineSelected();
+	// void seperateSelected();
 
     void saveFile();
     void loadFile();
+
+    void copy();
+    void paste();
+
+    void redo();
+    void undo();
 private:
 	Ui::MainWindow *ui;
 
@@ -112,4 +130,22 @@ private:
     QPushButton *triBtn;
     QPushButton *textBtn;
 
+    QWidget *rightw;
+    QPushButton *confirm;
+    QPushButton *cancle;
+    QFormLayout *formright;
+    QHBoxLayout *rbtnLayout;
+    QComboBox *lineType;
+    QComboBox *arrowType;
+    QDoubleSpinBox *linebound;
+
+    QToolButton *createTln;
+    QToolButton *openTln;
+    QToolButton *saveTln;
+    QToolButton *saveSvgTln;
+
+    QGroupBox *bgGroup;
+    QRadioButton *blankBg;
+    QRadioButton *gridBg;
+    QRadioButton *dotBg;
 };

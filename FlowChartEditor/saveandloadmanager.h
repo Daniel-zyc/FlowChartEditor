@@ -1,8 +1,8 @@
 #ifndef SAVEANDLOADMANAGER_H
 #define SAVEANDLOADMANAGER_H
-
 #include <QString>
-#include "serializer.h"
+
+#include "dscene.h"
 
 class SaveAndLoadManager
 {
@@ -16,17 +16,17 @@ public:
     SaveAndLoadManager& operator=(const SaveAndLoadManager&) = delete;
 
     bool saveToFile(const QString &fileName);
-    bool saveToFile(const QString &fileName, QGraphicsScene *scene);
+    bool saveToFile(const QString &fileName, DScene *scene);
 
     bool loadFromFile(const QString &fileName);
-    bool loadFromFile(const QString &fileName, QGraphicsScene *scene);
+    bool loadFromFile(const QString &fileName, DScene *scene);
 
-    void bindScene(QGraphicsScene *scene);
+    void bindScene(DScene *scene);
 
 private:
     SaveAndLoadManager() = default;
 
-    QGraphicsScene *scene;
+    DScene *scene;
 };
 
 #endif // SAVEANDLOADMANAGER_H

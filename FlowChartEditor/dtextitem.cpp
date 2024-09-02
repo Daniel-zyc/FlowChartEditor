@@ -34,7 +34,7 @@ void DTextBase::startEdit()
 void DTextBase::endEdit()
 {
 	QTextCursor tmpCursor = textCursor();
-	tmpCursor.clearSelection();
+    tmpCursor.clearSelection();
 	setTextCursor(tmpCursor);
 	setTextInteractionFlags(Qt::NoTextInteraction);
 }
@@ -47,18 +47,13 @@ void DTextBase::focusToCenter()
 }
 
 void DTextBase::serialize(QDataStream &out) const{
-	out << toHtml();
-	out << pos();
-    return;
+	out << toHtml() << pos();
 }
 
 void DTextBase::deserialize(QDataStream &in){
-	QString s; in >> s;
-	setHtml(s);
-	QPointF pos; in >> pos;
-	setPos(pos);
+	QString s; in >> s; setHtml(s);
+	QPointF pos; in >> pos; setPos(pos);
 	focusToCenter();
-    return;
 }
 
 //==============================================================================
@@ -146,33 +141,34 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 	if (change == QGraphicsItem::ItemSelectedHasChanged) {
 		if(!isSelected()) textBase.endEdit();
 	}
+	if (change == QGraphicsItem::ItemPositionHasChanged) {
+		if(dynamic_cast<DShapeBase*>(parentItem()))
+		{
+			DShapeBase* shape = dynamic_cast<DShapeBase*>(parentItem());
+			QPointF p = pos(); QRectF rc = sizeRect(), prc = shape->sizeRect();
+			p.setX(qMin(qMax(0.0, prc.right() - rc.width()/2), p.x()));
+			p.setX(qMax(qMin(0.0, prc.left() + rc.width()/2), p.x()));
+			p.setY(qMin(qMax(0.0, prc.bottom() - rc.height()/2), p.y()));
+			p.setY(qMax(qMin(0.0, prc.top() + rc.height()/2), p.y()));
+			if(p != pos()) setPos(p);
+		}
+	}
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void DTextItem::serialize(QDataStream &out) const{
-    qDebug() << "DTextIetm serializing";
-    DShapeBase::serialize(out);
-
-	out << reinterpret_cast<qintptr>(this);
-
-    textBase.serialize(out);
-
-	out << pos();
-    out << rect;
+void DTextItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DShapeBase::serialize(out, fa);
+	textBase.serialize(out);
+	out << rect;
 }
 
-void DTextItem::deserialize(QDataStream &in){
-    qDebug() << "DTextItem deserializing";
-    DShapeBase::deserialize(in);
+bool DTextItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DShapeBase::deserialize(in, fa)) return false;
 
-	qintptr thisPtr; in >> thisPtr;
-	Serializer::instance().PtrToTextItem.insert(thisPtr,this);
-
-    textBase.deserialize(in);
-
-	QPointF pos;
-	in >> pos;
-	setPos(pos);
-    in >> rect;
+	textBase.deserialize(in);
+	in >> rect;
 	setRect(rect);
+	return true;
 }

@@ -94,3 +94,20 @@ void DDocItem::setRect(const QRectF &nrect)
     sizeRectUpdated();
     updateMagPoint();
 }
+
+//====================================
+
+// void DDocItem::serialize(QDataStream &out) const{
+//     qDebug() << "DDocItem serializing";
+//     DShapeBase::serialize(out);
+
+//     out << rect;
+// }
+
+// void DDocItem::deserialize(QDataStream &in){
+//     qDebug() << "DDocItem deserializing";
+//     DShapeBase::deserialize(in);
+
+//     in >> rect;
+//     setRect(rect);
+// }

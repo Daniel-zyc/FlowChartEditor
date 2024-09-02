@@ -89,7 +89,7 @@ void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 			sizeToPointPre(mapFromScene(p));
 			break;
 		case DConst::ROT:
-			rotToPoint(p - mapToScene({0, 0}));
+			rotToPoint(p);
 			break;
 	}
 	updateAllLinkLines();
@@ -127,6 +127,7 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 void DShapeBase::rotToPoint(QPointF p)
 {
+	p = mapToParent(mapFromScene(p)) - mapToParent({0, 0});
 	qreal deg = DTool::radToDeg(atan2(p.x(), -p.y()));
 	setRotation(deg);
 }
@@ -160,8 +161,8 @@ QPainterPath DShapeBase::shapeSelected() const
 
 QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    SHOT_STATE = DConst::CHANGED;
 	if(change == QGraphicsItem::ItemPositionHasChanged
-	   || change == QGraphicsItem::ItemTransformHasChanged
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)
 		updateAllLinkLines();
@@ -194,27 +195,24 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 }
 
 //===========================================
-void DShapeBase::serialize(QDataStream &out) const{
-    qDebug() << "shape base serializing";
-    DAbstractBase::serialize(out);
+void DShapeBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DAbstractBase::serialize(out, fa);
 
-    qintptr textItemPtr = (textItem != nullptr) ? reinterpret_cast<qintptr>(textItem) : qintptr(-1);
-    out << textItemPtr;
+	out << (qintptr)textItem;
+	if(textItem) textItem->serialize(out, this);
 }
 
-void DShapeBase::deserialize(QDataStream &in){
-    qDebug() << "shape base deserializing";
-    DAbstractBase::deserialize(in);
+bool DShapeBase::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DAbstractBase::deserialize(in, fa)) return false;
 
-	if(textItem) delete textItem;
-
-	qintptr textItemPtr; in >> textItemPtr;
-
-    if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
-}
-
-void DShapeBase::linkTextItem(DTextItem*item){
-    qDebug() << "link shapebase and textItem";
-    textItem = item;
-	textItem->setParentItem(this);
+	qintptr item; in >> item;
+	if(item) textItem->deserialize(in, this);
+	else
+	{
+		delete textItem;
+		textItem = nullptr;
+	}
+	return true;
 }

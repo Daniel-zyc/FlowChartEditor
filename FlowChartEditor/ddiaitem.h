@@ -1,5 +1,7 @@
 #pragma once
+
 #include "dshapebase.h"
+
 #include <QPainter>
 #include <QPolygonF>
 #include <QRectF>

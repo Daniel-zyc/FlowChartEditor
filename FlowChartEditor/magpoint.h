@@ -1,7 +1,5 @@
 #pragma once
 
-#include "global.h"
-
 #include <QGraphicsItem>
 #include <QPointF>
 
@@ -13,6 +11,7 @@ class DLineBase;
 class MagPoint
 {
 public:
+	// 构造函数，需要指明挂载到的父图形项
 	MagPoint(QGraphicsItem* parent);
 	// 指定在父图形项坐标系的坐标点
 	MagPoint(const QPointF &p, QGraphicsItem* parent);
@@ -21,43 +20,50 @@ public:
 
 	~MagPoint();
 
-	// 更新与其相连的所有 DLineBase 的位置
-	void updateLines() const;
+	// 更新与其相连的所有 DLineBase 的位置（如果 scenePos 不变则不刷新）
+	void updateAllLinkLines();
+	// 更新其在画布上的位置，如果卫视发生改变，则刷新相连图形
+	void updateScenePos();
 
 	// 添加线条指针
 	void addLine(DLineBase* line);
 	// 删除线条指针
 	void deleteLine(DLineBase* line);
 
+	// 设置在父坐标系下的位置
+	void setPos(const QPointF &p);
+
 	// 删除所有线条
-	void deleteAllLines();
+	void unlinkAllLines();
 
 	// 将自己在父图形项中的坐标映射到 item 的坐标系
 	QPointF mapToItem(QGraphicsItem *item);
+	QPointF mapToScene();
 
 	// pos 表示在父图形项坐标系中的坐标
-	QPointF pos = {0, 0};
+	QPointF pos;
+	// 记录上一次刷新时的 scenePos，如果不改变则不刷新
+	QPointF scenePos;
 	// parent 指向挂载到的父图形项
 	QGraphicsItem *parent = nullptr;
-	// lines 存储与其相连的 DLineBase 的指针
-	QList<DLineBase*> *lines = nullptr;
 
+private:
+	// lines 存储与其相连的 DLineBase 的指针
+	QSet<DLineBase*> *lines = nullptr;
+
+public:
     //=====================================
     /**
      * @brief serialize
      * @param out
      * 序列化：this地址 -> parent地址 -> lines大小 -> lines地址
      */
-    void serialize(QDataStream &out) const;
+	void serialize(QDataStream &out) const;
     /**
-     * @brief deserialize
+	 * @brief deserialize
      * @param in
      * 反序列化: -> this地址 -> parent地址 -> lines大小 -> lines地址
-     */
-    void deserialize(QDataStream &in);
-
-    void linkParent(QGraphicsItem *parent);
-
-    void linkLine(DLineBase* line);
+	 */
+	void deserialize(QDataStream &in, QGraphicsItem* fa);
 };
 

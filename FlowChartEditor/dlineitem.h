@@ -28,12 +28,11 @@ protected:
 	void updateLine() override;
 
 public:
-    /**
-     * @brief serialize
-     * @param out
-     * 序列化：父类DLineBase序列化
-     */
-    void serialize(QDataStream &out) const override;
-
-    void deserialize(QDataStream &in) override;
+	/**
+	 * @brief serialize
+	 * @param out
+	 * 序列化：父类 DLineBase 序列化
+	 */
+	void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
 };

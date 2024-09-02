@@ -100,15 +100,12 @@ private:
 	int interactType = DConst::NONE;
 
 public:
-    /**
-     * @brief serialize
-     * @param out
-     * 序列化：DAbstractBase -> textPtr
-     */
-    void serialize(QDataStream &out) const override;
-
-    void deserialize(QDataStream &in) override;
-
-    void linkTextItem(DTextItem* item);
+	/**
+	 * @brief serialize
+	 * @param out
+	 * 序列化：DAbstractBase -> textPtr
+	 */
+	virtual void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
+	virtual bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
 };
 

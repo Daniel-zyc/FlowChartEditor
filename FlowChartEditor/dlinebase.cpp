@@ -76,18 +76,32 @@ void DLineBase::setInsertItem()
 	sizePointId = DConst::ED - 1;
 }
 
-void DLineBase::linkBegin(MagPoint *mp)
+void DLineBase::linkBeginUpdate(MagPoint *mp)
 {
+	if(!mp) return;
 	beginMag = mp;
 	mp->addLine(this);
 	updatePosition();
 }
 
-void DLineBase::linkEnd(MagPoint *mp)
+void DLineBase::linkEndUpdate(MagPoint *mp)
 {
+	if(!mp) return;
 	endMag = mp;
 	mp->addLine(this);
 	updatePosition();
+}
+
+void DLineBase::linkBegin(MagPoint *mp)
+{
+	if(!mp) return;
+	beginMag = mp; mp->addLine(this); beginPoint = mp->mapToItem(this);
+}
+
+void DLineBase::linkEnd(MagPoint *mp)
+{
+	if(!mp) return;
+	endMag = mp; mp->addLine(this); endPoint = mp->mapToItem(this);
 }
 
 void DLineBase::unlinkBegin()
@@ -95,7 +109,7 @@ void DLineBase::unlinkBegin()
 	if(beginMag)
 	{
 		beginPoint = beginMag->mapToItem(this);
-		if(beginMag) beginMag->deleteLine(this);
+		beginMag->deleteLine(this);
 		beginMag = nullptr;
 	}
 	updatePosition();
@@ -112,22 +126,39 @@ void DLineBase::unlinkEnd()
 	updatePosition();
 }
 
+void DLineBase::unlinkMag(MagPoint* mp)
+{
+	if(beginMag == mp)
+	{
+		beginPoint = beginMag->mapToItem(this);
+		beginMag = nullptr;
+	}
+	if(endMag == mp)
+	{
+		endPoint = endMag->mapToItem(this);
+		endMag = nullptr;
+	}
+	updatePosition();
+}
+
 void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 {
 	switch(id)
 	{
 		case DConst::ST - 1 :
-			if(mp) linkBegin(mp);
+			if(mp && mp != endMag) linkBeginUpdate(mp);
 			else
 			{
+				// qDebug() << "unlinkBegin";
 				unlinkBegin();
 				beginPoint = p;
 			}
 			break;
 		case DConst::ED - 1 :
-			if(mp) linkEnd(mp);
+			if(mp && mp != beginMag) linkEndUpdate(mp);
 			else
 			{
+				// qDebug() << "unlinkEnd";
 				unlinkEnd();
 				endPoint = p;
 			}
@@ -138,7 +169,6 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 void DLineBase::updatePosition()
 {
-	// qDebug() << beginMag << " " << endMag;
 	if(beginMag) beginPoint = beginMag->mapToItem(this);
 	if(endMag) endPoint = endMag->mapToItem(this);
 	sizes[DConst::ST - 1] = beginPoint;
@@ -160,30 +190,97 @@ void DLineBase::setEndArrowType(int type)
 	update();
 }
 
-//===========================================
+void DLineBase::drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize)
+{
 
-void DLineBase::serialize(QDataStream &out) const{
-    qDebug() << "line base serializing";
-    DAbstractBase::serialize(out);
 
-    out << reinterpret_cast<qintptr>(this);
+    QLineF line(startPoint, endPoint);
+    double angle = atan2(line.dy(), line.dx());
 
-	out << beginArrowType << endArrowType;
-	out << beginPoint << endPoint;
-	out << brush() << pen();
+    QPointF arrowP1 = endPoint - QPointF(cos(angle + DConst::PI / 6) * arrowSize,
+                                         sin(angle + DConst::PI / 6) * arrowSize);
+    QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
+                                         sin(angle - DConst::PI / 6) * arrowSize);
+
+    switch (arrowType) {
+    case DConst::NONE: {
+        break;
+    }
+    case DConst::ARROW: {
+        QPolygonF arrow;
+        arrow << endPoint << arrowP1 << arrowP2;
+        painter->drawPolygon(arrow);
+        break;
+    }
+    case DConst::OPEN_ARROW: {
+        painter->drawLine(endPoint, arrowP1);
+        painter->drawLine(endPoint, arrowP2);
+        break;
+    }
+    case DConst::DOVETAIL_ARROW: {
+        QPointF dovetailTip = endPoint - QPointF(cos(angle) * arrowSize,
+                                                sin(angle) * arrowSize);
+        QPointF dovetailP1 = arrowP1 - QPointF(cos(angle) * arrowSize / 2,
+                                              sin(angle) * arrowSize / 2);
+        QPointF dovetailP2 = arrowP2 - QPointF(cos(angle) * arrowSize / 2,
+                                              sin(angle) * arrowSize / 2);
+        QPolygonF dovetail;
+        dovetail << endPoint << dovetailP1 << dovetailTip << dovetailP2;
+        painter->drawPolygon(dovetail);
+        break;
+    }
+    case DConst::DIAMOND_ARROW: {
+        QPointF diamondTip = endPoint - QPointF(cos(angle) * arrowSize,
+                                                sin(angle) * arrowSize);
+        QPointF diamondP1 = endPoint - QPointF(cos(angle + DConst::PI / 4) * arrowSize / sqrt(2),
+                                             sin(angle + DConst::PI / 4) * arrowSize / sqrt(2));
+        QPointF diamondP2 = endPoint - QPointF(cos(angle - DConst::PI / 4) * arrowSize / sqrt(2),
+                                             sin(angle - DConst::PI / 4) * arrowSize / sqrt(2));
+        QPolygonF diamond;
+        diamond << endPoint << diamondP1 << diamondTip << diamondP2;
+        painter->drawPolygon(diamond);
+        break;
+    }
+    case DConst::ROUND_ARROW: {
+        painter->drawEllipse(endPoint, arrowSize / 2, arrowSize / 2);
+        break;
+    }
+    default: break;
+    }
 }
 
-void DLineBase::deserialize(QDataStream &in){
-    qDebug() << "line base deserializing";
-    DAbstractBase::deserialize(in);
+void DLineBase::setBeginPoint(QPointF p)
+{
+	p = mapFromScene(p);
+	sizeToPoint(p, DConst::ST-1);
+}
 
-	qintptr thisPtr; in >> thisPtr;
-    Serializer::instance().PtrToLineBase.insert(thisPtr, this);
+void DLineBase::setEndPoint(QPointF p)
+{
+	p = mapFromScene(p);
+	sizeToPoint(p, DConst::ED-1);
+}
+
+//===========================================
+
+void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DAbstractBase::serialize(out, fa);
+
+	out << beginPoint << endPoint;
+	out << (qintptr)beginMag << (qintptr)endMag;
+	out << beginArrowType << endArrowType;
+}
+
+bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DAbstractBase::deserialize(in, fa)) return false;
+
+	in >> beginPoint >> endPoint;
+	qintptr beginPtr, endPtr; in >> beginPtr >> endPtr;
+	linkBegin(Serializer::instance().ptrToMag[beginPtr]);
+	linkEnd(Serializer::instance().ptrToMag[endPtr]);
 
 	in >> beginArrowType >> endArrowType;
-	in >> beginPoint >> endPoint;
-	updatePosition();
-
-	QBrush qb; in >> qb; setBrush(qb);
-	QPen qp; in >> qp; setPen(qp);
+	return true;
 }

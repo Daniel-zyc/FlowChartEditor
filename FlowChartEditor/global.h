@@ -5,27 +5,11 @@
 #include <QBrush>
 #include <QPen>
 
-// 工具函数
-namespace DTool
-{
-	// 从角度转换到弧度
-	qreal degToRad(qreal deg);
+// 全局变量，记录图形是否发生了修改
+extern int SHOT_STATE;
 
-	// 从弧度转换到角度
-	qreal radToDeg(qreal rad);
-
-	// 将角度规范到 [0, 360]
-	qreal degMod(qreal deg);
-
-	// 两点距离
-	qreal dist(const QPointF& p1, const QPointF& p2);
-
-	// 平方
-	qreal sq(qreal x);
-
-	// p 是否在以 o 为半径 r 为圆心的圆中
-	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
-};
+// 序列化时用来判断某图形是否参与序列化
+extern QSet<int> registeredTypes;
 
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
 constexpr qreal sizePointRadius = 5;
@@ -55,8 +39,11 @@ const QPen magPointColidePen(Qt::gray, Qt::SolidLine);
 const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
 const QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
 
-const QBrush selectRectBrush = QBrush(Qt::transparent, Qt::SolidPattern);
+const QBrush selectRectBrush = QBrush(Qt::NoBrush);
 const QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
+
+const QBrush groupRectBrush = QBrush(Qt::NoBrush);
+const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -72,10 +59,11 @@ enum UserTypes
 	DRoundRectItemType = QGraphicsItem::UserType + 8,
 	DLineItemType = QGraphicsItem::UserType + 9,
 	DTriItemType = QGraphicsItem::UserType + 10,
-    DParallegramItemType = QGraphicsItem::UserType + 11,
-    DDocItemType = QGraphicsItem::UserType + 12,
-	DDiaItemType=QGraphicsItem::UserType + 13,
-	DTrapItemType=QGraphicsItem::UserType + 14
+	DParallegramItemType = QGraphicsItem::UserType + 11,
+	DDocItemType = QGraphicsItem::UserType + 12,
+	DDiaItemType = QGraphicsItem::UserType + 13,
+	DTrapItemType = QGraphicsItem::UserType + 14,
+	DItemGroupType = QGraphicsItem::UserType + 15
 };
 
 // 常量
@@ -136,7 +124,56 @@ namespace DConst
 		AFTER_INSERT_SHAPE = 4,
 		INSERT_TEXT = 5,
 		AFTER_INSERT_TEXT = 6
-	};
+    };
+
+    enum PasteShift
+    {
+		SHIFT_X = 30,
+		SHIFT_Y = 30
+    };
+
+    enum DataStreamVersion
+    {
+        DATA_STREAM_VERSION = QDataStream::Qt_6_7
+    };
+
+    enum RedoAndUndoStackSize
+    {
+        MAX_UNDO_STACK_SIZE = 25,
+        MAX_REDO_STACK_SIZE = 25
+    };
+
+    enum ITEM_CHANGE
+    {
+        CHANGED = 0,
+        UNCHANGED = 1
+    };
 };
 
-const int DataStreamVersion = QDataStream::Qt_6_7;
+// 工具函数
+namespace DTool
+{
+	// 从角度转换到弧度
+	qreal degToRad(qreal deg);
+
+	// 从弧度转换到角度
+	qreal radToDeg(qreal rad);
+
+	// 将角度规范到 [0, 360]
+	qreal degMod(qreal deg);
+
+	// 两点距离
+	qreal dist(const QPointF& p1, const QPointF& p2);
+
+	// 平方
+	qreal sq(qreal x);
+
+	// p 是否在以 o 为半径 r 为圆心的圆中
+	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
+
+	// 将要被拷贝的图形进行一定的平移操作
+	void moveItems(const QList<QGraphicsItem*> &items);
+
+	// 过滤掉所有 parent 存在于列表中的元素
+	void filterRootItem(QList<QGraphicsItem*> &items);
+};

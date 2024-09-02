@@ -5,146 +5,163 @@
 #include "droundrectitem.h"
 #include "dlineitem.h"
 #include "dtriitem.h"
+#include "ddocitem.h"
+#include "dtrapitem.h"
 
-void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
-    QList<QGraphicsItem *> items = scene->items();
-    // 输出数量
-    qint32 size = 0;
-    for (QGraphicsItem *item : items) {
-        if (dynamic_cast<DAbstractBase*>(item)) {
-            size++;
-        }
-    }
-    out << size;
-    for (QGraphicsItem* item : items) {
-        if (auto* abstractItem = dynamic_cast<DAbstractBase*>(item)) {
-			out << abstractItem->type();
-            abstractItem->serialize(out);
-        } else if(auto* abstractItem = dynamic_cast<MagPoint*>(item)){
-            qDebug() << "serializing MagPoint";
-        }else {
-            qDebug() << "Item is not derived from DAbstractBase";
-        }
-    }
+void Serializer::serializeEmptyItems(QDataStream &out){
+	out << (qint32)0 << (qint32)0 << (qint32)0;
 }
 
-void Serializer::printMapSize(){
-    qDebug() << "size of six map"
-             << PtrToMagPoint.size()
-             << PtrToLineBase.size()
-             << PtrToQGraphicsItem.size()
-             << MagPointToLinesPtr.size()
-             << MagPointToParentPtr.size()
-             << DAbstractBaseToMagsPtr.size();
+void Serializer::filterSerializableItem(QList<QGraphicsItem*>& items)
+{
+	QSet<QGraphicsItem*> S;
+	for (QGraphicsItem* item : items) S.insert(item);
+	for (int i = 0; i < items.size(); i++)
+	{
+		if(items[i] == nullptr || S.contains(items[i]->parentItem())
+		   || !registeredTypes.contains(items[i]->type()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+		}
+	}
 }
 
-void Serializer::deserializeSceneItems(QDataStream &in, QGraphicsScene *scene) {
-    scene->clear();  // 清除现有图形项
+void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
+{
+	qDebug() << "开始对象序列化";
+	qDebug() << "传入对象数量: " << items.size();
 
-    qint32 size;
-    in >> size;
-    qDebug() << "反序列化项的数量:" << size;
+	filterSerializableItem(items);
 
-    for (qint32 i = 0; i < size; ++i) {
-        int type;
-        in >> type;
-        QGraphicsItem *item = nullptr;
+	qDebug() << "过滤不参与序列化以及父对象也会被序列化的元素后数量: " << items.size();
 
-        switch (type) {
-        case DTextItem::Type:
-            item = new DTextItem();
-            break;
-        case DRectItem::Type:
-            item = new DRectItem();
-            break;
-        case DEllItem::Type:
-            item = new DEllItem();
-            break;
-        case DRoundRectItem::Type:
-            item = new DRoundRectItem();
-            break;
-        case DLineItem::Type:
-            item = new DLineItem();
-            break;
-        case DTriItem::Type:
-            item = new DTriItem();
-            break;
-        default:
-            qDebug() << "unknown type:" << type;
-            continue;
-        }
+	QList<DShapeBase*> shapes;
+	QList<DTextItem*> texts;
+	QList<DLineBase*> lines;
 
-        if (item) {
-            // 反序列化图形项的状态
-            DAbstractBase *abstractItem = dynamic_cast<DAbstractBase*>(item);
-			if (abstractItem) {
-				abstractItem->deserialize(in);
-            } else {
-                delete item;
-                qDebug() << "fail to deserialize";
-            }
-        }
-        // printMapSize();
-    }
+	for (QGraphicsItem *item : items)
+	{
+		if(dynamic_cast<DTextItem*>(item))
+		{
+			texts.push_back(dynamic_cast<DTextItem*>(item));
+			continue;
+		}
+		if(dynamic_cast<DShapeBase*>(item))
+		{
+			shapes.push_back(dynamic_cast<DShapeBase*>(item));
+			continue;
+		}
+		if(dynamic_cast<DLineBase*>(item))
+		{
+			lines.push_back(dynamic_cast<DLineBase*>(item));
+			continue;
+		}
+	}
 
-	linkAll();
+	qDebug() << "序列化中 shape 的数量: " << shapes.size();
+	out << (qint32)shapes.size();
+	for (DShapeBase *shape : shapes)
+	{
+		out << (qint32)shape->type();
+		shape->serialize(out);
+	}
 
-    for(auto it = PtrToQGraphicsItem.cbegin(); it != PtrToQGraphicsItem.cend(); ++it){
-		qDebug() << it.value()->pos();
-		scene->addItem(it.value());
-    }
+	qDebug() << "序列化中 text 的数量: " << texts.size();
+	out << (qint32)texts.size();
+	for (DTextItem *text : texts) text->serialize(out);
 
-	// qDebug() << scene;
+	qDebug() << "序列化中 line 的数量: " << lines.size();
+	out << (qint32)lines.size();
+	for (DLineBase *line : lines)
+	{
+		out << (qint32)line->type();
+		line->serialize(out);
+	}
 }
 
+QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
+{
+	qDebug() << "反序列化开始";
 
+	clearMap();
 
-void Serializer::linkAll(){
+	qint32 shapeSize, textSize, lineSize;
+	QList<QGraphicsItem* > data;
 
-    for(auto it = MagPointToLinesPtr.cbegin(); it != MagPointToLinesPtr.cend(); ++it){
-        MagPoint* magPoint = it.key();
-        qintptr linePtr = it.value();
-        if(PtrToLineBase.contains(linePtr)){
-            magPoint->linkLine(PtrToLineBase[linePtr]);
-        }
-    }
+	int tmpcnt;
 
-	// for(auto it = MagPointToParentPtr.cbegin(); it != MagPointToParentPtr.cend(); ++it){
-	//     MagPoint * magPoint = it.key();
-	//     qintptr parentPtr = it.value();
-	//     if(PtrToQGraphicsItem.contains(parentPtr)){
-	//         magPoint->linkParent(PtrToQGraphicsItem[parentPtr]);
-	//     }
-	// }
+	in >> shapeSize;
+	qDebug() << "读取到的 shape 数量: " << shapeSize;
+	for(tmpcnt = 0; shapeSize; shapeSize--)
+	{
+		qint32 type; in >> type;
 
-	// for(auto it = DAbstractBaseToMagsPtr.cbegin(); it != DAbstractBaseToMagsPtr.cend(); ++it){
-	//     DAbstractBase * dabstractBase = it.key();
-	//     qintptr magPtr = it.value();
-	//     if(PtrToMagPoint.contains(magPtr)){
-	//         dabstractBase->linkMags(PtrToMagPoint[magPtr]);
-	//     }
-	// }
+		if(!registeredTypes.contains(type)) continue;
 
-	// qDebug() << DShapeBaseToTextItem;
-	// qDebug() << PtrToTextItem;
+		DShapeBase *shape = nullptr;
+		switch(type) {
+			case DRectItemType: shape = new DRectItem(); break;
+			case DRoundRectItemType: shape = new DRoundRectItem(); break;
+			case DEllItemType: shape = new DEllItem(); break;
+		}
+		if(!shape || !shape->deserialize(in))
+		{
+			qDebug() << "shape 序列化失败";
+			delete shape;
+		}
+		data.push_back(shape);
+		tmpcnt++;
+	}
+	qDebug() << "成功序列化 shape 数量: " << tmpcnt;
 
-    for(auto it = DShapeBaseToTextItem.cbegin(); it != DShapeBaseToTextItem.cend(); ++it){
-        DShapeBase * dshapeBase = it.key();
-        qintptr textItemPtr = it.value();
-        if(PtrToTextItem.contains(textItemPtr)){
-            dshapeBase->linkTextItem(PtrToTextItem[textItemPtr]);
-        }
-    }
+	tmpcnt = 0;
+	in >> textSize;
+	qDebug() << "读取到的 text 数量: " << textSize;
+	for(tmpcnt = 0; textSize; textSize--)
+	{
+		DTextItem *text = new DTextItem();
+		if(!text->deserialize(in))
+		{
+			qDebug() << "text 序列化失败";
+			delete text;
+		}
+		data.push_back(text);
+		tmpcnt++;
+	}
+	qDebug() << "成功序列化 text 数量: " << tmpcnt;
 
-    return;
+	in >> lineSize;
+	qDebug() << "读取到的 line 数量: " << lineSize;
+	for(tmpcnt = 0; lineSize; lineSize--)
+	{
+		qint32 type; in >> type;
+
+		if(!registeredTypes.contains(type)) continue;
+
+		DLineBase *line = nullptr;
+		switch(type) {
+			case DLineItemType: line = new DLineItem(); break;
+		}
+		if(!line || !line->deserialize(in))
+		{
+			qDebug() << "line 序列化失败";
+			delete line;
+		}
+		data.push_back(line);
+		tmpcnt++;
+	}
+	qDebug() << "成功序列化 line 数量: " << tmpcnt;
+
+	return data;
 }
 
-void Serializer::clearMap(){
-    PtrToMagPoint.clear();
-    PtrToLineBase.clear();
-    PtrToQGraphicsItem.clear();
+void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene)
+{
+	serializeItems(out, scene->items());
+}
 
-    MagPointToLinesPtr.clear();
-    MagPointToParentPtr.clear();
-    DAbstractBaseToMagsPtr.clear();
+void Serializer::clearMap()
+{
+	ptrToMag.clear(); ptrToMag[0] = nullptr;
 }

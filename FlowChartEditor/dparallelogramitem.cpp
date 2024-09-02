@@ -1,10 +1,10 @@
 #include "dparallelogramitem.h"
 #include "magpoint.h"
 
-DParallegramItem::DParallegramItem(QGraphicsItem *parent)
+DParallelogramItem::DParallelogramItem(QGraphicsItem *parent)
     : DShapeBase(parent) {}
 
-DParallegramItem::DParallegramItem(qreal w, qreal h, QGraphicsItem *parent)
+DParallelogramItem::DParallelogramItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase(parent)
 {
     skew = w /4 ;
@@ -18,7 +18,7 @@ DParallegramItem::DParallegramItem(qreal w, qreal h, QGraphicsItem *parent)
     setRect(QRectF(-w/2, -h/2, w, h));
 }
 
-QPainterPath DParallegramItem::addParallelogram(const QRectF &rect, qreal skew) const
+QPainterPath DParallelogramItem::addParallelogram(const QRectF &rect, qreal skew) const
 {
     QPainterPath path;
 
@@ -36,7 +36,7 @@ QPainterPath DParallegramItem::addParallelogram(const QRectF &rect, qreal skew) 
     return path;
 }
 
-void DParallegramItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DParallelogramItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -47,19 +47,19 @@ void DParallegramItem::paintShape(QPainter *painter, const QStyleOptionGraphicsI
     painter->drawPath(parallelogramPath);
 }
 
-QRectF DParallegramItem::sizeRect() const
+QRectF DParallelogramItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DParallegramItem::shapeNormal() const
+QPainterPath DParallelogramItem::shapeNormal() const
 {
     QPainterPath pth;
     pth = addParallelogram(rect, skew);
     return pth;
 }
 
-void DParallegramItem::updateMagPoint()
+void DParallelogramItem::updateMagPoint()
 {
     double pos = rect.height() / 2 * (1.0 * rect.width() / skew - 1);
     (*mags)[0]->pos = {rect.left() + skew / 2, 0};
@@ -76,19 +76,19 @@ void DParallegramItem::updateMagPoint()
     }
 }
 
-void DParallegramItem::updateModiPoint()
+void DParallelogramItem::updateModiPoint()
 {
     skew = qMin(skew, rect.width());
     modis[0] = {rect.left() + skew, rect.top()};
     modis[1] = {rect.right() - skew, rect.bottom()};
 }
 
-void DParallegramItem::sizeToRect(QRectF nrect)
+void DParallelogramItem::sizeToRect(QRectF nrect)
 {
     setRect(nrect);
 }
 
-void DParallegramItem::modiToPoint(QPointF p, int id)
+void DParallelogramItem::modiToPoint(QPointF p, int id)
 {
     switch(id)
     {
@@ -106,10 +106,27 @@ void DParallegramItem::modiToPoint(QPointF p, int id)
     return;
 }
 
-void DParallegramItem::setRect(const QRectF &nrect)
+void DParallelogramItem::setRect(const QRectF &nrect)
 {
     rect = nrect;
     sizeRectUpdated();
     updateMagPoint();
     updateModiPoint();
 }
+
+//====================================
+
+// void DParallelogramItem::serialize(QDataStream &out) const{
+//     qDebug() << "DParallegramItem serializing";
+//     DShapeBase::serialize(out);
+
+//     out << rect << skew;
+// }
+
+// void DParallelogramItem::deserialize(QDataStream &in){
+//     qDebug() << "DParallegramItem deserializing";
+//     DShapeBase::deserialize(in);
+
+//     in >> rect >> skew;
+//     setRect(rect);
+// }

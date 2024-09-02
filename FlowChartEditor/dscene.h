@@ -1,7 +1,7 @@
 #pragma once
 
 #include "global.h"
-#include "dshapebase.h"
+#include "dlineitem.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -9,6 +9,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
+
+class DAbstractBase;
+class MagPoint;
 
 class DScene : public QGraphicsScene
 {
@@ -21,6 +24,8 @@ public:
 	DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
 
 public:
+    QMenu *menu = nullptr;
+
 	void resetRotation() { setRotation(0.0); }
 	void setRotation(qreal angle = 0.0);
 	void rotateSelected(qreal deg = DScene::defaultRotateDelta);
@@ -51,13 +56,30 @@ public:
     void addTrapItem();
     void addParallegramItem();
     void addDocItem();
+    void addPolyLineItem();
 
 	void combineSelected();
 	void seperateSelected();
 
+    void copySelectedItems();
+    void pasteItems();
+
+	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
 
+	DAbstractBase* getMagItemOnPoint(QPointF p);
+	DAbstractBase* getInterItemOnPoint(QPointF p);
+
 	void setMenu(QMenu *m) { menu = m; }
+
+    void clear();
+    void drawItems(QList<QGraphicsItem*> items);
+
+    QList<DLineBase*> getSelectedLine();
+    void changeLineType(Qt::PenStyle linestyle);
+    void changeEndArrow(int endArrowType);
+    void changeLineWidth(double width);
+    void setBg(QString path);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -75,6 +97,9 @@ private:
 
 	DAbstractBase *showMagedItem = nullptr;
 	DAbstractBase *modifiedShape = nullptr;
-	QMenu *menu = nullptr;
+
+    void shot();
+
+    QByteArray copyData;
 };
 

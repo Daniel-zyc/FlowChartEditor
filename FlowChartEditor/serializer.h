@@ -6,7 +6,6 @@
 #include "magpoint.h"
 #include "dlinebase.h"
 #include "drectitem.h"
-#include "dpolygonbase.h"
 
 /**
  * @brief The Serializer class
@@ -20,39 +19,21 @@ public:
         return instance;
     }
 
-    // 原地址 -- MagPoint
-    QMap<qintptr, MagPoint*> PtrToMagPoint;
-    // 原地址 -- LineBase
-    QMap<qintptr, DLineBase*> PtrToLineBase;
-    // 原地址 -- QGraphicsItem
-    QMap<qintptr, QGraphicsItem*> PtrToQGraphicsItem;
-    // 原地址 -- TextItem
-    QMap<qintptr, DTextItem*> PtrToTextItem;
+	QMap<qintptr, MagPoint*> ptrToMag;
 
+	void serializeItems(QDataStream &out, QList<QGraphicsItem *> items);
+	QList<QGraphicsItem *> deserializeItems(QDataStream &in);
 
-    // MagPoint -- lines原地址地址
-    QMap<MagPoint*, qintptr> MagPointToLinesPtr;
-    // MagPoint -- parent原地址
-    QMap<MagPoint*, qintptr> MagPointToParentPtr;
-    // DAbstractBase -- Mags原地址
-    QMap<DAbstractBase*, qintptr> DAbstractBaseToMagsPtr;
-    // DShapeBase -- TextItem原地址
-    QMap<DShapeBase*, qintptr> DShapeBaseToTextItem;
-
+    void serializeEmptyItems(QDataStream &out);
     void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
-
-    void deserializeSceneItems(QDataStream &in, QGraphicsScene *scene);
 
 private:
     Serializer() = default;
     Serializer(const Serializer&) = delete;
     Serializer& operator=(const Serializer&) = delete;
 
-    void linkAll();
-
-    void clearMap();
-
-    void printMapSize();
+	void filterSerializableItem(QList<QGraphicsItem*>& items);
+	void clearMap();
 };
 
 #endif // SERIALIZER_H

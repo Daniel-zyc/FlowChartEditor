@@ -17,6 +17,7 @@ SOURCES += \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
+    dpolylineitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -32,10 +33,12 @@ SOURCES += \
     saveandloadmanager.cpp \
     serializer.cpp \
     dparallelogramitem.cpp \
-    ddocitem.cpp
+    ddocitem.cpp \
+    undomanager.cpp
 
 HEADERS += \
     dabstractbase.h \
+    dallitems.h \
     ddiaitem.h \
     dellitem.h \
     dfinddialog.h \
@@ -43,6 +46,7 @@ HEADERS += \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
+    dpolylineitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \
@@ -57,7 +61,8 @@ HEADERS += \
     saveandloadmanager.h \
     serializer.h \
     dparallelogramitem.h \
-    ddocitem.h
+    ddocitem.h \
+    undomanager.h
 
 FORMS += \
     mainwindow.ui
@@ -68,4 +73,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    icon.qrc
+    icon.qrc \
+    qss.qrc

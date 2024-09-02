@@ -20,11 +20,21 @@ public:
     QPainterPath shapeNormal() const override;
     void sizeToRect(QRectF nrect) override;
     void modiToPoint(QPointF p, int id) override;
-	void setRect(const QRectF &nrect);
 
 private:
+    void setRect(const QRectF &nrect);
     void updateMagPoint();
     QPainterPath addDocShape(const QRectF &rec) const;
 
     QRectF rect = QRectF(0, 0, 0, 0);
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+     */
+	// void serialize(QDataStream &out) const override;
+
+	// void deserialize(QDataStream &in) override;
 };
