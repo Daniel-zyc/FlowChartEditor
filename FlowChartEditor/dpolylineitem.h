@@ -37,14 +37,20 @@ protected:
     void updateModiPoint();
     //获取折线长短边方向
     int getPolyLineDirection() const;
+    //获取实际绘制方向
+    int getPaintDirection() const;
     //获取碰撞方向
-    int getCollideDirection(QRectF item,QPointF center);
+    int getCollideDirection(QRectF item,QPointF center,QPointF point);
     //获取另一点与这个点的相对位置
     int getRelativePosition(QPointF cur,QPointF another);
+    //更新两中点坐标
+    //void updateBeginMidPoint();
+    //void updateEndMidPoint();
     //获取线头连线的图形是否有碰撞
     //int HasItemCollision(QRectF st_item,QRectF ed_item);
     //调整折线形
     void updatePolyLineType();
+    //获取调整线形时的midPoint位置
     QPointF getBoundingPoint(int point,int type);
     void updateOffsets(int st_dir,int ed_dir);
 
@@ -55,7 +61,9 @@ private:
     double ed_x_offset = 0, ed_y_offset = 0;
     //中点位置
     double mid_x_shift = 0, mid_y_shift = 0;
-    //中点位置记录；
+    //double cnt = 0;
+    //QPointF st_mid_point = {0,0}, ed_mid_point = {0,0};
+    //中点位置暂时记录
     QPointF midPoint = {0,0};
     int modis_num = 1;
     //折线类型
