@@ -460,6 +460,8 @@ QList<DLineBase *> DScene::getSelectedLine()
     }
 
     return lines;
+}
+
 void DScene::drawItems(QList<QGraphicsItem*> items){
     for(QGraphicsItem * item : items)
         if(item->parentItem() == nullptr)
