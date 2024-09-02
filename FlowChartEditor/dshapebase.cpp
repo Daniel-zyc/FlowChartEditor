@@ -26,7 +26,7 @@ void DShapeBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem
 {
 	paintSelectRect(painter, option, widget);
 	DAbstractBase::paintSelected(painter, option, widget);
-	paintRotPoint(painter, option, widget);
+	if(isRotateable) paintRotPoint(painter, option, widget);
 }
 
 void DShapeBase::paintSelectRect(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -60,7 +60,7 @@ int DShapeBase::checkInterPoint(QPointF p) const
 	if(!isSelected()) return DConst::NONE;
 	if(checkModiPoint(p) != -1) return DConst::MODI;
 	if(checkSizePoint(p) != -1) return DConst::SIZE;
-	if(checkRotPoint(p)) return DConst::ROT;
+	if(isRotateable && checkRotPoint(p)) return DConst::ROT;
 	return DConst::NONE;
 }
 
@@ -70,7 +70,7 @@ int DShapeBase::setInterPoint(QPointF p)
 	if(!isSelected()) return interactType = DConst::NONE;
 	if(setModiPoint(p)) return interactType = DConst::MODI;
 	if(setSizePoint(p)) return interactType = DConst::SIZE;
-	if(setRotPoint(p)) return interactType = DConst::ROT;
+	if(isRotateable && setRotPoint(p)) return interactType = DConst::ROT;
 	return interactType = DConst::NONE;
 }
 

@@ -108,6 +108,20 @@ void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
 	sizeToPoint(p, sizePointId, mp);
 }
 
+void DAbstractBase::setRotateable(bool state)
+{
+	if(state == isRotateable) return;
+	prepareGeometryChange();
+	isRotateable = state;
+	update();
+}
+
+void DAbstractBase::setScaleable(bool state)
+{
+	if(state == isScaleable) return;
+	isScaleable = state;
+}
+
 int DAbstractBase::checkModiPoint(QPointF p) const
 {
 	qreal r = modiPointRadius;

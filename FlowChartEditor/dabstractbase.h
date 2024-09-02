@@ -98,7 +98,14 @@ protected:
 	// 将选中的大小点 id，设置到 p 位置，p 为 item 坐标系下
 	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
-	
+
+	virtual void setRotateable(bool state);
+	virtual void setScaleable(bool state);
+
+public:
+	bool isScaleable = true;
+	bool isRotateable = true;
+
 protected:
 	// 图形所具有的磁吸点
 	QList<MagPoint*> *mags = nullptr;
