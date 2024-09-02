@@ -657,11 +657,11 @@ void MainWindow::loadFile(){
 }
 
 void MainWindow::copy(){
-    SaveAndLoadManager::instance().copySelectedItems();
+    scene->copySelectedItems();
 }
 
 void MainWindow::paste(){
-    SaveAndLoadManager::instance().pasteSeletedItems();
+    scene->pasteItems();
 }
 
 void MainWindow::redo(){

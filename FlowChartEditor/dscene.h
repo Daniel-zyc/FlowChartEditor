@@ -59,6 +59,9 @@ public:
 	void combineSelected();
 	void seperateSelected();
 
+    void copySelectedItems();
+    void pasteItems();
+
 	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
 
@@ -68,6 +71,7 @@ public:
 	void setMenu(QMenu *m) { menu = m; }
 
     void clear();
+    void drawItems(QList<QGraphicsItem*> items);
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(DConst::LineArrowType endArrowType);
@@ -90,5 +94,7 @@ private:
 	DAbstractBase *modifiedShape = nullptr;
 
     void shot();
+
+    QByteArray copyData;
 };
 
