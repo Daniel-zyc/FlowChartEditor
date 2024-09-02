@@ -203,7 +203,7 @@ void DAbstractBase::unLinkAllLines()
 
 void DAbstractBase::serialize(QDataStream &out) const{
     // qDebug() << "abstract base serializing";
-	out << reinterpret_cast<qintptr>(this);
+    // out << reinterpret_cast<qintptr>(this);
 	// qDebug() << pos();
 	out << pos() << rotation() << scale();
 	out << brush() << pen();
@@ -219,7 +219,7 @@ void DAbstractBase::serialize(QDataStream &out) const{
 void DAbstractBase::deserialize(QDataStream &in){
     // qDebug() << "abstract base deserializing";
 
-	qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
+    // qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
 
 	QPointF pos; in >> pos; setPos(pos);
 	qreal rot; in >> rot; setRotation(rot);

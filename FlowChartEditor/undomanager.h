@@ -28,7 +28,7 @@ public:
     void clearStack();
 
 private:
-    UndoManager() = default;
+    UndoManager();
     UndoManager(const UndoManager&) = delete;
     UndoManager& operator=(const UndoManager&) = delete;
 

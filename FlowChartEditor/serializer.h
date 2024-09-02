@@ -6,7 +6,6 @@
 #include "magpoint.h"
 #include "dlinebase.h"
 #include "drectitem.h"
-#include "dpolygonbase.h"
 
 /**
  * @brief The Serializer class
@@ -20,17 +19,11 @@ public:
         return instance;
     }
 
-    // 原地址 -- LineBase
-    QMap<qintptr, DLineBase*> PtrToLineBase;
-    // 原地址 -- QGraphicsItem
-    QMap<qintptr, QGraphicsItem*> PtrToQGraphicsItem;
     // 原地址 -- TextItem
     QMap<qintptr, DTextItem*> PtrToTextItem;
     // 原地址 -- MagPoint
     QMap<qintptr, MagPoint*> PtrToMagPoint;
 
-    // MagPoint -- lines原地址
-    QMap<MagPoint*, qintptr> MagPointToLinesPtr;
     // DShapeBase -- TextItem原地址
     QMap<DShapeBase*, qintptr> DShapeBaseToTextItem;
 
@@ -40,6 +33,7 @@ public:
     QMap<DLineBase*, qintptr> LineBaseToEndMagPoint;
 
 
+    void serializeEmptyItems(QDataStream &out);
     void serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> items);
     void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
 
