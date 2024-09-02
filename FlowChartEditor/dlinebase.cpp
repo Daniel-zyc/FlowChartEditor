@@ -267,7 +267,6 @@ void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DAbstractBase::serialize(out, fa);
 
-
 	out << beginPoint << endPoint;
 	out << (qintptr)beginMag << (qintptr)endMag;
 	out << beginArrowType << endArrowType;
@@ -277,6 +276,7 @@ bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DAbstractBase::deserialize(in, fa)) return false;
 
+	in >> beginPoint >> endPoint;
 	qintptr beginPtr, endPtr; in >> beginPtr >> endPtr;
 	linkBegin(Serializer::instance().ptrToMag[beginPtr]);
 	linkEnd(Serializer::instance().ptrToMag[endPtr]);
