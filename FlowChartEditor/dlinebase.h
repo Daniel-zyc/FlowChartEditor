@@ -27,9 +27,6 @@ public:
 
 	virtual void setInsertItem() override;
 
-	virtual void linkBeginUpdate(MagPoint *mp);
-	virtual void linkEndUpdate(MagPoint *mp);
-
 	virtual void linkBegin(MagPoint *mp);
 	virtual void linkEnd(MagPoint *mp);
 
@@ -71,7 +68,8 @@ public:
      * @param out
      * 序列化：父类DAbstractBase序列化 -> beginPoint -> endPoint -> beginArrowType -> endArrowType
      */
-	void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
-	bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
+    void serialize(QDataStream &out) const override;
+
+    void deserialize(QDataStream &in) override;
 };
 

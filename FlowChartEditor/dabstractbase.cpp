@@ -201,24 +201,26 @@ void DAbstractBase::unLinkAllLines()
 
 //=======================================
 
-void DAbstractBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
-{
-	if(fa != nullptr || parentItem() == nullptr)
-		out << pos() << rotation() << scale();
-	else out << scenePos() << rotation() + parentItem()->rotation()
-			 << scale() * parentItem()->scale();
-
+void DAbstractBase::serialize(QDataStream &out) const{
+    // qDebug() << "abstract base serializing";
+    // out << reinterpret_cast<qintptr>(this);
+	// qDebug() << pos();
+	out << pos() << rotation() << scale();
 	out << brush() << pen();
-	if(mags == nullptr) out << (quint32)0;
-	else{
-		out << (quint32)mags->size();
-		for(MagPoint *magPoint : *mags) magPoint->serialize(out);
+    if(mags == nullptr) out << static_cast<quint32>(0);
+    else{
+        out << static_cast<quint32>(mags->size());
+        for(MagPoint *magPoint : *mags){
+            magPoint->serialize(out);
+		}
 	}
 }
 
-bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
-{
-	if(fa) setParentItem(fa);
+void DAbstractBase::deserialize(QDataStream &in){
+    // qDebug() << "abstract base deserializing";
+
+    // qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
+
 	QPointF pos; in >> pos; setPos(pos);
 	qreal rot; in >> rot; setRotation(rot);
 	qreal scl; in >> scl; setScale(scl);
@@ -227,8 +229,15 @@ bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	QPen qp; in >> qp; setPen(qp);
 
 	quint32 magPointCount; in >> magPointCount;
-	for(quint32 i = 0; i < magPointCount; i++)
-		(*mags)[i]->deserialize(in, this);
+    mags->clear();
+	for(quint32 i = 0; i < magPointCount; i++) {
 
-	return true;
+        MagPoint *magPoint = new MagPoint(this);
+        magPoint->deserialize(in);
+        mags->append(magPoint);
+	}
+}
+
+void DAbstractBase::linkMags(MagPoint* point){
+    mags->append(point);
 }

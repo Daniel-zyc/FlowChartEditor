@@ -64,6 +64,6 @@ public:
      * @param in
      * 反序列化: -> this地址 -> parent地址 -> lines大小 -> lines地址
      */
-	void deserialize(QDataStream &in, QGraphicsItem* fa);
+	void deserialize(QDataStream &in);
 };
 

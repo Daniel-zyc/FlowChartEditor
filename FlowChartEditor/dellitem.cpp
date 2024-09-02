@@ -61,18 +61,17 @@ void DEllItem::setRect(const QRectF &nrect)
 
 //======================================
 
-void DEllItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
-{
-	DShapeBase::serialize(out, fa);
+void DEllItem::serialize(QDataStream &out) const{
+    // qDebug() << "DEllItem serializing";
+    DShapeBase::serialize(out);
 
-	out << rect;
+    out << rect;
 }
 
-bool DEllItem::deserialize(QDataStream &in, QGraphicsItem* fa)
-{
-	if(!DShapeBase::deserialize(in, fa)) return false;
+void DEllItem::deserialize(QDataStream &in){
+    // qDebug() << "DEllItem deserialing";
+    DShapeBase::deserialize(in);
 
-	in >> rect;
+    in >> rect;
 	setRect(rect);
-	return true;
 }

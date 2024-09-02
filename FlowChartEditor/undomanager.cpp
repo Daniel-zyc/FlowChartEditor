@@ -12,7 +12,7 @@ void UndoManager::shot(QGraphicsScene *scene){
     QByteArray data;
     QDataStream out(&data,QIODevice::WriteOnly);
     QList<QGraphicsItem *> items = scene->items();
-    Serializer::instance().serializeItems(out, items);
+    Serializer::instance().serializeSceneItems(out, items);
     if(undoStack.empty() || data != undoStack.top()) undoStack.push(data);
     trimStack();
     SHOT_STATE = DConst::UNCHANGED;
@@ -31,7 +31,7 @@ void UndoManager::undo(){
 
     QByteArray data = undoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
-	QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeSceneItems(in);
     for(QGraphicsItem * item : items){
         if(item->parentItem() == nullptr) scene->addItem(item);
     }
@@ -47,7 +47,7 @@ void UndoManager::redo(){
 
     QByteArray data = redoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
-	QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeSceneItems(in);
     for(QGraphicsItem * item : items){
         if(item->parentItem() == nullptr) scene->addItem(item);
     }

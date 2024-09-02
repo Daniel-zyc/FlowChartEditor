@@ -82,18 +82,17 @@ void DRoundRectItem::setRect(const QRectF &nrect)
 
 //====================================
 
-void DRoundRectItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
-{
-	DShapeBase::serialize(out, fa);
+void DRoundRectItem::serialize(QDataStream &out) const{
+    // qDebug() << "DRoundRectItem serializing";
+    DShapeBase::serialize(out);
 
 	out << rect << radiusx << radiusy;
 }
 
-bool DRoundRectItem::deserialize(QDataStream &in, QGraphicsItem* fa)
-{
-	if(!DShapeBase::deserialize(in, fa)) return false;
+void DRoundRectItem::deserialize(QDataStream &in){
+    // qDebug() << "DRoundRectItem deserializing";
+    DShapeBase::deserialize(in);
 
 	in >> rect >> radiusx >> radiusy;
 	setRect(rect);
-	return true;
 }

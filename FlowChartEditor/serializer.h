@@ -14,26 +14,41 @@
 class Serializer
 {
 public:
-	static Serializer& instance(){
-		static Serializer instance;
-		return instance;
-	}
+    static Serializer& instance(){
+        static Serializer instance;
+        return instance;
+    }
 
-	QMap<qintptr, MagPoint*> ptrToMag;
+    // 原地址 -- TextItem
+    QMap<qintptr, DTextItem*> PtrToTextItem;
+    // 原地址 -- MagPoint
+    QMap<qintptr, MagPoint*> PtrToMagPoint;
 
-	void serializeItems(QDataStream &out, QList<QGraphicsItem *> items);
-	QList<QGraphicsItem *> deserializeItems(QDataStream &in);
+    // DShapeBase -- TextItem原地址
+    QMap<DShapeBase*, qintptr> DShapeBaseToTextItem;
 
-	void serializeEmptyItems(QDataStream &out);
-	void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
+    // LineBase -- beginMagPoint原地址
+    QMap<DLineBase*, qintptr> LineBaseToBeginMagPonint;
+    // LineBase -- endMagPoint 原地址
+    QMap<DLineBase*, qintptr> LineBaseToEndMagPoint;
+
+
+    void serializeEmptyItems(QDataStream &out);
+    void serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> items);
+    void serializeSceneItems(QDataStream &out, QGraphicsScene *scene);
+
+    QList<QGraphicsItem *> deserializeSceneItems(QDataStream &in);
 
 private:
     Serializer() = default;
     Serializer(const Serializer&) = delete;
     Serializer& operator=(const Serializer&) = delete;
 
-	void filterSerializableItem(QList<QGraphicsItem*>& items);
-	void clearMap();
+    void linkAll();
+
+    void clearMap();
+
+    void printMapSize();
 };
 
 #endif // SERIALIZER_H

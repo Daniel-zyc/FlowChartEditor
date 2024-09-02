@@ -89,7 +89,7 @@ void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 			sizeToPointPre(mapFromScene(p));
 			break;
 		case DConst::ROT:
-			rotToPoint(p);
+			rotToPoint(p - mapToScene({0, 0}));
 			break;
 	}
 	updateAllLinkLines();
@@ -127,7 +127,6 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 void DShapeBase::rotToPoint(QPointF p)
 {
-	p = mapToParent(mapFromScene(p)) - mapToParent({0, 0});
 	qreal deg = DTool::radToDeg(atan2(p.x(), -p.y()));
 	setRotation(deg);
 }
@@ -195,24 +194,29 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 }
 
 //===========================================
-void DShapeBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
-{
-	DAbstractBase::serialize(out, fa);
+void DShapeBase::serialize(QDataStream &out) const{
+    qDebug() << "shape base serializing";
+    DAbstractBase::serialize(out);
 
-	out << (qintptr)textItem;
-	if(textItem) textItem->serialize(out, this);
+    qintptr textItemPtr = (textItem != nullptr) ? reinterpret_cast<qintptr>(textItem) : qintptr(-1);
+    out << textItemPtr;
 }
 
-bool DShapeBase::deserialize(QDataStream &in, QGraphicsItem* fa)
-{
-	if(!DAbstractBase::deserialize(in, fa)) return false;
+void DShapeBase::deserialize(QDataStream &in){
+    // qDebug() << "shape base deserializing";
+    DAbstractBase::deserialize(in);
 
-	qintptr item; in >> item;
-	if(item) textItem->deserialize(in, this);
-	else
-	{
-		delete textItem;
-		textItem = nullptr;
-	}
-	return true;
+	if(textItem) delete textItem;
+
+	qintptr textItemPtr; in >> textItemPtr;
+
+    if(textItemPtr != -1) Serializer::instance().DShapeBaseToTextItem.insert(this, textItemPtr);
+}
+
+void DShapeBase::linkTextItem(DTextItem* item){
+
+    textItem = item;
+	textItem->setParentItem(this);
+	textItem->deleteMagPoint();
+	// qDebug() << textItem->pos() << " " << textItem->parentItem();
 }
