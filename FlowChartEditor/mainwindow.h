@@ -13,6 +13,7 @@
 #include <QSplitter>
 #include <QWidget>
 #include <QPushButton>
+#include <QToolButton>
 #include <QFormLayout>
 #include <QComboBox>
 #include <QDoubleSpinBox>
@@ -134,4 +135,9 @@ private:
     QComboBox *lineType;
     QComboBox *arrowType;
     QDoubleSpinBox *linebound;
+
+    QToolButton *createTln;
+    QToolButton *openTln;
+    QToolButton *saveTln;
+    QToolButton *saveSvgTln;
 };

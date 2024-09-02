@@ -9,6 +9,8 @@
 #include "saveandloadmanager.h"
 #include "undomanager.h"
 
+#include <QFile>
+#include <QTextStream>
 #include <QActionGroup>
 #include <QShortcut>
 #include <QKeySequence>
@@ -67,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     initUi();
 
     createMenu();
-    // createToolBar();
+    createToolBar();
 
     bindAction();
 
@@ -258,8 +260,6 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddText);
     ui->addMenu->addAction(ui->actAddPolyLine);
 
-
-
 	ui->addMenu->addAction(ui->actSetTextFont);
 	ui->addMenu->addAction(ui->actSetTextColor);
 	ui->addMenu->addAction(ui->actSetBorderColor);
@@ -277,17 +277,45 @@ void MainWindow::createMenu()
 
 void MainWindow::createToolBar()
 {
-	ui->headToolBar->addAction(ui->actAddLine);
-	ui->headToolBar->addAction(ui->actAddRect);
-	ui->headToolBar->addAction(ui->actAddEll);
-	ui->headToolBar->addAction(ui->actAddText);
-	ui->headToolBar->addAction(ui->actAddRoundRect);
-    ui->headToolBar->addAction(ui->actAddTri);
-    ui->headToolBar->addAction(ui->actAddRhom);
-    ui->headToolBar->addAction(ui->actAddTrap);
-    ui->headToolBar->addAction(ui->actAddPargram);
-    ui->headToolBar->addAction(ui->actAddDoc);
-    ui->headToolBar->addAction(ui->actAddPolyLine);
+    QFile qssfile(":/stylesheet.qss");
+    if(qssfile.open(QFile::ReadOnly)) {
+        QTextStream textstream(&qssfile);
+        QString stylesheet = textstream.readAll();
+        setStyleSheet(stylesheet);
+        qssfile.close();
+    }
+
+    createTln = new QToolButton();
+    openTln = new QToolButton();
+    saveTln = new QToolButton();
+    saveSvgTln = new QToolButton();
+
+    createTln->addAction(ui->actNewFile);
+    openTln->addAction(ui->actOpenFile);
+    saveTln->addAction(ui->actSaveFile);
+    saveSvgTln->addAction(ui->actSvgFile);
+
+    createTln->setIcon(QIcon(":/icon/createfile.png"));
+    openTln->setIcon(QIcon(":/icon/openfile.png"));
+    saveTln->setIcon(QIcon(":/icon/savefile.png"));
+    saveSvgTln->setIcon(QIcon(":/icon/savesvg.png"));
+
+    ui->headToolBar->addWidget(createTln);
+    ui->headToolBar->addWidget(openTln);
+    ui->headToolBar->addWidget(saveTln);
+    ui->headToolBar->addWidget(saveSvgTln);
+
+    // ui->headToolBar->addAction(ui->actAddLine);
+    // ui->headToolBar->addAction(ui->actAddRect);
+    // ui->headToolBar->addAction(ui->actAddEll);
+    // ui->headToolBar->addAction(ui->actAddText);
+    // ui->headToolBar->addAction(ui->actAddRoundRect);
+ //    ui->headToolBar->addAction(ui->actAddTri);
+ //    ui->headToolBar->addAction(ui->actAddRhom);
+ //    ui->headToolBar->addAction(ui->actAddTrap);
+ //    ui->headToolBar->addAction(ui->actAddPargram);
+ //    ui->headToolBar->addAction(ui->actAddDoc);
+ //    ui->headToolBar->addAction(ui->actAddPolyLine);
 }
 
 void MainWindow::bindAction()
@@ -374,6 +402,11 @@ void MainWindow::bindAction()
     connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
     //折线button
+
+    // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
+    connect(openTln, &QToolButton::clicked, this, &MainWindow::loadFile);
+    connect(saveTln, &QToolButton::clicked, this, &MainWindow::saveFile);
+    connect(saveSvgTln, &QToolButton::clicked, this, &MainWindow::saveAsSvg);
 
     connect(confirm, &QPushButton::clicked, this, &MainWindow::changeLineStyle);
     connect(cancle, &QPushButton::clicked, this, [this]() {
