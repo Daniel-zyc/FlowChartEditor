@@ -46,12 +46,12 @@ public:
 	void moveUp(qreal dist = DScene::defaultMoveDist) { moveSelected(0, -dist); }
 	void moveDown(qreal dist = DScene::defaultMoveDist) { moveSelected(0, dist); }
 
-    void moveZUp(qreal value = DScene::defaultMoveZUp){moveSelectedZ(value);};
-    void moveZDown(qreal value = DScene::defaultMoveZDown){moveSelectedZ(value);};
+    void moveSelectedZUp(qreal value = DScene::defaultMoveZUp){moveSelectedZ(value);};
+    void moveSelectedZDown(qreal value = DScene::defaultMoveZDown){moveSelectedZ(value);};
     void moveSelectedZ(qreal value = 0.0);
 
-    // void moveSelectedZMaxUp();
-    // void moveSelectedZMaxDown();
+    void moveSelectedZMaxUp();
+    void moveSelectedZMaxDown();
 
 	void addTextItem();
 	void addRectItem();

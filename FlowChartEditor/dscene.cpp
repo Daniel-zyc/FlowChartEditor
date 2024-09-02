@@ -74,13 +74,60 @@ void DScene::moveSelected(qreal distx, qreal disty)
 }
 
 void DScene::moveSelectedZ(qreal value){
-    qDebug() << "movez" << value;
     for(QGraphicsItem *item : selectedItems()){
+        if(item->parentItem() != nullptr) continue;
         qreal z = item->zValue();
+        qDebug() << "设置为" << z + value;
         item->setZValue(z + value);
     }
 }
 
+void DScene::moveSelectedZMaxUp(){
+    QSet<QGraphicsItem*> S;
+    QList<QGraphicsItem*> colItems;
+    qreal selectedMin = std::numeric_limits<qreal>::max();
+    qreal colMax = std::numeric_limits<qreal>::lowest();
+    for(QGraphicsItem * item : selectedItems()){
+        if(item->parentItem() == nullptr && item->zValue() < selectedMin) selectedMin = item->zValue();
+        S.insert(item);
+        colItems.append(item->collidingItems());
+    }
+    for(QGraphicsItem * item : colItems)
+        if(!S.contains(item) && item->zValue() > colMax && item->parentItem() == nullptr)
+            colMax = item->zValue();
+    if(selectedMin > colMax) return;
+    qreal dis = colMax - selectedMin + 1;
+    for(QGraphicsItem * item : selectedItems())
+        if(item->parentItem() == nullptr){
+            qreal temdis = item->zValue();
+            qDebug() << "将z值设置为" << temdis + dis;
+            item->setZValue(temdis + dis);
+        }
+}
+
+void DScene::moveSelectedZMaxDown(){
+    QSet<QGraphicsItem*> S;
+    QList<QGraphicsItem*> colItems;
+    qreal selectedMax = std::numeric_limits<qreal>::lowest();
+    qreal colMin = std::numeric_limits<qreal>::max();
+    for(QGraphicsItem * item : selectedItems()){
+        if(item->parentItem() == nullptr && item->zValue() > selectedMax) selectedMax = item->zValue();
+        S.insert(item);
+        colItems.append(item->collidingItems());
+    }
+    for(QGraphicsItem * item : colItems)
+        if(!S.contains(item) && item->zValue() < colMin && item->parentItem() == nullptr){
+            colMin = item->zValue();
+        }
+    if(selectedMax < colMin) return;
+    qreal dis = selectedMax - colMin + 1;
+    for(QGraphicsItem * item : selectedItems())
+        if(item->parentItem() == nullptr){
+            qreal temdis = item->zValue();
+            qDebug() << "将z值设置为"  << temdis - dis;
+            item->setZValue(temdis - dis);
+        }
+}
 
 void DScene::addTextItem()
 {
@@ -460,10 +507,10 @@ void DScene::shot(){
 
 void DScene::clear(){
     QGraphicsScene::clear();
-    QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
-    line1->setZValue(DConst::LINE_Z_VALUE);
-    QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
-    line2->setZValue(DConst::LINE_Z_VALUE);
+    // QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
+    // line1->setZValue(DConst::LINE_Z_VALUE);
+    // QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
+    // line2->setZValue(DConst::LINE_Z_VALUE);
 }
 
 QList<DLineBase *> DScene::getSelectedLine()

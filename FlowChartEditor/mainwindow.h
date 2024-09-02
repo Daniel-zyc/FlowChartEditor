@@ -74,8 +74,11 @@ private slots:
 	void moveUp();
 	void moveDown();
 
-    void moveZUp();
-    void moveZDown();
+    void moveSelectedZUp();
+    void moveSelectedZDown();
+
+    void moveSelectedMaxZUp();
+    void moveSelectedMaxZDown();
 
 	void viewRotateCW() { view->rotateCW(); }
 	void viewRotateCCW() { view->rotateCCW(); }
