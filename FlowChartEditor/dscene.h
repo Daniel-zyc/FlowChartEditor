@@ -79,6 +79,7 @@ public:
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
     void changeLineWidth(double width);
+    void setBg(QString path);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

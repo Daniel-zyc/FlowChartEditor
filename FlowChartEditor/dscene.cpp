@@ -302,6 +302,12 @@ void DScene::changeLineWidth(double width)
     }
 }
 
+void DScene::setBg(QString path)
+{
+    QPixmap bg(path);
+    setBackgroundBrush(bg);
+}
+
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() != Qt::LeftButton)
