@@ -25,9 +25,10 @@ void Serializer::serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> it
         if (auto* abstractItem = dynamic_cast<DAbstractBase*>(item)) {
             out << abstractItem->type();
             abstractItem->serialize(out);
-        }else {
-            qDebug() << "Item is not derived from DAbstractBase";
         }
+        // else {
+        //     qDebug() << "Item is not derived from DAbstractBase";
+        // }
     }
 }
 
@@ -49,7 +50,7 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
     qint32 size;
     in >> size;
-    qDebug() << "反序列化项的数量:" << size;
+    // qDebug() << "反序列化项的数量:" << size;
 
     for (qint32 i = 0; i < size; ++i) {
         int type;
@@ -133,7 +134,6 @@ void Serializer::linkAll(){
             dlineBase->linkEnd(PtrToMagPoint[endMag]);
         }
     }
-    return;
 }
 
 void Serializer::clearMap(){

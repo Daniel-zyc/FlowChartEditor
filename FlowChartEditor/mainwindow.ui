@@ -590,6 +590,11 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="actLineStyleSheet">
+   <property name="text">
+    <string>打开线条样式表</string>
+   </property>
+  </action>
   <action name="actAddPolyLine">
    <property name="text">
     <string>折线</string>

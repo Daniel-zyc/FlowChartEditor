@@ -1,4 +1,5 @@
 #include "saveandloadmanager.h"
+#include "serializer.h"
 
 #include <QFile>
 
@@ -54,51 +55,5 @@ bool SaveAndLoadManager::loadFromFile(const QString &path, DScene *scene){
 bool SaveAndLoadManager::loadFromFile(const QString &path){
     if(scene != nullptr) loadFromFile(path, scene);
     else return false;
-    return true;
-}
-
-bool SaveAndLoadManager::copySelectedItems(DScene *scene){
-    if(temFile != nullptr) {
-        temFile -> close();
-        delete temFile;
-        temFile = nullptr;
-    }
-
-    temFile = new QTemporaryFile;
-    if(!temFile->open()){
-        delete temFile;
-        temFile = nullptr;
-        return false;
-    }
-
-    QDataStream out(temFile);
-
-    Serializer::instance().serializeSceneItems(out,scene->selectedItems());
-
-    return temFile->flush();
-    return true;
-}
-
-bool SaveAndLoadManager::copySelectedItems(){
-    if(scene == nullptr) return false;
-    copySelectedItems(scene);
-    return true;
-}
-
-bool SaveAndLoadManager::pasteSelectedItems(DScene *scene){
-    if(!temFile || !temFile->isOpen()) return false;
-    temFile->seek(0);
-    QDataStream in(temFile);
-    QList<QGraphicsItem *> items = Serializer::instance().deserializeSceneItems(in);
-    DTool::moveItems(items);
-    for(QGraphicsItem* item : items){
-        if(item->parentItem() == nullptr) scene->addItem(item);
-    }
-    return true;
-}
-
-bool SaveAndLoadManager::pasteSeletedItems(){
-    if(scene == nullptr) return false;
-    pasteSelectedItems(scene);
     return true;
 }

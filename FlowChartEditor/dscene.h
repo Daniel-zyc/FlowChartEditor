@@ -1,6 +1,7 @@
 #pragma once
 
 #include "global.h"
+#include "dlineitem.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -60,6 +61,9 @@ public:
 	void combineSelected();
 	void seperateSelected();
 
+    void copySelectedItems();
+    void pasteItems();
+
 	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
 
@@ -69,9 +73,12 @@ public:
 	void setMenu(QMenu *m) { menu = m; }
 
     void clear();
+    void drawItems(QList<QGraphicsItem*> items);
 
+    QList<DLineBase*> getSelectedLine();
     void changeLineType(Qt::PenStyle linestyle);
-    void changeEndArrow(DConst::LineArrowType endArrowType);
+    void changeEndArrow(int endArrowType);
+    void changeLineWidth(double width);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -91,5 +98,7 @@ private:
 	DAbstractBase *modifiedShape = nullptr;
 
     void shot();
+
+    QByteArray copyData;
 };
 
