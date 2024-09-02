@@ -21,5 +21,6 @@
 #include "ddiaitem.h"
 #include "dtrapitem.h"
 #include "dpolylineitem.h"
+#include "denditem.h"
 
 #include "dlineitem.h"

@@ -64,6 +64,8 @@ public:
     void addParallegramItem();
     void addDocItem();
     void addPolyLineItem();
+    void addEndItem();
+    void addPreItem();
 
 	void combineSelected();
 	void seperateSelected();

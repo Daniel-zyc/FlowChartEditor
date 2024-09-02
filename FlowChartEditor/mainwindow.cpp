@@ -8,6 +8,7 @@
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
+#include "aboutuswindow.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -105,6 +106,8 @@ void MainWindow::initUi()
     fileBtn = new QPushButton();
     textBtn = new QPushButton();
     triBtn = new QPushButton();
+    preBtn = new QPushButton();
+    endBtn = new QPushButton();
 
     rectBtn->setIcon(QPixmap(":/icon/rect.png"));
     roundRectBtn->setIcon(QPixmap(":/icon/roundrect.png"));
@@ -116,6 +119,8 @@ void MainWindow::initUi()
     fileBtn->setIcon(QPixmap(":/icon/file.png"));
     textBtn->setIcon(QPixmap(":/icon/text.png"));
     triBtn->setIcon(QPixmap(":/icon/triangle.png"));
+    preBtn->setIcon(QPixmap(":/icon/predefined.png"));
+    endBtn->setIcon(QPixmap(":/icon/end.png"));
 
     leftGrid->addWidget(rectBtn, 0, 0);
     leftGrid->addWidget(roundRectBtn, 0, 1);
@@ -127,6 +132,8 @@ void MainWindow::initUi()
     leftGrid->addWidget(fileBtn, 3, 1);
     leftGrid->addWidget(triBtn, 4, 0);
     leftGrid->addWidget(textBtn, 4, 1);
+    leftGrid->addWidget(preBtn, 5, 0);
+    leftGrid->addWidget(endBtn, 5, 1);
 
     leftUpV->addLayout(leftGrid);
     leftw->setLayout(leftUpV);
@@ -278,6 +285,8 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddTrap);
     ui->addMenu->addAction(ui->actAddTri);
 	ui->addMenu->addAction(ui->actAddText);
+    ui->addMenu->addAction(ui->actAddPrede);
+    ui->addMenu->addAction(ui->actAddEnd);
     ui->addMenu->addAction(ui->actAddPolyLine);
 
 	ui->addMenu->addAction(ui->actSetTextFont);
@@ -345,6 +354,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
@@ -363,6 +373,8 @@ void MainWindow::bindAction()
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
     connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
     connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
+    connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
+    connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
     connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
@@ -431,6 +443,8 @@ void MainWindow::bindAction()
     connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
     connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
+    connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
@@ -548,7 +562,14 @@ void MainWindow::addTrap()
 {
     scene->addTrapItem();
 }
-
+void MainWindow::addEnd()
+{
+    scene->addEndItem();
+}
+void MainWindow::addPre()
+{
+    scene->addPreItem();
+}
 void MainWindow::addParallegram()
 {
     scene->addParallegramItem();
@@ -857,4 +878,9 @@ void MainWindow::redo(){
 }
 void MainWindow::undo(){
     UndoManager::instance().undo();
+}
+
+void MainWindow::showAboutUsWindow(){
+    AboutUsWindow* auw = new AboutUsWindow();
+    auw->exec();
 }
