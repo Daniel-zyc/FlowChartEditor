@@ -47,8 +47,10 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actSelectTextCol);
     m->addAction(ui->actSelectTextFont);
     m->addAction(ui->actLineStyleSheet);
-    m->addAction(ui->actMoveZUp);
-    m->addAction(ui->actMoveZDown);
+    // m->addAction(ui->actMoveSelectedZUp);
+    // m->addAction(ui->actMoveSelectedZDown);
+    m->addAction(ui->actMoveSelectedMaxZUp);
+    m->addAction(ui->actMoveSelectedMaxZDown);
 
     findDia = new DFindDialog();
 
@@ -371,8 +373,11 @@ void MainWindow::bindAction()
     connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
     connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(selectTextFont()));
 
-    connect(ui->actMoveZUp,SIGNAL(triggered(bool)), this, SLOT(moveZUp()));
-    connect(ui->actMoveZDown,SIGNAL(triggered(bool)),this, SLOT(moveZDown()));
+    connect(ui->actMoveSelectedZUp,SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
+    connect(ui->actMoveSelectedZDown,SIGNAL(triggered(bool)),this, SLOT(moveSelectedZDown()));
+
+    connect(ui->actMoveSelectedMaxZUp,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZUp()));
+    connect(ui->actMoveSelectedMaxZDown,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZDown()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -768,14 +773,24 @@ void MainWindow::moveDown()
 		scene->moveDown();
 }
 
-void MainWindow::moveZUp(){
+void MainWindow::moveSelectedZUp(){
     if(scene->selectedItems().isEmpty()) return;
-    else scene->moveZUp(1);
+    else scene->moveSelectedZUp(1);
 }
 
-void MainWindow::moveZDown(){
+void MainWindow::moveSelectedZDown(){
     if(scene->selectedItems().isEmpty()) return;
-    else scene->moveZDown(-1);
+    else scene->moveSelectedZDown(-1);
+}
+
+void MainWindow::moveSelectedMaxZUp(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZMaxUp();
+}
+
+void MainWindow::moveSelectedMaxZDown(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZMaxDown();
 }
 
 void MainWindow::findandReplace()
@@ -808,7 +823,7 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(this, "save");
+    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     QList<QGraphicsItem *> items = scene->selectedItems();
@@ -820,7 +835,7 @@ void MainWindow::saveFile(){
 }
 
 void MainWindow::loadFile(){
-    QString filePath = QFileDialog::getOpenFileName(this, "load");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     SaveAndLoadManager::instance().loadFromFile(filePath);

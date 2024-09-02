@@ -606,7 +606,7 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actMoveZUp">
+  <action name="actMoveSelectedZUp">
    <property name="text">
     <string>图层上移</string>
    </property>
@@ -614,12 +614,28 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actMoveZDown">
+  <action name="actMoveSelectedZDown">
    <property name="text">
     <string>图层下移</string>
    </property>
    <property name="toolTip">
     <string>图层下移</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveSelectedMaxZUp">
+   <property name="text">
+    <string>置于顶层</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveSelectedMaxZDown">
+   <property name="text">
+    <string>置于底层</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
