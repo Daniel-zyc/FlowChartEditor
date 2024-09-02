@@ -91,7 +91,7 @@ void DDocItem::modiToPoint(QPointF p, int id)
 void DDocItem::setRect(const QRectF &nrect)
 {
     rect = nrect;
-    sizeRectUpdated();
+    updateSizePoint();
     updateMagPoint();
 }
 

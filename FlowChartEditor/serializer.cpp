@@ -1,12 +1,5 @@
 #include "serializer.h"
-#include "dabstractbase.h"
-#include "dtextitem.h"
-#include "dellitem.h"
-#include "droundrectitem.h"
-#include "dlineitem.h"
-#include "dtriitem.h"
-#include "ddocitem.h"
-#include "dtrapitem.h"
+#include "dallitems.h"
 
 void Serializer::serializeEmptyItems(QDataStream &out){
 	out << (qint32)0 << (qint32)0 << (qint32)0;
@@ -104,6 +97,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DRectItemType: shape = new DRectItem(); break;
 			case DRoundRectItemType: shape = new DRoundRectItem(); break;
 			case DEllItemType: shape = new DEllItem(); break;
+			case DTriItemType: shape = new DTriItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
@@ -115,7 +109,6 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 	}
 	qDebug() << "成功序列化 shape 数量: " << tmpcnt;
 
-	tmpcnt = 0;
 	in >> textSize;
 	qDebug() << "读取到的 text 数量: " << textSize;
 	for(tmpcnt = 0; textSize; textSize--)
