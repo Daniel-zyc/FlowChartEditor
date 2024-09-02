@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actAddPargram);
     m->addAction(ui->actAddDoc);
     m->addAction(ui->actAddTrap);
+    m->addAction(ui->actAddPrede);
+    m->addAction(ui->actAddEnd);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
@@ -52,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
     // m->addAction(ui->actMoveSelectedZDown);
     m->addAction(ui->actMoveSelectedMaxZUp);
     m->addAction(ui->actMoveSelectedMaxZDown);
+
 
     findDia = new DFindDialog();
 
@@ -281,6 +284,8 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddRhom);
 	ui->addMenu->addAction(ui->actAddTrap);
     ui->addMenu->addAction(ui->actAddTri);
+    ui->addMenu->addAction(ui->actAddEnd);
+    ui->addMenu->addAction(ui->actAddPrede);
 	ui->addMenu->addAction(ui->actAddText);
     ui->addMenu->addAction(ui->actAddPrede);
     ui->addMenu->addAction(ui->actAddEnd);
