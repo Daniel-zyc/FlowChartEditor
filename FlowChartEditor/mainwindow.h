@@ -50,6 +50,8 @@ private slots:
     void addTri();
     void addDia();
     void addTrap();
+    void addEnd();
+    void addPre();
     void addParallegram();
     void addDocShape();
     void addPolyLine();
@@ -129,6 +131,8 @@ private:
     QPushButton *fileBtn;
     QPushButton *triBtn;
     QPushButton *textBtn;
+    QPushButton *endBtn;
+    QPushButton *preBtn;
 
     QWidget *rightw;
     QPushButton *confirm;

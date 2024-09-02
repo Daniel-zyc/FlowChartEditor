@@ -143,7 +143,27 @@ void DScene::addDiaItem()
 {
     qDebug() << "add Diamond";
     DDiaItem *item = new DDiaItem(100, 100);
-    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem = new DTextItem(50, 50, "", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addEndItem()
+{
+    qDebug() << "add Document";
+    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    DEndItem *item = new DEndItem(100,60);
+    item->textItem = new DTextItem(50, 50, "", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addPreItem()
+{
+    qDebug() << "add Document";
+    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    DTrapItem *item = new DTrapItem(100,80,80);
+    item->textItem = new DTextItem(50, 50, "", item);
     item->textItem->deleteMagPoint();
     addItem(item);
 }
@@ -151,9 +171,9 @@ void DScene::addDiaItem()
 void DScene::addTrapItem()
 {
     qDebug() << "add Document";
-//    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
     DTrapItem *item = new DTrapItem(100,80,80);
-    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem = new DTextItem(50, 50, "", item);
     item->textItem->deleteMagPoint();
     addItem(item);
 }

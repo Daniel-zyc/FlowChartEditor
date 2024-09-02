@@ -12,12 +12,14 @@ SOURCES += \
     dabstractbase.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
+    denditem.cpp \
     dfinddialog.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
+    dpreitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -41,12 +43,14 @@ HEADERS += \
     dallitems.h \
     ddiaitem.h \
     dellitem.h \
+    denditem.h \
     dfinddialog.h \
     ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
+    dpreitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \

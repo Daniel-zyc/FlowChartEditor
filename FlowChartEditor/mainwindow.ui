@@ -606,6 +606,28 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="actAddPrede">
+   <property name="text">
+    <string>预定义过程图形</string>
+   </property>
+   <property name="toolTip">
+    <string>预定义过程图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actAddEnd">
+   <property name="text">
+    <string>终止图形</string>
+   </property>
+   <property name="toolTip">
+    <string>终止图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
