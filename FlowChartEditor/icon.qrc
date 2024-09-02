@@ -28,5 +28,7 @@
         <file>icon/dashLine.png</file>
         <file>icon/dotLine.png</file>
         <file>icon/solidLine.png</file>
+        <file>icon/predefined.png</file>
+        <file>icon/end.png</file>
     </qresource>
 </RCC>

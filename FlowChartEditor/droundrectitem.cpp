@@ -9,7 +9,8 @@ DRoundRectItem::DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent)
 {
 	modis.resize(2);
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
-	setRect(QRectF(-w/2, -h/2, w, h));
+	rect = QRectF(-w/2, -h/2, w, h);
+	updateAll();
 }
 
 void DRoundRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -28,24 +29,22 @@ QRectF DRoundRectItem::sizeRect() const
 
 QPainterPath DRoundRectItem::shapeNormal() const
 {
-	QPainterPath pth;
-	pth.addRoundedRect(rect, radiusx, radiusy);
-	return pth;
+	QPainterPath pth; pth.addRoundedRect(rect, radiusx, radiusy); return pth;
 }
 
 void DRoundRectItem::updateMagPoint()
 {
-	(*mags)[0]->pos = {rect.left(), 0};
-	(*mags)[1]->pos = {rect.right(), 0};
+	(*mags)[0]->setPos({rect.left(), 0});
+	(*mags)[1]->setPos({rect.right(), 0});
 
-	(*mags)[2]->pos = {0, rect.top()};
-	(*mags)[3]->pos = {0, rect.bottom()};
+	(*mags)[2]->setPos({0, rect.top()});
+	(*mags)[3]->setPos({0, rect.bottom()});
 }
 
 void DRoundRectItem::updateModiPoint()
 {
-	radiusx = qMin(radiusx, rect.width() / 2);
-	radiusy = qMin(radiusy, rect.height() / 2);
+	radiusx = qMin(radiusx, rect.width() / 2); radiusx = qMax(0.0, radiusx);
+	radiusy = qMin(radiusy, rect.height() / 2); radiusy = qMax(0.0, radiusy);
 
 	modis[0] = {rect.left() + radiusx, rect.top()};
 	modis[1] = {rect.left(), rect.top() + radiusy};
@@ -53,7 +52,7 @@ void DRoundRectItem::updateModiPoint()
 
 void DRoundRectItem::sizeToRect(QRectF nrect)
 {
-	setRect(nrect);
+	rect = nrect; updateAll();
 }
 
 void DRoundRectItem::modiToPoint(QPointF p, int id)
@@ -72,10 +71,9 @@ void DRoundRectItem::modiToPoint(QPointF p, int id)
 	return;
 }
 
-void DRoundRectItem::setRect(const QRectF &nrect)
+void DRoundRectItem::updateAll()
 {
-	rect = nrect;
-	sizeRectUpdated();
+	updateSizePoint();
 	updateMagPoint();
 	updateModiPoint();
 }
@@ -94,6 +92,6 @@ bool DRoundRectItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
 	in >> rect >> radiusx >> radiusy;
-	setRect(rect);
+	updateAll();
 	return true;
 }

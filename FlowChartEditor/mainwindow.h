@@ -53,6 +53,8 @@ private slots:
     void addTri();
     void addDia();
     void addTrap();
+    void addEnd();
+    void addPre();
     void addParallegram();
     void addDocShape();
     void addPolyLine();
@@ -76,6 +78,12 @@ private slots:
 	void moveRight();
 	void moveUp();
 	void moveDown();
+
+    void moveSelectedZUp();
+    void moveSelectedZDown();
+
+    void moveSelectedMaxZUp();
+    void moveSelectedMaxZDown();
 
 	void viewRotateCW() { view->rotateCW(); }
 	void viewRotateCCW() { view->rotateCCW(); }
@@ -108,6 +116,8 @@ private slots:
 
     void redo();
     void undo();
+
+    void showAboutUsWindow();
 private:
 	Ui::MainWindow *ui;
 
@@ -132,6 +142,8 @@ private:
     QPushButton *fileBtn;
     QPushButton *triBtn;
     QPushButton *textBtn;
+    QPushButton *endBtn;
+    QPushButton *preBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;

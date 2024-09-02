@@ -109,7 +109,7 @@ void DParallelogramItem::modiToPoint(QPointF p, int id)
 void DParallelogramItem::setRect(const QRectF &nrect)
 {
     rect = nrect;
-    sizeRectUpdated();
+    updateSizePoint();
     updateMagPoint();
     updateModiPoint();
 }

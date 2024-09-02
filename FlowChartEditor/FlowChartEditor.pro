@@ -9,15 +9,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aboutuswindow.cpp \
     dabstractbase.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
+    denditem.cpp \
     dfinddialog.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
+    dpreitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -37,16 +40,19 @@ SOURCES += \
     undomanager.cpp
 
 HEADERS += \
+    aboutuswindow.h \
     dabstractbase.h \
     dallitems.h \
     ddiaitem.h \
     dellitem.h \
+    denditem.h \
     dfinddialog.h \
     ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
+    dpreitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \
