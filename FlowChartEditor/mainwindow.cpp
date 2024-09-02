@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actSeperate);
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
+    m->addAction(ui->actAddRhom);
 	m->addAction(ui->actAddLine);
     m->addAction(ui->actAddPargram);
     m->addAction(ui->actAddDoc);

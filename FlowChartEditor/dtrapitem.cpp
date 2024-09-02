@@ -16,7 +16,7 @@ DTrapItem::DTrapItem(qreal topWidth,qreal bottomWidth, qreal height, QGraphicsIt
     mags->push_back(new MagPoint(this));
     mags->push_back(new MagPoint(this));
     mags->push_back(new MagPoint(this));
-    setRect(QRectF(-bottomWidth/2, -height/2, bottomWidth, height));
+    setRect(QRectF(-topWidth/2, -height/2, topWidth, height));
     c=bottomWidth/rect.width();
 
 }
@@ -68,7 +68,7 @@ void DTrapItem::updateMagPoint()
 void DTrapItem::updateModiPoint()
 {
     // 只有一个调整点
-    modis[0] = {rect.left() + (rect.width() - c*rect.width()) / 2, rect.top()};
+    modis[0] = {rect.left() + (rect.width() - c*rect.width()) / 2, rect.bottom()};
 }
 
 void DTrapItem::sizeToRect(QRectF nrect)
