@@ -20,5 +20,6 @@
 #include "ddocitem.h"
 #include "ddiaitem.h"
 #include "dtrapitem.h"
+#include "dpolylineitem.h"
 
 #include "dlineitem.h"

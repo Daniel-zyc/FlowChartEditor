@@ -8,6 +8,10 @@
 #include "ddocitem.h"
 #include "dtrapitem.h"
 
+void Serializer::serializeEmptyItems(QDataStream &out){
+    qint32 data = 0; out << data;
+}
+
 void Serializer::serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> items){
     // 输出数量
     qint32 size = 0;
@@ -21,11 +25,10 @@ void Serializer::serializeSceneItems(QDataStream &out, QList<QGraphicsItem *> it
         if (auto* abstractItem = dynamic_cast<DAbstractBase*>(item)) {
             out << abstractItem->type();
             abstractItem->serialize(out);
-        } else if(auto* abstractItem = dynamic_cast<MagPoint*>(item)){
-            qDebug() << "serializing MagPoint";
-        }else {
-            qDebug() << "Item is not derived from DAbstractBase";
         }
+        // else {
+        //     qDebug() << "Item is not derived from DAbstractBase";
+        // }
     }
 }
 
@@ -37,8 +40,7 @@ void Serializer::serializeSceneItems(QDataStream &out, QGraphicsScene *scene){
 void Serializer::printMapSize(){
     qDebug() << "size of six map"
              << LineBaseToBeginMagPonint.size()
-            <<LineBaseToEndMagPoint.size()
-             << MagPointToLinesPtr.size();
+             << LineBaseToEndMagPoint.size();
 }
 
 QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
@@ -48,14 +50,14 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
     qint32 size;
     in >> size;
-    qDebug() << "反序列化项的数量:" << size;
+    // qDebug() << "反序列化项的数量:" << size;
 
     for (qint32 i = 0; i < size; ++i) {
         int type;
         in >> type;
         QGraphicsItem *item = nullptr;
 
-		qDebug() << "Type: " << type;
+        // qDebug() << "Type: " << type;
 
         switch (type) {
         case DTextItem::Type:
@@ -109,14 +111,6 @@ QList<QGraphicsItem *> Serializer::deserializeSceneItems(QDataStream &in) {
 
 void Serializer::linkAll(){
     // printMapSize();
-	// for(auto it = MagPointToLinesPtr.cbegin(); it != MagPointToLinesPtr.cend(); ++it){
-	//     MagPoint* magPoint = it.key();
-	//     qintptr linePtr = it.value();
-	//     if(PtrToLineBase.contains(linePtr)){
-	//         magPoint->linkLine(PtrToLineBase[linePtr]);
-	//     }
-	// }
-
     for(auto it = DShapeBaseToTextItem.cbegin(); it != DShapeBaseToTextItem.cend(); ++it){
         DShapeBase * dshapeBase = it.key();
         qintptr textItemPtr = it.value();
@@ -140,16 +134,13 @@ void Serializer::linkAll(){
             dlineBase->linkEnd(PtrToMagPoint[endMag]);
         }
     }
-    return;
 }
 
 void Serializer::clearMap(){
-    PtrToLineBase.clear();
-    PtrToQGraphicsItem.clear();
+
     PtrToTextItem.clear();
     PtrToMagPoint.clear();
 
-    MagPointToLinesPtr.clear();
     DShapeBaseToTextItem.clear();
 
     LineBaseToBeginMagPonint.clear();

@@ -20,8 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+	setWindowTitle("Flowchart Editor");
+
 	ui->setupUi(this);
-    setWindowTitle("Flowchart Editor");
 
     // 绑定序列化管理
 	scene = new DScene(this);
@@ -255,6 +256,7 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddTrap);
     ui->addMenu->addAction(ui->actAddTri);
 	ui->addMenu->addAction(ui->actAddText);
+    ui->addMenu->addAction(ui->actAddPolyLine);
 
 
 
@@ -285,6 +287,7 @@ void MainWindow::createToolBar()
     ui->headToolBar->addAction(ui->actAddTrap);
     ui->headToolBar->addAction(ui->actAddPargram);
     ui->headToolBar->addAction(ui->actAddDoc);
+    ui->headToolBar->addAction(ui->actAddPolyLine);
 }
 
 void MainWindow::bindAction()
@@ -310,6 +313,7 @@ void MainWindow::bindAction()
     connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
+    connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
     connect(ui->actLineStyleSheet, &QAction::triggered, this, [this]() {
         rightw->setVisible(true);
@@ -369,6 +373,7 @@ void MainWindow::bindAction()
     connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
     connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+    //折线button
 
     connect(confirm, &QPushButton::clicked, this, &MainWindow::changeLineStyle);
     connect(cancle, &QPushButton::clicked, this, [this]() {
@@ -479,6 +484,11 @@ void MainWindow::addParallegram()
 void MainWindow::addDocShape()
 {
     scene->addDocItem();
+}
+
+void MainWindow::addPolyLine()
+{
+    scene->addPolyLineItem();
 }
 
 void MainWindow::changeLineType(Qt::PenStyle linestyle)
@@ -737,11 +747,11 @@ void MainWindow::loadFile(){
 }
 
 void MainWindow::copy(){
-    SaveAndLoadManager::instance().copySelectedItems();
+    scene->copySelectedItems();
 }
 
 void MainWindow::paste(){
-    SaveAndLoadManager::instance().pasteSeletedItems();
+    scene->pasteItems();
 }
 
 void MainWindow::redo(){

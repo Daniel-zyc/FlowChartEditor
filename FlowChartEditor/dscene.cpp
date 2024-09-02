@@ -1,6 +1,7 @@
 #include "dallitems.h"
 #include "dscene.h"
 #include "undomanager.h"
+#include "serializer.h"
 
 #include <QMessageBox>
 
@@ -155,6 +156,14 @@ void DScene::addTrapItem()
     item->textItem = new DTextItem(50, 50, "hello world", item);
     item->textItem->deleteMagPoint();
     addItem(item);
+}
+
+void DScene::addPolyLineItem()
+{
+    qDebug() << "add PolyLine";
+    DPolyLineItem *item = new DPolyLineItem();
+    state = DConst::INSERT_LINE;
+    modifiedShape = item;
 }
 
 void DScene::combineSelected()
@@ -451,4 +460,22 @@ QList<DLineBase *> DScene::getSelectedLine()
     }
 
     return lines;
+void DScene::drawItems(QList<QGraphicsItem*> items){
+    for(QGraphicsItem * item : items)
+        if(item->parentItem() == nullptr)
+            addItem(item);
+}
+
+void DScene::copySelectedItems(){
+    copyData.clear();
+    QDataStream out(&copyData,QIODevice::WriteOnly);
+    Serializer::instance().serializeSceneItems(out,this->selectedItems());
+}
+
+void DScene::pasteItems(){
+    if(copyData.isEmpty()) return;
+    QDataStream in(&copyData,QIODevice::ReadOnly);
+    QList<QGraphicsItem*> items = Serializer::instance().deserializeSceneItems(in);
+    DTool::moveItems(items);
+    drawItems(items);
 }

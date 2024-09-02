@@ -56,9 +56,13 @@ public:
     void addTrapItem();
     void addParallegramItem();
     void addDocItem();
+    void addPolyLineItem();
 
 	void combineSelected();
 	void seperateSelected();
+
+    void copySelectedItems();
+    void pasteItems();
 
 	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
@@ -69,6 +73,7 @@ public:
 	void setMenu(QMenu *m) { menu = m; }
 
     void clear();
+    void drawItems(QList<QGraphicsItem*> items);
 
     QList<DLineBase*> getSelectedLine();
     void changeLineType(Qt::PenStyle linestyle);
@@ -93,5 +98,7 @@ private:
 	DAbstractBase *modifiedShape = nullptr;
 
     void shot();
+
+    QByteArray copyData;
 };
 

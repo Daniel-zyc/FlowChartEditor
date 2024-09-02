@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -593,6 +593,12 @@
   <action name="actLineStyleSheet">
    <property name="text">
     <string>打开线条样式表</string>
+  <action name="actAddPolyLine">
+   <property name="text">
+    <string>折线</string>
+   </property>
+   <property name="toolTip">
+    <string>折线</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
