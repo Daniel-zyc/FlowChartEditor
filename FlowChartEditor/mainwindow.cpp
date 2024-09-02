@@ -46,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actSelectTextCol);
     m->addAction(ui->actSelectTextFont);
     m->addAction(ui->actLineStyleSheet);
+    m->addAction(ui->actMoveZUp);
+    m->addAction(ui->actMoveZDown);
 
     findDia = new DFindDialog();
 
@@ -59,8 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     fontDia->setOption(QFontDialog::ProportionalFonts);
 
 	scene->setMenu(m);
-	scene->addLine(-1000, 0, 1000, 0);
-	scene->addLine(0, -1000, 0, 1000);
+    scene->clear();
 
 	view = new DView(scene);
 
@@ -351,6 +352,9 @@ void MainWindow::bindAction()
     connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
     connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
     connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(selectTextFont()));
+
+    connect(ui->actMoveZUp,SIGNAL(triggered(bool)), this, SLOT(moveZUp()));
+    connect(ui->actMoveZDown,SIGNAL(triggered(bool)),this, SLOT(moveZDown()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -729,6 +733,16 @@ void MainWindow::moveDown()
 		view->moveDown();
 	else
 		scene->moveDown();
+}
+
+void MainWindow::moveZUp(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveZUp(1);
+}
+
+void MainWindow::moveZDown(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveZDown(-1);
 }
 
 void MainWindow::findandReplace()

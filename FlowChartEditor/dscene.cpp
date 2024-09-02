@@ -8,6 +8,8 @@
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
 qreal DScene::defaultMoveDist = 50;
+qreal DScene::defaultMoveZUp = 20;
+qreal DScene::defaultMoveZDown = -20;
 
 DScene::DScene()
 {
@@ -70,6 +72,15 @@ void DScene::moveSelected(qreal distx, qreal disty)
 		item->setPos(pos);
 	}
 }
+
+void DScene::moveSelectedZ(qreal value){
+    qDebug() << "movez" << value;
+    for(QGraphicsItem *item : selectedItems()){
+        qreal z = item->zValue();
+        item->setZValue(z + value);
+    }
+}
+
 
 void DScene::addTextItem()
 {
@@ -443,8 +454,10 @@ void DScene::shot(){
 
 void DScene::clear(){
     QGraphicsScene::clear();
-    addLine(-1000, 0, 1000, 0);
-    addLine(0, -1000, 0, 1000);
+    QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
+    line1->setZValue(DConst::LINE_Z_VALUE);
+    QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
+    line2->setZValue(DConst::LINE_Z_VALUE);
 }
 
 QList<DLineBase *> DScene::getSelectedLine()

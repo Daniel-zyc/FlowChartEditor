@@ -205,6 +205,7 @@ void DAbstractBase::serialize(QDataStream &out) const{
     // qDebug() << "abstract base serializing";
     // out << reinterpret_cast<qintptr>(this);
 	// qDebug() << pos();
+    out << this->zValue();
 	out << pos() << rotation() << scale();
 	out << brush() << pen();
     if(mags == nullptr) out << static_cast<quint32>(0);
@@ -220,7 +221,8 @@ void DAbstractBase::deserialize(QDataStream &in){
     // qDebug() << "abstract base deserializing";
 
     // qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToQGraphicsItem.insert(thisPtr,this);
-
+    qreal zValue;
+    in >> zValue; this->setZValue(zValue);
 	QPointF pos; in >> pos; setPos(pos);
 	qreal rot; in >> rot; setRotation(rot);
 	qreal scl; in >> scl; setScale(scl);

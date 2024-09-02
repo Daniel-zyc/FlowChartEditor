@@ -46,6 +46,13 @@ public:
 	void moveUp(qreal dist = DScene::defaultMoveDist) { moveSelected(0, -dist); }
 	void moveDown(qreal dist = DScene::defaultMoveDist) { moveSelected(0, dist); }
 
+    void moveZUp(qreal value = DScene::defaultMoveZUp){moveSelectedZ(value);};
+    void moveZDown(qreal value = DScene::defaultMoveZDown){moveSelectedZ(value);};
+    void moveSelectedZ(qreal value = 0.0);
+
+    // void moveSelectedZMaxUp();
+    // void moveSelectedZMaxDown();
+
 	void addTextItem();
 	void addRectItem();
 	void addRoundRectItem();
@@ -90,6 +97,8 @@ private:
 	static qreal defaultRotateDelta;
 	static qreal defaultScaleRatio;
 	static qreal defaultMoveDist;
+    static qreal defaultMoveZUp;
+    static qreal defaultMoveZDown;
 
 	int state = DConst::NONE;
 	int moditype = DConst::NONE;

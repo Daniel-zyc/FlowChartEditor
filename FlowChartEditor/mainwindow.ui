@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -601,6 +601,25 @@
    </property>
    <property name="toolTip">
     <string>折线</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveZUp">
+   <property name="text">
+    <string>图层上移</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveZDown">
+   <property name="text">
+    <string>图层下移</string>
+   </property>
+   <property name="toolTip">
+    <string>图层下移</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
