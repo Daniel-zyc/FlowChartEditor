@@ -44,8 +44,8 @@ protected:
     //获取另一点与这个点的相对位置
     int getRelativePosition(QPointF cur,QPointF another);
     //更新两中点坐标
-    //void updateBeginMidPoint();
-    //void updateEndMidPoint();
+    void updateBeginMidPoint(int type);
+    void updateEndMidPoint(int type);
     //获取线头连线的图形是否有碰撞
     //int HasItemCollision(QRectF st_item,QRectF ed_item);
     //调整折线形
@@ -61,13 +61,16 @@ private:
     double ed_x_offset = 0, ed_y_offset = 0;
     //中点位置
     double mid_x_shift = 0, mid_y_shift = 0;
-    //double cnt = 0;
-    //QPointF st_mid_point = {0,0}, ed_mid_point = {0,0};
+    QPointF begin_midPoint = {0,0}, end_midPoint = {0,0};
     //中点位置暂时记录
     QPointF midPoint = {0,0};
     int modis_num = 1;
     //折线类型
     int line_type = 0;
+    //绘制标记
+    int paint_flag = 0;
+    //距离形状的最短距离
+    double record_dist = 35;
 };
 
 #endif // DPOLYLINEITEM_H
