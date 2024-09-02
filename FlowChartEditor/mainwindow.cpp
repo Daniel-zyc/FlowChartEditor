@@ -8,6 +8,7 @@
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
+#include "aboutuswindow.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -342,6 +343,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
@@ -854,4 +856,9 @@ void MainWindow::redo(){
 }
 void MainWindow::undo(){
     UndoManager::instance().undo();
+}
+
+void MainWindow::showAboutUsWindow(){
+    AboutUsWindow* auw = new AboutUsWindow();
+    auw->exec();
 }

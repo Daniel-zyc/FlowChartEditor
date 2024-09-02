@@ -111,6 +111,8 @@ private slots:
 
     void redo();
     void undo();
+
+    void showAboutUsWindow();
 private:
 	Ui::MainWindow *ui;
 
