@@ -46,6 +46,7 @@ private slots:
     void addTrap();
     void addParallegram();
     void addDocShape();
+    void addPolyLine();
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(DConst::LineArrowType endArrowType);

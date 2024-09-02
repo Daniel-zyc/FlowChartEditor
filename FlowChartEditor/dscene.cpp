@@ -158,6 +158,14 @@ void DScene::addTrapItem()
     addItem(item);
 }
 
+void DScene::addPolyLineItem()
+{
+    qDebug() << "add PolyLine";
+    DPolyLineItem *item = new DPolyLineItem();
+    state = DConst::INSERT_LINE;
+    modifiedShape = item;
+}
+
 void DScene::combineSelected()
 {
 	QList<QGraphicsItem*> items = selectedItems();
