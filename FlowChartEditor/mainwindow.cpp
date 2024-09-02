@@ -823,8 +823,7 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(
-        this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     QList<QGraphicsItem *> items = scene->selectedItems();
@@ -836,8 +835,7 @@ void MainWindow::saveFile(){
 }
 
 void MainWindow::loadFile(){
-    QString filePath = QFileDialog::getOpenFileName(
-        this, tr("打开.bit文件"),"./",tr("(*.bit)"));
+    QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     SaveAndLoadManager::instance().loadFromFile(filePath);
