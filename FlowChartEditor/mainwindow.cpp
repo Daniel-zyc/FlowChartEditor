@@ -28,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     // 绑定序列化管理
 	scene = new DScene(this);
 
+	// scene->removeItem(rect);
+	// delete rect; rect = nullptr;
+
     UndoManager::instance().bindScene(scene);
     SaveAndLoadManager::instance().bindScene(scene);
 

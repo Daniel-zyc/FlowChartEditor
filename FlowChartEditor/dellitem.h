@@ -20,11 +20,12 @@ public:
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
 
-private:
-	void setRect(const QRectF &nrect);
+	void updateAll();
 	void updateMagPoint();
 
+protected:
 	QRectF rect = QRectF(0, 0, 0, 0);
+
 public:
 	/**
 	 * @brief serialize
