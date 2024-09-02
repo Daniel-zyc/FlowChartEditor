@@ -76,18 +76,32 @@ void DLineBase::setInsertItem()
 	sizePointId = DConst::ED - 1;
 }
 
-void DLineBase::linkBegin(MagPoint *mp)
+void DLineBase::linkBeginUpdate(MagPoint *mp)
 {
+	if(!mp) return;
 	beginMag = mp;
 	mp->addLine(this);
 	updatePosition();
 }
 
-void DLineBase::linkEnd(MagPoint *mp)
+void DLineBase::linkEndUpdate(MagPoint *mp)
 {
+	if(!mp) return;
 	endMag = mp;
 	mp->addLine(this);
 	updatePosition();
+}
+
+void DLineBase::linkBegin(MagPoint *mp)
+{
+	if(!mp) return;
+	beginMag = mp; mp->addLine(this); beginPoint = mp->mapToItem(this);
+}
+
+void DLineBase::linkEnd(MagPoint *mp)
+{
+	if(!mp) return;
+	endMag = mp; mp->addLine(this); endPoint = mp->mapToItem(this);
 }
 
 void DLineBase::unlinkBegin()
@@ -132,7 +146,7 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 	switch(id)
 	{
 		case DConst::ST - 1 :
-			if(mp && mp != endMag) linkBegin(mp);
+			if(mp && mp != endMag) linkBeginUpdate(mp);
 			else
 			{
 				// qDebug() << "unlinkBegin";
@@ -141,7 +155,7 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 			}
 			break;
 		case DConst::ED - 1 :
-			if(mp && mp != beginMag) linkEnd(mp);
+			if(mp && mp != beginMag) linkEndUpdate(mp);
 			else
 			{
 				// qDebug() << "unlinkEnd";
@@ -249,38 +263,24 @@ void DLineBase::setEndPoint(QPointF p)
 
 //===========================================
 
-void DLineBase::serialize(QDataStream &out) const{
-    qDebug() << "line base serializing";
-    DAbstractBase::serialize(out);
+void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DAbstractBase::serialize(out, fa);
 
-    // out << reinterpret_cast<qintptr>(this);
 
-	out << beginArrowType << endArrowType;
 	out << beginPoint << endPoint;
-	out << brush() << pen();
-
-    qintptr beginPtr,endPtr;
-    beginPtr = beginMag != nullptr ? reinterpret_cast<qintptr>(beginMag) : qintptr(-1);
-    endPtr = endMag != nullptr ? reinterpret_cast<qintptr>(endMag) : qintptr(-1);
-    out << beginPtr << endPtr;
-
+	out << (qintptr)beginMag << (qintptr)endMag;
+	out << beginArrowType << endArrowType;
 }
 
-void DLineBase::deserialize(QDataStream &in){
-    qDebug() << "line base deserializing";
-    DAbstractBase::deserialize(in);
+bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DAbstractBase::deserialize(in, fa)) return false;
 
-    // qintptr thisPtr; in >> thisPtr;
- //    Serializer::instance().PtrToLineBase.insert(thisPtr, this);
+	qintptr beginPtr, endPtr; in >> beginPtr >> endPtr;
+	linkBegin(Serializer::instance().ptrToMag[beginPtr]);
+	linkEnd(Serializer::instance().ptrToMag[endPtr]);
 
 	in >> beginArrowType >> endArrowType;
-	in >> beginPoint >> endPoint;
-	updatePosition();
-
-	QBrush qb; in >> qb; setBrush(qb);
-	QPen qp; in >> qp; setPen(qp);
-    qintptr beginPtr, endPtr;
-    in >> beginPtr >> endPtr;
-    if(beginPtr != -1) Serializer::instance().LineBaseToBeginMagPonint.insert(this, beginPtr);
-    if(endPtr != -1) Serializer::instance().LineBaseToEndMagPoint.insert(this, endPtr);
+	return true;
 }

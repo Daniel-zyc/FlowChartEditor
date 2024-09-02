@@ -96,14 +96,14 @@ void DTrapItem::setRect(const QRectF &nrect)
 }
 
 //================================
-void DTrapItem::serialize(QDataStream &out) const{
-    DShapeBase::serialize(out);
-    out << topWidth << bottomWidth;
-    out << height << c << rect;
-}
+// void DTrapItem::serialize(QDataStream &out) const{
+//     DShapeBase::serialize(out);
+//     out << topWidth << bottomWidth;
+//     out << height << c << rect;
+// }
 
-void DTrapItem::deserialize(QDataStream &in){
-    DShapeBase::deserialize(in);
-    in << topWidth << bottomWidth;
-    in << height << c << rect;
-}
+// void DTrapItem::deserialize(QDataStream &in){
+//     DShapeBase::deserialize(in);
+//     in << topWidth << bottomWidth;
+//     in << height << c << rect;
+// }

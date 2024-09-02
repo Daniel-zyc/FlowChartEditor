@@ -47,18 +47,13 @@ void DTextBase::focusToCenter()
 }
 
 void DTextBase::serialize(QDataStream &out) const{
-	out << toHtml();
-	out << pos();
-    return;
+	out << toHtml() << pos();
 }
 
 void DTextBase::deserialize(QDataStream &in){
-	QString s; in >> s;
-	setHtml(s);
-	QPointF pos; in >> pos;
-	setPos(pos);
+	QString s; in >> s; setHtml(s);
+	QPointF pos; in >> pos; setPos(pos);
 	focusToCenter();
-    return;
 }
 
 //==============================================================================
@@ -161,27 +156,19 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void DTextItem::serialize(QDataStream &out) const{
-    // qDebug() << "DTextIetm serializing";
-    DShapeBase::serialize(out);
-
-	out << reinterpret_cast<qintptr>(this);
-
-    textBase.serialize(out);
-
-	out << pos();
-    out << rect;
+void DTextItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DShapeBase::serialize(out, fa);
+	textBase.serialize(out);
+	out << rect;
 }
 
-void DTextItem::deserialize(QDataStream &in){
-    // qDebug() << "DTextItem deserializing";
-    DShapeBase::deserialize(in);
+bool DTextItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DShapeBase::deserialize(in, fa)) return false;
 
-	qintptr thisPtr; in >> thisPtr;
-	Serializer::instance().PtrToTextItem.insert(thisPtr,this);
-
-    textBase.deserialize(in);
-
-	QPointF pos; in >> pos; setPos(pos);
-	in >> rect; setRect(rect);
+	textBase.deserialize(in);
+	in >> rect;
+	setRect(rect);
+	return true;
 }

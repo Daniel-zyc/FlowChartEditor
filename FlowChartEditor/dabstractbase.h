@@ -111,15 +111,12 @@ protected:
 	bool showMagPoint = false;
 
 public:
-    /**
-     * @brief serialize
-     * @param out
-     * 序列化方法：this地址 -> magPoint列表大小 -> magPoint地址列表
-     */
-    virtual void serialize(QDataStream &out) const;
-
-    virtual void deserialize(QDataStream &in);
-
-    void linkMags(MagPoint*);
+	/**
+	 * @brief serialize
+	 * @param out
+	 * 序列化方法：this地址 -> magPoint列表大小 -> magPoint地址列表
+	 */
+	virtual void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const;
+	virtual bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr);
 };
 
