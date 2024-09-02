@@ -5,29 +5,8 @@
 #include <QBrush>
 #include <QPen>
 
-// 工具函数
-namespace DTool
-{
-	// 从角度转换到弧度
-	qreal degToRad(qreal deg);
-
-	// 从弧度转换到角度
-	qreal radToDeg(qreal rad);
-
-	// 将角度规范到 [0, 360]
-	qreal degMod(qreal deg);
-
-	// 两点距离
-	qreal dist(const QPointF& p1, const QPointF& p2);
-
-	// 平方
-	qreal sq(qreal x);
-
-	// p 是否在以 o 为半径 r 为圆心的圆中
-    bool inCircle(const QPointF& o, qreal r, const QPointF& p);
-
-    void moveItems(QList<QGraphicsItem*> items);
-};
+// 全局变量，记录图形是否发生了修改
+extern int SHOT_STATE;
 
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
 constexpr qreal sizePointRadius = 5;
@@ -146,7 +125,8 @@ namespace DConst
 
     enum PasteShift
     {
-        MAX_DISTANCE = 50
+		SHIFT_X = 30,
+		SHIFT_Y = 30
     };
 
     enum DataStreamVersion
@@ -167,4 +147,27 @@ namespace DConst
     };
 };
 
-extern int SHOT_STATE;
+// 工具函数
+namespace DTool
+{
+	// 从角度转换到弧度
+	qreal degToRad(qreal deg);
+
+	// 从弧度转换到角度
+	qreal radToDeg(qreal rad);
+
+	// 将角度规范到 [0, 360]
+	qreal degMod(qreal deg);
+
+	// 两点距离
+	qreal dist(const QPointF& p1, const QPointF& p2);
+
+	// 平方
+	qreal sq(qreal x);
+
+	// p 是否在以 o 为半径 r 为圆心的圆中
+	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
+
+	// 将将要被拷贝的图形进行一定的平移操作
+	void moveItems(const QList<QGraphicsItem*> &items);
+};

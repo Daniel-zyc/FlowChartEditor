@@ -20,8 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+	setWindowTitle("Flowchart Editor");
+
 	ui->setupUi(this);
-    setWindowTitle("Flowchart Editor");
 
     // 绑定序列化管理
 	scene = new DScene(this);
