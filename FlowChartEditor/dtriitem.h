@@ -23,8 +23,8 @@ public:
      * @param out
      * 序列化：DPolygonBase
      */
-    void serialize(QDataStream &out) const override;
+	// void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in) override;
+	// void deserialize(QDataStream &in) override;
 };
 

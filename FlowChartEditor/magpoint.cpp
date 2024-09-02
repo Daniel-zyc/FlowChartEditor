@@ -67,12 +67,15 @@ QPointF MagPoint::mapToScene()
 
 //=====================================================
 // 序列化与反序列化
-void MagPoint::serialize(QDataStream &out) const{
-	out << reinterpret_cast<qintptr>(this);
+void MagPoint::serialize(QDataStream &out) const
+{
+	out << (qintptr)this;
 	out << pos;
 }
 
-void MagPoint::deserialize(QDataStream &in){
-	qintptr thisPtr; in >> thisPtr; Serializer::instance().PtrToMagPoint.insert(thisPtr, this);
-	in >> this->pos;
+void MagPoint::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	qintptr thisPtr; in >> thisPtr; Serializer::instance().ptrToMag[thisPtr] = this;
+	in >> pos;
+	parent = fa;
 }

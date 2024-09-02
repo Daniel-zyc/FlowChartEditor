@@ -39,7 +39,7 @@ bool SaveAndLoadManager::loadFromFile(const QString &path, DScene *scene){
     QDataStream in(&file);
     in.setVersion(DConst::DATA_STREAM_VERSION);
 
-    QList<QGraphicsItem*> data = Serializer::instance().deserializeSceneItems(in);
+	QList<QGraphicsItem*> data = Serializer::instance().deserializeItems(in);
 
     file.close();
     qDebug() << data.size();

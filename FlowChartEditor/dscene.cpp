@@ -334,7 +334,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			DLineBase* line = dynamic_cast<DLineBase*>(modifiedShape);
 			DAbstractBase* shape = getMagItemOnPoint(p);
 			if(shape)
-				line->linkBegin(shape->getMagPoint(p));
+				line->linkBeginUpdate(shape->getMagPoint(p));
 			else
 				line->setBeginPoint(p);
 			line->setEndPoint(p);
@@ -477,13 +477,13 @@ void DScene::drawItems(QList<QGraphicsItem*> items){
 void DScene::copySelectedItems(){
     copyData.clear();
     QDataStream out(&copyData,QIODevice::WriteOnly);
-    Serializer::instance().serializeSceneItems(out,this->selectedItems());
+	Serializer::instance().serializeItems(out,this->selectedItems());
 }
 
 void DScene::pasteItems(){
     if(copyData.isEmpty()) return;
     QDataStream in(&copyData,QIODevice::ReadOnly);
-    QList<QGraphicsItem*> items = Serializer::instance().deserializeSceneItems(in);
+	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
     DTool::moveItems(items);
     drawItems(items);
 }
