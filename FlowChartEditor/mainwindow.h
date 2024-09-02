@@ -13,6 +13,9 @@
 #include <QSplitter>
 #include <QWidget>
 #include <QPushButton>
+#include <QFormLayout>
+#include <QComboBox>
+#include <QDoubleSpinBox>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -48,7 +51,8 @@ private slots:
     void addDocShape();
 
     void changeLineType(Qt::PenStyle linestyle);
-    void changeEndArrow(DConst::LineArrowType endArrowType);
+    void changeEndArrow(int endArrowType);
+    void changeLineStyle();
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -120,4 +124,13 @@ private:
     QPushButton *fileBtn;
     QPushButton *triBtn;
     QPushButton *textBtn;
+
+    QWidget *rightw;
+    QPushButton *confirm;
+    QPushButton *cancle;
+    QFormLayout *formright;
+    QHBoxLayout *rbtnLayout;
+    QComboBox *lineType;
+    QComboBox *arrowType;
+    QDoubleSpinBox *linebound;
 };

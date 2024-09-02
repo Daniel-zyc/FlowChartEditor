@@ -1,6 +1,7 @@
 #pragma once
 
 #include "global.h"
+#include "dlineitem.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -69,8 +70,10 @@ public:
 
     void clear();
 
+    QList<DLineBase*> getSelectedLine();
     void changeLineType(Qt::PenStyle linestyle);
-    void changeEndArrow(DConst::LineArrowType endArrowType);
+    void changeEndArrow(int endArrowType);
+    void changeLineWidth(double width);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

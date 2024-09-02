@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
     m->addAction(ui->actSelectTextFont);
+    m->addAction(ui->actLineStyleSheet);
 
     findDia = new DFindDialog();
 
@@ -123,6 +124,49 @@ void MainWindow::initUi()
     mainsplitter->addWidget(leftw);
     mainsplitter->addWidget(view);
     mainsplitter->setStretchFactor(1, 1);
+
+
+
+    rightw = new QWidget();
+    confirm = new QPushButton("确认");
+    cancle = new QPushButton("取消");
+    formright = new QFormLayout();
+    formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
+    // formright->setLabelAlignment(Qt::AlignLeft);
+
+    rbtnLayout = new QHBoxLayout();
+    rbtnLayout->addWidget(cancle, 1, Qt::AlignRight);
+
+    lineType = new QComboBox();
+    lineType->addItem("实线");
+    lineType->addItem("短划线");
+    lineType->addItem("点线");
+    lineType->addItem("点划线");
+    lineType->addItem("短划线-点-点线");
+
+    arrowType = new QComboBox();
+    arrowType->addItem("无箭头");
+    arrowType->addItem("箭头");
+    arrowType->addItem("开放型箭头");
+    arrowType->addItem("燕尾箭头");
+    arrowType->addItem("菱形箭头");
+    arrowType->addItem("圆型箭头");
+
+    linebound = new QDoubleSpinBox();
+    linebound->setRange(0, 1000);
+    linebound->setSingleStep(0.25);
+    linebound->setValue(1);
+    linebound->setSuffix("磅");
+    linebound->setWrapping(true);
+
+    formright->addRow("线条类型", lineType);
+    formright->addRow("箭头类型", arrowType);
+    formright->addRow("线条磅数", linebound);
+    formright->addRow(confirm, rbtnLayout);
+
+    rightw->setLayout(formright);
+    rightw->setVisible(false);
+    mainsplitter->addWidget(rightw);
 
     setCentralWidget(mainsplitter);
 }
@@ -264,9 +308,12 @@ void MainWindow::bindAction()
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
     connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
     connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
-
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
+
+    connect(ui->actLineStyleSheet, &QAction::triggered, this, [this]() {
+        rightw->setVisible(true);
+    });
 
     connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
     connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
@@ -306,8 +353,8 @@ void MainWindow::bindAction()
  //    connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
 
     QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
-    QShortcut *combinesc = new QShortcut(QKeySequence("ctrl+G"), this);
-    QShortcut *seperatesc = new QShortcut(QKeySequence("ctrl+shift+G"), this);
+    // QShortcut *combinesc = new QShortcut(QKeySequence("ctrl+G"), this);
+    // QShortcut *seperatesc = new QShortcut(QKeySequence("ctrl+shift+G"), this);
 
     connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
 	// connect(combinesc, SIGNAL(activated()), this, SLOT(combineSelected()));
@@ -322,6 +369,11 @@ void MainWindow::bindAction()
     connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
     connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+
+    connect(confirm, &QPushButton::clicked, this, &MainWindow::changeLineStyle);
+    connect(cancle, &QPushButton::clicked, this, [this]() {
+        rightw->setVisible(false);
+    });
 
     connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
         changeLineType(Qt::SolidLine);
@@ -340,22 +392,23 @@ void MainWindow::bindAction()
     });
 
     connect(ui->actNoArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(static_cast<DConst::LineArrowType>(0));
+        // changeEndArrow(static_cast<DConst::LineArrowType>(0));
+        changeEndArrow(0);
     });
     connect(ui->actArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(static_cast<DConst::LineArrowType>(1));
+        changeEndArrow(1);
     });
     connect(ui->actOpenArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(static_cast<DConst::LineArrowType>(2));
+        changeEndArrow(2);
     });
     connect(ui->actDovetailArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(static_cast<DConst::LineArrowType>(3));
+        changeEndArrow(3);
     });
     connect(ui->actDiaArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(static_cast<DConst::LineArrowType>(4));
+        changeEndArrow(4);
     });
     connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(static_cast<DConst::LineArrowType>(5));
+        changeEndArrow(5);
     });
 }
 
@@ -433,9 +486,36 @@ void MainWindow::changeLineType(Qt::PenStyle linestyle)
     scene->changeLineType(linestyle);
 }
 
-void MainWindow::changeEndArrow(DConst::LineArrowType endArrowType)
+void MainWindow::changeEndArrow(int endArrowType)
 {
     scene->changeEndArrow(endArrowType);
+}
+
+void MainWindow::changeLineStyle()
+{
+    int penstyle = lineType->currentIndex();
+    qDebug() << "penstyle;" << penstyle;
+    switch(penstyle) {
+    case 0: changeLineType(Qt::SolidLine); break;
+    case 1: changeLineType(Qt::DashLine); break;
+    case 2: changeLineType(Qt::DotLine); break;
+    case 3: changeLineType(Qt::DashDotLine); break;
+    case 4: changeLineType(Qt::DashDotDotLine); break;
+    }
+
+    int arrowstyle = arrowType->currentIndex();
+    qDebug() << "arrowstyle" << arrowstyle;
+    switch(arrowstyle) {
+    case 0: changeEndArrow(0); break;
+    case 1: changeEndArrow(1); break;
+    case 2: changeEndArrow(2); break;
+    case 3: changeEndArrow(3); break;
+    case 4: changeEndArrow(4); break;
+    case 5: changeEndArrow(5); break;
+    }
+
+    qDebug() << "width" << linebound->value();
+    scene->changeLineWidth(linebound->value());
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()

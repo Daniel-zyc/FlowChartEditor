@@ -249,58 +249,48 @@ DAbstractBase* DScene::getInterItemOnPoint(QPointF p)
 void DScene::changeLineType(Qt::PenStyle linestyle)
 {
     qDebug() << "change Line Type";
-    QList<QGraphicsItem*> items = selectedItems();
+    QList<DLineBase*> lines = getSelectedLine();
     QMessageBox msgBox;
     msgBox.setText("提示");
 
-    if(items.count() < 1) {
-        msgBox.setInformativeText("无选中元素");
-        msgBox.exec();
-        return;
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setStyle(linestyle);
+        line->setPen(npen);
     }
-    if(items.count() > 1) {
-        msgBox.setInformativeText("请选择单条线条");
-        msgBox.exec();
-        return;
-    }
-
-    DLineItem *line = dynamic_cast<DLineItem*>(items[0]);
-    if(!line) {
-        msgBox.setInformativeText("请选中线条");
-        msgBox.exec();
-        return;
-    }
-    QPen npen = line->pen();
-    npen.setStyle(linestyle);
-    line->setPen(npen);
-    // update();
 }
 
-void DScene::changeEndArrow(DConst::LineArrowType endArrowType)
+void DScene::changeEndArrow(int endArrowType)
 {
     qDebug() << "change Line endArrow";
-    QList<QGraphicsItem*> items = selectedItems();
+    QList<DLineBase*> lines = getSelectedLine();
     QMessageBox msgBox;
     msgBox.setText("提示");
 
-    if(items.count() < 1) {
-        msgBox.setInformativeText("无选中元素");
-        msgBox.exec();
-        return;
-    }
-    if(items.count() > 1) {
-        msgBox.setInformativeText("请选择单条线条");
-        msgBox.exec();
-        return;
+    for(DLineBase *line : lines) {
+        line->setEndArrowType(endArrowType);
     }
 
-    DLineItem *line = dynamic_cast<DLineItem*>(items[0]);
-    if(!line) {
-        msgBox.setInformativeText("请选中线条");
-        msgBox.exec();
-        return;
+}
+
+void DScene::changeLineWidth(double width)
+{
+    qDebug() << "change Line Width";
+    QList<DLineBase*> lines = getSelectedLine();
+    QMessageBox msgBox;
+    msgBox.setText("提示");
+
+    // if(lines.count() < 1) {
+    //     msgBox.setInformativeText("请选中线条");
+    //     msgBox.exec();
+    //     return;
+    // }
+
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setWidth(width);
+        line->setPen(npen);
     }
-    line->endArrowType = endArrowType;
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -446,4 +436,19 @@ void DScene::clear(){
     QGraphicsScene::clear();
     addLine(-1000, 0, 1000, 0);
     addLine(0, -1000, 0, 1000);
+}
+
+QList<DLineBase *> DScene::getSelectedLine()
+{
+    QList<QGraphicsItem*> items = selectedItems();
+    QList<DLineBase*> lines;
+
+    for(QGraphicsItem *item : items) {
+        DLineBase *line = dynamic_cast<DLineBase*>(item);
+        if(line != nullptr) {
+            lines.push_back(line);
+        }
+    }
+
+    return lines;
 }
