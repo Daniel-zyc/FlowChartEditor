@@ -17,6 +17,8 @@
 #include <QFormLayout>
 #include <QComboBox>
 #include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QRadioButton>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -55,6 +57,7 @@ private slots:
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
     void changeLineStyle();
+    void setSceneBg(QString path);
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -143,4 +146,9 @@ private:
     QToolButton *openTln;
     QToolButton *saveTln;
     QToolButton *saveSvgTln;
+
+    QGroupBox *bgGroup;
+    QRadioButton *blankBg;
+    QRadioButton *gridBg;
+    QRadioButton *dotBg;
 };

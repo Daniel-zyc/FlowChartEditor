@@ -16,7 +16,7 @@ DPolyLineItem::DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 QRectF DPolyLineItem::boundingRect() const
 {
     qreal r = maxPointRadius;
-    int direct = getPolyLineDirection();
+    int direct = getPaintDirection();
     //所有影响框线的点
     QVector<QPointF> points = {
         QPointF(beginPoint.x(), beginPoint.y()),
@@ -63,7 +63,7 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     painter->setBrush(brush());
     painter->setPen(pen());
 
-    int direct = getPolyLineDirection();
+    int direct = getPaintDirection();
     QPointF points[6] = {
         QPointF(beginPoint.x(), beginPoint.y()),
         QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),
@@ -74,8 +74,6 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),
         QPointF(endPoint.x(), endPoint.y())
     };
-    for(int i = 0; i < 6; i++ )
-        qDebug() << points[i].x() << ":" << points[i].y();
     painter->drawPolyline(points,6);
 }
 
@@ -84,7 +82,7 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
     switch(id)
     {
     case 0:
-        if(getPolyLineDirection()) mid_y_shift = p.y();
+        if(getPaintDirection()) mid_y_shift = p.y();
         else mid_x_shift = p.x();
         updateModiPoint();
         break;
@@ -128,9 +126,12 @@ void DPolyLineItem::updateMidPoint(int type)
         mid_y_shift = endPoint.y();
         break;
     case 2:
+        mid_x_shift = endPoint.x();
+        mid_y_shift = beginPoint.y();
+        break;
+    case 3:
         mid_x_shift = midPoint.x();
         mid_y_shift = midPoint.y();
-        break;
     }
     return;
 }
@@ -144,7 +145,7 @@ void DPolyLineItem::updateModiPoint()
         modis_num = 1;
         modis.resize(1);
         modis[0] = QPointF(mid_x_shift,mid_y_shift);
-        int direct = getPolyLineDirection();
+        int direct = getPaintDirection(); //
         if((abs(st_x_offset) > 1e-6 || abs(st_y_offset) > 1e-6) && direct) {
             modis_num++;
             modis.resize(modis_num);
@@ -168,14 +169,25 @@ int DPolyLineItem::getPolyLineDirection() const
     else return 1;
 }
 
+int DPolyLineItem::getPaintDirection() const
+{
+    if(!line_type) {
+        if(abs(endPoint.x() - beginPoint.x()) > abs(endPoint.y() - beginPoint.y())) return 0;
+        else return 1;
+    } else {
+        if(abs(endPoint.x() - beginPoint.x()) > abs(endPoint.y() - beginPoint.y())) return 1;
+        else return 0;
+    }
+}
+
 //上右下左1234
-int DPolyLineItem::getCollideDirection(QRectF item,QPointF center)
+int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
 {
     int item_direct = 0;
-    if(abs(center.x() + item.left() - beginPoint.x()) < 50) item_direct = 4;
-    else if(abs(center.x() + item.right() - beginPoint.x()) < 50) item_direct = 2;
-    if(abs(center.y() + item.top() - beginPoint.y()) < 50) item_direct = 1;
-    else if(abs(center.y() + item.bottom() - beginPoint.y()) < 50) item_direct = 3;
+    if(abs(center.x() + item.left() - point.x()) < 50) item_direct = 4;
+    else if(abs(center.x() + item.right() - point.x()) < 50) item_direct = 2;
+    if(abs(center.y() + item.top() - point.y()) < 50) item_direct = 1;
+    else if(abs(center.y() + item.bottom() - point.y()) < 50) item_direct = 3;
     return item_direct;
 }
 //相对位置 1234右上开始顺时针
@@ -185,7 +197,30 @@ int DPolyLineItem::getRelativePosition(QPointF cur,QPointF another)
         return (another.y() > cur.y()) ? 2 : 1;
     else return (another.y() > cur.y()) ? 3 : 4;
 }
-
+/*
+void DPolyLineItem::updateBeginMidPoint()
+{
+    int direct = getPolyLineDirection();
+    if(!line_type) {
+        begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * direct + mid_x_shift * (direct ^ 1),
+                              (beginPoint.y() + st_y_offset) * (direct ^ 1) + mid_y_shift * direct);
+    } else {
+        begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * (direct ^ 1) + mid_x_shift * direct,
+                              (beginPoint.y() + st_y_offset) * direct + mid_y_shift * (direct ^ 1));
+    }
+}
+void DPolyLineItem::updateEndMidPoint()
+{
+    int direct = getPolyLineDirection();
+    if(!line_type) {
+        end_midPoint = QPointF((endPoint.x() + ed_x_offset) * direct + mid_x_shift * (direct ^ 1),
+                              (endPoint.y() + ed_y_offset) * (direct ^ 1) + mid_y_shift * direct);
+    } else {
+        end_midPoint = QPointF((endPoint.x() + ed_x_offset) * (direct ^ 1) + mid_x_shift * direct,
+                              (endPoint.y() + ed_y_offset) * direct + mid_y_shift * (direct ^ 1));
+    }
+}
+*/
 void DPolyLineItem::updatePolyLineType()
 {
     //测试方向 1234上右下左
@@ -195,18 +230,19 @@ void DPolyLineItem::updatePolyLineType()
     if(beginMag) {
         st_item = beginMag->parent->boundingRect();
         st_center = beginMag->parent->pos();
-        begin_item_direct = getCollideDirection(st_item,st_center);
+        begin_item_direct = getCollideDirection(st_item,st_center,beginPoint);
     }
     if(endMag) {
         ed_item = endMag->parent->boundingRect();
         ed_center = endMag->parent->pos();
-        end_item_direct = getCollideDirection(ed_item,ed_center);
+        end_item_direct = getCollideDirection(ed_item,ed_center,endPoint);
     }
     qDebug() << "directions:" << begin_item_direct << "," << end_item_direct;
     updateOffsets(begin_item_direct,end_item_direct);
     return;
 }
 
+//得到图形对应的点 右上顺时针1234
 QPointF DPolyLineItem::getBoundingPoint(int point, int type)
 {
     QRectF item,bound;
@@ -217,6 +253,7 @@ QPointF DPolyLineItem::getBoundingPoint(int point, int type)
         item = endMag->parent->boundingRect();
         bound = endMag->parent->mapRectToScene(item);
     }
+    qDebug() << "bound:" << bound.left() << bound.right() << bound.top() << bound.bottom();
     switch (type) {
     case 1:
         return QPointF(bound.right() + 40 , bound.top() - 40);
@@ -239,89 +276,204 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
     int relative_pos = getRelativePosition(beginPoint,endPoint);
     int rect_type = getPolyLineDirection();
     int temp_relative_pos;
+    int begin_line_type = 0,end_line_type = 0;
+    QPointF begin_midPoint = {0,0},end_midPoint = {0,0};
     switch (st_dir) {
     case 0:
         st_x_offset = 0;
         st_y_offset = 0;
-        line_type = 0;
-        return;
+        begin_line_type = 0;
+        break;
     case 1:
+        begin_line_type = 0;
         st_y_offset = -40;
         st_x_offset = 0;
         temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
         if(!rect_type) {
-            if(temp_relative_pos == 1 || temp_relative_pos == 4) line_type = 1;
-            else line_type = 0;
-        } else {
-            if(temp_relative_pos == 1 || temp_relative_pos == 4) st_y_offset = st_x_offset = 0;
-            else if(temp_relative_pos == 2) {
-                line_type = 3;
-                //qDebug() << "midPoint:" << midPoint;
-                //midPoint = getBoundingPoint(0,1);
-
-            } else if(temp_relative_pos == 3) {
-                line_type = 3;
-                //midPoint = getBoundingPoint(0,2);
-                //qDebug() << "midPoint:" << midPoint;
+            if(temp_relative_pos == 1 || temp_relative_pos == 4) {
+                begin_line_type = 1;
+                begin_midPoint = QPointF(beginPoint.x(),endPoint.y());
             }
-            else line_type = 0;
+        } else {
+            if(temp_relative_pos == 1 || temp_relative_pos == 4); //st_y_offset = st_x_offset = 0;
+            else if(temp_relative_pos == 2) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,1);
+            } else if(temp_relative_pos == 3) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,4);
+            }
         }
         break;
     case 2:
+        begin_line_type = 0;
         st_x_offset = 40;
         st_y_offset = 0;
+        temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
         if(rect_type) {
-            temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
-            if(temp_relative_pos == 1 || temp_relative_pos == 2) line_type = 2;
-            else line_type = 0;
-        } else line_type = 0;
+            if(temp_relative_pos == 1 || temp_relative_pos == 2) {
+                begin_line_type = 2;
+                begin_midPoint = QPointF(endPoint.x(),beginPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 1 || temp_relative_pos == 2);
+            else if(temp_relative_pos == 3) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,2);
+            } else if(temp_relative_pos == 4) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,1);
+            }
+        }
         break;
     case 3:
+        begin_line_type = 0;
         st_y_offset = 40;
         st_x_offset = 0;
+        temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
         if(!rect_type) {
-            temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
-            if(temp_relative_pos == 2 || temp_relative_pos == 3) line_type = 1;
-            else line_type = 0;
-        } else line_type = 0;
+            if(temp_relative_pos == 2 || temp_relative_pos == 3) {
+                begin_line_type = 1;
+                begin_midPoint = QPointF(beginPoint.x(),endPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 2 || temp_relative_pos == 3); //st_y_offset = st_x_offset = 0;
+            else if(temp_relative_pos == 1) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,2);
+            } else if(temp_relative_pos == 4) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,3);
+            }
+        }
         break;
     case 4:
+        begin_line_type = 0;
         st_x_offset = -40;
         st_y_offset = 0;
+        temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
         if(rect_type) {
-            temp_relative_pos = getRelativePosition(QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),endPoint);
-            if(temp_relative_pos == 3 || temp_relative_pos == 4) line_type = 2;
-            else line_type = 0;
-        } else line_type = 0;
+            if(temp_relative_pos == 3 || temp_relative_pos == 4) {
+                begin_line_type = 2;
+                begin_midPoint = QPointF(endPoint.x(),beginPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 3 || temp_relative_pos == 4);
+            else if(temp_relative_pos == 1) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,4);
+            } else if(temp_relative_pos == 2) {
+                begin_line_type = 3;
+                begin_midPoint = getBoundingPoint(0,3);
+            }
+        }
         break;
     }
-    /*
+
     switch (ed_dir) {
     case 0:
         ed_x_offset = 0;
         ed_y_offset = 0;
-        line_type = 0;
-        return;
+        end_line_type = 0;
+        break;
     case 1:
-        ed_x_offset = -40;
-        ed_y_offset = 0;
-        line_type = 3;
+        end_line_type = 0;
+        ed_y_offset = -40;
+        ed_x_offset = 0;
+        temp_relative_pos = getRelativePosition(QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),beginPoint);
+        if(!rect_type) {
+            if(temp_relative_pos == 1 || temp_relative_pos == 4) {
+                end_line_type = 2;
+                end_midPoint = QPointF(endPoint.x(),beginPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 1 || temp_relative_pos == 4);
+            else if(temp_relative_pos == 2) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,1);
+            } else if(temp_relative_pos == 3) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,4);
+            }
+        }
         break;
     case 2:
-        ed_x_offset = 0;
-        ed_y_offset = 40;
-        line_type = 4;
-        break;
-    case 3:
+        end_line_type = 0;
         ed_x_offset = 40;
         ed_y_offset = 0;
-        line_type = 1;
+        temp_relative_pos = getRelativePosition(QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),beginPoint);
+        if(rect_type) {
+            if(temp_relative_pos == 1 || temp_relative_pos == 2) {
+                end_line_type = 1;
+                end_midPoint = QPointF(beginPoint.x(),endPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 1 || temp_relative_pos == 2);
+            else if(temp_relative_pos == 3) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,2);
+            } else if(temp_relative_pos == 4) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,1);
+            }
+        }
+        break;
+    case 3:
+        end_line_type = 0;
+        ed_y_offset = 40;
+        ed_x_offset = 0;
+        temp_relative_pos = getRelativePosition(QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),beginPoint);
+        if(!rect_type) {
+            if(temp_relative_pos == 2 || temp_relative_pos == 3) {
+                end_line_type = 2;
+                end_midPoint = QPointF(endPoint.x(),beginPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 2 || temp_relative_pos == 3);
+            else if(temp_relative_pos == 4) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,3);
+            } else if(temp_relative_pos == 1) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,2);
+            }
+        }
         break;
     case 4:
-        ed_x_offset = 0;
-        ed_y_offset = -40;
-        line_type = 2;
+        end_line_type = 0;
+        ed_x_offset = -40;
+        ed_y_offset = 0;
+        temp_relative_pos = getRelativePosition(QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),beginPoint);
+        if(!rect_type) {
+            if(temp_relative_pos == 3 || temp_relative_pos == 4) {
+                end_line_type = 1;
+                end_midPoint = QPointF(beginPoint.x(),endPoint.y());
+            }
+        } else {
+            if(temp_relative_pos == 3 || temp_relative_pos == 4);
+            else if(temp_relative_pos == 1) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,4);
+            } else if(temp_relative_pos == 2) {
+                end_line_type = 3;
+                end_midPoint = getBoundingPoint(1,3);
+            }
+        }
         break;
     }
-*/
+
+    if(!begin_line_type && !end_line_type) {
+        line_type = 0;
+    } else if(!end_line_type && begin_line_type) {
+        line_type = begin_line_type;
+        midPoint = begin_midPoint;
+    } else if(!begin_line_type && end_line_type) {
+        line_type = end_line_type;
+        midPoint = end_midPoint;
+    } else {
+        line_type = 3;
+        midPoint = (begin_midPoint + end_midPoint) / 2;
+    }
+
+    qDebug() << "line_type:" << line_type << "midPoint:" << midPoint;
 }

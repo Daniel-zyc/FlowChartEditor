@@ -22,10 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-	setWindowTitle("Flowchart Editor");
-
 	ui->setupUi(this);
 
+    setWindowTitle("Flowchart Editor");
     // 绑定序列化管理
 	scene = new DScene(this);
 
@@ -38,9 +37,11 @@ MainWindow::MainWindow(QWidget *parent)
 	// m->addAction(ui->actSeperate);
 	m->addAction(ui->actAddRect);
 	m->addAction(ui->actAddEll);
+    m->addAction(ui->actAddRhom);
 	m->addAction(ui->actAddLine);
     m->addAction(ui->actAddPargram);
     m->addAction(ui->actAddDoc);
+    m->addAction(ui->actAddTrap);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
@@ -52,8 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
     findDia = new DFindDialog();
 
     colorDia = new QColorDialog(Qt::blue, this);
-    colorDia->setOption(QColorDialog::ShowAlphaChannel);
-    colorDia->setOption(QColorDialog::DontUseNativeDialog);
+    // colorDia->setOption(QColorDialog::ShowAlphaChannel);
+    // colorDia->setOption(QColorDialog::DontUseNativeDialog);
 
     fontDia = new QFontDialog(this);
     // fontDia->setOption(QFontDialog::DontUseNativeDialog);
@@ -83,6 +84,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUi()
 {
+    //图形页面
     mainsplitter = new QSplitter(Qt::Horizontal, this);
     leftw = new QWidget();
     leftUpV = new QVBoxLayout(leftw);
@@ -122,15 +124,27 @@ void MainWindow::initUi()
     leftGrid->addWidget(textBtn, 4, 1);
 
     leftUpV->addLayout(leftGrid);
-    leftUpV->addStretch();
     leftw->setLayout(leftUpV);
+
+    bgGroup = new QGroupBox("背景选择");
+    QVBoxLayout *bgV = new QVBoxLayout();
+    blankBg = new QRadioButton("空白");
+    gridBg = new QRadioButton("网格");
+    dotBg = new QRadioButton("点状");
+    bgV->addWidget(blankBg);
+    bgV->addWidget(gridBg);
+    bgV->addWidget(dotBg);
+    bgGroup->setLayout(bgV);
+    blankBg->setChecked(true);
+
+    leftUpV->addWidget(bgGroup);
+    leftUpV->addStretch();
 
     mainsplitter->addWidget(leftw);
     mainsplitter->addWidget(view);
     mainsplitter->setStretchFactor(1, 1);
 
-
-
+    //线条样式表
     rightw = new QWidget();
     confirm = new QPushButton("确认");
     cancle = new QPushButton("取消");
@@ -301,6 +315,11 @@ void MainWindow::createToolBar()
     saveTln->setIcon(QIcon(":/icon/savefile.png"));
     saveSvgTln->setIcon(QIcon(":/icon/savesvg.png"));
 
+    createTln->setToolTip("新建文件");
+    openTln->setToolTip("打开文件");
+    saveTln->setToolTip("保存文件");
+    saveSvgTln->setToolTip("导出Svg格式");
+
     ui->headToolBar->addWidget(createTln);
     ui->headToolBar->addWidget(openTln);
     ui->headToolBar->addWidget(saveTln);
@@ -326,11 +345,10 @@ void MainWindow::bindAction()
 
     connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
     connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
+    connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
 
     connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
     connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
-
-    connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
 
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
@@ -452,6 +470,16 @@ void MainWindow::bindAction()
     connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
         changeEndArrow(5);
     });
+
+    connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
+        if(checked) setSceneBg(":/icon/blankBg.png");
+    });
+    connect(gridBg, &QRadioButton::toggled, this, [this](bool checked) {
+        if(checked) setSceneBg(":/icon/gridBg.png");
+    });
+    connect(dotBg, &QRadioButton::toggled, this, [this](bool checked) {
+        if(checked) setSceneBg(":/icon/dotBg.png");
+    });
 }
 
 void MainWindow::saveAsSvg()
@@ -565,6 +593,11 @@ void MainWindow::changeLineStyle()
     scene->changeLineWidth(linebound->value());
 }
 
+void MainWindow::setSceneBg(QString path)
+{
+    scene->setBg(path);
+}
+
 QSet<DTextBase *> MainWindow::getTextBases()
 {
     QSet<DTextBase *> texts;
@@ -592,7 +625,7 @@ QSet<DTextBase *> MainWindow::getTextBases()
 void MainWindow::selectFrameCol()
 {
     QList<QGraphicsItem *> items = scene->selectedItems();
-    QColor color = colorDia->getColor(Qt::white, this);
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
     for(QGraphicsItem *item : items) {
         DLineItem *line = dynamic_cast<DLineItem *>(item);
         if(line != nullptr) {
@@ -615,7 +648,7 @@ void MainWindow::selectFrameCol()
 void MainWindow::selectFillCol()
 {
     QList<QGraphicsItem *> items = scene->selectedItems();
-    QColor color = colorDia->getColor(Qt::white, this);
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
     // qDebug() << items;
     // qDebug() << color;
     for(QGraphicsItem *item : items) {
@@ -633,7 +666,7 @@ void MainWindow::selectFillCol()
 void MainWindow::selectTextCol()
 {
     QSet<DTextBase *> texts = getTextBases();
-    QColor color = colorDia->getColor(Qt::white, this);
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
     // qDebug() << items;
     // qDebug() << color;
 

@@ -2,6 +2,19 @@
 
 #include <cmath>
 
+QSet<int> registeredTypes = QSet<int>(
+			{
+				// shape
+				DRectItemType, DRoundRectItemType,
+				DEllItemType,
+
+				// text
+				DTextItemType,
+
+				// line
+				DLineItemType
+			});
+
 int SHOT_STATE = DConst::UNCHANGED;
 
 qreal DTool::degToRad(qreal deg) { return deg / 180 * DConst::PI; }
@@ -29,11 +42,27 @@ bool DTool::inCircle(const QPointF& o, qreal r, const QPointF& p)
 
 void DTool::moveItems(const QList<QGraphicsItem *> &items)
 {
+	QSet<QGraphicsItem*> S;
+	for (QGraphicsItem* item : items) S.insert(item);
 	for (QGraphicsItem* item : items)
 	{
-		if (item || item->parentItem() != nullptr) continue;
-		QPointF currentPos = item->pos();
-		item->setPos(currentPos.x() + DConst::SHIFT_X,
-					 currentPos.y() - DConst::SHIFT_Y);
+		if (item == nullptr || S.contains(item->parentItem())) continue;
+		QPointF curPos = item->pos();
+		item->setPos(curPos.x() + DConst::SHIFT_X,
+					 curPos.y() - DConst::SHIFT_Y);
+	}
+}
+
+void DTool::filterRootItem(QList<QGraphicsItem*>& items)
+{
+	QSet<QGraphicsItem*> S;
+	for(QGraphicsItem* item : items) S.insert(item);
+	for (int i = 0; i < items.size(); i++)
+	{
+		if(items[i] == nullptr || S.contains(items[i]->parentItem()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+		}
 	}
 }

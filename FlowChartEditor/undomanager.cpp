@@ -12,7 +12,7 @@ void UndoManager::shot(QGraphicsScene *scene){
     QByteArray data;
     QDataStream out(&data,QIODevice::WriteOnly);
     QList<QGraphicsItem *> items = scene->items();
-    Serializer::instance().serializeSceneItems(out, items);
+	Serializer::instance().serializeItems(out, items);
     if(undoStack.empty() || data != undoStack.top()) undoStack.push(data);
     trimStack();
     SHOT_STATE = DConst::UNCHANGED;
@@ -30,7 +30,7 @@ void UndoManager::undo(){
     if(redoStack.empty() && !undoStack.empty()) redoStack.push(undoStack.pop());        // 当前快照移动
     QByteArray data = undoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
-    QList<QGraphicsItem *> items = Serializer::instance().deserializeSceneItems(in);
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
     scene->clear(); scene->drawItems(items);
     redoStack.push(data);
     trimStack();
@@ -42,7 +42,7 @@ void UndoManager::redo(){
     if(undoStack.empty() && !redoStack.empty()) undoStack.push(redoStack.pop());
     QByteArray data = redoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
-    QList<QGraphicsItem *> items = Serializer::instance().deserializeSceneItems(in);
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
     scene->clear(); scene->drawItems(items);
     undoStack.push(data);
     trimStack();

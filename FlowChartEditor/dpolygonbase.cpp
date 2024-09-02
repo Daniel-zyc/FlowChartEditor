@@ -44,16 +44,16 @@ void DPolygonBase::setPoly(const QPolygonF &npoly)
 }
 
 //==============================================
-void DPolygonBase::serialize(QDataStream &out) const{
-    // qDebug() << "dpolygon base serializing";
-    DShapeBase::serialize(out);
+// void DPolygonBase::serialize(QDataStream &out) const{
+//     // qDebug() << "dpolygon base serializing";
+//     DShapeBase::serialize(out);
 
-    out << polygon;
-}
+//     out << polygon;
+// }
 
-void DPolygonBase::deserialize(QDataStream &in){
-    // qDebug() << "dpolygon base deserializing";
-    DShapeBase::deserialize(in);
+// void DPolygonBase::deserialize(QDataStream &in){
+//     // qDebug() << "dpolygon base deserializing";
+//     DShapeBase::deserialize(in);
 
-    in >> polygon;
-}
+//     in >> polygon;
+// }

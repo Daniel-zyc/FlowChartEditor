@@ -16,8 +16,8 @@ DTrapItem::DTrapItem(qreal topWidth,qreal bottomWidth, qreal height, QGraphicsIt
     mags->push_back(new MagPoint(this));
     mags->push_back(new MagPoint(this));
     mags->push_back(new MagPoint(this));
-    setRect(QRectF(-bottomWidth/2, -height/2, bottomWidth, height));
-    c=topWidth/rect.width();
+    setRect(QRectF(-topWidth/2, -height/2, topWidth, height));
+    c=bottomWidth/rect.width();
 
 }
 void DTrapItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -29,10 +29,10 @@ void DTrapItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->setPen(pen());
 
     QPolygonF polygon;
-    polygon<< QPointF(rect.left() + (rect.width() - c*rect.width()) / 2, rect.top())
-            << QPointF(rect.right() - (rect.width() - c*rect.width()) / 2, rect.top())
-            << QPointF(rect.right(), rect.bottom())
-            << QPointF(rect.left(), rect.bottom());
+    polygon<< QPointF(rect.left(), rect.top())
+            << QPointF(rect.right(), rect.top())
+            << QPointF(rect.right() - (rect.width()- c*rect.width()) / 2, rect.bottom())
+            << QPointF(rect.left() + (rect.width()- c*rect.width()) / 2, rect.bottom());
 
     painter->drawPolygon(polygon);
     updateMagPoint();
@@ -48,10 +48,10 @@ QPainterPath DTrapItem::shapeNormal() const
 {
     QPainterPath path;
     QPolygonF polygon;
-    polygon<< QPointF(rect.left() + (rect.width()- c*rect.width()) / 2, rect.top())
-           << QPointF(rect.right() - (rect.width()- c*rect.width()) / 2, rect.top())
-           << QPointF(rect.right(), rect.bottom())
-           << QPointF(rect.left(), rect.bottom());
+    polygon<< QPointF(rect.left(), rect.top())
+            << QPointF(rect.right(), rect.top())
+            << QPointF(rect.right() - (rect.width()- c*rect.width()) / 2, rect.bottom())
+            << QPointF(rect.left() + (rect.width()- c*rect.width()) / 2, rect.bottom());
     path.addPolygon(polygon);
     return path;
 }
@@ -68,7 +68,7 @@ void DTrapItem::updateMagPoint()
 void DTrapItem::updateModiPoint()
 {
     // 只有一个调整点
-    modis[0] = {rect.left() + (rect.width() - c*rect.width()) / 2, rect.top()};
+    modis[0] = {rect.left() + (rect.width() - c*rect.width()) / 2, rect.bottom()};
 }
 
 void DTrapItem::sizeToRect(QRectF nrect)
@@ -79,10 +79,10 @@ void DTrapItem::sizeToRect(QRectF nrect)
 void DTrapItem::modiToPoint(QPointF p, int id)
 {
     if (id == 0) {
-        qreal newTopWidth = qAbs(((rect.right() - p.x())-rect.width()/2)*2);
-        topWidth = qMin(newTopWidth, rect.width());
-        bottomWidth = rect.width();
-        c=topWidth/rect.width();
+        qreal newBottomWidth = qAbs(((rect.right() - p.x())-rect.width()/2)*2);
+        bottomWidth = qMin(newBottomWidth, rect.width());
+        topWidth = rect.width();
+        c=bottomWidth/rect.width();
         updateModiPoint();
     }
 }
@@ -96,14 +96,14 @@ void DTrapItem::setRect(const QRectF &nrect)
 }
 
 //================================
-void DTrapItem::serialize(QDataStream &out) const{
-    DShapeBase::serialize(out);
-    out << topWidth << bottomWidth;
-    out << height << c << rect;
-}
+// void DTrapItem::serialize(QDataStream &out) const{
+//     DShapeBase::serialize(out);
+//     out << topWidth << bottomWidth;
+//     out << height << c << rect;
+// }
 
-void DTrapItem::deserialize(QDataStream &in){
-    DShapeBase::deserialize(in);
-    in << topWidth << bottomWidth;
-    in << height << c << rect;
-}
+// void DTrapItem::deserialize(QDataStream &in){
+//     DShapeBase::deserialize(in);
+//     in << topWidth << bottomWidth;
+//     in << height << c << rect;
+// }

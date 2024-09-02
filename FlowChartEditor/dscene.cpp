@@ -163,7 +163,7 @@ void DScene::addTrapItem()
 {
     qDebug() << "add Document";
 //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(80,100,80);
+    DTrapItem *item = new DTrapItem(100,80,80);
     item->textItem = new DTextItem(50, 50, "hello world", item);
     item->textItem->deleteMagPoint();
     addItem(item);
@@ -313,6 +313,12 @@ void DScene::changeLineWidth(double width)
     }
 }
 
+void DScene::setBg(QString path)
+{
+    QPixmap bg(path);
+    setBackgroundBrush(bg);
+}
+
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() != Qt::LeftButton)
@@ -339,7 +345,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			DLineBase* line = dynamic_cast<DLineBase*>(modifiedShape);
 			DAbstractBase* shape = getMagItemOnPoint(p);
 			if(shape)
-				line->linkBegin(shape->getMagPoint(p));
+				line->linkBeginUpdate(shape->getMagPoint(p));
 			else
 				line->setBeginPoint(p);
 			line->setEndPoint(p);
@@ -484,13 +490,13 @@ void DScene::drawItems(QList<QGraphicsItem*> items){
 void DScene::copySelectedItems(){
     copyData.clear();
     QDataStream out(&copyData,QIODevice::WriteOnly);
-    Serializer::instance().serializeSceneItems(out,this->selectedItems());
+	Serializer::instance().serializeItems(out,this->selectedItems());
 }
 
 void DScene::pasteItems(){
     if(copyData.isEmpty()) return;
     QDataStream in(&copyData,QIODevice::ReadOnly);
-    QList<QGraphicsItem*> items = Serializer::instance().deserializeSceneItems(in);
+	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
     DTool::moveItems(items);
     drawItems(items);
 }

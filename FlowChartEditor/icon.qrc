@@ -14,5 +14,8 @@
         <file>icon/openfile.png</file>
         <file>icon/savefile.png</file>
         <file>icon/savesvg.png</file>
+        <file>icon/blankBg.png</file>
+        <file>icon/gridBg.png</file>
+        <file>icon/dotBg.png</file>
     </qresource>
 </RCC>
