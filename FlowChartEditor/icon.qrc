@@ -17,5 +17,16 @@
         <file>icon/blankBg.png</file>
         <file>icon/gridBg.png</file>
         <file>icon/dotBg.png</file>
+        <file>icon/arrow.png</file>
+        <file>icon/diaArrow.png</file>
+        <file>icon/dovetailArrow.png</file>
+        <file>icon/noArrow.png</file>
+        <file>icon/openArrow.png</file>
+        <file>icon/roundArrow.png</file>
+        <file>icon/dashDDLine.png</file>
+        <file>icon/dashDotLine.png</file>
+        <file>icon/dashLine.png</file>
+        <file>icon/dotLine.png</file>
+        <file>icon/solidLine.png</file>
     </qresource>
 </RCC>

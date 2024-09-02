@@ -19,6 +19,9 @@
 #include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QTabWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -130,7 +133,8 @@ private:
     QPushButton *triBtn;
     QPushButton *textBtn;
 
-    QWidget *rightw;
+    QTabWidget *rightTab;
+    QWidget *rightLinew;
     QPushButton *confirm;
     QPushButton *cancle;
     QFormLayout *formright;
@@ -148,4 +152,8 @@ private:
     QRadioButton *blankBg;
     QRadioButton *gridBg;
     QRadioButton *dotBg;
+
+    QTreeWidget *rightBgw;
+    QTreeWidgetItem *colorTop;
+    QTreeWidgetItem *patternTop;
 };
