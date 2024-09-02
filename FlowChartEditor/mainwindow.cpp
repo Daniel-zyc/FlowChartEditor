@@ -212,6 +212,7 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddTrap);
     ui->addMenu->addAction(ui->actAddTri);
 	ui->addMenu->addAction(ui->actAddText);
+    ui->addMenu->addAction(ui->actAddPolyLine);
 
 
 
@@ -242,6 +243,7 @@ void MainWindow::createToolBar()
     ui->headToolBar->addAction(ui->actAddTrap);
     ui->headToolBar->addAction(ui->actAddPargram);
     ui->headToolBar->addAction(ui->actAddDoc);
+    ui->headToolBar->addAction(ui->actAddPolyLine);
 }
 
 void MainWindow::bindAction()
@@ -268,6 +270,7 @@ void MainWindow::bindAction()
 
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
+    connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
     connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
     connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
@@ -323,6 +326,7 @@ void MainWindow::bindAction()
     connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
     connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+    //折线button
 
     connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
         changeLineType(Qt::SolidLine);
@@ -427,6 +431,11 @@ void MainWindow::addParallegram()
 void MainWindow::addDocShape()
 {
     scene->addDocItem();
+}
+
+void MainWindow::addPolyLine()
+{
+    scene->addPolyLineItem();
 }
 
 void MainWindow::changeLineType(Qt::PenStyle linestyle)

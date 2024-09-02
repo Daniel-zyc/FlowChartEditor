@@ -1,6 +1,12 @@
 #include "undomanager.h"
 #include "serializer.h"
 
+UndoManager::UndoManager(){
+    QByteArray data; QDataStream out(&data,QIODevice::WriteOnly);
+    Serializer::instance().serializeEmptyItems(out);
+    undoStack.push(data);
+}
+
 void UndoManager::shot(QGraphicsScene *scene){
     qDebug() << "shot";
     QByteArray data;

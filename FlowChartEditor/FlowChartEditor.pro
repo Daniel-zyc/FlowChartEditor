@@ -17,6 +17,7 @@ SOURCES += \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
+    dpolylineitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
+    dpolylineitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \
