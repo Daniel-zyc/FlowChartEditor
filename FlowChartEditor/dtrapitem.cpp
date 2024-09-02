@@ -90,7 +90,7 @@ void DTrapItem::modiToPoint(QPointF p, int id)
 void DTrapItem::setRect(const QRectF &nrect)
 {
     rect = nrect;
-    sizeRectUpdated();
+    updateSizePoint();
     updateMagPoint();
     updateModiPoint();
 }

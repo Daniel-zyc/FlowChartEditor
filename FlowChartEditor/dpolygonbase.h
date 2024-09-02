@@ -9,20 +9,21 @@ class DPolygonBase : public DShapeBase
 public:
 	enum { Type = DPolygonBaseType };
 	DPolygonBase(QGraphicsItem *parent = nullptr);
+	DPolygonBase(const QString& text, QGraphicsItem *parent = nullptr);
 
 public:
 	virtual int type() const override { return Type; }
 
-	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-	QRectF sizeRect() const override;
-	QPainterPath shapeNormal() const override;
+	virtual void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+	virtual QRectF sizeRect() const override;
+	virtual QPainterPath shapeNormal() const override;
 	virtual void sizeToRect(QRectF nrect) override;
-	void setPoly(const QPolygonF &npoly);
 
-protected:
+	virtual void updateAll();
 	virtual void updateMagPoint() = 0;
 	virtual void updateModiPoint() = 0;
 
+protected:
 	QPolygonF polygon;
 
 public:
@@ -31,7 +32,6 @@ public:
      * @param out
      * 序列化：DShapeBase -> polygon
      */
-	// void serialize(QDataStream &out) const override;
-
-	// void deserialize(QDataStream &in) override;
+	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };

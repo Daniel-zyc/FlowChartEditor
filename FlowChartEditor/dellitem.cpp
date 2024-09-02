@@ -55,7 +55,7 @@ void DEllItem::modiToPoint(QPointF p, int id)
 void DEllItem::setRect(const QRectF &nrect)
 {
 	rect = nrect;
-	sizeRectUpdated();
+	updateSizePoint();
 	updateMagPoint();
 }
 

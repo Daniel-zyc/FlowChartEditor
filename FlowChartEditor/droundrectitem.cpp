@@ -75,7 +75,7 @@ void DRoundRectItem::modiToPoint(QPointF p, int id)
 void DRoundRectItem::setRect(const QRectF &nrect)
 {
 	rect = nrect;
-	sizeRectUpdated();
+	updateSizePoint();
 	updateMagPoint();
 	updateModiPoint();
 }

@@ -120,7 +120,7 @@ void DTextItem::setRect(const QRectF &nrect)
 {
 	rect = nrect;
 	textBase.setTextWidth(rect.width() - maxPointRadius*2);
-	sizeRectUpdated();
+	updateSizePoint();
 	updateMagPoint();
 }
 

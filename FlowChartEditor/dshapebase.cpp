@@ -121,7 +121,7 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 	nrect.moveCenter({0, 0});
 
 	sizeToRect(nrect);
-	sizeRectUpdated();
+	updateSizePoint();
 	setPos(cent);
 }
 
@@ -132,7 +132,7 @@ void DShapeBase::rotToPoint(QPointF p)
 	setRotation(deg);
 }
 
-void DShapeBase::sizeRectUpdated()
+void DShapeBase::updateSizePoint()
 {
 	QRectF rc = sizeRect();
 	qreal minx = rc.left(), maxx = rc.right();
@@ -154,8 +154,8 @@ void DShapeBase::sizeRectUpdated()
 QPainterPath DShapeBase::shapeSelected() const
 {
 	QPainterPath pth = DAbstractBase::shapeSelected();
-	qreal r = rotPointRadius;
-	pth.addEllipse(rotPoint, r, r);
+	qreal r = rotPointRadius; pth.addEllipse(rotPoint, r, r);
+	pth.addRect(sizeRect());
 	return pth;
 }
 
@@ -194,10 +194,17 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 	return nrc;
 }
 
-//===========================================
+//==============================================================================
+
 void DShapeBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DAbstractBase::serialize(out, fa);
+
+	if(mags == nullptr) out << (quint32)0;
+	else{
+		out << (quint32)mags->size();
+		for(MagPoint *magPoint : *mags) magPoint->serialize(out);
+	}
 
 	out << (qintptr)textItem;
 	if(textItem) textItem->serialize(out, this);
@@ -207,6 +214,10 @@ bool DShapeBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DAbstractBase::deserialize(in, fa)) return false;
 
+	quint32 magPointCount; in >> magPointCount;
+	for(quint32 i = 0; i < magPointCount; i++)
+		(*mags)[i]->deserialize(in, this);
+
 	qintptr item; in >> item;
 	if(item) textItem->deserialize(in, this);
 	else
@@ -214,5 +225,6 @@ bool DShapeBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 		delete textItem;
 		textItem = nullptr;
 	}
+
 	return true;
 }
