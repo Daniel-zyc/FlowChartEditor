@@ -199,35 +199,30 @@ void DAbstractBase::unLinkAllLines()
 	for(MagPoint* mag : *mags) mag->unlinkAllLines();
 }
 
-//=======================================
+//==============================================================================
 
 void DAbstractBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	if(fa != nullptr || parentItem() == nullptr)
-		out << pos() << rotation() << scale();
-	else out << scenePos() << rotation() + parentItem()->rotation()
-			 << scale() * parentItem()->scale();
+		out << pos() << rotation() << scale() << zValue();
+	else
+		out << scenePos() << rotation() + parentItem()->rotation()
+			<< scale() * parentItem()->scale() << parentItem()->zValue();
 
 	out << brush() << pen();
-	if(mags == nullptr) out << (quint32)0;
-	else{
-		out << (quint32)mags->size();
-		for(MagPoint *magPoint : *mags) magPoint->serialize(out);
-	}
 }
 
 bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(fa) setParentItem(fa);
+
 	QPointF pos; in >> pos; setPos(pos);
 	qreal rot; in >> rot; setRotation(rot);
 	qreal scl; in >> scl; setScale(scl);
-
+	qreal zval; in >> zval; setZValue(zval);
+	
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
 
-	quint32 magPointCount; in >> magPointCount;
-	for(quint32 i = 0; i < magPointCount; i++)
-		(*mags)[i]->deserialize(in, this);
-		return true;
+	return true;
 }

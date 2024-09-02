@@ -150,6 +150,11 @@ namespace DConst
         CHANGED = 0,
         UNCHANGED = 1
     };
+
+    enum LINE_Z
+    {
+        LINE_Z_VALUE = -100
+    };
 };
 
 // 工具函数

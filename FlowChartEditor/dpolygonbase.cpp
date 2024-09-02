@@ -1,7 +1,10 @@
 #include "dpolygonbase.h"
 
 DPolygonBase::DPolygonBase(QGraphicsItem *parent)
-	: DShapeBase("", parent) {}
+	: DPolygonBase("", parent) {}
+
+DPolygonBase::DPolygonBase(const QString& text, QGraphicsItem* parent)
+	: DShapeBase(text, parent) {}
 
 void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -14,46 +17,42 @@ void DPolygonBase::paintShape(QPainter *painter, const QStyleOptionGraphicsItem 
 
 QRectF DPolygonBase::sizeRect() const
 {
-    return polygon.boundingRect();
+	return polygon.boundingRect();
 }
 
 void DPolygonBase::sizeToRect(QRectF nrect)
 {
-	QPolygonF poly;
-	QRectF rect = sizeRect();
+	QPolygonF poly; QRectF rect = sizeRect();
 	double ratiox = nrect.width() / rect.width();
 	double ratioy = nrect.height() / rect.height();
 	for(int i = 0; i < polygon.size(); i++)
 		poly << QPointF(polygon[i].x() * ratiox, polygon[i].y() * ratioy);
-	setPoly(poly);
+	polygon = poly; updateAll();
 }
 
 QPainterPath DPolygonBase::shapeNormal() const
 {
-	QPainterPath pth;
-	pth.addPolygon(polygon);
-	return pth;
+	QPainterPath pth; pth.addPolygon(polygon); return pth;
 }
 
-void DPolygonBase::setPoly(const QPolygonF &npoly)
+void DPolygonBase::updateAll()
 {
-	polygon = npoly;
-	sizeRectUpdated();
+	updateSizePoint();
 	updateMagPoint();
 	updateModiPoint();
 }
 
-//==============================================
-// void DPolygonBase::serialize(QDataStream &out) const{
-//     // qDebug() << "dpolygon base serializing";
-//     DShapeBase::serialize(out);
+//==============================================================================
 
-//     out << polygon;
-// }
+void DPolygonBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DShapeBase::serialize(out, fa);
+	out << polygon;
+}
 
-// void DPolygonBase::deserialize(QDataStream &in){
-//     // qDebug() << "dpolygon base deserializing";
-//     DShapeBase::deserialize(in);
-
-//     in >> polygon;
-// }
+bool DPolygonBase::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DShapeBase::deserialize(in, fa)) return false;
+	in >> polygon;
+	return true;
+}

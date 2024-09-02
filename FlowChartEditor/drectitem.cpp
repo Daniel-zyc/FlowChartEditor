@@ -55,11 +55,11 @@ void DRectItem::modiToPoint(QPointF p, int id)
 void DRectItem::setRect(const QRectF &nrect)
 {
 	rect = nrect;
-	sizeRectUpdated();
+	updateSizePoint();
 	updateMagPoint();
 }
 
-//========================================
+//==============================================================================
 
 void DRectItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {

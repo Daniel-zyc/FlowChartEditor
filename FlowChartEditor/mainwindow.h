@@ -76,6 +76,12 @@ private slots:
 	void moveUp();
 	void moveDown();
 
+    void moveSelectedZUp();
+    void moveSelectedZDown();
+
+    void moveSelectedMaxZUp();
+    void moveSelectedMaxZDown();
+
 	void viewRotateCW() { view->rotateCW(); }
 	void viewRotateCCW() { view->rotateCCW(); }
 	void viewEnlarge() { view->enlarge(); }
@@ -107,6 +113,8 @@ private slots:
 
     void redo();
     void undo();
+
+    void showAboutUsWindow();
 private:
 	Ui::MainWindow *ui;
 

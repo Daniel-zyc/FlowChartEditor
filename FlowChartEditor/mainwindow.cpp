@@ -8,6 +8,7 @@
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
+#include "aboutuswindow.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -47,6 +48,10 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actSelectTextCol);
     m->addAction(ui->actSelectTextFont);
     m->addAction(ui->actLineStyleSheet);
+    // m->addAction(ui->actMoveSelectedZUp);
+    // m->addAction(ui->actMoveSelectedZDown);
+    m->addAction(ui->actMoveSelectedMaxZUp);
+    m->addAction(ui->actMoveSelectedMaxZDown);
 
     findDia = new DFindDialog();
 
@@ -60,8 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     fontDia->setOption(QFontDialog::ProportionalFonts);
 
 	scene->setMenu(m);
-	scene->addLine(-1000, 0, 1000, 0);
-	scene->addLine(0, -1000, 0, 1000);
+    scene->clear();
 
 	view = new DView(scene);
 
@@ -347,6 +351,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
@@ -379,6 +384,12 @@ void MainWindow::bindAction()
     connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
     connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
     connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(selectTextFont()));
+
+    connect(ui->actMoveSelectedZUp,SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
+    connect(ui->actMoveSelectedZDown,SIGNAL(triggered(bool)),this, SLOT(moveSelectedZDown()));
+
+    connect(ui->actMoveSelectedMaxZUp,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZUp()));
+    connect(ui->actMoveSelectedMaxZDown,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZDown()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -783,6 +794,26 @@ void MainWindow::moveDown()
 		scene->moveDown();
 }
 
+void MainWindow::moveSelectedZUp(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZUp(1);
+}
+
+void MainWindow::moveSelectedZDown(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZDown(-1);
+}
+
+void MainWindow::moveSelectedMaxZUp(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZMaxUp();
+}
+
+void MainWindow::moveSelectedMaxZDown(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZMaxDown();
+}
+
 void MainWindow::findandReplace()
 {
     findDia->docs.clear();
@@ -813,7 +844,7 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(this, "save");
+    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     QList<QGraphicsItem *> items = scene->selectedItems();
@@ -825,7 +856,7 @@ void MainWindow::saveFile(){
 }
 
 void MainWindow::loadFile(){
-    QString filePath = QFileDialog::getOpenFileName(this, "load");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     SaveAndLoadManager::instance().loadFromFile(filePath);
@@ -844,4 +875,9 @@ void MainWindow::redo(){
 }
 void MainWindow::undo(){
     UndoManager::instance().undo();
+}
+
+void MainWindow::showAboutUsWindow(){
+    AboutUsWindow* auw = new AboutUsWindow();
+    auw->exec();
 }
