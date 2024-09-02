@@ -63,7 +63,7 @@ protected:
 	// 根据向量 p 来调整图形角度
 	virtual void rotToPoint(QPointF p);
 	// 更新图形的大小点和旋转点坐标，如果图形的大小改变需要调用此函数进行刷新
-	virtual void sizeRectUpdated();
+	virtual void updateSizePoint();
 
 protected:
 	// 被选中时多出的碰撞框，与父类相比多出了旋转点

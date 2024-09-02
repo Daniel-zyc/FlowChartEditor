@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -48,11 +48,18 @@
      <string>视角</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actAboutUs"/>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
    <addaction name="addMenu"/>
    <addaction name="styleMenu"/>
    <addaction name="viewMenu"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="headToolBar">
@@ -604,6 +611,68 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actAddPrede">
+   <property name="text">
+    <string>预定义过程图形</string>
+   </property>
+   <property name="toolTip">
+    <string>预定义过程图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actAddEnd">
+   <property name="text">
+    <string>终止图形</string>
+   </property>
+   <property name="toolTip">
+    <string>终止图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actMoveSelectedZUp">
+   <property name="text">
+    <string>图层上移</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveSelectedZDown">
+   <property name="text">
+    <string>图层下移</string>
+   </property>
+   <property name="toolTip">
+    <string>图层下移</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveSelectedMaxZUp">
+   <property name="text">
+    <string>置于顶层</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actMoveSelectedMaxZDown">
+   <property name="text">
+    <string>置于底层</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actAboutUs">
+   <property name="text">
+    <string>关于我们</string>
    </property>
   </action>
  </widget>

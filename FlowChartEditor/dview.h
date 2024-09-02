@@ -41,8 +41,11 @@ public:
 
 	void updateTransMatrix();
 
-private:
-	qreal scale, rotation;
+protected:
+	void init();
+
+protected:
+	qreal scale = 1.0, rotation = 0.0;
 
 	static qreal defaultRotateDelta;
 	static qreal defaultScaleRatio;

@@ -8,6 +8,8 @@
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.2;
 qreal DScene::defaultMoveDist = 50;
+qreal DScene::defaultMoveZUp = 20;
+qreal DScene::defaultMoveZDown = -20;
 
 DScene::DScene()
 {
@@ -69,6 +71,62 @@ void DScene::moveSelected(qreal distx, qreal disty)
 		pos.setY(pos.y() + disty);
 		item->setPos(pos);
 	}
+}
+
+void DScene::moveSelectedZ(qreal value){
+    for(QGraphicsItem *item : selectedItems()){
+        if(item->parentItem() != nullptr) continue;
+        qreal z = item->zValue();
+        qDebug() << "设置为" << z + value;
+        item->setZValue(z + value);
+    }
+}
+
+void DScene::moveSelectedZMaxUp(){
+    QSet<QGraphicsItem*> S;
+    QList<QGraphicsItem*> colItems;
+    qreal selectedMin = std::numeric_limits<qreal>::max();
+    qreal colMax = std::numeric_limits<qreal>::lowest();
+    for(QGraphicsItem * item : selectedItems()){
+        if(item->parentItem() == nullptr && item->zValue() < selectedMin) selectedMin = item->zValue();
+        S.insert(item);
+        colItems.append(item->collidingItems());
+    }
+    for(QGraphicsItem * item : colItems)
+        if(!S.contains(item) && item->zValue() > colMax && item->parentItem() == nullptr)
+            colMax = item->zValue();
+    if(selectedMin > colMax) return;
+    qreal dis = colMax - selectedMin + 1;
+    for(QGraphicsItem * item : selectedItems())
+        if(item->parentItem() == nullptr){
+            qreal temdis = item->zValue();
+            qDebug() << "将z值设置为" << temdis + dis;
+            item->setZValue(temdis + dis);
+        }
+}
+
+void DScene::moveSelectedZMaxDown(){
+    QSet<QGraphicsItem*> S;
+    QList<QGraphicsItem*> colItems;
+    qreal selectedMax = std::numeric_limits<qreal>::lowest();
+    qreal colMin = std::numeric_limits<qreal>::max();
+    for(QGraphicsItem * item : selectedItems()){
+        if(item->parentItem() == nullptr && item->zValue() > selectedMax) selectedMax = item->zValue();
+        S.insert(item);
+        colItems.append(item->collidingItems());
+    }
+    for(QGraphicsItem * item : colItems)
+        if(!S.contains(item) && item->zValue() < colMin && item->parentItem() == nullptr){
+            colMin = item->zValue();
+        }
+    if(selectedMax < colMin) return;
+    qreal dis = selectedMax - colMin + 1;
+    for(QGraphicsItem * item : selectedItems())
+        if(item->parentItem() == nullptr){
+            qreal temdis = item->zValue();
+            qDebug() << "将z值设置为"  << temdis - dis;
+            item->setZValue(temdis - dis);
+        }
 }
 
 void DScene::addTextItem()
@@ -143,7 +201,27 @@ void DScene::addDiaItem()
 {
     qDebug() << "add Diamond";
     DDiaItem *item = new DDiaItem(100, 100);
-    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem = new DTextItem(50, 50, "", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addEndItem()
+{
+    qDebug() << "add Document";
+    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    DEndItem *item = new DEndItem(100,60);
+    item->textItem = new DTextItem(50, 50, "", item);
+    item->textItem->deleteMagPoint();
+    addItem(item);
+}
+
+void DScene::addPreItem()
+{
+    qDebug() << "add Document";
+    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    DTrapItem *item = new DTrapItem(100,80,80);
+    item->textItem = new DTextItem(50, 50, "", item);
     item->textItem->deleteMagPoint();
     addItem(item);
 }
@@ -151,9 +229,9 @@ void DScene::addDiaItem()
 void DScene::addTrapItem()
 {
     qDebug() << "add Document";
-//    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
+    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
     DTrapItem *item = new DTrapItem(100,80,80);
-    item->textItem = new DTextItem(50, 50, "hello world", item);
+    item->textItem = new DTextItem(50, 50, "", item);
     item->textItem->deleteMagPoint();
     addItem(item);
 }
@@ -317,6 +395,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
 	QPointF p = event->scenePos();
+	qDebug() << "press pos: " << p;
 
 	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_LINE
 	   || state == DConst::INSERT_TEXT)
@@ -327,7 +406,10 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		{
 			DShapeBase* shape = dynamic_cast<DShapeBase*>(modifiedShape);
 			shape->setInsertItem();
+			qDebug() << p;
+			qDebug() << p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2);
 			shape->setPos(p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2));
+			qDebug() << shape->pos();
 		}
 		else
 		{
@@ -449,8 +531,16 @@ void DScene::shot(){
 
 void DScene::clear(){
     QGraphicsScene::clear();
-    addLine(-1000, 0, 1000, 0);
-    addLine(0, -1000, 0, 1000);
+	QGraphicsLineItem *line_h = new QGraphicsLineItem(-2000, 0, 2000, 0);
+	line_h->setZValue(DConst::LINE_Z_VALUE);
+	QGraphicsLineItem *line_v = new QGraphicsLineItem(0, -2000, 0, 2000);
+	line_v->setZValue(DConst::LINE_Z_VALUE);
+	addItem(line_h);
+	addItem(line_v);
+    // QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
+    // line1->setZValue(DConst::LINE_Z_VALUE);
+    // QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
+    // line2->setZValue(DConst::LINE_Z_VALUE);
 }
 
 QList<DLineBase *> DScene::getSelectedLine()

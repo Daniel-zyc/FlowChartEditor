@@ -5,16 +5,12 @@ qreal DView::defaultScaleRatio = 1.2;
 qreal DView::defaultMoveDist = 50;
 
 DView::DView(QWidget *parent)
-	: QGraphicsView(parent), scale(1.0), rotation(0.0)
-{
-	setRenderHint(QPainter::Antialiasing, true);
-}
+	: QGraphicsView(parent)
+{ init(); }
 
 DView::DView(QGraphicsScene *scene, QWidget *parent)
-	: QGraphicsView(scene, parent), scale(1.0), rotation(0.0)
-{
-
-}
+	: QGraphicsView(scene, parent)
+{ init(); }
 
 void DView::setRotation(qreal angle)
 {
@@ -35,4 +31,10 @@ void DView::updateTransMatrix()
 	matrix.rotate(rotation);
 	setTransform(matrix);
 	update();
+}
+
+void DView::init()
+{
+	setRenderHint(QPainter::Antialiasing, true);
+	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 }

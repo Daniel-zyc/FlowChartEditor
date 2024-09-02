@@ -8,6 +8,7 @@
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
+#include "aboutuswindow.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     // 绑定序列化管理
 	scene = new DScene(this);
 
+	// scene->removeItem(rect);
+	// delete rect; rect = nullptr;
+
     UndoManager::instance().bindScene(scene);
     SaveAndLoadManager::instance().bindScene(scene);
 
@@ -47,6 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actSelectTextCol);
     m->addAction(ui->actSelectTextFont);
     m->addAction(ui->actLineStyleSheet);
+    // m->addAction(ui->actMoveSelectedZUp);
+    // m->addAction(ui->actMoveSelectedZDown);
+    m->addAction(ui->actMoveSelectedMaxZUp);
+    m->addAction(ui->actMoveSelectedMaxZDown);
 
     findDia = new DFindDialog();
 
@@ -60,8 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
     fontDia->setOption(QFontDialog::ProportionalFonts);
 
 	scene->setMenu(m);
-	scene->addLine(-1000, 0, 1000, 0);
-	scene->addLine(0, -1000, 0, 1000);
+    scene->clear();
 
 	view = new DView(scene);
 
@@ -99,6 +106,8 @@ void MainWindow::initUi()
     fileBtn = new QPushButton();
     textBtn = new QPushButton();
     triBtn = new QPushButton();
+    preBtn = new QPushButton();
+    endBtn = new QPushButton();
 
     rectBtn->setIcon(QPixmap(":/icon/rect.png"));
     roundRectBtn->setIcon(QPixmap(":/icon/roundrect.png"));
@@ -110,6 +119,8 @@ void MainWindow::initUi()
     fileBtn->setIcon(QPixmap(":/icon/file.png"));
     textBtn->setIcon(QPixmap(":/icon/text.png"));
     triBtn->setIcon(QPixmap(":/icon/triangle.png"));
+    preBtn->setIcon(QPixmap(":/icon/predefined.png"));
+    endBtn->setIcon(QPixmap(":/icon/end.png"));
 
     leftGrid->addWidget(rectBtn, 0, 0);
     leftGrid->addWidget(roundRectBtn, 0, 1);
@@ -121,6 +132,8 @@ void MainWindow::initUi()
     leftGrid->addWidget(fileBtn, 3, 1);
     leftGrid->addWidget(triBtn, 4, 0);
     leftGrid->addWidget(textBtn, 4, 1);
+    leftGrid->addWidget(preBtn, 5, 0);
+    leftGrid->addWidget(endBtn, 5, 1);
 
     leftUpV->addLayout(leftGrid);
     leftw->setLayout(leftUpV);
@@ -272,6 +285,8 @@ void MainWindow::createMenu()
 	ui->addMenu->addAction(ui->actAddTrap);
     ui->addMenu->addAction(ui->actAddTri);
 	ui->addMenu->addAction(ui->actAddText);
+    ui->addMenu->addAction(ui->actAddPrede);
+    ui->addMenu->addAction(ui->actAddEnd);
     ui->addMenu->addAction(ui->actAddPolyLine);
 
 	ui->addMenu->addAction(ui->actSetTextFont);
@@ -339,6 +354,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
@@ -357,6 +373,8 @@ void MainWindow::bindAction()
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
     connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
     connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
+    connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
+    connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
     connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
@@ -369,6 +387,12 @@ void MainWindow::bindAction()
     connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
     connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
     connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(selectTextFont()));
+
+    connect(ui->actMoveSelectedZUp,SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
+    connect(ui->actMoveSelectedZDown,SIGNAL(triggered(bool)),this, SLOT(moveSelectedZDown()));
+
+    connect(ui->actMoveSelectedMaxZUp,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZUp()));
+    connect(ui->actMoveSelectedMaxZDown,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZDown()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -419,6 +443,8 @@ void MainWindow::bindAction()
     connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
     connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
+    connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
@@ -536,7 +562,14 @@ void MainWindow::addTrap()
 {
     scene->addTrapItem();
 }
-
+void MainWindow::addEnd()
+{
+    scene->addEndItem();
+}
+void MainWindow::addPre()
+{
+    scene->addPreItem();
+}
 void MainWindow::addParallegram()
 {
     scene->addParallegramItem();
@@ -764,6 +797,26 @@ void MainWindow::moveDown()
 		scene->moveDown();
 }
 
+void MainWindow::moveSelectedZUp(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZUp(1);
+}
+
+void MainWindow::moveSelectedZDown(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZDown(-1);
+}
+
+void MainWindow::moveSelectedMaxZUp(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZMaxUp();
+}
+
+void MainWindow::moveSelectedMaxZDown(){
+    if(scene->selectedItems().isEmpty()) return;
+    else scene->moveSelectedZMaxDown();
+}
+
 void MainWindow::findandReplace()
 {
     findDia->docs.clear();
@@ -794,7 +847,7 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(this, "save");
+    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     QList<QGraphicsItem *> items = scene->selectedItems();
@@ -806,7 +859,7 @@ void MainWindow::saveFile(){
 }
 
 void MainWindow::loadFile(){
-    QString filePath = QFileDialog::getOpenFileName(this, "load");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
 
     SaveAndLoadManager::instance().loadFromFile(filePath);
@@ -825,4 +878,9 @@ void MainWindow::redo(){
 }
 void MainWindow::undo(){
     UndoManager::instance().undo();
+}
+
+void MainWindow::showAboutUsWindow(){
+    AboutUsWindow* auw = new AboutUsWindow();
+    auw->exec();
 }

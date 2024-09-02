@@ -24,33 +24,26 @@ void UndoManager::shot(){
 }
 
 void UndoManager::undo(){
-    // if(!undoStack.empty()) redoStack.push(undoStack.pop());    // 当前快照压入
+
     printStackSize();
     if(scene == nullptr || undoStack.empty()) return;
-    scene->clear();
-
+    if(redoStack.empty() && !undoStack.empty()) redoStack.push(undoStack.pop());        // 当前快照移动
     QByteArray data = undoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
-	QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
-    for(QGraphicsItem * item : items){
-        if(item->parentItem() == nullptr) scene->addItem(item);
-    }
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
+    scene->clear(); scene->drawItems(items);
     redoStack.push(data);
     trimStack();
 }
 
 void UndoManager::redo(){
-    // if(!redoStack.empty()) undoStack.push(redoStack.pop());
     printStackSize();
     if(scene == nullptr || redoStack.empty()) return;
-    scene->clear();
-
+    if(undoStack.empty() && !redoStack.empty()) undoStack.push(redoStack.pop());
     QByteArray data = redoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
-	QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
-    for(QGraphicsItem * item : items){
-        if(item->parentItem() == nullptr) scene->addItem(item);
-    }
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
+    scene->clear(); scene->drawItems(items);
     undoStack.push(data);
     trimStack();
 }

@@ -24,7 +24,6 @@ void DTrapItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
-    setBrush(QBrush(Qt::transparent));
     painter->setBrush(brush());
     painter->setPen(pen());
 
@@ -79,8 +78,13 @@ void DTrapItem::sizeToRect(QRectF nrect)
 void DTrapItem::modiToPoint(QPointF p, int id)
 {
     if (id == 0) {
-        qreal newBottomWidth = qAbs(((rect.right() - p.x())-rect.width()/2)*2);
-        bottomWidth = qMin(newBottomWidth, rect.width());
+        if(((rect.right()-p.x())>=rect.width()/2)){
+            qreal newBottomWidth = ((rect.right() - p.x())-rect.width()/2)*2;
+            bottomWidth = qMin(newBottomWidth, rect.width());
+        }else{
+            bottomWidth =0;
+        }
+
         topWidth = rect.width();
         c=bottomWidth/rect.width();
         updateModiPoint();
@@ -90,7 +94,7 @@ void DTrapItem::modiToPoint(QPointF p, int id)
 void DTrapItem::setRect(const QRectF &nrect)
 {
     rect = nrect;
-    sizeRectUpdated();
+    updateSizePoint();
     updateMagPoint();
     updateModiPoint();
 }
