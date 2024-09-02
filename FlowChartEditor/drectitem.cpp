@@ -8,7 +8,8 @@ DRectItem::DRectItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DShapeBase("", parent)
 {
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
-	setRect(QRectF(-w/2, -h/2, w, h));
+	rect = QRectF(-w/2, -h/2, w, h);
+	updateAll();
 }
 
 void DRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -27,34 +28,30 @@ QRectF DRectItem::sizeRect() const
 
 QPainterPath DRectItem::shapeNormal() const
 {
-	QPainterPath pth;
-	pth.addRect(rect);
-	return pth;
+	QPainterPath pth; pth.addRect(rect); return pth;
 }
 
 void DRectItem::updateMagPoint()
 {
-	(*mags)[0]->pos = {rect.left(), 0};
-	(*mags)[1]->pos = {rect.right(), 0};
+	(*mags)[0]->setPos({rect.left(), 0});
+	(*mags)[1]->setPos({rect.right(), 0});
 
-	(*mags)[2]->pos = {0, rect.top()};
-	(*mags)[3]->pos = {0, rect.bottom()};
+	(*mags)[2]->setPos({0, rect.top()});
+	(*mags)[3]->setPos({0, rect.bottom()});
 }
 
 void DRectItem::sizeToRect(QRectF nrect)
 {
-	setRect(nrect);
+	rect = nrect; updateAll();
 }
 
 void DRectItem::modiToPoint(QPointF p, int id)
 {
-	Q_UNUSED(p); Q_UNUSED(id);
-	return;
+	Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
-void DRectItem::setRect(const QRectF &nrect)
+void DRectItem::updateAll()
 {
-	rect = nrect;
 	updateSizePoint();
 	updateMagPoint();
 }
@@ -73,6 +70,6 @@ bool DRectItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
 	in >> rect;
-	setRect(rect);
+	updateAll();
 	return true;
 }

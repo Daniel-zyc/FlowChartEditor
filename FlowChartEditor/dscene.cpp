@@ -395,6 +395,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
 	QPointF p = event->scenePos();
+	qDebug() << "press pos: " << p;
 
 	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_LINE
 	   || state == DConst::INSERT_TEXT)
@@ -405,7 +406,10 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		{
 			DShapeBase* shape = dynamic_cast<DShapeBase*>(modifiedShape);
 			shape->setInsertItem();
+			qDebug() << p;
+			qDebug() << p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2);
 			shape->setPos(p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2));
+			qDebug() << shape->pos();
 		}
 		else
 		{
@@ -527,6 +531,12 @@ void DScene::shot(){
 
 void DScene::clear(){
     QGraphicsScene::clear();
+	QGraphicsLineItem *line_h = new QGraphicsLineItem(-2000, 0, 2000, 0);
+	line_h->setZValue(DConst::LINE_Z_VALUE);
+	QGraphicsLineItem *line_v = new QGraphicsLineItem(0, -2000, 0, 2000);
+	line_v->setZValue(DConst::LINE_Z_VALUE);
+	addItem(line_h);
+	addItem(line_v);
     // QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
     // line1->setZValue(DConst::LINE_Z_VALUE);
     // QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
