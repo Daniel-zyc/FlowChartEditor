@@ -55,6 +55,7 @@ public:
     void addTrapItem();
     void addParallegramItem();
     void addDocItem();
+    void addPolyLineItem();
 
 	void combineSelected();
 	void seperateSelected();
