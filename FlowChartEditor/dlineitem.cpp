@@ -1,7 +1,7 @@
 #include "dlineitem.h"
 
 DLineItem::DLineItem(QGraphicsItem *parent)
-	: DLineBase(parent) {}
+	: DLineItem({-1, -1}, {1, 1}, parent) {}
 
 DLineItem::DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 	: DLineBase(parent)
@@ -51,12 +51,13 @@ void DLineItem::updateLine()
 
 //================================
 
-void DLineItem::serialize(QDataStream &out) const{
-    // qDebug() << "DLineItem serializing";
-    DLineBase::serialize(out);
+void DLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DLineBase::serialize(out, fa);
 }
 
-void DLineItem::deserialize(QDataStream &in){
-    // qDebug() << "DLineItem deserializing";
-    DLineBase::deserialize(in);
+bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	return DLineBase::deserialize(in, fa);
+	updatePosition();
 }

@@ -116,17 +116,17 @@ void DParallelogramItem::setRect(const QRectF &nrect)
 
 //====================================
 
-void DParallelogramItem::serialize(QDataStream &out) const{
-    qDebug() << "DParallegramItem serializing";
-    DShapeBase::serialize(out);
+// void DParallelogramItem::serialize(QDataStream &out) const{
+//     qDebug() << "DParallegramItem serializing";
+//     DShapeBase::serialize(out);
 
-    out << rect << skew;
-}
+//     out << rect << skew;
+// }
 
-void DParallelogramItem::deserialize(QDataStream &in){
-    qDebug() << "DParallegramItem deserializing";
-    DShapeBase::deserialize(in);
+// void DParallelogramItem::deserialize(QDataStream &in){
+//     qDebug() << "DParallegramItem deserializing";
+//     DShapeBase::deserialize(in);
 
-    in >> rect >> skew;
-    setRect(rect);
-}
+//     in >> rect >> skew;
+//     setRect(rect);
+// }

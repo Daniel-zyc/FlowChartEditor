@@ -10,5 +10,12 @@
         <file>icon/triangle.png</file>
         <file>icon/trapezoid.png</file>
         <file>icon/file.png</file>
+        <file>icon/createfile.png</file>
+        <file>icon/openfile.png</file>
+        <file>icon/savefile.png</file>
+        <file>icon/savesvg.png</file>
+        <file>icon/blankBg.png</file>
+        <file>icon/gridBg.png</file>
+        <file>icon/dotBg.png</file>
     </qresource>
 </RCC>

@@ -1,6 +1,7 @@
 #include "dallitems.h"
 #include "dscene.h"
 #include "undomanager.h"
+#include "serializer.h"
 
 #include <QMessageBox>
 
@@ -151,7 +152,7 @@ void DScene::addTrapItem()
 {
     qDebug() << "add Document";
 //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(80,100,80);
+    DTrapItem *item = new DTrapItem(100,80,80);
     item->textItem = new DTextItem(50, 50, "hello world", item);
     item->textItem->deleteMagPoint();
     addItem(item);
@@ -257,58 +258,54 @@ DAbstractBase* DScene::getInterItemOnPoint(QPointF p)
 void DScene::changeLineType(Qt::PenStyle linestyle)
 {
     qDebug() << "change Line Type";
-    QList<QGraphicsItem*> items = selectedItems();
+    QList<DLineBase*> lines = getSelectedLine();
     QMessageBox msgBox;
     msgBox.setText("提示");
 
-    if(items.count() < 1) {
-        msgBox.setInformativeText("无选中元素");
-        msgBox.exec();
-        return;
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setStyle(linestyle);
+        line->setPen(npen);
     }
-    if(items.count() > 1) {
-        msgBox.setInformativeText("请选择单条线条");
-        msgBox.exec();
-        return;
-    }
-
-    DLineItem *line = dynamic_cast<DLineItem*>(items[0]);
-    if(!line) {
-        msgBox.setInformativeText("请选中线条");
-        msgBox.exec();
-        return;
-    }
-    QPen npen = line->pen();
-    npen.setStyle(linestyle);
-    line->setPen(npen);
-    // update();
 }
 
-void DScene::changeEndArrow(DConst::LineArrowType endArrowType)
+void DScene::changeEndArrow(int endArrowType)
 {
     qDebug() << "change Line endArrow";
-    QList<QGraphicsItem*> items = selectedItems();
+    QList<DLineBase*> lines = getSelectedLine();
     QMessageBox msgBox;
     msgBox.setText("提示");
 
-    if(items.count() < 1) {
-        msgBox.setInformativeText("无选中元素");
-        msgBox.exec();
-        return;
-    }
-    if(items.count() > 1) {
-        msgBox.setInformativeText("请选择单条线条");
-        msgBox.exec();
-        return;
+    for(DLineBase *line : lines) {
+        line->setEndArrowType(endArrowType);
     }
 
-    DLineItem *line = dynamic_cast<DLineItem*>(items[0]);
-    if(!line) {
-        msgBox.setInformativeText("请选中线条");
-        msgBox.exec();
-        return;
+}
+
+void DScene::changeLineWidth(double width)
+{
+    qDebug() << "change Line Width";
+    QList<DLineBase*> lines = getSelectedLine();
+    QMessageBox msgBox;
+    msgBox.setText("提示");
+
+    // if(lines.count() < 1) {
+    //     msgBox.setInformativeText("请选中线条");
+    //     msgBox.exec();
+    //     return;
+    // }
+
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setWidth(width);
+        line->setPen(npen);
     }
-    line->endArrowType = endArrowType;
+}
+
+void DScene::setBg(QString path)
+{
+    QPixmap bg(path);
+    setBackgroundBrush(bg);
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -337,7 +334,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			DLineBase* line = dynamic_cast<DLineBase*>(modifiedShape);
 			DAbstractBase* shape = getMagItemOnPoint(p);
 			if(shape)
-				line->linkBegin(shape->getMagPoint(p));
+				line->linkBeginUpdate(shape->getMagPoint(p));
 			else
 				line->setBeginPoint(p);
 			line->setEndPoint(p);
@@ -454,4 +451,39 @@ void DScene::clear(){
     QGraphicsScene::clear();
     addLine(-1000, 0, 1000, 0);
     addLine(0, -1000, 0, 1000);
+}
+
+QList<DLineBase *> DScene::getSelectedLine()
+{
+    QList<QGraphicsItem*> items = selectedItems();
+    QList<DLineBase*> lines;
+
+    for(QGraphicsItem *item : items) {
+        DLineBase *line = dynamic_cast<DLineBase*>(item);
+        if(line != nullptr) {
+            lines.push_back(line);
+        }
+    }
+
+    return lines;
+}
+
+void DScene::drawItems(QList<QGraphicsItem*> items){
+    for(QGraphicsItem * item : items)
+        if(item->parentItem() == nullptr)
+            addItem(item);
+}
+
+void DScene::copySelectedItems(){
+    copyData.clear();
+    QDataStream out(&copyData,QIODevice::WriteOnly);
+	Serializer::instance().serializeItems(out,this->selectedItems());
+}
+
+void DScene::pasteItems(){
+    if(copyData.isEmpty()) return;
+    QDataStream in(&copyData,QIODevice::ReadOnly);
+	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
+    DTool::moveItems(items);
+    drawItems(items);
 }
