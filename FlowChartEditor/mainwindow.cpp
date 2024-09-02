@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actAddLine);
     m->addAction(ui->actAddPargram);
     m->addAction(ui->actAddDoc);
+    m->addAction(ui->actAddTrap);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);

@@ -9,7 +9,7 @@ class DShapeBase;
 class DDiaItem : public DShapeBase
 {
 public:
-    enum { Type = DConst::DDiaItemType };
+    enum { Type = DDiaItemType };
 
     DDiaItem(QGraphicsItem *parent = nullptr);
     DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);

@@ -162,7 +162,7 @@ void DScene::addTrapItem()
 {
     qDebug() << "add Document";
 //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(80,100,80);
+    DTrapItem *item = new DTrapItem(100,80,80);
     item->textItem = new DTextItem(50, 50, "hello world", item);
     item->textItem->deleteMagPoint();
     addItem(item);
