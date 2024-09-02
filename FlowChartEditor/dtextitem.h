@@ -73,13 +73,12 @@ private:
 	QRectF rect = QRectF(0, 0, 0, 0);
 
 public:
-    /**
-     * @brief serialize
-     * @param out
-     * 序列化：DShapeBase -> textBase -> rect
-     */
-    void serialize(QDataStream &out) const override;
-
-    void deserialize(QDataStream &in) override;
+	/**
+	 * @brief serialize
+	 * @param out
+	 * 序列化：DShapeBase -> textBase -> rect
+	 */
+	void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
 };
 

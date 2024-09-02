@@ -8,6 +8,9 @@
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
 
+// 序列化时用来判断某图形是否参与序列化
+extern QSet<int> registeredTypes;
+
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
 constexpr qreal sizePointRadius = 5;
 constexpr qreal magPointRadius = 5;
@@ -56,8 +59,8 @@ enum UserTypes
 	DRoundRectItemType = QGraphicsItem::UserType + 8,
 	DLineItemType = QGraphicsItem::UserType + 9,
 	DTriItemType = QGraphicsItem::UserType + 10,
-    DParallegramItemType = QGraphicsItem::UserType + 11,
-    DDocItemType = QGraphicsItem::UserType + 12,
+	DParallegramItemType = QGraphicsItem::UserType + 11,
+	DDocItemType = QGraphicsItem::UserType + 12,
 	DDiaItemType = QGraphicsItem::UserType + 13,
 	DTrapItemType = QGraphicsItem::UserType + 14,
 	DItemGroupType = QGraphicsItem::UserType + 15
@@ -168,6 +171,9 @@ namespace DTool
 	// p 是否在以 o 为半径 r 为圆心的圆中
 	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
 
-	// 将将要被拷贝的图形进行一定的平移操作
+	// 将要被拷贝的图形进行一定的平移操作
 	void moveItems(const QList<QGraphicsItem*> &items);
+
+	// 过滤掉所有 parent 存在于列表中的元素
+	void filterRootItem(QList<QGraphicsItem*> &items);
 };

@@ -38,7 +38,7 @@ bool SaveAndLoadManager::loadFromFile(const QString &path, DScene *scene){
     QDataStream in(&file);
     in.setVersion(DConst::DATA_STREAM_VERSION);
 
-    QList<QGraphicsItem*> data = Serializer::instance().deserializeSceneItems(in);
+    QList<QGraphicsItem*> data = Serializer::instance().deserializeItems(in);
 
     file.close();
     qDebug() << data.size();
@@ -73,7 +73,7 @@ bool SaveAndLoadManager::copySelectedItems(DScene *scene){
 
     QDataStream out(temFile);
 
-    Serializer::instance().serializeSceneItems(out,scene->selectedItems());
+    Serializer::instance().serializeItems(out,scene->selectedItems());
 
     return temFile->flush();
     return true;
@@ -89,7 +89,7 @@ bool SaveAndLoadManager::pasteSelectedItems(DScene *scene){
     if(!temFile || !temFile->isOpen()) return false;
     temFile->seek(0);
     QDataStream in(temFile);
-    QList<QGraphicsItem *> items = Serializer::instance().deserializeSceneItems(in);
+    QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
     DTool::moveItems(items);
     for(QGraphicsItem* item : items){
         if(item->parentItem() == nullptr) scene->addItem(item);

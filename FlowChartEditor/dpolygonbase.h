@@ -31,7 +31,7 @@ public:
      * @param out
      * 序列化：DShapeBase -> polygon
      */
-    void serialize(QDataStream &out) const override;
+	// void serialize(QDataStream &out) const override;
 
-    void deserialize(QDataStream &in) override;
+	// void deserialize(QDataStream &in) override;
 };

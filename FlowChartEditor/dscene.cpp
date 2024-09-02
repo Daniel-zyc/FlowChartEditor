@@ -337,7 +337,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			DLineBase* line = dynamic_cast<DLineBase*>(modifiedShape);
 			DAbstractBase* shape = getMagItemOnPoint(p);
 			if(shape)
-				line->linkBegin(shape->getMagPoint(p));
+				line->linkBeginUpdate(shape->getMagPoint(p));
 			else
 				line->setBeginPoint(p);
 			line->setEndPoint(p);
@@ -427,11 +427,11 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
-    if((!selectedItems().empty()
-        || state != DConst::NONE)
-        && SHOT_STATE == DConst::CHANGED){
-        shot();
-    }
+	if((!selectedItems().empty()
+		|| state != DConst::NONE)
+		&& SHOT_STATE == DConst::CHANGED){
+		shot();
+	}
 
 	state = DConst::NONE;
 	moditype = DConst::NONE;
