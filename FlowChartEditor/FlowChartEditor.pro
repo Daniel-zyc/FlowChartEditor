@@ -16,6 +16,7 @@ SOURCES += \
     dellitem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
+    dfdelayitem.cpp \
     dfdocumentitem.cpp \
     dfinddialog.cpp \
     dfinformationitem.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
     dfstartenditem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
+    dmultidocitem.cpp \
     dparagramitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
@@ -59,6 +61,7 @@ HEADERS += \
     dellitem.h \
     dfconditionitem.h \
     dfdataitem.h \
+    dfdelayitem.h \
     dfdocumentitem.h \
     dfinddialog.h \
     dfinformationitem.h \
@@ -73,6 +76,7 @@ HEADERS += \
     dfstartenditem.h \
     dlinebase.h \
     dlineitem.h \
+    dmultidocitem.h \
     dparagramitem.h \
     dpolygonbase.h \
     dpolylineitem.h \

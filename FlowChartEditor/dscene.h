@@ -87,6 +87,8 @@ public:
     void addManualinItem();
 	void addDFPredefineItem();
 	void addManualInputItem();
+    void addDFDelayItem();
+
 
 	// 插入文本框
 	void addTextItem();
@@ -118,6 +120,9 @@ public:
 	void changeLineWidth(double width);
 	void changeLineColor(QColor color);
 	void setBg(QString path);
+    void changeItemRot();
+    void changeItemScale();
+
 
 	void setView(DView *v) { view = v; }
 

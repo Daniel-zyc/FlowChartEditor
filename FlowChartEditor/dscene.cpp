@@ -235,11 +235,15 @@ void DScene::addDFInternalStoreItem()
 	qDebug() << "add DFInternalStoreItem";
 	prepareInsertItem(new DFInternalStoreItem());
 }
-
 void DScene::addDFPrepareItem()
 {
 	qDebug() << "add DFPrepareItem";
 	prepareInsertItem(new DFPrepareItem());
+}
+void DScene::addDFDelayItem()
+{
+    qDebug() << "add DFDelayItem";
+    prepareInsertItem(new DFDelayItem());
 }
 
 void DScene::addDFProcessItem()
@@ -427,6 +431,16 @@ void DScene::setBg(QString path)
 {
     QPixmap bg(path);
     setBackgroundBrush(bg);
+}
+
+void DScene::changeItemRot()
+{
+
+}
+
+void DScene::changeItemScale()
+{
+
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

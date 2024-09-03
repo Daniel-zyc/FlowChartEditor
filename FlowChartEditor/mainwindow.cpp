@@ -249,56 +249,52 @@ void MainWindow::initrightUi()
     rightTab->setMaximumWidth(320);
 
     //背景样式表
+    rightBgw = new QWidget();
+    rightBgf = new QFormLayout();
     blankBg = new QRadioButton("无背景");
+    colorBg = new QRadioButton("纯色填充");
     gridBg = new QRadioButton("网格");
     dotBg = new QRadioButton("点状");
+    reColorBtn = new QPushButton("选择颜色");
+    reFileBtn = new QPushButton("选择文件");
+
     blankBg->setChecked(true);
-
-    rightBgw = new QTreeWidget();
-    rightBgw->setColumnCount(2);
-    // rightBgw->setHeaderLabels({"背景选择", "", ""});
-    rightBgw->setHeaderHidden(true);
-    rightBgw->header()->setStretchLastSection(true);
-    rightBgw->setColumnWidth(0, 150);
-    colorTop = new QTreeWidgetItem(rightBgw);
-    patternTop = new QTreeWidgetItem(rightBgw);
-
-    colorTop->setText(0, "颜色");
-    patternTop->setText(0, "图案");
-
-    colorChild0 = new QTreeWidgetItem(colorTop);
-    colorChild0->setText(0, "纯色填充");
-    selectedColor = new QPushButton();
-    setColorIcon(selectedColor);
-    // selectedColor->setIcon(QPixmap(":/icon/palette.png"));
-    rightBgw->setItemWidget(colorChild0, 1, selectedColor);
-
-    patternChild0 = new QTreeWidgetItem(patternTop);
-    patternChild1 = new QTreeWidgetItem(patternTop);
-    patternChild2 = new QTreeWidgetItem(patternTop);
-    patternChild3 = new QTreeWidgetItem(patternTop);
-
     customizeBg = new QRadioButton("自定义图片填充");
-    repickBtn = new QPushButton("重选");
+    rightBgf->addRow(blankBg);
+    rightBgf->addRow(colorBg, reColorBtn);
+    rightBgf->addRow(gridBg);
+    rightBgf->addRow(dotBg);
+    rightBgf->addRow(customizeBg, reFileBtn);
 
-    rightBgw->setItemWidget(patternChild0, 0, blankBg);
-    rightBgw->setItemWidget(patternChild1, 0, gridBg);
-    rightBgw->setItemWidget(patternChild2, 0, dotBg);
-    rightBgw->setItemWidget(patternChild3, 0, customizeBg);
-    rightBgw->setItemWidget(patternChild3, 1, repickBtn);
-
-    rightBgw->addTopLevelItem(colorTop);
-    rightBgw->addTopLevelItem(patternTop);
-
+    rightBgw->setLayout(rightBgf);
     rightTab->addTab(rightBgw, "背景");
 
     //形状样式表
     rightShapew = new QWidget();
     rightShapef = new QFormLayout();
+    rotationBox = new QDoubleSpinBox();
+    zoomBox = new QDoubleSpinBox();
     QHBoxLayout *frameH = new QHBoxLayout();
     QHBoxLayout *fillH = new QHBoxLayout();
+    QHBoxLayout *rotH = new QHBoxLayout();
+    QHBoxLayout *zoomH = new QHBoxLayout();
     frameColor = new QPushButton();
     fillColor = new QPushButton();
+
+    rotationBox->setRange(0, 360);
+    rotationBox->setSingleStep(1);
+    rotationBox->setSuffix("°");
+    rotationBox->setValue(0);
+    rotationBox->setWrapping(true);
+    zoomBox->setRange(1, 10000);
+    zoomBox->setSingleStep(1);
+    zoomBox->setValue(1);
+    zoomBox->setSuffix("%");
+    zoomBox->setWrapping(true);
+    rotH->addStretch();
+    rotH->addWidget(rotationBox);
+    zoomH->addStretch();
+    zoomH->addWidget(zoomBox);
 
     setColorIcon(frameColor);
     setColorIcon(fillColor);
@@ -310,6 +306,8 @@ void MainWindow::initrightUi()
 
     rightShapef->addRow("边框：", frameH);
     rightShapef->addRow("填充：", fillH);
+    rightShapef->addRow("旋转角度", rotH);
+    rightShapef->addRow("缩放比例：", zoomH);
     rightShapew->setLayout(rightShapef);
 
     rightTab->addTab(rightShapew, "形状");
@@ -337,23 +335,14 @@ void MainWindow::initrightUi()
 
     //线条样式表
     rightLinew = new QWidget();
-    QHBoxLayout *lineH = new QHBoxLayout();
-    QHBoxLayout *arrowH = new QHBoxLayout();
-    QHBoxLayout *lineboundH = new QHBoxLayout();
-    lineConfirm = new QPushButton("确认");
-    arrowConfirm = new QPushButton("确认");
-    lineboundConfirm  = new QPushButton("确认");
     linecolor  = new QPushButton();
-
-    lineConfirm->setFixedWidth(50);
-    arrowConfirm->setFixedWidth(50);
-    lineboundConfirm->setFixedWidth(50);
+    QHBoxLayout *linecolorH = new QHBoxLayout();
     setColorIcon(linecolor);
-    // linecolor->setIcon(QPixmap(":/icon/palette.png"));
-    // linecolor->setIconSize(linecolor->size());
     formright = new QFormLayout();
     formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
-    // formright->setLabelAlignment(Qt::AlignLeft);
+
+    linecolorH->addStretch();
+    linecolorH->addWidget(linecolor);
 
     lineType = new QComboBox();
     lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
@@ -361,8 +350,6 @@ void MainWindow::initrightUi()
     lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
     lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
     lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
-    lineH->addWidget(lineType);
-    lineH->addWidget(lineConfirm);
 
     arrowType = new QComboBox();
     arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
@@ -371,8 +358,6 @@ void MainWindow::initrightUi()
     arrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
     arrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
     arrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
-    arrowH->addWidget(arrowType);
-    arrowH->addWidget(arrowConfirm);
 
     linebound = new QDoubleSpinBox();
     linebound->setRange(0, 1000);
@@ -380,13 +365,11 @@ void MainWindow::initrightUi()
     linebound->setValue(1);
     linebound->setSuffix("磅");
     linebound->setWrapping(true);
-    lineboundH->addWidget(linebound);
-    lineboundH->addWidget(lineboundConfirm);
 
-    formright->addRow("线条颜色", linecolor);
-    formright->addRow("线条类型", lineH);
-    formright->addRow("箭头类型", arrowH);
-    formright->addRow("线条磅数", lineboundH);
+    formright->addRow("线条颜色：", linecolorH);
+    formright->addRow("线条类型：", lineType);
+    formright->addRow("箭头类型：", arrowType);
+    formright->addRow("线条磅数：", linebound);
 
     rightLinew->setLayout(formright);
     // rightw->setVisible(false);
@@ -461,14 +444,21 @@ void MainWindow::connectRight()
     connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
         if(checked) setSceneBg(":/icon/blankBg.png");
     });
+    connect(reColorBtn, &QPushButton::clicked, this, [this]() {
+        if(colorBg->isChecked()) {
+            QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+            if(color.isValid()) scene->setBackgroundBrush(QBrush(color));
+            else blankBg->setChecked(true);
+        }
+    });
     connect(gridBg, &QRadioButton::toggled, this, [this](bool checked) {
         if(checked) setSceneBg(":/icon/gridBg.png");
     });
     connect(dotBg, &QRadioButton::toggled, this, [this](bool checked) {
         if(checked) setSceneBg(":/icon/dotBg.png");
     });
-    connect(customizeBg, &QRadioButton::toggled, this, [this](bool checked) {
-        if(checked) {
+    connect(reFileBtn, &QPushButton::clicked, this, [this]() {
+        if(customizeBg->isChecked()) {
             QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg *.bmp"));
             if(!fileName.isEmpty()) {
                 setSceneBg(fileName);
@@ -477,18 +467,7 @@ void MainWindow::connectRight()
             }
         }
     });
-    connect(repickBtn, &QPushButton::clicked, this, [this](){
-        if(customizeBg->isChecked()) {
-            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg"));
-            if(!fileName.isEmpty()) setSceneBg(fileName);
-        }
-    });
-    connect(selectedColor, &QPushButton::clicked, this, [this](){
-        QColor color = QColorDialog::getColor(Qt::white, this);
-        if(color.isValid()) scene->setBackgroundBrush(QBrush(color));
-        blankBg->setChecked(true);
-    });
-    connect(lineConfirm, &QPushButton::clicked, this, [this](){
+    connect(lineType, &QComboBox::currentIndexChanged, this, [this]() {
         int penstyle = lineType->currentIndex();
         qDebug() << "penstyle;" << penstyle;
         switch(penstyle) {
@@ -499,7 +478,7 @@ void MainWindow::connectRight()
         case 4: changeLineType(Qt::DashDotDotLine); break;
         }
     });
-    connect(arrowConfirm, &QPushButton::clicked, this, [this](){
+    connect(arrowType, &QComboBox::currentIndexChanged, this, [this]() {
         int arrowstyle = arrowType->currentIndex();
         // qDebug() << "arrowstyle" << arrowstyle;
         switch(arrowstyle) {
@@ -511,17 +490,23 @@ void MainWindow::connectRight()
         case 5: changeEndArrow(5); break;
         }
     });
-    connect(lineboundConfirm, &QPushButton::clicked, this, [this](){
+    connect(linebound, &QDoubleSpinBox::valueChanged, this, [this]() {
         scene->changeLineWidth(linebound->value());
     });
     connect(linecolor, &QPushButton::clicked, this, [this](){
-        QColor color = QColorDialog::getColor(Qt::white, this);
+        QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
         scene->changeLineColor(color);
     });
     connect(frameColor, &QPushButton::clicked, this, &MainWindow::selectFrameCol);
     connect(fillColor, &QPushButton::clicked, this, &MainWindow::selectFillCol);
     connect(textColor, &QPushButton::clicked, this, &MainWindow::selectTextCol);
     connect(textFont, &QPushButton::clicked, this, &MainWindow::selectTextFont);
+    connect(rotationBox, &QDoubleSpinBox::valueChanged, this, [this]() {
+        scene->changeLineWidth(linebound->value());
+    });
+    connect(zoomBox, &QDoubleSpinBox::valueChanged, this, [this]() {
+        scene->changeLineWidth(linebound->value());
+    });
 }
 
 void MainWindow::createMenu()
@@ -809,6 +794,16 @@ void MainWindow::changeLineColor(QColor color)
 void MainWindow::setSceneBg(QString path)
 {
     scene->setBg(path);
+}
+
+void MainWindow::changeItemRot()
+{
+    scene->changeItemRot();
+}
+
+void MainWindow::changeItemScale()
+{
+    scene->changeItemScale();
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()
