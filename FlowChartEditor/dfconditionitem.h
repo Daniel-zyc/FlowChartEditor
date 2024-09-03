@@ -2,16 +2,12 @@
 
 #include "dpolygonbase.h"
 
-#include <QPainter>
-#include <QPolygonF>
-#include <QRectF>
-
-class DDiaItem : public DPolygonBase
+class DFConditionItem : public DPolygonBase
 {
 public:
-	enum { Type = DFDiaItemType };
-	DDiaItem(QGraphicsItem *parent = nullptr);
-	DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFConditionItemType };
+	DFConditionItem(QGraphicsItem *parent = nullptr);
+	DFConditionItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }

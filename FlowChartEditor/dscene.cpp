@@ -93,7 +93,10 @@ void DScene::moveSelectedZMaxUp(){
         colItems.append(item->collidingItems());
     }
     for(QGraphicsItem * item : colItems)
-        if(!S.contains(item) && item->zValue() > colMax && item->parentItem() == nullptr)
+        if(!S.contains(item)
+            && item->zValue() > colMax
+            && item->parentItem() == nullptr
+            && dynamic_cast<DAbstractBase*>(item) != nullptr)
             colMax = item->zValue();
     if(selectedMin > colMax) return;
     qreal dis = colMax - selectedMin + 1;
@@ -116,7 +119,10 @@ void DScene::moveSelectedZMaxDown(){
         colItems.append(item->collidingItems());
     }
     for(QGraphicsItem * item : colItems)
-        if(!S.contains(item) && item->zValue() < colMin && item->parentItem() == nullptr){
+        if(!S.contains(item)
+            && item->zValue() < colMin
+            && item->parentItem() == nullptr
+            && dynamic_cast<DAbstractBase*>(item) != nullptr){
             colMin = item->zValue();
         }
     if(selectedMax < colMin) return;
@@ -127,6 +133,27 @@ void DScene::moveSelectedZMaxDown(){
             qDebug() << "将z值设置为"  << temdis - dis;
             item->setZValue(temdis - dis);
         }
+}
+
+void DScene::prepareInsertItem(DAbstractBase* item)
+{
+	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_SHAPE
+	   || state == DConst::INSERT_LINE)
+	{
+		delete modifiedShape;
+		modifiedShape = nullptr;
+	}
+
+	int type = item->type(); qDebug() << type;
+	if(QGraphicsItem::UserType + 40 <= type
+	   && type < QGraphicsItem::UserType + 100)
+		state = DConst::INSERT_TEXT;
+	if(QGraphicsItem::UserType + 100 <= type
+	   && type < QGraphicsItem::UserType + 300)
+		state = DConst::INSERT_SHAPE;
+	if(QGraphicsItem::UserType + 300 <= type)
+		state = DConst::INSERT_LINE;
+	modifiedShape = item;
 }
 
 void DScene::addTextItem()
@@ -217,6 +244,66 @@ void DScene::addPreItem()
     DPreItem *item = new DPreItem();
     state = DConst::INSERT_TEXT;
     modifiedShape = item;
+}
+
+void DScene::addDFDocItem()
+{
+	qDebug() << "add DFDocItem";
+	prepareInsertItem(new DDocItem());
+}
+
+void DScene::addDFEndItem()
+{
+	qDebug() << "add DFEndItem";
+	prepareInsertItem(new DEndItem());
+}
+
+void DScene::addDFManualOperateItem()
+{
+	qDebug() << "add DFManualOperateItem";
+	prepareInsertItem(new DFManualOperateItem());
+}
+
+void DScene::addDFInternalStoreItem()
+{
+	qDebug() << "add DFInternalStoreItem";
+	prepareInsertItem(new DFInternalStoreItem());
+}
+
+void DScene::addDFPrepareItem()
+{
+	qDebug() << "add DFPrepareItem";
+	prepareInsertItem(new DFPrepareItem());
+}
+
+void DScene::addDFProcessItem()
+{
+	qDebug() << "add DFProcessItem";
+	prepareInsertItem(new DFProcessItem());
+}
+
+void DScene::addDFOptionalProcessItem()
+{
+	qDebug() << "add DFOptionalProcessItem";
+	prepareInsertItem(new DFOptionalProcessItem());
+}
+
+void DScene::addDFConditionItem()
+{
+	qDebug() << "add DFConditionItem";
+	prepareInsertItem(new DFConditionItem());
+}
+
+void DScene::addDFDataItem()
+{
+	qDebug() << "add DFDataItem";
+	prepareInsertItem(new DFDataItem());
+}
+
+void DScene::addDFNodeItem()
+{
+	qDebug() << "add DFNodeItem";
+	prepareInsertItem(new DFNodeItem());
 }
 
 void DScene::addTrapItem()
@@ -572,16 +659,4 @@ void DScene::pasteItems(){
 	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
     DTool::moveItems(items);
     drawItems(items);
-}
-
-// 菱形判定至少有一个输入两个输出
-void DScene::check(){
-    QList<QGraphicsItem * > items = this->items();
-    for(QGraphicsItem * item : items){
-        if(dynamic_cast<DDiaItem*>(item)){
-            qDebug() << "找到一个菱形";
-            DDiaItem *diaItem = dynamic_cast<DDiaItem*>(item);
-            diaItem->check();
-        }
-    }
 }

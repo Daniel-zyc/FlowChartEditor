@@ -33,6 +33,8 @@ protected:
     void updateLine() override;
     //调整中点位置
     void updateMidPoint(int type);
+    //判断是否可调整
+    int checkModi(int type,QPointF p);
     //获取调整点数量及位置
     void updateModiPoint();
     //获取折线长短边方向
@@ -70,7 +72,13 @@ private:
     //绘制标记
     int paint_flag = 0;
     //距离形状的最短距离
-    double record_dist = 35;
+    double record_dist = 40;
+    /*记录最多三个调整点的调整位置，
+     * 存完拿回去用的时候先更新完线，
+     * 然后调用modiToPoint
+     * id为012，对应的p在QMap里
+    */
+    QMap<int,QPointF> modi_pos;
 };
 
 #endif // DPOLYLINEITEM_H

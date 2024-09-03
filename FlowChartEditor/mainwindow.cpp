@@ -76,6 +76,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	view = new DView(scene);
 
+    inspector = new Inspector(this,scene,view);
+
 	view->setDragMode(QGraphicsView::RubberBandDrag);
 
     initUi();
@@ -85,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     bindAction();
 
+	// 调试用
+	// scene->addDFNodeItem();
 }
 
 MainWindow::~MainWindow()
@@ -920,5 +924,6 @@ void MainWindow::showAboutUsWindow(){
 }
 
 void MainWindow::check(){
-    scene->check();
+    inspector->check();
+    inspector->show();
 }

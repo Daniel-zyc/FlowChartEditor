@@ -14,10 +14,14 @@ SOURCES += \
     ddiaitem.cpp \
     dellitem.cpp \
     denditem.cpp \
+    dfconditionitem.cpp \
+    dfdataitem.cpp \
     dfinddialog.cpp \
     dfinternalstoreitem.cpp \
     dfmanualoperateitem.cpp \
     dfpredefineitem.cpp \
+    dfnodeitem.cpp \
+    dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
     ditemgroup.cpp \
@@ -34,6 +38,7 @@ SOURCES += \
     dtriitem.cpp \
     dview.cpp \
     global.cpp \
+    inspector.cpp \
     magpoint.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -50,10 +55,17 @@ HEADERS += \
     ddiaitem.h \
     dellitem.h \
     denditem.h \
+    dfconditionitem.h \
+    dfdataitem.h \
     dfinddialog.h \
     dfinternalstoreitem.h \
     dfmanualoperateitem.h \
+<<<<<<< HEAD
     dfpredefineitem.h \
+=======
+    dfnodeitem.h \
+    dfoptionalprocessitem.h \
+>>>>>>> aa5c61a3f131533c99191c3fb889efc5551bdecd
     dfprepareitem.h \
     dfprocessitem.h \
     ditemgroup.h \
@@ -70,6 +82,7 @@ HEADERS += \
     dtriitem.h \
     dview.h \
     global.h \
+    inspector.h \
     magpoint.h \
     mainwindow.h \
     saveandloadmanager.h \
