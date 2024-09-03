@@ -213,8 +213,13 @@ void DScene::addEndItem()
 
 void DScene::addPreItem()
 {
+	// qDebug() << "add TrapItem";
+	// DFInternalStoreItem *item = new DFInternalStoreItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+
 	qDebug() << "add TrapItem";
-	DFInternalStoreItem *item = new DFInternalStoreItem();
+	DFPrepareItem *item = new DFPrepareItem();
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
