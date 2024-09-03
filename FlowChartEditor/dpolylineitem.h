@@ -10,6 +10,7 @@
 class DPolyLineItem : public DLineBase
 {
 public:
+	enum { Type = DPolyLineItemType };
     DPolyLineItem(QGraphicsItem * parent = nullptr);
     DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent = nullptr);
 
@@ -46,8 +47,8 @@ protected:
     //获取另一点与这个点的相对位置
     int getRelativePosition(QPointF cur,QPointF another);
     //更新两中点坐标
-    void updateBeginMidPoint(int type);
-    void updateEndMidPoint(int type);
+    void updateBeginMidPoint();
+    void updateEndMidPoint();
     //获取线头连线的图形是否有碰撞
     //int HasItemCollision(QRectF st_item,QRectF ed_item);
     //调整折线形

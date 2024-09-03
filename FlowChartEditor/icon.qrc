@@ -30,5 +30,28 @@
         <file>icon/solidLine.png</file>
         <file>icon/predefined.png</file>
         <file>icon/end.png</file>
+        <file>icon/grayBg.png</file>
+        <file>icon/palette.png</file>
+        <file>icon/primary/ellipse.png</file>
+        <file>icon/primary/text.png</file>
+        <file>icon/primary/rect.png</file>
+        <file>icon/flowchart/doc.png</file>
+        <file>icon/flowchart/ellipse.png</file>
+        <file>icon/flowchart/manul.png</file>
+        <file>icon/flowchart/parallgram.png</file>
+        <file>icon/flowchart/pre.png</file>
+        <file>icon/flowchart/prepare.png</file>
+        <file>icon/flowchart/rect.png</file>
+        <file>icon/flowchart/rhomb.png</file>
+        <file>icon/flowchart/roundrect.png</file>
+        <file>icon/flowchart/store.png</file>
+        <file>icon/flowchart/teminate.png</file>
+        <file>icon/flowchart/triangle.png</file>
+        <file>icon/primary/parallgram.png</file>
+        <file>icon/primary/rhomb.png</file>
+        <file>icon/primary/trapezoid.png</file>
+        <file>icon/primary/triangle.png</file>
+        <file>icon/flowchart/node.png</file>
+        <file>icon/polyLine.png</file>
     </qresource>
 </RCC>

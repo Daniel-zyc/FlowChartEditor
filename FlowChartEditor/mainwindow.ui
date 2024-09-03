@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -48,19 +48,17 @@
      <string>视角</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="helpMenu">
     <property name="title">
      <string>帮助</string>
     </property>
-    <addaction name="actAboutUs"/>
-    <addaction name="actCheck"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
    <addaction name="addMenu"/>
    <addaction name="styleMenu"/>
    <addaction name="viewMenu"/>
-   <addaction name="menu"/>
+   <addaction name="helpMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="headToolBar">

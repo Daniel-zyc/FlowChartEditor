@@ -21,6 +21,7 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QTabWidget>
+#include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QMainWindow>
@@ -42,29 +43,44 @@ private:
 	void createToolBar();
 	void bindAction();
     void initUi();
+    void initleftUi();
+    void initrightUi();
+    void connectLeft();
+    void connectRight();
 
 private slots:
     void check();
     void saveAsSvg();
 
-	void addLine();
-	void addRect();
-	void addRoundRect();
-	void addEll();
-	void addText();
-    void addTri();
-    void addDia();
-    void addTrap();
-    void addEnd();
-    void addPre();
-    void addParallegram();
-    void addDocShape();
-    void addPolyLine();
-    void addManualin();
+	void addLine() { scene->addLineItem(); }
+	void addPolyLine() { scene->addPolyLineItem(); }
+	void addCurveLine() { scene->addCurveLineItem(); }
+
+	void addText() { scene->addTextItem(); }
+
+	void addRect() { scene->addRectItem(); }
+	void addRoundRect() { scene->addRoundRectItem(); }
+	void addEll() { scene->addEllItem(); }
+	void addTri() { scene->addTriItem(); }
+	void addDia() { scene->addDiaItem(); }
+	void addTrap() { scene->addTrapItem(); }
+	void addParagram() { scene->addParagramItem(); }
+
+	void addDFDocItem() { scene->addDFDocItem(); }
+	void addDFManualOperateItem() { scene->addDFManualOperateItem(); }
+	void addDFInternalStoreItem() { scene->addDFInternalStoreItem(); }
+	void addDFPrepareItem() { scene->addDFPrepareItem(); }
+	void addDFProcessItem() { scene->addDFProcessItem(); }
+	void addDFOptionalProcessItem() { scene->addDFOptionalProcessItem(); }
+	void addDFConditionItem() { scene->addDFConditionItem(); }
+	void addDFDataItem() { scene->addDFDataItem(); }
+	void addDFNodeItem() { scene->addDFNodeItem(); }
+	void addDFStartEndItem() { scene->addDFStartEndItem(); }
+	void addDFPredefineItem() { scene->addDFPredefineItem(); }
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
-    void changeLineStyle();
+    void changeLineColor(QColor color);
     void setSceneBg(QString path);
 
     QSet<DTextBase *> getTextBases();
@@ -105,6 +121,7 @@ private slots:
 	void editMoveRight() { scene->moveRight(); }
 	void editMoveUp() { scene->moveUp(); }
 	void editMoveDown() { scene->moveDown(); }
+
     void findandReplace();
 
 	void delSelectedItem();
@@ -133,9 +150,16 @@ private:
 
     QSplitter *mainsplitter;
     QWidget *leftw;
-    QGridLayout *leftGrid;
+    QGridLayout *flowGrid;
+    QGridLayout *primaryGrid;
+    QGridLayout *lineGrid;
+    QGridLayout *textGrid;
     QVBoxLayout *leftUpV;
 
+    QGroupBox *primaryGroup;
+    QGroupBox *flowcGroup;
+    QGroupBox *lineGroup;
+    QGroupBox *textGroup;
     QPushButton *rectBtn;
     QPushButton *roundRectBtn;
     QPushButton *ellipseBtn;
@@ -148,7 +172,17 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
-    QPushButton *manualinBtn;
+ //   QPushButton *manualinBtn;
+    QPushButton *prepareBtn;
+    QPushButton *storeBtn;
+    QPushButton *polyLineBtn;
+
+	QPushButton *addRectBtn;
+	QPushButton *addEllBtn;
+	QPushButton *addParagramBtn;
+	QPushButton *addDiaBtn;
+	QPushButton *addTrapBtn;
+	QPushButton *addTriBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;
@@ -159,6 +193,10 @@ private:
     QComboBox *lineType;
     QComboBox *arrowType;
     QDoubleSpinBox *linebound;
+    QPushButton *lineConfirm;
+    QPushButton *arrowConfirm;
+    QPushButton *lineboundConfirm;
+    QPushButton *linecolor;
 
     QToolButton *createTln;
     QToolButton *openTln;
@@ -173,8 +211,14 @@ private:
     QTreeWidget *rightBgw;
     QTreeWidgetItem *colorTop;
     QTreeWidgetItem *patternTop;
-
     QPushButton *selectedColor;
     QTreeWidgetItem *colorChild0;
+    QTreeWidgetItem *patternChild0;
+    QTreeWidgetItem *patternChild1;
+    QTreeWidgetItem *patternChild2;
+    QTreeWidgetItem *patternChild3;
+    QRadioButton *customizeBg;
+    QPushButton *repickBtn;
+
     QString filePath = nullptr;
 };

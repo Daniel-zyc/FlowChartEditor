@@ -31,7 +31,7 @@ void UndoManager::undo(){
     QByteArray data = undoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
     QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
-    scene->clear(); scene->drawItems(items);
+    scene->clear(); scene->dDrawItems(items);
     redoStack.push(data);
     trimStack();
 }
@@ -43,7 +43,7 @@ void UndoManager::redo(){
     QByteArray data = redoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
     QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
-    scene->clear(); scene->drawItems(items);
+    scene->clear(); scene->dDrawItems(items);
     undoStack.push(data);
     trimStack();
 }

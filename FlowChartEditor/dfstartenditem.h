@@ -2,12 +2,12 @@
 
 #include "dshapebase.h"
 #include <QRectF>
-class DEndItem : public DShapeBase
+class DFStartEndItem : public DShapeBase
 {
 public:
-	enum { Type = DFEndItemType };
-	DEndItem(QGraphicsItem *parent = nullptr);
-	DEndItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFStartEndItemType };
+	DFStartEndItem(QGraphicsItem *parent = nullptr);
+	DFStartEndItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }

@@ -8,6 +8,8 @@
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
 
+extern int PASTE_NUM;
+
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 
@@ -60,13 +62,13 @@ enum UserTypes
 	DEllItemType = QGraphicsItem::UserType + 101,
 	DRoundRectItemType = QGraphicsItem::UserType + 102,
 	DTriItemType = QGraphicsItem::UserType + 103,
-	DParallegramItemType = QGraphicsItem::UserType + 104,
+	DParagramItemType = QGraphicsItem::UserType + 104,
 	DTrapItemType = QGraphicsItem::UserType + 105,
+	DDiaItemType = QGraphicsItem::UserType + 106,
 
-	DFEndItemType = QGraphicsItem::UserType + 200,
-	DFPreItemType = QGraphicsItem::UserType + 201,
-	DFDocItemType = QGraphicsItem::UserType + 202,
-	DFDiaItemType = QGraphicsItem::UserType + 203,
+	DFStartEndItemType = QGraphicsItem::UserType + 200,
+	DFPredefineItemType = QGraphicsItem::UserType + 201,
+	DFDocumentItemType = QGraphicsItem::UserType + 202,
 	DFManualOperateItemType = QGraphicsItem::UserType + 204,
 	DFInternalStoreItemType = QGraphicsItem::UserType + 205,
 	DFPrepareItemType = QGraphicsItem::UserType + 206,
@@ -76,8 +78,11 @@ enum UserTypes
 	DFDataItemType = QGraphicsItem::UserType + 210,
 	DFNodeItemType = QGraphicsItem::UserType + 211,
     DFManualinputItemType = QGraphicsItem::UserType + 212,
+	DFInformationItemType = QGraphicsItem::UserType + 213,
 
-	DLineItemType = QGraphicsItem::UserType + 300
+	DLineItemType = QGraphicsItem::UserType + 300,
+	DCurveLineItemType = QGraphicsItem::UserType + 301,
+	DPolyLineItemType = QGraphicsItem::UserType + 302
 };
 
 // 常量
@@ -194,6 +199,18 @@ namespace DTool
 	// 平方
 	qreal sq(qreal x);
 
+	// 判断是不是 AbstractShape 继承出的元素
+	bool isAbstract(int type);
+
+	// 判断是不是 Shape 类型
+	bool isShape(int type);
+
+	// 判断是不是 Line 类型
+	bool isLine(int type);
+
+	// 判断是不是 text 类型
+	bool isText(int type);
+
 	// p 是否在以 o 为半径 r 为圆心的圆中
 	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
 
@@ -201,5 +218,5 @@ namespace DTool
 	void moveItems(const QList<QGraphicsItem*> &items);
 
 	// 过滤掉所有 parent 存在于列表中的元素
-	void filterRootItem(QList<QGraphicsItem*> &items);
+	void filterRootBases(QList<QGraphicsItem*> &items);
 };

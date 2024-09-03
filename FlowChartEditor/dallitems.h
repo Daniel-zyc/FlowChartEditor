@@ -15,12 +15,12 @@
 #include "droundrectitem.h"
 #include "dellitem.h"
 #include "dtriitem.h"
-#include "dparallelogramitem.h"
+#include "dparagramitem.h"
 #include "dtrapitem.h"
 
-#include "ddocitem.h"
+#include "dfdocumentitem.h"
 #include "ddiaitem.h"
-#include "denditem.h"
+#include "dfstartenditem.h"
 #include "dfpredefineitem.h"
 #include "dfmanualoperateitem.h"
 #include "dfmanualinputitem.h"
@@ -34,3 +34,4 @@
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"
+#include "dcurvelineitem.h"

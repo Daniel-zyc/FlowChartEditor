@@ -41,7 +41,8 @@ public:
 
 	virtual void setBeginArrowType(int type);
 	virtual void setEndArrowType(int type);
-    virtual void drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize = 10.0);
+    virtual double getAngle(const QPointF &beginPoint, const QPointF &endPoint);
+    virtual void drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType, qreal arrowSize = 10.0);
 
 	virtual void setBeginPoint(QPointF p);
 	virtual void setEndPoint(QPointF p);

@@ -190,13 +190,15 @@ void DLineBase::setEndArrowType(int type)
 	update();
 }
 
-void DLineBase::drawArrow(QPainter *painter, const QPointF &startPoint, const QPointF &endPoint, int arrowType, qreal arrowSize)
+double DLineBase::getAngle(const QPointF &beginPoint, const QPointF &endPoint)
 {
-
-
-    QLineF line(startPoint, endPoint);
+    QLineF line(beginPoint, endPoint);
     double angle = atan2(line.dy(), line.dx());
+    return angle;
+}
 
+void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType, qreal arrowSize)
+{
     QPointF arrowP1 = endPoint - QPointF(cos(angle + DConst::PI / 6) * arrowSize,
                                          sin(angle + DConst::PI / 6) * arrowSize);
     QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
@@ -219,11 +221,11 @@ void DLineBase::drawArrow(QPainter *painter, const QPointF &startPoint, const QP
     }
     case DConst::DOVETAIL_ARROW: {
         QPointF dovetailTip = endPoint - QPointF(cos(angle) * arrowSize,
-                                                sin(angle) * arrowSize);
+                                                 sin(angle) * arrowSize);
         QPointF dovetailP1 = arrowP1 - QPointF(cos(angle) * arrowSize / 2,
-                                              sin(angle) * arrowSize / 2);
+                                               sin(angle) * arrowSize / 2);
         QPointF dovetailP2 = arrowP2 - QPointF(cos(angle) * arrowSize / 2,
-                                              sin(angle) * arrowSize / 2);
+                                               sin(angle) * arrowSize / 2);
         QPolygonF dovetail;
         dovetail << endPoint << dovetailP1 << dovetailTip << dovetailP2;
         painter->drawPolygon(dovetail);
@@ -233,9 +235,9 @@ void DLineBase::drawArrow(QPainter *painter, const QPointF &startPoint, const QP
         QPointF diamondTip = endPoint - QPointF(cos(angle) * arrowSize,
                                                 sin(angle) * arrowSize);
         QPointF diamondP1 = endPoint - QPointF(cos(angle + DConst::PI / 4) * arrowSize / sqrt(2),
-                                             sin(angle + DConst::PI / 4) * arrowSize / sqrt(2));
+                                               sin(angle + DConst::PI / 4) * arrowSize / sqrt(2));
         QPointF diamondP2 = endPoint - QPointF(cos(angle - DConst::PI / 4) * arrowSize / sqrt(2),
-                                             sin(angle - DConst::PI / 4) * arrowSize / sqrt(2));
+                                               sin(angle - DConst::PI / 4) * arrowSize / sqrt(2));
         QPolygonF diamond;
         diamond << endPoint << diamondP1 << diamondTip << diamondP2;
         painter->drawPolygon(diamond);
@@ -290,5 +292,6 @@ bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	linkEnd(Serializer::instance().ptrToMag[endPtr]);
 
 	in >> beginArrowType >> endArrowType;
+    updatePosition();
 	return true;
 }
