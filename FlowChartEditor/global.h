@@ -77,7 +77,7 @@ enum UserTypes
 	DFConditionItemType = QGraphicsItem::UserType + 209,
 	DFDataItemType = QGraphicsItem::UserType + 210,
 	DFNodeItemType = QGraphicsItem::UserType + 211,
-    DFManualinputItemType = QGraphicsItem::UserType + 212,
+	DFManualInputItemType = QGraphicsItem::UserType + 212,
 	DFInformationItemType = QGraphicsItem::UserType + 213,
     DFDelayItemType = QGraphicsItem::UserType + 214,
 
@@ -205,6 +205,9 @@ namespace DTool
 
 	// 判断是不是 Shape 类型
 	bool isShape(int type);
+
+	// 判断是不是流程图用图形
+	bool isFlowChartShape(int type);
 
 	// 判断是不是 Line 类型
 	bool isLine(int type);

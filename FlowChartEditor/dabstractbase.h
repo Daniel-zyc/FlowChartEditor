@@ -29,6 +29,7 @@ public:
 
 	// 图形的类型判断
 	virtual bool isShape();
+	virtual bool isFLowChartShape();
 	virtual bool isLine();
 	virtual bool isText();
 

@@ -23,7 +23,7 @@ void DFProcessItem::updateMagPoint()
 
 void DFProcessItem::modiToPoint(QPointF p, int id)
 {
-	Q_UNUSED(id); Q_UNUSED(id); return;
+	Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
 void DFProcessItem::updateModiPoint()

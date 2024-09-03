@@ -86,6 +86,7 @@ public:
 	void addDFNodeItem();
     void addManualinItem();
 	void addDFPredefineItem();
+	void addManualInputItem();
     void addDFDelayItem();
 
 

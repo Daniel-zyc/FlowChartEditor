@@ -11,28 +11,24 @@ public:
 	enum { Type = DCurveLineItemType };
 	DCurveLineItem(QGraphicsItem *parent = nullptr);
 	DCurveLineItem(QPointF begin, QPointF end, QGraphicsItem *parent = nullptr);
-
 	~DCurveLineItem() = default;
 
+public:
 	int type() const override { return Type; }
 
 	QRectF boundingRect() const override;
-
-protected:
 	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
 	void modiToPoint(QPointF p, int id) override;
-
 	QPainterPath shapeNormal() const override;
-
 	void updateLine() override;
+
+	void updateModiPoint();
+	void updatePath();
 
 private:
 	QPointF tip;
-	double angle;
-
-	void updateModiPoint();
-	QPainterPath drawCurve() const;
+	qreal angle;
+	QPainterPath path;
 
 public:
 	/**

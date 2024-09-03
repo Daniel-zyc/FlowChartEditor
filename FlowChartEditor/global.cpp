@@ -107,3 +107,8 @@ bool DTool::isAbstract(int type)
 {
 	return QGraphicsItem::UserType <= type;
 }
+
+bool DTool::isFlowChartShape(int type)
+{
+	return QGraphicsItem::UserType + 200 <= type && type < QGraphicsItem::UserType + 300;
+}

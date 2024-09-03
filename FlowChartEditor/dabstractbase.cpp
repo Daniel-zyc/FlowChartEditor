@@ -54,6 +54,11 @@ bool DAbstractBase::isShape()
 	return DTool::isShape(type());
 }
 
+bool DAbstractBase::isFLowChartShape()
+{
+	return DTool::isFlowChartShape(type());
+}
+
 bool DAbstractBase::isLine()
 {
 	return DTool::isLine(type());

@@ -278,8 +278,14 @@ void DScene::addDFNodeItem()
 
 void DScene::addDFPredefineItem()
 {
-	qDebug() << "add DFNodeItem";
+	qDebug() << "add DFPredefineItem";
 	prepareInsertItem(new DFPredefineItem());
+}
+
+void DScene::addManualInputItem()
+{
+	qDebug() << "add DFManualInput";
+	prepareInsertItem(new DFManualInputItem());
 }
 
 //=============================== line item ====================================
@@ -292,7 +298,7 @@ void DScene::addLineItem()
 void DScene::addManualinItem()
 {
     qDebug() << "add ManualinItem";
-    DFManualinputItem *item = new DFManualinputItem();
+	DFManualInputItem *item = new DFManualInputItem();
     state = DConst::INSERT_SHAPE;
     modifiedShape = item;
 }

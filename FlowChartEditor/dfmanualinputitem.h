@@ -2,12 +2,12 @@
 
 #include "dpolygonbase.h"
 
-class DFManualinputItem : public DPolygonBase
+class DFManualInputItem : public DPolygonBase
 {
 public:
-    enum { Type = DFManualinputItemType };
-    DFManualinputItem(QGraphicsItem *parent = nullptr);
-    DFManualinputItem(qreal w, qreal h, QGraphicsItem* parent = nullptr);
+    enum { Type = DFManualInputItemType };
+	DFManualInputItem(QGraphicsItem *parent = nullptr);
+	DFManualInputItem(qreal w, qreal h, QGraphicsItem* parent = nullptr);
 
 public:
     int type() const override { return Type; }

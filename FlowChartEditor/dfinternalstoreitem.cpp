@@ -89,14 +89,14 @@ void DFInternalStoreItem::serialize(QDataStream &out, const QGraphicsItem* fa) c
 {
 	DShapeBase::serialize(out, fa);
 
-	out << rect;
+	out << rect << ratiox << ratioy;
 }
 
 bool DFInternalStoreItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
-	in >> rect;
+	in >> rect >> ratiox >> ratioy;
 	updateAll();
 	return true;
 }

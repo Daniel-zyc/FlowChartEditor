@@ -1,10 +1,10 @@
 #include "dfmanualinputitem.h"
 #include "magpoint.h"
 
-DFManualinputItem::DFManualinputItem(QGraphicsItem *parent)
-    : DFManualinputItem(minRectSize, minRectSize, parent) {}
+DFManualInputItem::DFManualInputItem(QGraphicsItem *parent)
+    : DFManualInputItem(minRectSize, minRectSize, parent) {}
 
-DFManualinputItem::DFManualinputItem(qreal w,qreal h, QGraphicsItem *parent)
+DFManualInputItem::DFManualInputItem(qreal w,qreal h, QGraphicsItem *parent)
     : DPolygonBase("", parent)
 {
     modis.resize(1);
@@ -14,7 +14,7 @@ DFManualinputItem::DFManualinputItem(qreal w,qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void DFManualinputItem::updateMagPoint()
+void DFManualInputItem::updateMagPoint()
 {
     (*mags)[0]->setPos((polygon[0] + polygon[1]) / 2);
     (*mags)[1]->setPos((polygon[1] + polygon[2]) / 2);
@@ -22,7 +22,7 @@ void DFManualinputItem::updateMagPoint()
     (*mags)[3]->setPos((polygon[3] + polygon[0]) / 2);
 }
 
-void DFManualinputItem::modiToPoint(QPointF p, int id)
+void DFManualInputItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(id);
     QRectF rc = sizeRect();
@@ -33,7 +33,7 @@ void DFManualinputItem::modiToPoint(QPointF p, int id)
     updateMagPoint();
 }
 
-void DFManualinputItem::updateModiPoint()
+void DFManualInputItem::updateModiPoint()
 {
     modis[0] = polygon[0];
 }
