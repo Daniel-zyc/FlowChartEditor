@@ -60,12 +60,9 @@ HEADERS += \
     dfinddialog.h \
     dfinternalstoreitem.h \
     dfmanualoperateitem.h \
-<<<<<<< HEAD
     dfpredefineitem.h \
-=======
     dfnodeitem.h \
     dfoptionalprocessitem.h \
->>>>>>> aa5c61a3f131533c99191c3fb889efc5551bdecd
     dfprepareitem.h \
     dfprocessitem.h \
     ditemgroup.h \
