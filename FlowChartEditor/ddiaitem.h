@@ -9,7 +9,7 @@
 class DDiaItem : public DPolygonBase
 {
 public:
-	enum { Type = DDiaItemType };
+	enum { Type = DFDiaItemType };
 	DDiaItem(QGraphicsItem *parent = nullptr);
 	DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

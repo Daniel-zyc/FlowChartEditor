@@ -5,7 +5,7 @@
 class DEndItem : public DShapeBase
 {
 public:
-	enum { Type = DEndItemType };
+	enum { Type = DFEndItemType };
 	DEndItem(QGraphicsItem *parent = nullptr);
 	DEndItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

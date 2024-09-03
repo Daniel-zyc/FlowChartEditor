@@ -8,7 +8,7 @@ class DShapeBase;
 class DDocItem : public DShapeBase
 {
 public:
-	enum { Type = DDocItemType };
+	enum { Type = DFDocItemType };
 	DDocItem(QGraphicsItem *parent = nullptr);
 	DDocItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

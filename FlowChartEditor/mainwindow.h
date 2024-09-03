@@ -172,5 +172,7 @@ private:
     QTreeWidgetItem *colorTop;
     QTreeWidgetItem *patternTop;
 
+    QPushButton *selectedColor;
+    QTreeWidgetItem *colorChild0;
     QString filePath = nullptr;
 };

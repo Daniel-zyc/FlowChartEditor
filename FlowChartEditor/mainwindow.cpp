@@ -218,7 +218,10 @@ void MainWindow::initUi()
     colorTop->setText(0, "颜色");
     patternTop->setText(0, "图案");
 
-
+    colorChild0 = new QTreeWidgetItem(colorTop);
+    colorChild0->setText(0, "纯色填充：");
+    selectedColor = new QPushButton();
+    rightBgw->setItemWidget(colorChild0, 1, selectedColor);
 
     rightBgw->addTopLevelItem(colorTop);
     rightBgw->addTopLevelItem(patternTop);
