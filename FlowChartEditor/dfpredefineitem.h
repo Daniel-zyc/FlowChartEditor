@@ -3,12 +3,10 @@
 #include "dshapebase.h"
 #include <QRectF>
 
-class DShapeBase;
-
 class DPreItem : public DShapeBase
 {
 public:
-    enum { Type = DPreItemType };
+    enum { Type = DFPreItemType };
     DPreItem(QGraphicsItem *parent = nullptr);
     DPreItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
@@ -23,9 +21,10 @@ public:
 
     void updateAll();
     void updateMagPoint();
+    void updateModiPoint();
 
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
-    QRectF rect1 = QRectF(0, 0, 0, 0);
+    qreal ratio = 0.15;
 
 };

@@ -1,4 +1,4 @@
-#include "dpreitem.h"
+#include "dfpredefineitem.h"
 #include "magpoint.h"
 
 DPreItem::DPreItem(QGraphicsItem *parent)
@@ -7,8 +7,8 @@ DPreItem::DPreItem(QGraphicsItem *parent)
 DPreItem::DPreItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase("", parent)
 {
+    modis.resize(1);
     for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
-    rect1 = QRectF(-w/2+0.15*w, -h/2, 0.7*w, h);
     rect = QRectF(-w/2, -h/2, w, h);
     updateAll();
 }
@@ -20,7 +20,8 @@ void DPreItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->setBrush(brush());
     painter->setPen(pen());
     painter->drawRect(rect);
-    painter->drawRect(rect1);
+    painter->drawLine(QPointF(rect.left()+ratio*rect.width(), -0.5*rect.height()), QPointF(rect.left()+ratio*rect.width(), 0.5*rect.height()));
+    painter->drawLine(QPointF(rect.right()-ratio*rect.width(), -0.5*rect.height()), QPointF(rect.right()-ratio*rect.width(), 0.5*rect.height()));
 }
 
 QRectF DPreItem::sizeRect() const
@@ -32,8 +33,11 @@ QPainterPath DPreItem::shapeNormal() const
 {
     QPainterPath pth;
     pth.addRect(rect);
-    pth.addRect(rect1);
     return pth;
+}
+void DPreItem::updateModiPoint()
+{
+    modis[0] = {rect.left() + rect.width() * ratio, rect.top()};
 }
 
 void DPreItem::updateMagPoint()
@@ -48,17 +52,24 @@ void DPreItem::updateMagPoint()
 void DPreItem::sizeToRect(QRectF nrect)
 {
     rect = nrect;
-    rect1 = QRectF(rect.left() + 0.15 * rect.width(), rect.top(), 0.7 * rect.width(), rect.height());
     updateAll();
 }
 
 void DPreItem::modiToPoint(QPointF p, int id)
 {
-    Q_UNUSED(p); Q_UNUSED(id); return;
+    switch(id)
+    {
+    case 0:
+        ratio = (p.x() - rect.left()) / rect.width();
+        ratio = qMin(ratio, 0.5);
+        ratio = qMax(0.0, ratio);
+        updateModiPoint();
+        break;
+    }
 }
-
 void DPreItem::updateAll()
 {
     updateSizePoint();
     updateMagPoint();
+    updateModiPoint();
 }

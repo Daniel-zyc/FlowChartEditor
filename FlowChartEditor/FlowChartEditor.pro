@@ -17,6 +17,7 @@ SOURCES += \
     dfinddialog.cpp \
     dfinternalstoreitem.cpp \
     dfmanualoperateitem.cpp \
+    dfpredefineitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
     ditemgroup.cpp \
@@ -24,7 +25,6 @@ SOURCES += \
     dlineitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
-    dpreitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -53,6 +53,7 @@ HEADERS += \
     dfinddialog.h \
     dfinternalstoreitem.h \
     dfmanualoperateitem.h \
+    dfpredefineitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
     ditemgroup.h \
@@ -60,7 +61,6 @@ HEADERS += \
     dlineitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
-    dpreitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \
