@@ -1,7 +1,7 @@
 #pragma once
 
 #include "global.h"
-#include "dlineitem.h"
+#include "dallitems.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -12,6 +12,7 @@
 
 class DAbstractBase;
 class MagPoint;
+class DView;
 
 class DScene : public QGraphicsScene
 {
@@ -24,7 +25,9 @@ public:
 	DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
 
 public:
-    QMenu *menu = nullptr;
+	QMenu *menu = nullptr;
+
+	QList<QGraphicsItem*> getRootSelectedItems();
 
 	void resetRotation() { setRotation(0.0); }
 	void setRotation(qreal angle = 0.0);
@@ -103,6 +106,8 @@ public:
     void changeLineWidth(double width);
     void setBg(QString path);
 
+	void setView(DView *v) { view = v; }
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -115,6 +120,8 @@ private:
 	static qreal defaultMoveDist;
     static qreal defaultMoveZUp;
     static qreal defaultMoveZDown;
+
+	DView *view;
 
 	int state = DConst::NONE;
 	int moditype = DConst::NONE;

@@ -193,6 +193,8 @@ namespace DTool
 	// 平方
 	qreal sq(qreal x);
 
+
+
 	// p 是否在以 o 为半径 r 为圆心的圆中
 	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
 

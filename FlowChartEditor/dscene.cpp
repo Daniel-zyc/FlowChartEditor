@@ -32,39 +32,43 @@ DScene::DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
 
 }
 
+QList<QGraphicsItem*> DScene::getRootSelectedItems()
+{
+	QList<QGraphicsItem*> items = selectedItems();
+	DTool::filterRootItem(items);
+	return items;
+}
+
 void DScene::setRotation(qreal angle)
 {
-	for(QGraphicsItem *item : selectedItems())
+	for(QGraphicsItem *item : getRootSelectedItems())
 		item->setRotation(angle);
 }
 
 void DScene::rotateSelected(qreal deg)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setRotation(DTool::degMod(item->rotation() + deg));
+	for(QGraphicsItem *item : getRootSelectedItems()) item->setRotation(DTool::degMod(item->rotation() + deg));
 }
 
 void DScene::setScale(qreal scale)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setScale(scale);
+	for(QGraphicsItem *item : getRootSelectedItems()) item->setScale(scale);
 }
 
 void DScene::enlargeSelected(qreal ratio)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setScale(item->scale() * ratio);
+	for(QGraphicsItem *item : getRootSelectedItems()) item->setScale(item->scale() * ratio);
 }
 
 void DScene::setCenter(qreal x, qreal y)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setPos(x, y);
+	for(QGraphicsItem *item : getRootSelectedItems()) item->setPos(x, y);
 }
 
 void DScene::moveSelected(qreal distx, qreal disty)
 {
-	for(QGraphicsItem *item : selectedItems())
+	QPointF dir(distx, disty);
+	for(QGraphicsItem *item : getRootSelectedItems())
 	{
 		QPointF pos = item->pos();
 		pos.setX(pos.x() + distx);
@@ -137,14 +141,18 @@ void DScene::moveSelectedZMaxDown(){
 
 void DScene::prepareInsertItem(DAbstractBase* item)
 {
+	qDebug() << "prepare insert item";
+	qDebug() << "item type: " << item->type();
+
 	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_SHAPE
 	   || state == DConst::INSERT_LINE)
 	{
+		qDebug() << "delete uninserted item";
 		delete modifiedShape;
 		modifiedShape = nullptr;
 	}
 
-	int type = item->type(); qDebug() << type;
+	int type = item->type();
 	if(QGraphicsItem::UserType + 40 <= type
 	   && type < QGraphicsItem::UserType + 100)
 		state = DConst::INSERT_TEXT;
@@ -339,39 +347,10 @@ void DScene::addPolyLineItem()
 
 void DScene::combineSelected()
 {
-	// QList<QGraphicsItem*> items = selectedItems();
-	// int cnt = 0;
-	// for(QGraphicsItem* item : items)
-	// {
-	// 	if(item->parentItem() != nullptr) continue;
-	// 	cnt++;
-	// }
-	// if(cnt <= 1) return;
-
-	// DItemGroup* group = new DItemGroup();  //创建组合
-	// // group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// addItem(group);      //添加到场景中
-
-	// for(QGraphicsItem* item : items)
-	// {
-	// 	if(item->parentItem() != nullptr) continue;
-	// 	group->addToGroup(item);
-	// }
-
-	// // group->setSelected(false);
 }
 
 void DScene::seperateSelected()
 {
-	// int cnt=selectedItems().count();
-	// if (cnt==1)
-	// {
-	// 	DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
-	// 	if(!group) return;
-	// 	destroyItemGroup(group);
-	// 	QList<QGraphicsItem*> items = this->items();
-	// 	// for(QGraphicsItem* item : items) item->setSelected(false);
-	// }
 }
 
 QList<QGraphicsItem *> DScene::getDelete()
@@ -622,18 +601,16 @@ void DScene::shot(){
     UndoManager::instance().shot();
 }
 
-void DScene::clear(){
-    QGraphicsScene::clear();
+void DScene::clear()
+{
+	QGraphicsScene::clear();
+
 	QGraphicsLineItem *line_h = new QGraphicsLineItem(-2000, 0, 2000, 0);
-	line_h->setZValue(DConst::LINE_Z_VALUE);
 	QGraphicsLineItem *line_v = new QGraphicsLineItem(0, -2000, 0, 2000);
-	line_v->setZValue(DConst::LINE_Z_VALUE);
 	addItem(line_h);
 	addItem(line_v);
-    // QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
-    // line1->setZValue(DConst::LINE_Z_VALUE);
-    // QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
-    // line2->setZValue(DConst::LINE_Z_VALUE);
+	line_h->setVisible(false);
+	line_v->setVisible(false);
 }
 
 QList<DLineBase *> DScene::getSelectedLine()

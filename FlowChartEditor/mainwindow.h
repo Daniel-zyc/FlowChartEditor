@@ -59,7 +59,18 @@ private slots:
     void addPre();
     void addParallegram();
     void addDocShape();
-    void addPolyLine();
+	void addPolyLine();
+
+	void addDFDocItem() { scene->addDFDocItem(); }
+	void addDFEndItem() { scene->addDFEndItem(); }
+	void addDFManualOperateItem() { scene->addDFManualOperateItem(); }
+	void addDFInternalStoreItem() { scene->addDFInternalStoreItem(); }
+	void addDFPrepareItem() { scene->addDFPrepareItem(); }
+	void addDFProcessItem() { scene->addDFProcessItem(); }
+	void addDFOptionalProcessItem() { scene->addDFOptionalProcessItem(); }
+	void addDFConditionItem() { scene->addDFConditionItem(); }
+	void addDFDataItem() { scene->addDFDataItem(); }
+	void addDFNodeItem() { scene->addDFNodeItem(); }
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
@@ -104,6 +115,7 @@ private slots:
 	void editMoveRight() { scene->moveRight(); }
 	void editMoveUp() { scene->moveUp(); }
 	void editMoveDown() { scene->moveDown(); }
+
     void findandReplace();
 
 	void delSelectedItem();

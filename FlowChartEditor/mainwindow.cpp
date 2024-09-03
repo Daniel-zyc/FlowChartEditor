@@ -75,10 +75,9 @@ MainWindow::MainWindow(QWidget *parent)
     scene->clear();
 
 	view = new DView(scene);
+	scene->setView(view);
 
-    inspector = new Inspector(this,scene,view);
-
-	view->setDragMode(QGraphicsView::RubberBandDrag);
+	inspector = new Inspector(this,scene,view);
 
     initUi();
 
