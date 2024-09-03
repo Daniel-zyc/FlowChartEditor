@@ -84,10 +84,11 @@ public:
 	void addDFConditionItem();
 	void addDFDataItem();
 	void addDFNodeItem();
-    void addManualinItem();
+	void addManualinItem();
 	void addDFPredefineItem();
 	void addManualInputItem();
-    void addDFDelayItem();
+	void addDFDelayItem();
+	void addDFInformationItem();
 
 
 	// 插入文本框

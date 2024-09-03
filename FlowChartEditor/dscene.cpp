@@ -246,6 +246,12 @@ void DScene::addDFDelayItem()
     prepareInsertItem(new DFDelayItem());
 }
 
+void DScene::addDFInformationItem()
+{
+	qDebug() << "add DFInformationItem";
+	prepareInsertItem(new DFInformationItem());
+}
+
 void DScene::addDFProcessItem()
 {
 	qDebug() << "add DFProcessItem";

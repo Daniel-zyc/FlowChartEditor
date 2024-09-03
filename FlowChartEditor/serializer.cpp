@@ -112,6 +112,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DFConditionItemType: shape = new DFConditionItem(); break;
 			case DFDataItemType: shape = new DFDataItem(); break;
 			case DFNodeItemType: shape = new DFNodeItem(); break;
+			case DFInformationItemType: shape = new DFInformationItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
