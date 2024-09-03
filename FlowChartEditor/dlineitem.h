@@ -3,8 +3,6 @@
 #include "global.h"
 #include "dlinebase.h"
 
-class DShapeBase;
-
 class DLineItem : public DLineBase
 {
 public:
@@ -15,13 +13,18 @@ public:
 
 public:
 	int type() const override { return Type; }
-	QRectF boundingRect() const override;
 
-protected:
+	QRectF boundingRect() const override;
 	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	void modiToPoint(QPointF p, int id) override;
 	QPainterPath shapeNormal() const override;
+
+	void updateAll();
 	void updateLine() override;
+	void updatePath();
+
+protected:
+	QPainterPath path;
 
 public:
 	/**

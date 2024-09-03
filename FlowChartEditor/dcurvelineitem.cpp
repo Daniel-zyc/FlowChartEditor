@@ -10,15 +10,13 @@ DCurveLineItem::DCurveLineItem(QPointF begin, QPointF end, QGraphicsItem *parent
 {
 	modis.resize(1);
 	beginPoint = begin; endPoint = end;
-	tip = (beginPoint + endPoint) / 2;
-	updatePath();
-	updateModiPoint();
+	updateLine();
 	updatePosition();
 }
 
 QRectF DCurveLineItem::boundingRect() const
 {
-	qreal r = maxPointRadius;
+	qreal r = maxBorderRadius;
 	QPolygonF poly; poly << beginPoint << endPoint << tip;
 	return poly.boundingRect().adjusted(-r, -r, r, r);
 }
@@ -55,8 +53,6 @@ void DCurveLineItem::updatePath()
 		controlPoint = QPointF(tip.x() * 9 / 10 + endPoint.x() * 1 / 10 - waveHeight * bulge, tip.y() * 9 / 10 + endPoint.y() * 1 / 10);
 		path.quadTo(controlPoint, endPoint);
 	}
-
-	qDebug() << path;
 }
 
 void DCurveLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

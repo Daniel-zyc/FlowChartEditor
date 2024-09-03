@@ -14,15 +14,19 @@ extern int PASTE_NUM;
 extern QSet<int> registeredTypes;
 
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
+
 constexpr qreal sizePointRadius = 5;
 constexpr qreal magPointRadius = 5;
 constexpr qreal magPointCollideRadius = 10;
 constexpr qreal modiPointRadius = 5;
 constexpr qreal rotPointRadius = 5;
 constexpr qreal rotPointMargin = 30;
+constexpr qreal maxPenWidth = 30;
 constexpr qreal maxPointRadius =
 	qMax(qMax(sizePointRadius, magPointRadius),
 		 qMax(magPointCollideRadius, modiPointRadius));
+constexpr qreal maxBorderRadius = qMax(maxPointRadius, maxPenWidth / 2);
+constexpr qreal maxLineRaidus = qMax(maxBorderRadius, maxPenWidth * 5);
 constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
 
 // 各个图形以及边框的画笔和画刷

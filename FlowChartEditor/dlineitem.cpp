@@ -7,12 +7,13 @@ DLineItem::DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 	: DLineBase(parent)
 {
 	beginPoint = begin; endPoint = end;
+	updateAll();
 	updatePosition();
 }
 
 QRectF DLineItem::boundingRect() const
 {
-	qreal r = maxPointRadius;
+	qreal r = maxLineRaidus;
 	QSizeF sz(endPoint.x() - beginPoint.x(), endPoint.y() - beginPoint.y());
 	return QRectF(beginPoint, sz).normalized().adjusted(-r, -r, r, r);
 }
@@ -36,13 +37,30 @@ void DLineItem::modiToPoint(QPointF p, int id)
 
 QPainterPath DLineItem::shapeNormal() const
 {
-	QGraphicsLineItem item(QLineF(beginPoint, endPoint));
-	return item.shape();
+	return path;
+}
+
+void DLineItem::updateAll()
+{
+	updatePath();
 }
 
 void DLineItem::updateLine()
 {
-	return;
+	updateAll();
+}
+
+void DLineItem::updatePath()
+{
+	path.clear();
+	QLineF vec(QPointF{0, 0}, endPoint - beginPoint);
+	vec.setLength(qMax(1.0 * pen().width(), sizePointRadius));
+	vec = vec.normalVector();
+	QPointF dir = vec.p2();
+	QPolygonF poly;
+	poly << (beginPoint + dir) << (endPoint + dir)
+		 << (endPoint - dir) << (beginPoint + dir);
+	path.addPolygon(poly);
 }
 
 //================================
