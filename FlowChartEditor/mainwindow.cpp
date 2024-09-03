@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
     bindAction();
 
 	// 调试用
-	scene->addDFNodeItem();
+	// scene->addDFNodeItem();
 }
 
 MainWindow::~MainWindow()
