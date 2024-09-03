@@ -1,14 +1,13 @@
 #pragma once
 
 #include "dshapebase.h"
-#include <QRectF>
 
-class DRoundRectItem : public DShapeBase
+class DFNodeItem : public DShapeBase
 {
 public:
-	enum { Type = DRoundRectItemType };
-	DRoundRectItem(QGraphicsItem *parent = nullptr);
-	DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFNodeItemType };
+	DFNodeItem(QGraphicsItem *parent = nullptr);
+	DFNodeItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }
@@ -21,19 +20,17 @@ public:
 
 	void updateAll();
 	void updateMagPoint();
-	void updateModiPoint();
 
 protected:
-	QRectF rect;
-	qreal ratiox = 0.2, ratioy = 0.2;
+	QRectF rect = QRectF(0, 0, 0, 0);
 
 public:
 	/**
 	 * @brief serialize
 	 * @param out
-	 * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+	 * 序列化：DShapeBase -> rect
 	 */
 	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
+
 	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };
-

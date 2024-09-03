@@ -1,9 +1,6 @@
 #pragma once
 
 #include "dpolygonbase.h"
-#include <QRectF>
-
-class DShapeBase;
 
 class DParallelogramItem : public DPolygonBase
 {

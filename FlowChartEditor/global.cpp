@@ -5,15 +5,25 @@
 QSet<int> registeredTypes = QSet<int>(
 			{
 				// shape
-				DRectItemType, DRoundRectItemType,
+				DRectItemType,
+				DRoundRectItemType,
 				DEllItemType,
-				DTriItemType, DFDiaItemType, DParallegramItemType,
+				DTriItemType,
+				DFDiaItemType,
+				DParallegramItemType,
 				DTrapItemType,
 
 				// shape for flowchart
-				DFDocItemType, DFEndItemType, DFManualOperateItemType,
-				DFInternalStoreItemType, DFPrepareItemType,
+				DFDocItemType,
+				DFEndItemType,
+				DFManualOperateItemType,
+				DFInternalStoreItemType,
+				DFPrepareItemType,
 				DFProcessItemType,
+				DFOptionalProcessItemType,
+				DFConditionItemType,
+				DFDataItemType,
+				DFNodeItemType,
 
 				// text
 				DTextItemType,

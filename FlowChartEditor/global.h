@@ -71,6 +71,10 @@ enum UserTypes
 	DFInternalStoreItemType = QGraphicsItem::UserType + 205,
 	DFPrepareItemType = QGraphicsItem::UserType + 206,
 	DFProcessItemType = QGraphicsItem::UserType + 207,
+	DFOptionalProcessItemType = QGraphicsItem::UserType + 208,
+	DFConditionItemType = QGraphicsItem::UserType + 209,
+	DFDataItemType = QGraphicsItem::UserType + 210,
+	DFNodeItemType = QGraphicsItem::UserType + 211,
 
 	DLineItemType = QGraphicsItem::UserType + 300
 };
