@@ -152,15 +152,9 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 		modifiedShape = nullptr;
 	}
 
-	int type = item->type();
-	if(QGraphicsItem::UserType + 40 <= type
-	   && type < QGraphicsItem::UserType + 100)
-		state = DConst::INSERT_TEXT;
-	if(QGraphicsItem::UserType + 100 <= type
-	   && type < QGraphicsItem::UserType + 300)
-		state = DConst::INSERT_SHAPE;
-	if(QGraphicsItem::UserType + 300 <= type)
-		state = DConst::INSERT_LINE;
+	if(item->isShape()) state = DConst::INSERT_SHAPE;
+	if(item->isLine()) state = DConst::INSERT_LINE;
+	if(item->isText()) state = DConst::INSERT_LINE;
 	modifiedShape = item;
 }
 
