@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     aboutuswindow.cpp \
     dabstractbase.cpp \
+    dcurveitem.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
     denditem.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
+    dinfitem.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
@@ -52,6 +54,7 @@ HEADERS += \
     aboutuswindow.h \
     dabstractbase.h \
     dallitems.h \
+    dcurveitem.h \
     ddiaitem.h \
     dellitem.h \
     denditem.h \
@@ -65,6 +68,7 @@ HEADERS += \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
+    dinfitem.h \
     ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
