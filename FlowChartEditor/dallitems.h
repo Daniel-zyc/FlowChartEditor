@@ -24,6 +24,7 @@
 #include "dfmanualoperateitem.h"
 #include "dfinternalstoreitem.h"
 #include "dfprepareitem.h"
+#include "dfprocessitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

@@ -18,6 +18,7 @@ SOURCES += \
     dfinternalstoreitem.cpp \
     dfmanualoperateitem.cpp \
     dfprepareitem.cpp \
+    dfprocessitem.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     dfinternalstoreitem.h \
     dfmanualoperateitem.h \
     dfprepareitem.h \
+    dfprocessitem.h \
     ditemgroup.h \
     dlinebase.h \
     dlineitem.h \

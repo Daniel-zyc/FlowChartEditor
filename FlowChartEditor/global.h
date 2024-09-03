@@ -70,6 +70,7 @@ enum UserTypes
 	DFManualOperateItemType = QGraphicsItem::UserType + 204,
 	DFInternalStoreItemType = QGraphicsItem::UserType + 205,
 	DFPrepareItemType = QGraphicsItem::UserType + 206,
+	DFProcessItemType = QGraphicsItem::UserType + 207,
 
 	DLineItemType = QGraphicsItem::UserType + 300
 };

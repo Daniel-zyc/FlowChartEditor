@@ -218,8 +218,13 @@ void DScene::addPreItem()
 	// state = DConst::INSERT_SHAPE;
 	// modifiedShape = item;
 
+	// qDebug() << "add TrapItem";
+	// DFPrepareItem *item = new DFPrepareItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+
 	qDebug() << "add TrapItem";
-	DFPrepareItem *item = new DFPrepareItem();
+	DFProcessItem *item = new DFProcessItem();
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
