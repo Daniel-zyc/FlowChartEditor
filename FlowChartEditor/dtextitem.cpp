@@ -62,7 +62,7 @@ DTextItem::DTextItem(QGraphicsItem *parent)
 	: DTextItem(minRectSize*0.8, minRectSize*0.8, "", parent) {}
 
 DTextItem::DTextItem(const QString &text, QGraphicsItem *parent)
-	: DTextItem(minRectSize*0.8, minRectSize*0.8, "", parent) {}
+	: DTextItem(minRectSize*0.8, minRectSize*0.8, text, parent) {}
 
 DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent), textBase(text, this)

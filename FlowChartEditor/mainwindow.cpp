@@ -702,11 +702,11 @@ void MainWindow::bindAction()
     connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
     connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
     connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
-    connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
-    connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
-    connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
-    connect(ui->actAddManualinput, SIGNAL(triggered(bool)), this, SLOT(addManualin()));
-    connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
+	connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addDFStartEndItem()));
+	connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addDFPredefineItem()));
+	connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParagram()));
+	connect(ui->actAddManualinput, SIGNAL(triggered(bool)), this, SLOT(addDFManualInputItem()));
+	connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDFDocItem()));
     connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
     connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {

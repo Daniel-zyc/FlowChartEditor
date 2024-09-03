@@ -86,6 +86,7 @@ public:
 	void addDFNodeItem();
     void addManualinItem();
 	void addDFPredefineItem();
+	void addManualInputItem();
 
 	// 插入文本框
 	void addTextItem();

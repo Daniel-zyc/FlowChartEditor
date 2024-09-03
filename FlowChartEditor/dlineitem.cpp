@@ -1,7 +1,7 @@
 #include "dlineitem.h"
 
 DLineItem::DLineItem(QGraphicsItem *parent)
-	: DLineItem({-1, -1}, {1, 1}, parent) {}
+	: DLineItem({-minRectSize, -minRectSize}, {minRectSize, minRectSize}, parent) {}
 
 DLineItem::DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 	: DLineBase(parent)
@@ -21,22 +21,17 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
-	QBrush qbrush = painter->brush();
-	qbrush.setColor(pen().color());
-	setBrush(qbrush);
-
-	painter->setBrush(brush());
+	painter->setBrush(Qt::NoBrush);
 	painter->setPen(pen());
+	painter->drawLine(QLineF(beginPoint, endPoint));
 
-    painter->drawLine(QLineF(beginPoint, endPoint));
-	// 此处应加入根据不同箭头类型进行绘制的代码
-    double angle = getAngle(beginPoint, endPoint);
-    drawArrow(painter, angle, endPoint, endArrowType);
+	qreal angle = getAngle(beginPoint, endPoint);
+	drawArrow(painter, angle, endPoint, endArrowType);
 }
 
 void DLineItem::modiToPoint(QPointF p, int id)
 {
-	Q_UNUSED(p); Q_UNUSED(id);
+	Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
 QPainterPath DLineItem::shapeNormal() const

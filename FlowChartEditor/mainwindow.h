@@ -77,6 +77,7 @@ private slots:
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
 	void addDFPredefineItem() { scene->addDFPredefineItem(); }
+	void addDFManualInputItem() { scene->addManualInputItem(); }
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
