@@ -23,6 +23,7 @@
 #include "denditem.h"
 #include "dfpredefineitem.h"
 #include "dfmanualoperateitem.h"
+#include "dfmanualinputitem.h"
 #include "dfinternalstoreitem.h"
 #include "dfprepareitem.h"
 #include "dfprocessitem.h"

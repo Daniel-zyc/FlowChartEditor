@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actAddTrap);
     m->addAction(ui->actAddPrede);
     m->addAction(ui->actAddEnd);
+    m->addAction(ui->actAddManualinput);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
@@ -116,6 +117,7 @@ void MainWindow::initUi()
     triBtn = new QPushButton();
     preBtn = new QPushButton();
     endBtn = new QPushButton();
+    manualinBtn = new QPushButton();
 
     rectBtn->setIcon(QPixmap(":/icon/rect.png"));
     roundRectBtn->setIcon(QPixmap(":/icon/roundrect.png"));
@@ -142,6 +144,7 @@ void MainWindow::initUi()
     leftGrid->addWidget(textBtn, 4, 1);
     leftGrid->addWidget(preBtn, 5, 0);
     leftGrid->addWidget(endBtn, 5, 1);
+    leftGrid->addWidget(manualinBtn, 6, 0);
 
     leftUpV->addLayout(leftGrid);
     leftw->setLayout(leftUpV);
@@ -414,6 +417,7 @@ void MainWindow::bindAction()
     connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
     connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
+    connect(ui->actAddManualinput, SIGNAL(triggered(bool)), this, SLOT(addManualin()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
     connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
@@ -484,6 +488,7 @@ void MainWindow::bindAction()
     connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
     connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
 	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
+    connect(manualinBtn, &QPushButton::clicked, this, &MainWindow::addManualin);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
@@ -613,7 +618,10 @@ void MainWindow::addParallegram()
 {
     scene->addParallegramItem();
 }
-
+void MainWindow::addManualin()
+{
+    scene->addManualinItem();
+}
 void MainWindow::addDocShape()
 {
     scene->addDocItem();

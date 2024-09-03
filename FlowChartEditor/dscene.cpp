@@ -242,7 +242,7 @@ void DScene::addPreItem()
 {
     qDebug() << "add PreDefine";
     DPreItem *item = new DPreItem();
-    state = DConst::INSERT_TEXT;
+    state = DConst::INSERT_SHAPE;
     modifiedShape = item;
 }
 
@@ -317,6 +317,13 @@ void DScene::addTrapItem()
 	DFManualOperateItem *item = new DFManualOperateItem();
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
+}
+void DScene::addManualinItem()
+{
+    qDebug() << "add ManualinItem";
+    DFManualinputItem *item = new DFManualinputItem();
+    state = DConst::INSERT_SHAPE;
+    modifiedShape = item;
 }
 
 void DScene::addPolyLineItem()

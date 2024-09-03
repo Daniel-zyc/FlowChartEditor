@@ -75,6 +75,7 @@ enum UserTypes
 	DFConditionItemType = QGraphicsItem::UserType + 209,
 	DFDataItemType = QGraphicsItem::UserType + 210,
 	DFNodeItemType = QGraphicsItem::UserType + 211,
+    DFManualinputItemType = QGraphicsItem::UserType + 212,
 
 	DLineItemType = QGraphicsItem::UserType + 300
 };

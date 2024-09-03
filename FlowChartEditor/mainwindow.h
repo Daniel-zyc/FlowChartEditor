@@ -60,6 +60,7 @@ private slots:
     void addParallegram();
     void addDocShape();
     void addPolyLine();
+    void addManualin();
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
@@ -147,6 +148,7 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
+    QPushButton *manualinBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;

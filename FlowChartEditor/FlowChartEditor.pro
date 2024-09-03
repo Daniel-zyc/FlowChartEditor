@@ -18,6 +18,7 @@ SOURCES += \
     dfdataitem.cpp \
     dfinddialog.cpp \
     dfinternalstoreitem.cpp \
+    dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     dfdataitem.h \
     dfinddialog.h \
     dfinternalstoreitem.h \
+    dfmanualinputitem.h \
     dfmanualoperateitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \

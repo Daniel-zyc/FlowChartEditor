@@ -79,6 +79,7 @@ public:
 	void addDFConditionItem();
 	void addDFDataItem();
 	void addDFNodeItem();
+    void addManualinItem();
 
 	void combineSelected();
 	void seperateSelected();
