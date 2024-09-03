@@ -292,5 +292,6 @@ bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	linkEnd(Serializer::instance().ptrToMag[endPtr]);
 
 	in >> beginArrowType >> endArrowType;
+    updatePosition();
 	return true;
 }

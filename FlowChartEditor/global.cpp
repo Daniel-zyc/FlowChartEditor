@@ -34,6 +34,8 @@ QSet<int> registeredTypes = QSet<int>(
 
 int SHOT_STATE = DConst::UNCHANGED;
 
+int PASTE_NUM = 1;
+
 qreal DTool::degToRad(qreal deg) { return deg / 180 * DConst::PI; }
 
 qreal DTool::radToDeg(qreal rad) { return rad / DConst::PI * 180; }
@@ -59,27 +61,49 @@ bool DTool::inCircle(const QPointF& o, qreal r, const QPointF& p)
 
 void DTool::moveItems(const QList<QGraphicsItem *> &items)
 {
+    int currentCopytNum = PASTE_NUM ++ ;
 	QSet<QGraphicsItem*> S;
 	for (QGraphicsItem* item : items) S.insert(item);
 	for (QGraphicsItem* item : items)
 	{
 		if (item == nullptr || S.contains(item->parentItem())) continue;
 		QPointF curPos = item->pos();
-		item->setPos(curPos.x() + DConst::SHIFT_X,
-					 curPos.y() - DConst::SHIFT_Y);
+        item->setPos(curPos.x() + DConst::SHIFT_X * currentCopytNum,
+                     curPos.y() - DConst::SHIFT_Y * currentCopytNum);
 	}
 }
 
-void DTool::filterRootItem(QList<QGraphicsItem*>& items)
+void DTool::filterRootBases(QList<QGraphicsItem*>& items)
 {
 	QSet<QGraphicsItem*> S;
 	for(QGraphicsItem* item : items) S.insert(item);
 	for (int i = 0; i < items.size(); i++)
 	{
-		if(items[i] == nullptr || S.contains(items[i]->parentItem()))
+		if(items[i] == nullptr || !isAbstract(items[i]->type())
+		   || S.contains(items[i]->parentItem()))
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
 		}
 	}
+}
+
+bool DTool::isShape(int type)
+{
+	return QGraphicsItem::UserType + 100 <= type && type < QGraphicsItem::UserType + 300;
+}
+
+bool DTool::isLine(int type)
+{
+	return QGraphicsItem::UserType + 300 <= type;
+}
+
+bool DTool::isText(int type)
+{
+	return QGraphicsItem::UserType + 40 <= type && type < QGraphicsItem::UserType + 100;
+}
+
+bool DTool::isAbstract(int type)
+{
+	return QGraphicsItem::UserType <= type;
 }
