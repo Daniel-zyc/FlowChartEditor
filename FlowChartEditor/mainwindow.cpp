@@ -132,7 +132,7 @@ void MainWindow::initUi()
 
     rectBtn->setIcon(QPixmap(":/icon/flowchart/rect.png"));
     roundRectBtn->setIcon(QPixmap(":/icon/flowchart/roundrect.png"));
-    ellipseBtn->setIcon(QPixmap(":/icon/flowchart/ellipse.png"));
+    ellipseBtn->setIcon(QPixmap(":/icon/flowchart/node.png"));
     lineBtn->setIcon(QPixmap(":/icon/line.png"));
     parellgramBtn->setIcon(QPixmap(":/icon/flowchart/parallgram.png"));
     trapBtn->setIcon(QPixmap(":/icon/flowchart/manul.png"));
@@ -242,7 +242,7 @@ void MainWindow::initUi()
     //线条样式表
     rightLinew = new QWidget();
     confirm = new QPushButton("确认");
-    cancle = new QPushButton("取消");
+    cancle = new QPushButton("关闭");
     formright = new QFormLayout();
     formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
     // formright->setLabelAlignment(Qt::AlignLeft);
@@ -523,18 +523,28 @@ void MainWindow::bindAction()
 	// connect(combinesc, SIGNAL(activated()), this, SLOT(combineSelected()));
 	// connect(seperatesc, SIGNAL(activated()), this, SLOT(seperateSelected()));
 
-    connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
+    connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addDFProcessItem);
     connect(lineBtn, &QPushButton::clicked, this, &MainWindow::addLine);
-    connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addRoundRect);
-    connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
+    connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addDFOptionalProcessItem);
+    connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addDFNodeItem);
     connect(textBtn, &QPushButton::clicked, this, &MainWindow::addText);
     connect(triBtn, &QPushButton::clicked, this, &MainWindow::addTri);
-    connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
-    connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
-    connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
-    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
+    connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDFConditionItem);
+    connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDFDocItem);
+    connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addDFManualOperateItem);
+    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addDFEndItem);
     connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
-	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
+    connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addDFDataItem);
+    connect(storeBtn,  &QPushButton::clicked, this, &MainWindow::addDFInternalStoreItem);
+    connect(prepareBtn,  &QPushButton::clicked, this, &MainWindow::addDFPrepareItem);
+
+
+    connect(prectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
+    connect(pellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
+    connect(ptriBtn, &QPushButton::clicked, this, &MainWindow::addTri);
+    connect(prhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
+    connect(ptrapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+    connect(pparellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)

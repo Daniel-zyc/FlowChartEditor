@@ -51,5 +51,6 @@
         <file>icon/primary/rhomb.png</file>
         <file>icon/primary/trapezoid.png</file>
         <file>icon/primary/triangle.png</file>
+        <file>icon/flowchart/node.png</file>
     </qresource>
 </RCC>
