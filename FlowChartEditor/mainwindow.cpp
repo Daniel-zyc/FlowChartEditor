@@ -546,6 +546,7 @@ void MainWindow::bindAction()
     connect(ptrapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
     connect(pparellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
     //折线button
+    //connect(polylineBtn, &QPushButton::clicked,this, &MainWindow::addPolyLine);
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
     connect(openTln, &QToolButton::clicked, this, &MainWindow::loadFile);
