@@ -37,4 +37,5 @@ void DView::init()
 {
 	setRenderHint(QPainter::Antialiasing, true);
 	setResizeAnchor(QGraphicsView::AnchorViewCenter);
+	setDragMode(QGraphicsView::RubberBandDrag);
 }

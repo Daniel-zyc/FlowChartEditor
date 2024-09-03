@@ -21,6 +21,7 @@
 #include "ddocitem.h"
 #include "ddiaitem.h"
 #include "denditem.h"
+#include "dfpredefineitem.h"
 #include "dfmanualoperateitem.h"
 #include "dfinternalstoreitem.h"
 #include "dfprepareitem.h"
