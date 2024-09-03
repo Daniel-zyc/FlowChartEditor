@@ -8,6 +8,8 @@
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
 
+extern int PASTE_NUM;
+
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 
@@ -75,10 +77,11 @@ enum UserTypes
 	DFConditionItemType = QGraphicsItem::UserType + 209,
 	DFDataItemType = QGraphicsItem::UserType + 210,
 	DFNodeItemType = QGraphicsItem::UserType + 211,
-    DFInformationItemType = QGraphicsItem::UserType + 212,
+	DFInformationItemType = QGraphicsItem::UserType + 212,
 
-    DLineItemType = QGraphicsItem::UserType + 300,
-    DCurveLineItemType = QGraphicsItem::UserType + 301
+	DLineItemType = QGraphicsItem::UserType + 300,
+	DCurveLineItemType = QGraphicsItem::UserType + 301,
+	DPolyLineItemType = QGraphicsItem::UserType + 302
 };
 
 // 常量

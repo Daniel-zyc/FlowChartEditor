@@ -164,14 +164,15 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 	modifiedShape = item;
 }
 
+//================================= text item ==================================
+
 void DScene::addTextItem()
 {
 	qDebug() << "add textitem";
-
-	DTextItem *item = new DTextItem();
-	state = DConst::INSERT_TEXT;
-	modifiedShape = item;
+	prepareInsertItem(new DTextItem());
 }
+
+//================================ basic item ==================================
 
 void DScene::addRectItem()
 {
@@ -191,12 +192,6 @@ void DScene::addEllItem()
 	prepareInsertItem(new DEllItem());
 }
 
-void DScene::addLineItem()
-{
-	qDebug() << "add line";
-	prepareInsertItem(new DLineItem());
-}
-
 void DScene::addTriItem()
 {
 	qDebug() << "add Triangle";
@@ -209,29 +204,19 @@ void DScene::addParagramItem()
 	prepareInsertItem(new DParagramItem());
 }
 
-void DScene::addDocItem()
-{
-	qDebug() << "add Document";
-	prepareInsertItem(new DFDocumentItem());
-}
-
 void DScene::addDiaItem()
 {
 	qDebug() << "add Diamond";
 	prepareInsertItem(new DDiaItem());
 }
 
-void DScene::addEndItem()
+void DScene::addTrapItem()
 {
-	qDebug() << "add Start/End";
-	prepareInsertItem(new DFStartEndItem());
+	qDebug() << "add TrapItem";
+	prepareInsertItem(new DTrapItem());
 }
 
-void DScene::addPreItem()
-{
-	qDebug() << "add PreDefine";
-	prepareInsertItem(new DPreItem());
-}
+//============================ flow chart item =================================
 
 void DScene::addDFDocItem()
 {
@@ -239,7 +224,7 @@ void DScene::addDFDocItem()
 	prepareInsertItem(new DFDocumentItem());
 }
 
-void DScene::addDFEndItem()
+void DScene::addDFStartEndItem()
 {
 	qDebug() << "add DFEndItem";
 	prepareInsertItem(new DFStartEndItem());
@@ -293,10 +278,18 @@ void DScene::addDFNodeItem()
 	prepareInsertItem(new DFNodeItem());
 }
 
-void DScene::addTrapItem()
+void DScene::addDFPredefineItem()
 {
-	qDebug() << "add TrapItem";
-	prepareInsertItem(new DTrapItem());
+	qDebug() << "add DFNodeItem";
+	prepareInsertItem(new DFPredefineItem());
+}
+
+//=============================== line item ====================================
+
+void DScene::addLineItem()
+{
+	qDebug() << "add line";
+	prepareInsertItem(new DLineItem());
 }
 
 void DScene::addPolyLineItem()
@@ -305,13 +298,12 @@ void DScene::addPolyLineItem()
 	prepareInsertItem(new DPolyLineItem());
 }
 
-void DScene::combineSelected()
+void DScene::addCurveLineItem()
 {
+	qDebug() << "add CurveLine";
+	prepareInsertItem(new DCurveLineItem());
 }
 
-void DScene::seperateSelected()
-{
-}
 
 QList<QGraphicsItem *> DScene::getDelete()
 {

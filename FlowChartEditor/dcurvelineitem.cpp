@@ -1,12 +1,12 @@
-#include "dcurveitem.h"
+#include "dcurvelineitem.h"
 #include "magpoint.h"
 
-DCurveItem::DCurveItem(QGraphicsItem *parent)
+DCurveLineItem::DCurveLineItem(QGraphicsItem *parent)
     : DLineBase(parent) {
     qDebug() << tip;
 }
 
-DCurveItem::DCurveItem(QPointF begin, QPointF end, QGraphicsItem *parent)
+DCurveLineItem::DCurveLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     : DLineBase(parent)
 {
     modis.resize(1);
@@ -16,7 +16,7 @@ DCurveItem::DCurveItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     updatePosition();
 }
 
-QRectF DCurveItem::boundingRect() const
+QRectF DCurveLineItem::boundingRect() const
 {
     qreal r = maxPointRadius;
     qreal w,h;
@@ -54,7 +54,7 @@ QRectF DCurveItem::boundingRect() const
     return QRectF(startPoint, sz).normalized().adjusted(-r, -r, r, r);
 }
 
-QPainterPath DCurveItem::drawCurve() const
+QPainterPath DCurveLineItem::drawCurve() const
 {
 
     QPainterPath path;
@@ -99,7 +99,7 @@ QPainterPath DCurveItem::drawCurve() const
     return path;
 }
 
-void DCurveItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DCurveLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -136,12 +136,12 @@ void DCurveItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *o
     drawArrow(painter, arrowAngle, endPoint, endArrowType);
 }
 
-void DCurveItem::updateModiPoint()
+void DCurveLineItem::updateModiPoint()
 {
     modis[0] = tip;
 }
 
-void DCurveItem::modiToPoint(QPointF p, int id)
+void DCurveLineItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(id);
     if(qAbs(angle) < DConst::PI / 4 || qAbs(angle) > DConst::PI * 3 / 4){
@@ -154,12 +154,12 @@ void DCurveItem::modiToPoint(QPointF p, int id)
     return;
 }
 
-QPainterPath DCurveItem::shapeNormal() const
+QPainterPath DCurveLineItem::shapeNormal() const
 {
     return drawCurve();
 }
 
-void DCurveItem::updateLine()
+void DCurveLineItem::updateLine()
 {
     tip = (beginPoint + endPoint) / 2;
     angle = getAngle(beginPoint, endPoint);

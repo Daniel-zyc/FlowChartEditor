@@ -3,12 +3,12 @@
 #include "dshapebase.h"
 #include <QRectF>
 
-class DPreItem : public DShapeBase
+class DFPredefineItem : public DShapeBase
 {
 public:
 	enum { Type = DFPredefineItemType };
-    DPreItem(QGraphicsItem *parent = nullptr);
-    DPreItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	DFPredefineItem(QGraphicsItem *parent = nullptr);
+	DFPredefineItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }

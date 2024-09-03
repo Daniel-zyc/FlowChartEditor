@@ -33,3 +33,4 @@
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"
+#include "dcurvelineitem.h"

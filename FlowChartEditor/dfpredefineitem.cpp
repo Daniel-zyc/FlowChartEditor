@@ -1,10 +1,10 @@
 #include "dfpredefineitem.h"
 #include "magpoint.h"
 
-DPreItem::DPreItem(QGraphicsItem *parent)
-    : DPreItem(minRectSize, minRectSize, parent) {}
+DFPredefineItem::DFPredefineItem(QGraphicsItem *parent)
+    : DFPredefineItem(minRectSize, minRectSize, parent) {}
 
-DPreItem::DPreItem(qreal w, qreal h, QGraphicsItem *parent)
+DFPredefineItem::DFPredefineItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase("", parent)
 {
     modis.resize(1);
@@ -13,7 +13,7 @@ DPreItem::DPreItem(qreal w, qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void DPreItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFPredefineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -24,23 +24,23 @@ void DPreItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->drawLine(QPointF(rect.right()-ratio*rect.width(), -0.5*rect.height()), QPointF(rect.right()-ratio*rect.width(), 0.5*rect.height()));
 }
 
-QRectF DPreItem::sizeRect() const
+QRectF DFPredefineItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DPreItem::shapeNormal() const
+QPainterPath DFPredefineItem::shapeNormal() const
 {
     QPainterPath pth;
     pth.addRect(rect);
     return pth;
 }
-void DPreItem::updateModiPoint()
+void DFPredefineItem::updateModiPoint()
 {
     modis[0] = {rect.left() + rect.width() * ratio, rect.top()};
 }
 
-void DPreItem::updateMagPoint()
+void DFPredefineItem::updateMagPoint()
 {
     (*mags)[0]->setPos({rect.left(), 0});
     (*mags)[1]->setPos({rect.right(), 0});
@@ -49,13 +49,13 @@ void DPreItem::updateMagPoint()
     (*mags)[3]->setPos({0, rect.bottom()});
 }
 
-void DPreItem::sizeToRect(QRectF nrect)
+void DFPredefineItem::sizeToRect(QRectF nrect)
 {
     rect = nrect;
     updateAll();
 }
 
-void DPreItem::modiToPoint(QPointF p, int id)
+void DFPredefineItem::modiToPoint(QPointF p, int id)
 {
     switch(id)
     {
@@ -67,7 +67,7 @@ void DPreItem::modiToPoint(QPointF p, int id)
         break;
     }
 }
-void DPreItem::updateAll()
+void DFPredefineItem::updateAll()
 {
     updateSizePoint();
     updateMagPoint();
