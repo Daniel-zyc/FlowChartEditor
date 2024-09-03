@@ -33,11 +33,11 @@ QPainterPath DDocItem::shapeNormal() const
 
 void DDocItem::updateMagPoint()
 {
-	(*mags)[0]->pos = {rect.left(), -rect.height() / 10};
-	(*mags)[1]->pos = {rect.right(), -rect.height() / 10};
+	(*mags)[0]->setPos({rect.left(), -rect.height() / 10});
+	(*mags)[1]->setPos({rect.right(), -rect.height() / 10});
 
-	(*mags)[2]->pos = {0, rect.top()};
-	(*mags)[3]->pos = {0, rect.bottom() * 4 / 5};
+	(*mags)[2]->setPos({0, rect.top()});
+	(*mags)[3]->setPos({0, rect.bottom() * 4 / 5});
 }
 
 void DDocItem::updatePath()

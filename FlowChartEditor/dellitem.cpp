@@ -7,7 +7,7 @@ DEllItem::DEllItem(QGraphicsItem *parent)
 DEllItem::DEllItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DShapeBase("", parent)
 {
-	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
+	for(int i = 0; i < 8; i++) mags->push_back(new MagPoint(this));
 	rect = QRectF(-w/2, -h/2, w, h);
 	updateAll();
 }
@@ -35,9 +35,14 @@ void DEllItem::updateMagPoint()
 {
 	(*mags)[0]->setPos({rect.left(), 0});
 	(*mags)[1]->setPos({rect.right(), 0});
-
 	(*mags)[2]->setPos({0, rect.top()});
 	(*mags)[3]->setPos({0, rect.bottom()});
+
+	qreal rx = rect.width() / 2, ry = rect.height() / 2;
+	(*mags)[4]->setPos({rx * cos(DTool::degToRad(45)), ry * sin(DTool::degToRad(45))});
+	(*mags)[5]->setPos({rx * cos(DTool::degToRad(135)), ry * sin(DTool::degToRad(45))});
+	(*mags)[6]->setPos({rx * cos(DTool::degToRad(-135)), ry * sin(DTool::degToRad(-135))});
+	(*mags)[7]->setPos({rx * cos(DTool::degToRad(-45)), ry * sin(DTool::degToRad(-45))});
 }
 
 void DEllItem::sizeToRect(QRectF nrect)

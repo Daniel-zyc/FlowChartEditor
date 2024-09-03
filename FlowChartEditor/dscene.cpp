@@ -206,12 +206,10 @@ void DScene::addDiaItem()
 
 void DScene::addEndItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DEndItem *item = new DEndItem(100,60);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Start/End";
+	DEndItem *item = new DEndItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addPreItem()
