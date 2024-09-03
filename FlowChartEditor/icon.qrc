@@ -56,5 +56,21 @@
         <file>icon/error.png</file>
         <file>icon/polyLine.png</file>
         <file>icon/palette1.png</file>
+        <file>icon/flowchart/aggreconnect.png</file>
+        <file>icon/flowchart/card.png</file>
+        <file>icon/flowchart/compare.png</file>
+        <file>icon/flowchart/data.png</file>
+        <file>icon/flowchart/directaccess.png</file>
+        <file>icon/flowchart/disk.png</file>
+        <file>icon/flowchart/display.png</file>
+        <file>icon/flowchart/manulinput.png</file>
+        <file>icon/flowchart/merge.png</file>
+        <file>icon/flowchart/multidoc.png</file>
+        <file>icon/flowchart/offpage.png</file>
+        <file>icon/flowchart/or.png</file>
+        <file>icon/flowchart/postpone.png</file>
+        <file>icon/flowchart/sequentialaccess.png</file>
+        <file>icon/flowchart/sort.png</file>
+        <file>icon/flowchart/storedata.png</file>
     </qresource>
 </RCC>
