@@ -3,8 +3,6 @@
 #include "dtextitem.h"
 #include "magpoint.h"
 
-#include "serializer.h"
-
 DShapeBase::DShapeBase(QGraphicsItem *parent)
 	: DAbstractBase(parent) {}
 

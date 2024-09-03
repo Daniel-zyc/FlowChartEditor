@@ -32,6 +32,7 @@ public:
 	virtual bool isLine();
 	virtual bool isText();
 
+	// 设置大小和旋转
 	virtual void setScale(qreal scl);
 	virtual void setRotation(qreal deg);
 
