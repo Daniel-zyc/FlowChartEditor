@@ -52,5 +52,6 @@
         <file>icon/primary/trapezoid.png</file>
         <file>icon/primary/triangle.png</file>
         <file>icon/flowchart/node.png</file>
+        <file>icon/polyLine.png</file>
     </qresource>
 </RCC>

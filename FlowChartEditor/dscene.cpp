@@ -442,6 +442,18 @@ void DScene::changeLineWidth(double width)
     }
 }
 
+void DScene::changeLineColor(QColor color)
+{
+    qDebug() << "change Line Color";
+    QList<DLineBase*> lines = getSelectedLine();
+
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setColor(color);
+        line->setPen(npen);
+    }
+}
+
 void DScene::setBg(QString path)
 {
     QPixmap bg(path);

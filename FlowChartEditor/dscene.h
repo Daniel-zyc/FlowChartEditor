@@ -104,6 +104,7 @@ public:
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
     void changeLineWidth(double width);
+    void changeLineColor(QColor color);
     void setBg(QString path);
 
 	void setView(DView *v) { view = v; }
