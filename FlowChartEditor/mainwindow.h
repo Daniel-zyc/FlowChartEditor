@@ -20,6 +20,7 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QTabWidget>
+#include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QMainWindow>
@@ -130,9 +131,14 @@ private:
 
     QSplitter *mainsplitter;
     QWidget *leftw;
-    QGridLayout *leftGrid;
+    QGridLayout *flowGrid;
+    QGridLayout *primaryGrid;
+    QGridLayout *otherG;
     QVBoxLayout *leftUpV;
 
+    QGroupBox *primaryGroup;
+    QGroupBox *flowcGroup;
+    QGroupBox *otherGroup;
     QPushButton *rectBtn;
     QPushButton *roundRectBtn;
     QPushButton *ellipseBtn;
@@ -145,6 +151,15 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
+    QPushButton *prepareBtn;
+    QPushButton *storeBtn;
+
+    QPushButton *prectBtn;
+    QPushButton *pellipseBtn;
+    QPushButton *pparellgramBtn;
+    QPushButton *prhomBtn;
+    QPushButton *ptrapBtn;
+    QPushButton *ptriBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;
@@ -169,8 +184,14 @@ private:
     QTreeWidget *rightBgw;
     QTreeWidgetItem *colorTop;
     QTreeWidgetItem *patternTop;
-
     QPushButton *selectedColor;
     QTreeWidgetItem *colorChild0;
+    QTreeWidgetItem *patternChild0;
+    QTreeWidgetItem *patternChild1;
+    QTreeWidgetItem *patternChild2;
+    QTreeWidgetItem *patternChild3;
+    QRadioButton *customizeBg;
+    QPushButton *repickBtn;
+
     QString filePath = nullptr;
 };
