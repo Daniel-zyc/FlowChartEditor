@@ -190,30 +190,26 @@ void DScene::addParallegramItem()
 
 void DScene::addDocItem()
 {
-    qDebug() << "add Parallegram";
-    DDocItem *item = new DDocItem(200, 200);
-    item->textItem = new DTextItem(100, 100, "hello world!", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Document";
+	DDocItem *item = new DDocItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addDiaItem()
 {
-    qDebug() << "add Diamond";
-    DDiaItem *item = new DDiaItem(100, 100);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Diamond";
+	DDiaItem *item = new DDiaItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addEndItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DEndItem *item = new DEndItem(100,60);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Start/End";
+	DEndItem *item = new DEndItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addPreItem()

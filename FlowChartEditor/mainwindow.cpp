@@ -476,6 +476,7 @@ void MainWindow::bindAction()
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
     connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
     connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
+	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
@@ -506,22 +507,22 @@ void MainWindow::bindAction()
 
     connect(ui->actNoArrow, &QAction::triggered, this, [this]() {
         // changeEndArrow(static_cast<DConst::LineArrowType>(0));
-        changeEndArrow(0);
+		changeEndArrow(DConst::NONE);
     });
     connect(ui->actArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(1);
+		changeEndArrow(DConst::ARROW);
     });
     connect(ui->actOpenArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(2);
+		changeEndArrow(DConst::OPEN_ARROW);
     });
     connect(ui->actDovetailArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(3);
+		changeEndArrow(DConst::DOVETAIL_ARROW);
     });
     connect(ui->actDiaArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(4);
+		changeEndArrow(DConst::DIAMOND_ARROW);
     });
     connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(5);
+		changeEndArrow(DConst::ROUND_ARROW);
     });
 
     connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {

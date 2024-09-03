@@ -5,7 +5,7 @@ DTriItem::DTriItem(QGraphicsItem *parent)
 	: DTriItem(minRectSize, minRectSize, parent) {}
 
 DTriItem::DTriItem(qreal w, qreal h, QGraphicsItem *parent)
-	: DPolygonBase(parent)
+	: DPolygonBase("", parent)
 {
 	modis.resize(1);
 	for(int i = 0; i < 3; i++) mags->push_back(new MagPoint(this));
@@ -21,7 +21,8 @@ void DTriItem::modiToPoint(QPointF p, int id)
 	p.setX(qMax(p.x(), rc.left()));
 	p.setX(qMin(p.x(), rc.right()));
 	polygon[0].setX(p.x());
-	updateAll();
+	updateModiPoint();
+	updateMagPoint();
 }
 
 void DTriItem::updateMagPoint()
