@@ -189,7 +189,17 @@ void MainWindow::initUi()
     leftUpV->addStretch();
 
     mainsplitter->addWidget(leftw);
-    mainsplitter->addWidget(view);
+
+    //====
+    middlesplitter = new QSplitter(Qt::Vertical,this);
+    middlesplitter->addWidget(view);
+
+    middlesplitter->addWidget(inspector);
+    middlesplitter->setStretchFactor(0, 3);
+    middlesplitter->setStretchFactor(1, 1);
+
+    mainsplitter->addWidget(middlesplitter);
+    //====
     mainsplitter->setStretchFactor(1, 1);
 
     //样式表
@@ -994,6 +1004,6 @@ void MainWindow::showAboutUsWindow(){
 }
 
 void MainWindow::check(){
-    inspector->check();
+    inspector->checkAll();
     inspector->show();
 }

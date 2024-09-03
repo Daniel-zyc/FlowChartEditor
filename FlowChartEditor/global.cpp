@@ -107,3 +107,7 @@ bool DTool::isAbstract(int type)
 {
 	return QGraphicsItem::UserType <= type;
 }
+
+int DTool::getErrorLevel(int errorType){
+    return errorType >= 100;
+}

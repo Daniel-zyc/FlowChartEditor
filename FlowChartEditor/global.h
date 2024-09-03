@@ -7,7 +7,7 @@
 
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
-
+// 全局变量，记录同一个图形拷贝次数，用于计算错开距离
 extern int PASTE_NUM;
 
 // 序列化时用来判断某图形是否参与序列化
@@ -26,26 +26,26 @@ constexpr qreal maxPointRadius =
 constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
 
 // 各个图形以及边框的画笔和画刷
-const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
-const QPen modiPointPen(Qt::black, 1, Qt::SolidLine);
+inline const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
+inline const QPen modiPointPen(Qt::black, 1, Qt::SolidLine);
 
-const QBrush sizePointBrush(Qt::white, Qt::SolidPattern);
-const QPen sizePointPen(Qt::black, 1, Qt::SolidLine);
+inline const QBrush sizePointBrush(Qt::white, Qt::SolidPattern);
+inline const QPen sizePointPen(Qt::black, 1, Qt::SolidLine);
 
-const QBrush magPointBrush(Qt::darkGray, Qt::SolidPattern);
-const QPen magPointPen(Qt::darkGray, 1, Qt::SolidLine);
+inline const QBrush magPointBrush(Qt::darkGray, Qt::SolidPattern);
+inline const QPen magPointPen(Qt::darkGray, 1, Qt::SolidLine);
 
-const QBrush magPointCollideBursh(Qt::gray, Qt::SolidPattern);
-const QPen magPointColidePen(Qt::gray, Qt::SolidLine);
+inline const QBrush magPointCollideBursh(Qt::gray, Qt::SolidPattern);
+inline const QPen magPointColidePen(Qt::gray, Qt::SolidLine);
 
-const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
-const QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
+inline const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
+inline const QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
 
-const QBrush selectRectBrush = QBrush(Qt::NoBrush);
-const QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
+inline const QBrush selectRectBrush = QBrush(Qt::NoBrush);
+inline const QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
 
-const QBrush groupRectBrush = QBrush(Qt::NoBrush);
-const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
+inline const QBrush groupRectBrush = QBrush(Qt::NoBrush);
+inline const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -81,6 +81,26 @@ enum UserTypes
 
     DLineItemType = QGraphicsItem::UserType + 300,
     DCurveLineItemType = QGraphicsItem::UserType + 301
+};
+
+enum ErrorType
+{
+    DDiaIn = 1,                 // 菱形一个输入
+    DDiaOut =2,                 // 一个输出
+    DDiaNoTypeArrow = 100,      // 存在无类型连线
+
+    DRectIn = 3,                // 矩形一个输入
+    DRectOut = 4,               // 一个输出
+    DRectNoTypeArrow = 200,     // 存在无类型连线
+
+    NoLinkedItem = 5,           // 独立无连线图形
+
+    RoundLine = 6               // 回环连线
+};
+enum ErrorLevel
+{
+    WARNING = 1,
+    ERROR = 0
 };
 
 // 常量
@@ -217,4 +237,7 @@ namespace DTool
 
 	// 过滤掉所有 parent 存在于列表中的元素
 	void filterRootBases(QList<QGraphicsItem*> &items);
+
+    // 获取错误等级
+    int getErrorLevel(int ErrorType);
 };

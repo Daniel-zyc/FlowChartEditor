@@ -143,6 +143,8 @@ private:
     QColorDialog *colorDia;
     QFontDialog *fontDia;
 
+    QSplitter *middlesplitter;
+
     QSplitter *mainsplitter;
     QWidget *leftw;
     QGridLayout *flowGrid;

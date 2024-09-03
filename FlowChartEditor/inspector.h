@@ -2,45 +2,57 @@
 #define INSPECTOR_H
 #include "dscene.h"
 #include "dview.h"
-#include "qlabel.h"
-#include <QDialog>
+#include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QListWidget>
 
-struct errorItem{
+struct errorMessage{
+    int errorType;
     QString message;
     QGraphicsItem * item;
 };
 
-class Inspector : public QDialog
+class Inspector : public QWidget
 {
+    Q_OBJECT
 public:
-    Inspector(QWidget *parent = nullptr,DScene *scene = nullptr,DView *view = nullptr);
+    explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
+    ~Inspector();
 
-    void check();
+    void checkAll();
+    void checkItem(QGraphicsItem * item);
+    void checkItems(QList<QGraphicsItem*> item);
+
+    void checkDItem(QGraphicsItem * item);
+    void checkOtherItem(QGraphicsItem * item);
+
+    void restoreView();
+    void updateErrorList();
 
 private:
     DScene *scene;
-    DView * view;
-
-    QList<errorItem> errorMessage;
-
-    QGridLayout *gridLayout = new QGridLayout();
-    QPushButton *forwardBtn = new QPushButton("向前");
-    QPushButton *backwardBtn = new QPushButton("向后");
-    QLabel *message = new QLabel;
-
+    DView *view;
+    QList<errorMessage> errorMessage;
     QPointF originalCentrer;
     QTransform originalTransform;
+    QListWidget *errorListWidget;
 
-    void restoreView();
-protected:
-    void closeEvent(QCloseEvent *event) override;
+    void showAllType();
+
+    void showErrorsOnly();
+
+    bool ifShowErrorOnly = false;
+
 private slots:
-    void forward();
-    void backward();
+    void onItemClicked(QListWidgetItem *item);
 
-    int index;
+    void clearAllItems();
+
+    void onshowErrorActionClicked();
+
+    void showDErrorsOnly();
 };
+
 
 #endif // INSPECTOR_H
