@@ -27,6 +27,7 @@
 #include "dfinternalstoreitem.h"
 #include "dfprepareitem.h"
 #include "dfprocessitem.h"
+#include "dfdelayitem.h"
 #include "dfoptionalprocessitem.h"
 #include "dfconditionitem.h"
 #include "dfdataitem.h"

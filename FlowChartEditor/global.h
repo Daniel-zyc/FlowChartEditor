@@ -79,6 +79,7 @@ enum UserTypes
 	DFNodeItemType = QGraphicsItem::UserType + 211,
     DFManualinputItemType = QGraphicsItem::UserType + 212,
 	DFInformationItemType = QGraphicsItem::UserType + 213,
+    DFDelayItemType = QGraphicsItem::UserType + 214,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
