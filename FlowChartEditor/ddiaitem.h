@@ -21,8 +21,6 @@ public:
 	void updateMagPoint() override;
 	void updateModiPoint() override;
 
-    void check();
-
 public:
 	/**
 	 * @brief serialize

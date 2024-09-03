@@ -30,6 +30,7 @@ SOURCES += \
     dtriitem.cpp \
     dview.cpp \
     global.cpp \
+    inspector.cpp \
     magpoint.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     dtriitem.h \
     dview.h \
     global.h \
+    inspector.h \
     magpoint.h \
     mainwindow.h \
     saveandloadmanager.h \
