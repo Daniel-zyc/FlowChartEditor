@@ -31,6 +31,7 @@ SOURCES += \
     dfstartenditem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
+    dmultidocitem.cpp \
     dparagramitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
@@ -75,6 +76,7 @@ HEADERS += \
     dfstartenditem.h \
     dlinebase.h \
     dlineitem.h \
+    dmultidocitem.h \
     dparagramitem.h \
     dpolygonbase.h \
     dpolylineitem.h \

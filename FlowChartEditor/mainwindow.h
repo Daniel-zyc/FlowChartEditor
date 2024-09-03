@@ -85,6 +85,12 @@ private slots:
     void changeEndArrow(int endArrowType);
     void changeLineColor(QColor color);
     void setSceneBg(QString path);
+    void setColorIcon(QPushButton *button) {
+        button->setStyleSheet("QPushButton {"
+                                  "    background-image: url(:/icon/palette.png) 0 0 0 0 stretch stretch;"
+                                  "}");
+        button->setFixedWidth(100);
+    };
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -222,6 +228,16 @@ private:
     QTreeWidgetItem *patternChild3;
     QRadioButton *customizeBg;
     QPushButton *repickBtn;
+
+    QWidget *rightShapew;
+    QFormLayout *rightShapef;
+    QPushButton *frameColor;
+    QPushButton *fillColor;
+
+    QWidget *rightFontw;
+    QFormLayout *rightFontf;
+    QPushButton *textColor;
+    QPushButton *textFont;
 
     QString filePath = nullptr;
 };
