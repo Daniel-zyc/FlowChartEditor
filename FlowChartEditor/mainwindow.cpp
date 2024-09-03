@@ -384,6 +384,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
     connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
@@ -877,14 +878,13 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    if(filePath == nullptr || filePath == "")
+        filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
-
     QList<QGraphicsItem *> items = scene->selectedItems();
     for(QGraphicsItem *item : items) {
         item->setSelected(false);
     }
-
     SaveAndLoadManager::instance().saveToFile(filePath);
 }
 
@@ -913,4 +913,8 @@ void MainWindow::undo(){
 void MainWindow::showAboutUsWindow(){
     AboutUsWindow* auw = new AboutUsWindow();
     auw->exec();
+}
+
+void MainWindow::check(){
+    scene->check();
 }

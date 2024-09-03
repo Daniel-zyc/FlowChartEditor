@@ -46,6 +46,9 @@ public:
 	virtual void setBeginPoint(QPointF p);
 	virtual void setEndPoint(QPointF p);
 
+    // 获取某个磁吸点的类型
+    int magType(MagPoint *mag);
+
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;
