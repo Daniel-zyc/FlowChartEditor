@@ -1,14 +1,13 @@
 #pragma once
 
 #include "dshapebase.h"
-#include <QRectF>
 
-class DFPredefineItem : public DShapeBase
+class DFDelayItem : public DShapeBase
 {
 public:
-	enum { Type = DFPredefineItemType };
-	DFPredefineItem(QGraphicsItem *parent = nullptr);
-	DFPredefineItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+    enum { Type = DFDelayItemType };
+    DFDelayItem(QGraphicsItem *parent = nullptr);
+    DFDelayItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
@@ -20,10 +19,10 @@ public:
     void modiToPoint(QPointF p, int id) override;
 
     void updateAll();
+    void updatePath();
     void updateMagPoint();
-    void updateModiPoint();
 
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
-    qreal ratio = 0.15;
+    QPainterPath path;
 };

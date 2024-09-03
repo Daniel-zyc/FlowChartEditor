@@ -9,13 +9,13 @@ QSet<int> registeredTypes = QSet<int>(
 				DRoundRectItemType,
 				DEllItemType,
 				DTriItemType,
-				DFDiaItemType,
-				DParallegramItemType,
+				DDiaItemType,
+				DParagramItemType,
 				DTrapItemType,
 
 				// shape for flowchart
-				DFDocItemType,
-				DFEndItemType,
+				DFDocumentItemType,
+				DFStartEndItemType,
 				DFManualOperateItemType,
 				DFInternalStoreItemType,
 				DFPrepareItemType,
@@ -108,6 +108,7 @@ bool DTool::isAbstract(int type)
 	return QGraphicsItem::UserType <= type;
 }
 
-int DTool::getErrorLevel(int errorType){
-    return errorType >= 100;
+bool DTool::isFlowChartShape(int type)
+{
+	return QGraphicsItem::UserType + 200 <= type && type < QGraphicsItem::UserType + 300;
 }

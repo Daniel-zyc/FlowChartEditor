@@ -152,26 +152,21 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 		modifiedShape = nullptr;
 	}
 
-	int type = item->type();
-	if(QGraphicsItem::UserType + 40 <= type
-	   && type < QGraphicsItem::UserType + 100)
-		state = DConst::INSERT_TEXT;
-	if(QGraphicsItem::UserType + 100 <= type
-	   && type < QGraphicsItem::UserType + 300)
-		state = DConst::INSERT_SHAPE;
-	if(QGraphicsItem::UserType + 300 <= type)
-		state = DConst::INSERT_LINE;
+	if(item->isShape()) state = DConst::INSERT_SHAPE;
+	if(item->isLine()) state = DConst::INSERT_LINE;
+	if(item->isText()) state = DConst::INSERT_LINE;
 	modifiedShape = item;
 }
+
+//================================= text item ==================================
 
 void DScene::addTextItem()
 {
 	qDebug() << "add textitem";
-
-	DTextItem *item = new DTextItem();
-	state = DConst::INSERT_TEXT;
-	modifiedShape = item;
+	prepareInsertItem(new DTextItem());
 }
+
+//================================ basic item ==================================
 
 void DScene::addRectItem()
 {
@@ -191,12 +186,6 @@ void DScene::addEllItem()
 	prepareInsertItem(new DEllItem());
 }
 
-void DScene::addLineItem()
-{
-	qDebug() << "add line";
-	prepareInsertItem(new DLineItem());
-}
-
 void DScene::addTriItem()
 {
 	qDebug() << "add Triangle";
@@ -206,13 +195,7 @@ void DScene::addTriItem()
 void DScene::addParagramItem()
 {
 	qDebug() << "add Parallegram";
-	prepareInsertItem(new DParallelogramItem());
-}
-
-void DScene::addDocItem()
-{
-	qDebug() << "add Document";
-	prepareInsertItem(new DDocItem());
+	prepareInsertItem(new DParagramItem());
 }
 
 void DScene::addDiaItem()
@@ -221,28 +204,24 @@ void DScene::addDiaItem()
 	prepareInsertItem(new DDiaItem());
 }
 
-void DScene::addEndItem()
+void DScene::addTrapItem()
 {
-	qDebug() << "add Start/End";
-	prepareInsertItem(new DEndItem());
+	qDebug() << "add TrapItem";
+	prepareInsertItem(new DTrapItem());
 }
 
-void DScene::addPreItem()
-{
-	qDebug() << "add PreDefine";
-	prepareInsertItem(new DPreItem());
-}
+//============================ flow chart item =================================
 
 void DScene::addDFDocItem()
 {
 	qDebug() << "add DFDocItem";
-	prepareInsertItem(new DDocItem());
+	prepareInsertItem(new DFDocumentItem());
 }
 
-void DScene::addDFEndItem()
+void DScene::addDFStartEndItem()
 {
 	qDebug() << "add DFEndItem";
-	prepareInsertItem(new DEndItem());
+	prepareInsertItem(new DFStartEndItem());
 }
 
 void DScene::addDFManualOperateItem()
@@ -256,11 +235,15 @@ void DScene::addDFInternalStoreItem()
 	qDebug() << "add DFInternalStoreItem";
 	prepareInsertItem(new DFInternalStoreItem());
 }
-
 void DScene::addDFPrepareItem()
 {
 	qDebug() << "add DFPrepareItem";
 	prepareInsertItem(new DFPrepareItem());
+}
+void DScene::addDFDelayItem()
+{
+    qDebug() << "add DFDelayItem";
+    prepareInsertItem(new DFDelayItem());
 }
 
 void DScene::addDFProcessItem()
@@ -293,10 +276,31 @@ void DScene::addDFNodeItem()
 	prepareInsertItem(new DFNodeItem());
 }
 
-void DScene::addTrapItem()
+void DScene::addDFPredefineItem()
 {
-	qDebug() << "add TrapItem";
-	prepareInsertItem(new DTrapItem());
+	qDebug() << "add DFPredefineItem";
+	prepareInsertItem(new DFPredefineItem());
+}
+
+void DScene::addManualInputItem()
+{
+	qDebug() << "add DFManualInput";
+	prepareInsertItem(new DFManualInputItem());
+}
+
+//=============================== line item ====================================
+
+void DScene::addLineItem()
+{
+	qDebug() << "add line";
+	prepareInsertItem(new DLineItem());
+}
+void DScene::addManualinItem()
+{
+    qDebug() << "add ManualinItem";
+	DFManualInputItem *item = new DFManualInputItem();
+    state = DConst::INSERT_SHAPE;
+    modifiedShape = item;
 }
 
 void DScene::addPolyLineItem()
@@ -305,13 +309,12 @@ void DScene::addPolyLineItem()
 	prepareInsertItem(new DPolyLineItem());
 }
 
-void DScene::combineSelected()
+void DScene::addCurveLineItem()
 {
+	qDebug() << "add CurveLine";
+	prepareInsertItem(new DCurveLineItem());
 }
 
-void DScene::seperateSelected()
-{
-}
 
 QList<QGraphicsItem *> DScene::getDelete()
 {
@@ -412,10 +415,32 @@ void DScene::changeLineWidth(double width)
     }
 }
 
+void DScene::changeLineColor(QColor color)
+{
+    qDebug() << "change Line Color";
+    QList<DLineBase*> lines = getSelectedLine();
+
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setColor(color);
+        line->setPen(npen);
+    }
+}
+
 void DScene::setBg(QString path)
 {
     QPixmap bg(path);
     setBackgroundBrush(bg);
+}
+
+void DScene::changeItemRot()
+{
+
+}
+
+void DScene::changeItemScale()
+{
+
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

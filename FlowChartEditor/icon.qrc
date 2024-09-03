@@ -54,5 +54,7 @@
         <file>icon/flowchart/node.png</file>
         <file>icon/warning.png</file>
         <file>icon/error.png</file>
+        <file>icon/polyLine.png</file>
+        <file>icon/palette1.png</file>
     </qresource>
 </RCC>

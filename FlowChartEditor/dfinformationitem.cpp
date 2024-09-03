@@ -1,10 +1,10 @@
-#include "dinfitem.h"
+#include "dfinformationitem.h"
 #include "magpoint.h"
 
-DInfItem::DInfItem(QGraphicsItem *parent)
+DFInformationItem::DFInformationItem(QGraphicsItem *parent)
     : DShapeBase(parent) {}
 
-DInfItem::DInfItem(qreal w, qreal h, QGraphicsItem *parent)
+DFInformationItem::DFInformationItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase(parent)
 {
     mags->push_back(new MagPoint(this));
@@ -14,7 +14,7 @@ DInfItem::DInfItem(qreal w, qreal h, QGraphicsItem *parent)
     setRect(QRectF(-w/2, -h/2, w, h));
 }
 
-QPainterPath DInfItem::addInfShape(const QRectF &rec) const
+QPainterPath DFInformationItem::addInfShape(const QRectF &rec) const
 {
     QPainterPath path;
 
@@ -45,7 +45,7 @@ QPainterPath DInfItem::addInfShape(const QRectF &rec) const
     return path;
 }
 
-void DInfItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFInformationItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -56,19 +56,19 @@ void DInfItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->drawPath(infShape);
 }
 
-QRectF DInfItem::sizeRect() const
+QRectF DFInformationItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DInfItem::shapeNormal() const
+QPainterPath DFInformationItem::shapeNormal() const
 {
     QPainterPath pth;
     pth.addRect(rect);
     return pth;
 }
 
-void DInfItem::updateMagPoint()
+void DFInformationItem::updateMagPoint()
 {
     (*mags)[0]->pos = {rect.left(), 0};
     (*mags)[1]->pos = {rect.right(), 0};
@@ -77,18 +77,18 @@ void DInfItem::updateMagPoint()
     (*mags)[3]->pos = {0, rect.bottom() * 9 / 10};
 }
 
-void DInfItem::sizeToRect(QRectF nrect)
+void DFInformationItem::sizeToRect(QRectF nrect)
 {
     setRect(nrect);
 }
 
-void DInfItem::modiToPoint(QPointF p, int id)
+void DFInformationItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(p); Q_UNUSED(id);
     return;
 }
 
-void DInfItem::setRect(const QRectF &nrect)
+void DFInformationItem::setRect(const QRectF &nrect)
 {
     rect = nrect;
     updateSizePoint();

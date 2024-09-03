@@ -1,10 +1,10 @@
-#include "denditem.h"
+#include "dfstartenditem.h"
 #include "magpoint.h"
 
-DEndItem::DEndItem(QGraphicsItem *parent)
-    : DEndItem(minRectSize, minRectSize, parent) {}
+DFStartEndItem::DFStartEndItem(QGraphicsItem *parent)
+    : DFStartEndItem(minRectSize, minRectSize, parent) {}
 
-DEndItem::DEndItem(qreal w, qreal h, QGraphicsItem *parent)
+DFStartEndItem::DFStartEndItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DShapeBase("", parent)
 {
     for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
@@ -12,7 +12,7 @@ DEndItem::DEndItem(qreal w, qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void DEndItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFStartEndItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -21,17 +21,17 @@ void DEndItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->drawRoundedRect(rect, rect.width() / 5, rect.height() / 2);
 }
 
-QRectF DEndItem::sizeRect() const
+QRectF DFStartEndItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DEndItem::shapeNormal() const
+QPainterPath DFStartEndItem::shapeNormal() const
 {
 	QPainterPath pth; pth.addRoundedRect(rect, rect.width() / 5, rect.height() / 2); return pth;
 }
 
-void DEndItem::updateMagPoint()
+void DFStartEndItem::updateMagPoint()
 {
 	(*mags)[0]->pos = {rect.left(), 0};
 	(*mags)[1]->pos = {rect.right(), 0};
@@ -40,30 +40,30 @@ void DEndItem::updateMagPoint()
 	(*mags)[3]->pos = {0, rect.bottom()};
 }
 
-void DEndItem::sizeToRect(QRectF nrect)
+void DFStartEndItem::sizeToRect(QRectF nrect)
 {
 	rect = nrect; updateAll();
 }
 
-void DEndItem::modiToPoint(QPointF p, int id)
+void DFStartEndItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
-void DEndItem::updateAll()
+void DFStartEndItem::updateAll()
 {
     updateSizePoint();
     updateMagPoint();
 }
 
-void DEndItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DFStartEndItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DShapeBase::serialize(out, fa);
 
 	out << rect;
 }
 
-bool DEndItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DFStartEndItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DShapeBase::deserialize(in, fa)) return false;
 

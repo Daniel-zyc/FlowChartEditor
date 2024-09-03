@@ -1,3 +1,4 @@
 QToolButton::menu-indicator {
     image : None;
 }
+

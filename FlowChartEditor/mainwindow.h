@@ -43,27 +43,30 @@ private:
 	void createToolBar();
 	void bindAction();
     void initUi();
+    void initleftUi();
+    void initrightUi();
+    void connectLeft();
+    void connectRight();
 
 private slots:
     void check();
     void saveAsSvg();
 
-	void addLine();
-	void addRect();
-	void addRoundRect();
-	void addEll();
-	void addText();
-    void addTri();
-    void addDia();
-    void addTrap();
-    void addEnd();
-    void addPre();
-    void addParallegram();
-    void addDocShape();
-	void addPolyLine();
+	void addLine() { scene->addLineItem(); }
+	void addPolyLine() { scene->addPolyLineItem(); }
+	void addCurveLine() { scene->addCurveLineItem(); }
+
+	void addText() { scene->addTextItem(); }
+
+	void addRect() { scene->addRectItem(); }
+	void addRoundRect() { scene->addRoundRectItem(); }
+	void addEll() { scene->addEllItem(); }
+	void addTri() { scene->addTriItem(); }
+	void addDia() { scene->addDiaItem(); }
+	void addTrap() { scene->addTrapItem(); }
+	void addParagram() { scene->addParagramItem(); }
 
 	void addDFDocItem() { scene->addDFDocItem(); }
-	void addDFEndItem() { scene->addDFEndItem(); }
 	void addDFManualOperateItem() { scene->addDFManualOperateItem(); }
 	void addDFInternalStoreItem() { scene->addDFInternalStoreItem(); }
 	void addDFPrepareItem() { scene->addDFPrepareItem(); }
@@ -72,11 +75,22 @@ private slots:
 	void addDFConditionItem() { scene->addDFConditionItem(); }
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
+	void addDFStartEndItem() { scene->addDFStartEndItem(); }
+	void addDFPredefineItem() { scene->addDFPredefineItem(); }
+	void addDFManualInputItem() { scene->addManualInputItem(); }
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
-    void changeLineStyle();
+    void changeLineColor(QColor color);
     void setSceneBg(QString path);
+    void setColorIcon(QPushButton *button) {
+        button->setStyleSheet("QPushButton {"
+                                  "    background-image: url(:/icon/palette.png) 0 0 0 0 stretch stretch;"
+                                  "}");
+        button->setFixedWidth(100);
+    };
+    void changeItemRot();
+    void changeItemScale();
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -149,12 +163,14 @@ private:
     QWidget *leftw;
     QGridLayout *flowGrid;
     QGridLayout *primaryGrid;
-    QGridLayout *otherG;
+    QGridLayout *lineGrid;
+    QGridLayout *textGrid;
     QVBoxLayout *leftUpV;
 
     QGroupBox *primaryGroup;
     QGroupBox *flowcGroup;
-    QGroupBox *otherGroup;
+    QGroupBox *lineGroup;
+    QGroupBox *textGroup;
     QPushButton *rectBtn;
     QPushButton *roundRectBtn;
     QPushButton *ellipseBtn;
@@ -167,25 +183,26 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
+ //   QPushButton *manualinBtn;
     QPushButton *prepareBtn;
     QPushButton *storeBtn;
+    QPushButton *polyLineBtn;
 
-    QPushButton *prectBtn;
-    QPushButton *pellipseBtn;
-    QPushButton *pparellgramBtn;
-    QPushButton *prhomBtn;
-    QPushButton *ptrapBtn;
-    QPushButton *ptriBtn;
+	QPushButton *addRectBtn;
+	QPushButton *addEllBtn;
+	QPushButton *addParagramBtn;
+	QPushButton *addDiaBtn;
+	QPushButton *addTrapBtn;
+	QPushButton *addTriBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;
-    QPushButton *confirm;
-    QPushButton *cancle;
     QFormLayout *formright;
     QHBoxLayout *rbtnLayout;
     QComboBox *lineType;
     QComboBox *arrowType;
     QDoubleSpinBox *linebound;
+    QPushButton *linecolor;
 
     QToolButton *createTln;
     QToolButton *openTln;
@@ -193,21 +210,28 @@ private:
     QToolButton *saveSvgTln;
 
     QGroupBox *bgGroup;
+    QRadioButton *colorBg;
     QRadioButton *blankBg;
     QRadioButton *gridBg;
     QRadioButton *dotBg;
-
-    QTreeWidget *rightBgw;
-    QTreeWidgetItem *colorTop;
-    QTreeWidgetItem *patternTop;
-    QPushButton *selectedColor;
-    QTreeWidgetItem *colorChild0;
-    QTreeWidgetItem *patternChild0;
-    QTreeWidgetItem *patternChild1;
-    QTreeWidgetItem *patternChild2;
-    QTreeWidgetItem *patternChild3;
     QRadioButton *customizeBg;
-    QPushButton *repickBtn;
+
+    QWidget *rightBgw;
+    QFormLayout *rightBgf;
+    QPushButton *reColorBtn;
+    QPushButton *reFileBtn;
+
+    QWidget *rightShapew;
+    QFormLayout *rightShapef;
+    QPushButton *frameColor;
+    QPushButton *fillColor;
+    QDoubleSpinBox *rotationBox;
+    QDoubleSpinBox *zoomBox;
+
+    QWidget *rightFontw;
+    QFormLayout *rightFontf;
+    QPushButton *textColor;
+    QPushButton *textFont;
 
     QString filePath = nullptr;
 };

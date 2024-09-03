@@ -1,10 +1,10 @@
-#include "dparallelogramitem.h"
+#include "dparagramitem.h"
 #include "magpoint.h"
 
-DParallelogramItem::DParallelogramItem(QGraphicsItem *parent)
-	: DParallelogramItem(minRectSize, minRectSize, parent) {}
+DParagramItem::DParagramItem(QGraphicsItem *parent)
+	: DParagramItem(minRectSize, minRectSize, parent) {}
 
-DParallelogramItem::DParallelogramItem(qreal w, qreal h, QGraphicsItem *parent)
+DParagramItem::DParagramItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DPolygonBase("", parent)
 {
 	modis.resize(1);
@@ -14,7 +14,7 @@ DParallelogramItem::DParallelogramItem(qreal w, qreal h, QGraphicsItem *parent)
 	updateAll();
 }
 
-void DParallelogramItem::updateMagPoint()
+void DParagramItem::updateMagPoint()
 {
 	QRectF rect = sizeRect();
 	(*mags)[0]->setPos((polygon[0] + polygon[1]) / 2);
@@ -37,12 +37,12 @@ void DParallelogramItem::updateMagPoint()
 	}
 }
 
-void DParallelogramItem::updateModiPoint()
+void DParagramItem::updateModiPoint()
 {
 	modis[0] = polygon[0];
 }
 
-void DParallelogramItem::modiToPoint(QPointF p, int id)
+void DParagramItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(id);
 	QRectF rc = sizeRect(); qreal nx = p.x();
@@ -54,12 +54,12 @@ void DParallelogramItem::modiToPoint(QPointF p, int id)
 
 //==============================================================================
 
-void DParallelogramItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DParagramItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DPolygonBase::serialize(out, fa);
 }
 
-bool DParallelogramItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DParagramItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DPolygonBase::deserialize(in, fa)) return false;
 	updateAll();

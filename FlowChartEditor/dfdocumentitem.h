@@ -1,16 +1,13 @@
 #pragma once
 
 #include "dshapebase.h"
-#include <QRectF>
 
-class DShapeBase;
-
-class DDocItem : public DShapeBase
+class DFDocumentItem : public DShapeBase
 {
 public:
-	enum { Type = DFDocItemType };
-	DDocItem(QGraphicsItem *parent = nullptr);
-	DDocItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFDocumentItemType };
+	DFDocumentItem(QGraphicsItem *parent = nullptr);
+	DFDocumentItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }

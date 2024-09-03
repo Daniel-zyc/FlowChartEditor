@@ -98,12 +98,12 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DRoundRectItemType: shape = new DRoundRectItem(); break;
 			case DEllItemType: shape = new DEllItem(); break;
 			case DTriItemType: shape = new DTriItem(); break;
-			case DParallegramItemType: shape = new DParallelogramItem(); break;
+			case DParagramItemType: shape = new DParagramItem(); break;
 			case DTrapItemType: shape = new DTrapItem(); break;
 
-			case DFDiaItemType: shape = new DDiaItem(); break;
-			case DFDocItemType: shape = new DDocItem(); break;
-			case DFEndItemType: shape = new DEndItem(); break;
+			case DDiaItemType: shape = new DDiaItem(); break;
+			case DFDocumentItemType: shape = new DFDocumentItem(); break;
+			case DFStartEndItemType: shape = new DFStartEndItem(); break;
 			case DFManualOperateItemType: shape = new DFManualOperateItem(); break;
 			case DFInternalStoreItemType: shape = new DFInternalStoreItem(); break;
 			case DFPrepareItemType: shape = new DFPrepareItem(); break;

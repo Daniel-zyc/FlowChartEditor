@@ -1,14 +1,14 @@
-#pragma once
+#ifndef DMULTIDOCITEM_H
+#define DMULTIDOCITEM_H
 
 #include "dshapebase.h"
-#include <QRectF>
 
-class DFPredefineItem : public DShapeBase
+class DMultiDocItem : public DShapeBase
 {
 public:
-	enum { Type = DFPredefineItemType };
-	DFPredefineItem(QGraphicsItem *parent = nullptr);
-	DFPredefineItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+    enum { Type = DFDocumentItemType };
+    DMultiDocItem(QGraphicsItem *parent = nullptr);
+    DMultiDocItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
@@ -19,11 +19,10 @@ public:
     void sizeToRect(QRectF nrect) override;
     void modiToPoint(QPointF p, int id) override;
 
-    void updateAll();
-    void updateMagPoint();
-    void updateModiPoint();
-
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
-    qreal ratio = 0.15;
+    QPainterPath path;
+
 };
+
+#endif // DMULTIDOCITEM_H

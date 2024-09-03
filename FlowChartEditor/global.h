@@ -62,13 +62,13 @@ enum UserTypes
 	DEllItemType = QGraphicsItem::UserType + 101,
 	DRoundRectItemType = QGraphicsItem::UserType + 102,
 	DTriItemType = QGraphicsItem::UserType + 103,
-	DParallegramItemType = QGraphicsItem::UserType + 104,
+	DParagramItemType = QGraphicsItem::UserType + 104,
 	DTrapItemType = QGraphicsItem::UserType + 105,
+	DDiaItemType = QGraphicsItem::UserType + 106,
 
-	DFEndItemType = QGraphicsItem::UserType + 200,
-	DFPreItemType = QGraphicsItem::UserType + 201,
-	DFDocItemType = QGraphicsItem::UserType + 202,
-	DFDiaItemType = QGraphicsItem::UserType + 203,
+	DFStartEndItemType = QGraphicsItem::UserType + 200,
+	DFPredefineItemType = QGraphicsItem::UserType + 201,
+	DFDocumentItemType = QGraphicsItem::UserType + 202,
 	DFManualOperateItemType = QGraphicsItem::UserType + 204,
 	DFInternalStoreItemType = QGraphicsItem::UserType + 205,
 	DFPrepareItemType = QGraphicsItem::UserType + 206,
@@ -77,10 +77,13 @@ enum UserTypes
 	DFConditionItemType = QGraphicsItem::UserType + 209,
 	DFDataItemType = QGraphicsItem::UserType + 210,
 	DFNodeItemType = QGraphicsItem::UserType + 211,
-    DFInformationItemType = QGraphicsItem::UserType + 212,
+	DFManualInputItemType = QGraphicsItem::UserType + 212,
+	DFInformationItemType = QGraphicsItem::UserType + 213,
+    DFDelayItemType = QGraphicsItem::UserType + 214,
 
-    DLineItemType = QGraphicsItem::UserType + 300,
-    DCurveLineItemType = QGraphicsItem::UserType + 301
+	DLineItemType = QGraphicsItem::UserType + 300,
+	DCurveLineItemType = QGraphicsItem::UserType + 301,
+	DPolyLineItemType = QGraphicsItem::UserType + 302
 };
 
 enum ErrorType
@@ -222,6 +225,9 @@ namespace DTool
 
 	// 判断是不是 Shape 类型
 	bool isShape(int type);
+
+	// 判断是不是流程图用图形
+	bool isFlowChartShape(int type);
 
 	// 判断是不是 Line 类型
 	bool isLine(int type);

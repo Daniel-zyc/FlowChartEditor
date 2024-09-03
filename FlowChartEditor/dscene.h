@@ -53,15 +53,18 @@ public:
 	void moveUp(int dist = DScene::defaultMoveDist) { moveSelected(0, -dist); }
 	void moveDown(int dist = DScene::defaultMoveDist) { moveSelected(0, dist); }
 
-    void moveSelectedZUp(qreal value = DScene::defaultMoveZUp){moveSelectedZ(value);};
-    void moveSelectedZDown(qreal value = DScene::defaultMoveZDown){moveSelectedZ(value);};
-    void moveSelectedZ(qreal value = 0.0);
+	// 调整对象 Z 值
+	void moveSelectedZUp(qreal value = DScene::defaultMoveZUp) { moveSelectedZ(value); }
+	void moveSelectedZDown(qreal value = DScene::defaultMoveZDown) { moveSelectedZ(-value); }
+	void moveSelectedZ(qreal value = 0.0);
 
-    void moveSelectedZMaxUp();
-    void moveSelectedZMaxDown();
+	void moveSelectedZMaxUp();
+	void moveSelectedZMaxDown();
 
+	// 插入图形辅助函数
 	void prepareInsertItem(DAbstractBase* item);
 
+	// 插入基础图形
 	void addRectItem();
 	void addRoundRectItem();
 	void addEllItem();
@@ -70,12 +73,9 @@ public:
 	void addTrapItem();
 	void addParagramItem();
 
-	void addDocItem();
-	void addEndItem();
-	void addPreItem();
-
+	// 插入流程图图形
 	void addDFDocItem();
-	void addDFEndItem();
+	void addDFStartEndItem();
 	void addDFManualOperateItem();
 	void addDFInternalStoreItem();
 	void addDFPrepareItem();
@@ -84,18 +84,25 @@ public:
 	void addDFConditionItem();
 	void addDFDataItem();
 	void addDFNodeItem();
+    void addManualinItem();
+	void addDFPredefineItem();
+	void addManualInputItem();
+    void addDFDelayItem();
 
+
+	// 插入文本框
 	void addTextItem();
 
+	// 插入线条
 	void addLineItem();
 	void addPolyLineItem();
+	void addCurveLineItem();
 
-	void combineSelected();
-	void seperateSelected();
+	// 复制、粘贴
+	void copySelectedItems();
+	void pasteItems();
 
-    void copySelectedItems();
-    void pasteItems();
-
+	// 删除
 	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
 
@@ -104,14 +111,18 @@ public:
 
 	void setMenu(QMenu *m) { menu = m; }
 
-    void clear();
-    void dDrawItems(QList<QGraphicsItem*> items);
+	void clear();
+	void dDrawItems(QList<QGraphicsItem*> items);
 
-    QList<DLineBase*> getSelectedLine();
-    void changeLineType(Qt::PenStyle linestyle);
-    void changeEndArrow(int endArrowType);
-    void changeLineWidth(double width);
-    void setBg(QString path);
+	QList<DLineBase*> getSelectedLine();
+	void changeLineType(Qt::PenStyle linestyle);
+	void changeEndArrow(int endArrowType);
+	void changeLineWidth(double width);
+	void changeLineColor(QColor color);
+	void setBg(QString path);
+    void changeItemRot();
+    void changeItemScale();
+
 
 	void setView(DView *v) { view = v; }
 
@@ -123,13 +134,16 @@ protected:
 
 private:
 	void init();
+	void shot();
 
+private:
 	static qreal defaultRotateDelta;
 	static qreal defaultScaleRatio;
 	static int defaultMoveDist;
-    static qreal defaultMoveZUp;
-    static qreal defaultMoveZDown;
+	static qreal defaultMoveZUp;
+	static qreal defaultMoveZDown;
 
+	// 绑定的 view 窗口，在本使用情形下，有且仅会有一个窗口
 	DView *view;
 
 	int state = DConst::NONE;
@@ -138,8 +152,6 @@ private:
 	DAbstractBase *showMagedItem = nullptr;
 	DAbstractBase *modifiedShape = nullptr;
 
-    void shot();
-
-    QByteArray copyData;
+	QByteArray copyData;
 };
 
