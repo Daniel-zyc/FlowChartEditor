@@ -1,8 +1,6 @@
 #include "magpoint.h"
 #include "dabstractbase.h"
 
-#include "serializer.h"
-
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
@@ -49,6 +47,33 @@ void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	paintShape(painter, option, widget);
 	if(isSelected()) paintSelected(painter, option, widget);
 	if(showMagPoint) paintMagPoint(painter, option, widget);
+}
+
+bool DAbstractBase::isShape()
+{
+	return DTool::isShape(type());
+}
+
+bool DAbstractBase::isLine()
+{
+	return DTool::isLine(type());
+}
+
+bool DAbstractBase::isText()
+{
+	return DTool::isText(type());
+}
+
+void DAbstractBase::setScale(qreal scl)
+{
+	if(!isScaleable) return;
+	QGraphicsItem::setScale(scl);
+}
+
+void DAbstractBase::setRotation(qreal deg)
+{
+	if(!isRotateable) return;
+	QGraphicsItem::setRotation(deg);
 }
 
 void DAbstractBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

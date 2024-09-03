@@ -195,7 +195,17 @@ namespace DTool
 	// 平方
 	qreal sq(qreal x);
 
+	// 判断是不是 AbstractShape 继承出的元素
+	bool isAbstract(int type);
 
+	// 判断是不是 Shape 类型
+	bool isShape(int type);
+
+	// 判断是不是 Line 类型
+	bool isLine(int type);
+
+	// 判断是不是 text 类型
+	bool isText(int type);
 
 	// p 是否在以 o 为半径 r 为圆心的圆中
 	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
@@ -204,5 +214,5 @@ namespace DTool
 	void moveItems(const QList<QGraphicsItem*> &items);
 
 	// 过滤掉所有 parent 存在于列表中的元素
-	void filterRootItem(QList<QGraphicsItem*> &items);
+	void filterRootBases(QList<QGraphicsItem*> &items);
 };

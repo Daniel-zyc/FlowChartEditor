@@ -694,7 +694,7 @@ void MainWindow::addPre()
 }
 void MainWindow::addParallegram()
 {
-    scene->addParallegramItem();
+	scene->addParagramItem();
 }
 
 void MainWindow::addDocShape()
@@ -857,66 +857,50 @@ void MainWindow::selectTextFont()
 
 void MainWindow::rotateCW()
 {
-	if(scene->selectedItems().isEmpty())
-		view->rotateCW();
-	else
-		scene->rotateCW();
+	if(scene->selectedItems().isEmpty()) view->rotateCW();
+	else scene->rotateCW();
 }
 
 void MainWindow::rotateCCW()
 {
-	if(scene->selectedItems().isEmpty())
-		view->rotateCCW();
-	else
-		scene->rotateCCW();
+	if(scene->selectedItems().isEmpty()) view->rotateCCW();
+	else scene->rotateCCW();
 }
 
 void MainWindow::enlarge()
 {
-	if(scene->selectedItems().isEmpty())
-		view->enlarge();
-	else
-		scene->enlarge();
+	if(scene->selectedItems().isEmpty()) view->enlarge();
+	else scene->enlarge();
 }
 
 void MainWindow::shrink()
 {
-	if(scene->selectedItems().isEmpty())
-		view->shrink();
-	else
-		scene->shrink();
+	if(scene->selectedItems().isEmpty()) view->shrink();
+	else scene->shrink();
 }
 
 void MainWindow::moveLeft()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveLeft();
-	else
-		scene->moveLeft();
+	if(scene->selectedItems().isEmpty()) view->moveLeft();
+	else scene->moveLeft();
 }
 
 void MainWindow::moveRight()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveRight();
-	else
-		scene->moveRight();
+	if(scene->selectedItems().isEmpty()) view->moveRight();
+	else scene->moveRight();
 }
 
 void MainWindow::moveUp()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveUp();
-	else
-		scene->moveUp();
+	if(scene->selectedItems().isEmpty()) view->moveUp();
+	else scene->moveUp();
 }
 
 void MainWindow::moveDown()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveDown();
-	else
-		scene->moveDown();
+	if(scene->selectedItems().isEmpty()) view->moveDown();
+	else scene->moveDown();
 }
 
 void MainWindow::moveSelectedZUp(){

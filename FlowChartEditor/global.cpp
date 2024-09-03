@@ -70,16 +70,37 @@ void DTool::moveItems(const QList<QGraphicsItem *> &items)
 	}
 }
 
-void DTool::filterRootItem(QList<QGraphicsItem*>& items)
+void DTool::filterRootBases(QList<QGraphicsItem*>& items)
 {
 	QSet<QGraphicsItem*> S;
 	for(QGraphicsItem* item : items) S.insert(item);
 	for (int i = 0; i < items.size(); i++)
 	{
-		if(items[i] == nullptr || S.contains(items[i]->parentItem()))
+		if(items[i] == nullptr || !isAbstract(items[i]->type())
+		   || S.contains(items[i]->parentItem()))
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
 		}
 	}
+}
+
+bool DTool::isShape(int type)
+{
+	return QGraphicsItem::UserType + 100 <= type && type < QGraphicsItem::UserType + 300;
+}
+
+bool DTool::isLine(int type)
+{
+	return QGraphicsItem::UserType + 300 <= type;
+}
+
+bool DTool::isText(int type)
+{
+	return QGraphicsItem::UserType + 40 <= type && type < QGraphicsItem::UserType + 100;
+}
+
+bool DTool::isAbstract(int type)
+{
+	return QGraphicsItem::UserType <= type;
 }
