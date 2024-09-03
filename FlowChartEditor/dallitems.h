@@ -25,6 +25,7 @@
 #include "dfinternalstoreitem.h"
 #include "dfprepareitem.h"
 #include "dfprocessitem.h"
+#include "dfoptionalprocessitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

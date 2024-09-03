@@ -4,8 +4,6 @@
 #include <QGraphicsScene>
 
 #include "magpoint.h"
-#include "dlinebase.h"
-#include "drectitem.h"
 
 /**
  * @brief The Serializer class

@@ -17,6 +17,7 @@ SOURCES += \
     dfinddialog.cpp \
     dfinternalstoreitem.cpp \
     dfmanualoperateitem.cpp \
+    dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
     ditemgroup.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     dfinddialog.h \
     dfinternalstoreitem.h \
     dfmanualoperateitem.h \
+    dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
     ditemgroup.h \

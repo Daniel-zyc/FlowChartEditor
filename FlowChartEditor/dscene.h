@@ -53,19 +53,29 @@ public:
     void moveSelectedZMaxUp();
     void moveSelectedZMaxDown();
 
+	void prepareInsertItem(DAbstractBase* item);
+
 	void addTextItem();
 	void addRectItem();
 	void addRoundRectItem();
 	void addEllItem();
 	void addLineItem();
-    void addTriItem();
-    void addDiaItem();
-    void addTrapItem();
-    void addParallegramItem();
-    void addDocItem();
-    void addPolyLineItem();
-    void addEndItem();
-    void addPreItem();
+	void addTriItem();
+	void addDiaItem();
+	void addTrapItem();
+	void addParallegramItem();
+	void addDocItem();
+	void addPolyLineItem();
+	void addEndItem();
+	void addPreItem();
+
+	void addDFDocItem();
+	void addDFEndItem();
+	void addDFManualOperateItem();
+	void addDFInternalStoreItem();
+	void addDFPrepareItem();
+	void addDFProcessItem();
+	void addDFOptionalProcessItem();
 
 	void combineSelected();
 	void seperateSelected();

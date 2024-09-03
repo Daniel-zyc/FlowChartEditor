@@ -3,12 +3,12 @@
 #include "dshapebase.h"
 #include <QRectF>
 
-class DRoundRectItem : public DShapeBase
+class DFOptionalProcessItem : public DShapeBase
 {
 public:
-	enum { Type = DRoundRectItemType };
-	DRoundRectItem(QGraphicsItem *parent = nullptr);
-	DRoundRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFOptionalProcessItemType };
+	DFOptionalProcessItem(QGraphicsItem *parent = nullptr);
+	DFOptionalProcessItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }

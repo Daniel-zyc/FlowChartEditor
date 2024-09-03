@@ -129,6 +129,27 @@ void DScene::moveSelectedZMaxDown(){
         }
 }
 
+void DScene::prepareInsertItem(DAbstractBase* item)
+{
+	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_SHAPE
+	   || state == DConst::INSERT_LINE)
+	{
+		delete modifiedShape;
+		modifiedShape = nullptr;
+	}
+
+	int type = item->type(); qDebug() << type;
+	if(QGraphicsItem::UserType + 40 <= type
+	   && type < QGraphicsItem::UserType + 100)
+		state = DConst::INSERT_TEXT;
+	if(QGraphicsItem::UserType + 100 <= type
+	   && type < QGraphicsItem::UserType + 300)
+		state = DConst::INSERT_SHAPE;
+	if(QGraphicsItem::UserType + 300 <= type)
+		state = DConst::INSERT_LINE;
+	modifiedShape = item;
+}
+
 void DScene::addTextItem()
 {
 	qDebug() << "add textitem";
@@ -227,6 +248,48 @@ void DScene::addPreItem()
 	DFProcessItem *item = new DFProcessItem();
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
+}
+
+void DScene::addDFDocItem()
+{
+	qDebug() << "add DFDocItem";
+	prepareInsertItem(new DDocItem());
+}
+
+void DScene::addDFEndItem()
+{
+	qDebug() << "add DFEndItem";
+	prepareInsertItem(new DEndItem());
+}
+
+void DScene::addDFManualOperateItem()
+{
+	qDebug() << "add DFManualOperateItem";
+	prepareInsertItem(new DFManualOperateItem());
+}
+
+void DScene::addDFInternalStoreItem()
+{
+	qDebug() << "add DFInternalStoreItem";
+	prepareInsertItem(new DFInternalStoreItem());
+}
+
+void DScene::addDFPrepareItem()
+{
+	qDebug() << "add DFPrepareItem";
+	prepareInsertItem(new DFPrepareItem());
+}
+
+void DScene::addDFProcessItem()
+{
+	qDebug() << "add DFProcessItem";
+	prepareInsertItem(new DFProcessItem());
+}
+
+void DScene::addDFOptionalProcessItem()
+{
+	qDebug() << "add DFOptionalProcessItem";
+	prepareInsertItem(new DFOptionalProcessItem());
 }
 
 void DScene::addTrapItem()
