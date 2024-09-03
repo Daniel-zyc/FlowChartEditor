@@ -147,6 +147,7 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
+    //QPushButton *polylineBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;
