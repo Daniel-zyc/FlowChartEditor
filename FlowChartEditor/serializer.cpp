@@ -81,7 +81,6 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 
 	qint32 shapeSize, textSize, lineSize;
 	QList<QGraphicsItem* > data;
-
 	int tmpcnt;
 
     in >> shapeSize;
@@ -102,6 +101,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DDocItemType: shape = new DDocItem(); break;
 			case DEndItemType: shape = new DEndItem(); break;
 			case DParallegramItemType: shape = new DParallelogramItem(); break;
+			case DTrapItemType: shape = new DTrapItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{

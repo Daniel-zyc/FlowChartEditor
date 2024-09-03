@@ -43,9 +43,6 @@ void DRoundRectItem::updateMagPoint()
 
 void DRoundRectItem::updateModiPoint()
 {
-	radiusx = qMin(radiusx, rect.width() / 2); radiusx = qMax(0.0, radiusx);
-	radiusy = qMin(radiusy, rect.height() / 2); radiusy = qMax(0.0, radiusy);
-
 	modis[0] = {rect.left() + radiusx, rect.top()};
 	modis[1] = {rect.left(), rect.top() + radiusy};
 }
@@ -60,11 +57,13 @@ void DRoundRectItem::modiToPoint(QPointF p, int id)
 	switch(id)
 	{
 		case 0:
-			radiusx = qAbs(rect.left() - p.x());
+			radiusx = p.x() - rect.left();
+			radiusx = qMin(radiusx, rect.width() / 2); radiusx = qMax(0.0, radiusx);
 			updateModiPoint();
 			break;
 		case 1:
-			radiusy = qAbs(rect.top() - p.y());
+			radiusy = p.y() - rect.top();
+			radiusy = qMin(radiusy, rect.height() / 2); radiusy = qMax(0.0, radiusy);
 			updateModiPoint();
 			break;
 	}

@@ -182,10 +182,9 @@ void DScene::addTriItem()
 void DScene::addParallegramItem()
 {
     qDebug() << "add Parallegram";
-    DParallelogramItem *item = new DParallelogramItem(200, 200);
-    item->textItem = new DTextItem(100, 100, "hello world!", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	DParallelogramItem *item = new DParallelogramItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addDocItem()
@@ -214,22 +213,22 @@ void DScene::addEndItem()
 
 void DScene::addPreItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(100,80,80);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	// qDebug() << "add Document";
+	// DEndItem *item = new DEndItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+ //    DTrapItem *item = new DTrapItem(100,80,80);
+ //    item->textItem = new DTextItem(50, 50, "", item);
+ //    item->textItem->deleteMagPoint();
+ //    addItem(item);
 }
 
 void DScene::addTrapItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(100,80,80);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add TrapItem";
+	DTrapItem *item = new DTrapItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addPolyLineItem()
