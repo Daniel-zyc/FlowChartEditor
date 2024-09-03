@@ -1,77 +1,80 @@
 #include "dallitems.h"
 #include "dscene.h"
+#include "dview.h"
 #include "undomanager.h"
 #include "serializer.h"
 
 #include <QMessageBox>
 
 qreal DScene::defaultRotateDelta = 10;
-qreal DScene::defaultScaleRatio = 1.2;
-qreal DScene::defaultMoveDist = 50;
+qreal DScene::defaultScaleRatio = 1.1;
+int DScene::defaultMoveDist = 5;
 qreal DScene::defaultMoveZUp = 20;
 qreal DScene::defaultMoveZDown = -20;
 
-DScene::DScene()
-{
-}
+DScene::DScene() { init(); }
 
 DScene::DScene(QObject *parent)
-	: QGraphicsScene(parent)
-{
-}
+	: QGraphicsScene(parent) { init(); }
 
 DScene::DScene(const QRectF &sceneRect, QObject *parent)
-	: QGraphicsScene(sceneRect, parent)
-{
-
-}
+	: QGraphicsScene(sceneRect, parent) { init(); }
 
 DScene::DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
-	: QGraphicsScene(x, y, width, height, parent)
-{
+	: QGraphicsScene(x, y, width, height, parent) { init(); }
 
+void DScene::init()
+{
+}
+
+QList<DAbstractBase*> DScene::getRootSelectedBases()
+{
+	QList<QGraphicsItem*> items = selectedItems();
+	DTool::filterRootBases(items);
+	QList<DAbstractBase*> bases;
+	for(QGraphicsItem* item : items) bases.push_back(dynamic_cast<DShapeBase*>(item));
+	return bases;
 }
 
 void DScene::setRotation(qreal angle)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setRotation(angle);
+	for(DAbstractBase *item : getRootSelectedBases()) item->setRotation(angle);
 }
 
 void DScene::rotateSelected(qreal deg)
 {
-	for(QGraphicsItem *item : selectedItems())
+	for(DAbstractBase *item : getRootSelectedBases())
 		item->setRotation(DTool::degMod(item->rotation() + deg));
 }
 
 void DScene::setScale(qreal scale)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setScale(scale);
+	for(DAbstractBase *item : getRootSelectedBases()) item->setScale(scale);
 }
 
 void DScene::enlargeSelected(qreal ratio)
 {
-	for(QGraphicsItem *item : selectedItems())
+	for(DAbstractBase *item : getRootSelectedBases())
 		item->setScale(item->scale() * ratio);
 }
 
 void DScene::setCenter(qreal x, qreal y)
 {
-	for(QGraphicsItem *item : selectedItems())
-		item->setPos(x, y);
+	for(DAbstractBase *item : getRootSelectedBases()) item->setPos(x, y);
 }
 
-void DScene::moveSelected(qreal distx, qreal disty)
+void DScene::moveSelected(int distx, int disty)
 {
-	for(QGraphicsItem *item : selectedItems())
+	QPointF dir = view->mapToScene(distx, disty) - view->mapToScene(QPoint(0, 0));
+	for(DAbstractBase *item : getRootSelectedBases())
 	{
 		QPointF pos = item->pos();
-		pos.setX(pos.x() + distx);
-		pos.setY(pos.y() + disty);
+		pos.setX(pos.x() + dir.x());
+		pos.setY(pos.y() + dir.y());
 		item->setPos(pos);
 	}
 }
+
 
 void DScene::moveSelectedZ(qreal value){
     for(QGraphicsItem *item : selectedItems()){
@@ -135,16 +138,21 @@ void DScene::moveSelectedZMaxDown(){
         }
 }
 
+
 void DScene::prepareInsertItem(DAbstractBase* item)
 {
+	qDebug() << "prepare insert item";
+	qDebug() << "item type: " << item->type();
+
 	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_SHAPE
 	   || state == DConst::INSERT_LINE)
 	{
+		qDebug() << "delete uninserted item";
 		delete modifiedShape;
 		modifiedShape = nullptr;
 	}
 
-	int type = item->type(); qDebug() << type;
+	int type = item->type();
 	if(QGraphicsItem::UserType + 40 <= type
 	   && type < QGraphicsItem::UserType + 100)
 		state = DConst::INSERT_TEXT;
@@ -168,92 +176,61 @@ void DScene::addTextItem()
 void DScene::addRectItem()
 {
 	qDebug() << "add rectangle";
-
-	DRectItem *item = new DRectItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DRectItem());
 }
 
 void DScene::addRoundRectItem()
 {
 	qDebug() << "add round rectangle";
-	DRoundRectItem *item = new DRoundRectItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DRoundRectItem());
 }
 
 void DScene::addEllItem()
 {
 	qDebug() << "add ellipse";
-	DEllItem *item = new DEllItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DEllItem());
 }
 
 void DScene::addLineItem()
 {
 	qDebug() << "add line";
-	DLineItem *item = new DLineItem();
-	state = DConst::INSERT_LINE;
-	modifiedShape = item;
+	prepareInsertItem(new DLineItem());
 }
 
 void DScene::addTriItem()
 {
 	qDebug() << "add Triangle";
-	DTriItem *item = new DTriItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DTriItem());
 }
 
-void DScene::addParallegramItem()
+void DScene::addParagramItem()
 {
-    qDebug() << "add Parallegram";
-	DParallelogramItem *item = new DParallelogramItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	qDebug() << "add Parallegram";
+	prepareInsertItem(new DParallelogramItem());
 }
 
 void DScene::addDocItem()
 {
 	qDebug() << "add Document";
-	DDocItem *item = new DDocItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DDocItem());
 }
 
 void DScene::addDiaItem()
 {
 	qDebug() << "add Diamond";
-	DDiaItem *item = new DDiaItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DDiaItem());
 }
 
 void DScene::addEndItem()
 {
 	qDebug() << "add Start/End";
-	DEndItem *item = new DEndItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DEndItem());
 }
 
 void DScene::addPreItem()
 {
-	// qDebug() << "add TrapItem";
-	// DFInternalStoreItem *item = new DFInternalStoreItem();
-	// state = DConst::INSERT_SHAPE;
-	// modifiedShape = item;
-
-	// qDebug() << "add TrapItem";
-	// DFPrepareItem *item = new DFPrepareItem();
-	// state = DConst::INSERT_SHAPE;
-	// modifiedShape = item;
-
-	qDebug() << "add TrapItem";
-	DFProcessItem *item = new DFProcessItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	qDebug() << "add PreDefine";
+	prepareInsertItem(new DPreItem());
 }
 
 void DScene::addDFDocItem()
@@ -318,60 +295,22 @@ void DScene::addDFNodeItem()
 
 void DScene::addTrapItem()
 {
-	// qDebug() << "add TrapItem";
-	// DTrapItem *item = new DTrapItem();
-	// state = DConst::INSERT_SHAPE;
-	// modifiedShape = item;
-
 	qDebug() << "add TrapItem";
-	DFManualOperateItem *item = new DFManualOperateItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+	prepareInsertItem(new DTrapItem());
 }
 
 void DScene::addPolyLineItem()
 {
-    qDebug() << "add PolyLine";
-    DPolyLineItem *item = new DPolyLineItem();
-    state = DConst::INSERT_LINE;
-    modifiedShape = item;
+	qDebug() << "add PolyLine";
+	prepareInsertItem(new DPolyLineItem());
 }
 
 void DScene::combineSelected()
 {
-	// QList<QGraphicsItem*> items = selectedItems();
-	// int cnt = 0;
-	// for(QGraphicsItem* item : items)
-	// {
-	// 	if(item->parentItem() != nullptr) continue;
-	// 	cnt++;
-	// }
-	// if(cnt <= 1) return;
-
-	// DItemGroup* group = new DItemGroup();  //创建组合
-	// // group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	// addItem(group);      //添加到场景中
-
-	// for(QGraphicsItem* item : items)
-	// {
-	// 	if(item->parentItem() != nullptr) continue;
-	// 	group->addToGroup(item);
-	// }
-
-	// // group->setSelected(false);
 }
 
 void DScene::seperateSelected()
 {
-	// int cnt=selectedItems().count();
-	// if (cnt==1)
-	// {
-	// 	DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
-	// 	if(!group) return;
-	// 	destroyItemGroup(group);
-	// 	QList<QGraphicsItem*> items = this->items();
-	// 	// for(QGraphicsItem* item : items) item->setSelected(false);
-	// }
 }
 
 QList<QGraphicsItem *> DScene::getDelete()
@@ -494,6 +433,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	   || state == DConst::INSERT_TEXT)
 	{
 		event->accept();
+		modifiedShape->setSelected(true);
 		addItem(modifiedShape);
 		if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_TEXT)
 		{
@@ -622,18 +562,16 @@ void DScene::shot(){
     UndoManager::instance().shot();
 }
 
-void DScene::clear(){
-    QGraphicsScene::clear();
+void DScene::clear()
+{
+	QGraphicsScene::clear();
+
 	QGraphicsLineItem *line_h = new QGraphicsLineItem(-2000, 0, 2000, 0);
-	line_h->setZValue(DConst::LINE_Z_VALUE);
 	QGraphicsLineItem *line_v = new QGraphicsLineItem(0, -2000, 0, 2000);
-	line_v->setZValue(DConst::LINE_Z_VALUE);
 	addItem(line_h);
 	addItem(line_v);
-    // QGraphicsLineItem *line1 = addLine(-1000, 0, 1000, 0);
-    // line1->setZValue(DConst::LINE_Z_VALUE);
-    // QGraphicsLineItem *line2 = addLine(0, -1000, 0, 1000);
-    // line2->setZValue(DConst::LINE_Z_VALUE);
+	line_h->setVisible(false);
+	line_v->setVisible(false);
 }
 
 QList<DLineBase *> DScene::getSelectedLine()

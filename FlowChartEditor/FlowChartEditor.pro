@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     aboutuswindow.cpp \
     dabstractbase.cpp \
+    dcurveitem.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
     denditem.cpp \
@@ -19,16 +20,17 @@ SOURCES += \
     dfinddialog.cpp \
     dfinternalstoreitem.cpp \
     dfmanualoperateitem.cpp \
+    dfpredefineitem.cpp \
     dfnodeitem.cpp \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
+    dinfitem.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
-    dpreitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -52,6 +54,7 @@ HEADERS += \
     aboutuswindow.h \
     dabstractbase.h \
     dallitems.h \
+    dcurveitem.h \
     ddiaitem.h \
     dellitem.h \
     denditem.h \
@@ -60,16 +63,17 @@ HEADERS += \
     dfinddialog.h \
     dfinternalstoreitem.h \
     dfmanualoperateitem.h \
+    dfpredefineitem.h \
     dfnodeitem.h \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
+    dinfitem.h \
     ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
-    dpreitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \

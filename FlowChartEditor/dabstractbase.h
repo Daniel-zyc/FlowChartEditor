@@ -27,6 +27,14 @@ public:
 	// 绘制图形项，绘制顺序为 paintShape，paintSelected(被选中), paintMagPoint(显示磁吸点）
 	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
+	// 图形的类型判断
+	virtual bool isShape();
+	virtual bool isLine();
+	virtual bool isText();
+
+	virtual void setScale(qreal scl);
+	virtual void setRotation(qreal deg);
+
 protected:
 	// 被选中下多出的碰撞范围
 	virtual QPainterPath shapeSelected() const;

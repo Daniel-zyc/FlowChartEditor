@@ -10,8 +10,8 @@ DPolyLineItem::DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     endPoint = end;
     //重置调整点数量
     updatePolyLineType(); // 实时更新？
-    updateBeginMidPoint(line_type);
-    updateEndMidPoint(line_type);
+    updateBeginMidPoint();
+    updateEndMidPoint();
     modis.resize(modis_num);
     updatePosition();
 }
@@ -191,8 +191,8 @@ QPainterPath DPolyLineItem::shapeNormal() const
 void DPolyLineItem::updateLine()
 {
     updatePolyLineType();
-    updateBeginMidPoint(line_type);
-    updateEndMidPoint(line_type);
+    updateBeginMidPoint();
+    updateEndMidPoint();
     updateMidPoint(line_type);
     updateModiPoint();
     return;
@@ -296,36 +296,26 @@ int DPolyLineItem::getRelativePosition(QPointF cur,QPointF another)
     else return (another.y() > cur.y()) ? 3 : 4;
 }
 
-void DPolyLineItem::updateBeginMidPoint(int type)
+void DPolyLineItem::updateBeginMidPoint()
 {
     int direct = getPaintDirection();
-    switch(type)
-    {
-    case 4:
-        begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * direct + mid_x_shift * (direct ^ 1),
-                                 (beginPoint.y() + st_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-
-        break;
-    default:
-        begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * direct + mid_x_shift * (direct ^ 1),
-                                 (beginPoint.y() + st_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-        break;
+    begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * direct + mid_x_shift * (direct ^ 1),
+                             (beginPoint.y() + st_y_offset) * (direct ^ 1) + mid_y_shift * direct);
+    if(st_x_offset > 0 && begin_midPoint.x() < beginPoint.x() + st_x_offset) {
+        st_x_offset = begin_midPoint.x() - beginPoint.x();
+    } else if(st_x_offset < 0 && begin_midPoint.x() > beginPoint.x() + st_x_offset) {
+        st_x_offset = begin_midPoint.x() - beginPoint.x();
     }
 }
-void DPolyLineItem::updateEndMidPoint(int type)
+void DPolyLineItem::updateEndMidPoint()
 {
     int direct = getPaintDirection();
-    switch(type)
-    {
-    case 4:
-        end_midPoint = QPointF((endPoint.x() + ed_x_offset) * direct + mid_x_shift * (direct ^ 1),
-                               (endPoint.y() + ed_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-
-        break;
-    default:
-        end_midPoint = QPointF((endPoint.x() + ed_x_offset) * direct + mid_x_shift * (direct ^ 1),
-                               (endPoint.y() + ed_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-        break;
+    end_midPoint = QPointF((endPoint.x() + ed_x_offset) * direct + mid_x_shift * (direct ^ 1),
+                           (endPoint.y() + ed_y_offset) * (direct ^ 1) + mid_y_shift * direct);
+    if(ed_x_offset > 0 && end_midPoint.x() < endPoint.x() + ed_x_offset) {
+        ed_x_offset = end_midPoint.x() - endPoint.x();
+    } else if(ed_x_offset < 0 && end_midPoint.x() > endPoint.x() + ed_x_offset) {
+        ed_x_offset = end_midPoint.x() - endPoint.x();
     }
 }
 

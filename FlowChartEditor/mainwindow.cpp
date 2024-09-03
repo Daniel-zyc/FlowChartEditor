@@ -10,6 +10,7 @@
 #include "undomanager.h"
 #include "aboutuswindow.h"
 
+#include <QMessageBox>
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
@@ -75,10 +76,9 @@ MainWindow::MainWindow(QWidget *parent)
     scene->clear();
 
 	view = new DView(scene);
+	scene->setView(view);
 
-    inspector = new Inspector(this,scene,view);
-
-	view->setDragMode(QGraphicsView::RubberBandDrag);
+	inspector = new Inspector(this,scene,view);
 
     initUi();
 
@@ -102,7 +102,11 @@ void MainWindow::initUi()
     mainsplitter = new QSplitter(Qt::Horizontal, this);
     leftw = new QWidget();
     leftUpV = new QVBoxLayout(leftw);
-    leftGrid = new QGridLayout();
+    flowGrid = new QGridLayout();
+    primaryGrid = new QGridLayout();
+    primaryGroup = new QGroupBox("基本图形");
+    flowcGroup = new QGroupBox("流程图图形");
+    otherGroup = new QGroupBox("其他");
 
     rectBtn = new QPushButton();
     roundRectBtn = new QPushButton();
@@ -116,48 +120,72 @@ void MainWindow::initUi()
     triBtn = new QPushButton();
     preBtn = new QPushButton();
     endBtn = new QPushButton();
+    prepareBtn = new QPushButton();
+    storeBtn = new QPushButton();
 
-    rectBtn->setIcon(QPixmap(":/icon/rect.png"));
-    roundRectBtn->setIcon(QPixmap(":/icon/roundrect.png"));
-    ellipseBtn->setIcon(QPixmap(":/icon/ellipse.png"));
+    prectBtn = new QPushButton();
+    pellipseBtn = new QPushButton();
+    pparellgramBtn = new QPushButton();
+    ptrapBtn = new QPushButton();
+    prhomBtn = new QPushButton();
+    ptriBtn = new QPushButton();
+
+    rectBtn->setIcon(QPixmap(":/icon/flowchart/rect.png"));
+    roundRectBtn->setIcon(QPixmap(":/icon/flowchart/roundrect.png"));
+    ellipseBtn->setIcon(QPixmap(":/icon/flowchart/node.png"));
     lineBtn->setIcon(QPixmap(":/icon/line.png"));
-    parellgramBtn->setIcon(QPixmap(":/icon/parellgram.png"));
-    trapBtn->setIcon(QPixmap(":/icon/trapezoid.png"));
-    rhomBtn->setIcon(QPixmap(":/icon/rhombic.png"));
-    fileBtn->setIcon(QPixmap(":/icon/file.png"));
+    parellgramBtn->setIcon(QPixmap(":/icon/flowchart/parallgram.png"));
+    trapBtn->setIcon(QPixmap(":/icon/flowchart/manul.png"));
+    rhomBtn->setIcon(QPixmap(":/icon/flowchart/rhomb.png"));
+    fileBtn->setIcon(QPixmap(":/icon/flowchart/doc.png"));
     textBtn->setIcon(QPixmap(":/icon/text.png"));
-    triBtn->setIcon(QPixmap(":/icon/triangle.png"));
-    preBtn->setIcon(QPixmap(":/icon/predefined.png"));
-    endBtn->setIcon(QPixmap(":/icon/end.png"));
+    triBtn->setIcon(QPixmap(":/icon/flowchart/triangle.png"));
+    preBtn->setIcon(QPixmap(":/icon/flowchart/pre.png"));
+    endBtn->setIcon(QPixmap(":/icon/flowchart/teminate.png"));
+    prepareBtn->setIcon(QPixmap(":/icon/flowchart/prepare.png"));
+    storeBtn->setIcon(QPixmap(":/icon/flowchart/store.png"));
 
-    leftGrid->addWidget(rectBtn, 0, 0);
-    leftGrid->addWidget(roundRectBtn, 0, 1);
-    leftGrid->addWidget(ellipseBtn, 1, 0);
-    leftGrid->addWidget(lineBtn, 1, 1);
-    leftGrid->addWidget(parellgramBtn, 2, 0);
-    leftGrid->addWidget(trapBtn, 2, 1);
-    leftGrid->addWidget(rhomBtn, 3, 0);
-    leftGrid->addWidget(fileBtn, 3, 1);
-    leftGrid->addWidget(triBtn, 4, 0);
-    leftGrid->addWidget(textBtn, 4, 1);
-    leftGrid->addWidget(preBtn, 5, 0);
-    leftGrid->addWidget(endBtn, 5, 1);
+    prectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
+    pellipseBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
+    pparellgramBtn->setIcon(QPixmap(":/icon/primary/parallgram.png"));
+    ptrapBtn->setIcon(QPixmap(":/icon/primary/trapezoid.png"));
+    prhomBtn->setIcon(QPixmap(":/icon/primary/rhomb.png"));
+    ptriBtn->setIcon(QPixmap(":/icon/primary/triangle.png"));
 
-    leftUpV->addLayout(leftGrid);
+    flowGrid->addWidget(rectBtn, 0, 0);
+    flowGrid->addWidget(roundRectBtn, 0, 1);
+    flowGrid->addWidget(ellipseBtn, 0, 2);
+    flowGrid->addWidget(parellgramBtn, 1, 0);
+    flowGrid->addWidget(trapBtn, 1, 1);
+    flowGrid->addWidget(rhomBtn, 1, 2);
+    flowGrid->addWidget(fileBtn, 2, 0);
+    flowGrid->addWidget(triBtn, 2, 1);
+    flowGrid->addWidget(preBtn, 2, 2);
+    flowGrid->addWidget(endBtn, 3, 0);
+    flowGrid->addWidget(prepareBtn, 3, 1);
+    flowGrid->addWidget(storeBtn, 3, 2);
+
+    primaryGrid->addWidget(prectBtn, 0, 0);
+    primaryGrid->addWidget(pellipseBtn, 0, 1);
+    primaryGrid->addWidget(pparellgramBtn, 0, 2);
+    primaryGrid->addWidget(ptrapBtn, 1, 0);
+    primaryGrid->addWidget(prhomBtn, 1, 1);
+    primaryGrid->addWidget(ptriBtn, 1, 2);
+
+    primaryGroup->setLayout(primaryGrid);
+    flowcGroup->setLayout(flowGrid);
+    leftUpV->addWidget(primaryGroup);
+    leftUpV->addWidget(flowcGroup);
     leftw->setLayout(leftUpV);
 
-    bgGroup = new QGroupBox("背景选择");
-    QVBoxLayout *bgV = new QVBoxLayout();
-    blankBg = new QRadioButton("空白");
-    gridBg = new QRadioButton("网格");
-    dotBg = new QRadioButton("点状");
-    bgV->addWidget(blankBg);
-    bgV->addWidget(gridBg);
-    bgV->addWidget(dotBg);
-    bgGroup->setLayout(bgV);
-    blankBg->setChecked(true);
+    otherG = new QGridLayout();
+    otherG->addWidget(lineBtn, 0, 0);
+    otherG->addWidget(textBtn, 0, 1);
+    QLabel *noneLabel = new QLabel();
+    otherG->addWidget(noneLabel, 0, 2);
+    otherGroup->setLayout(otherG);
 
-    leftUpV->addWidget(bgGroup);
+    leftUpV->addWidget(otherGroup);
     leftUpV->addStretch();
 
     mainsplitter->addWidget(leftw);
@@ -168,10 +196,53 @@ void MainWindow::initUi()
     rightTab = new QTabWidget();
     rightTab->setMovable(true);
 
+    //背景样式表
+    blankBg = new QRadioButton("无背景");
+    gridBg = new QRadioButton("网格");
+    dotBg = new QRadioButton("点状");
+    blankBg->setChecked(true);
+
+    rightBgw = new QTreeWidget();
+    rightBgw->setColumnCount(2);
+    // rightBgw->setHeaderLabels({"背景选择", "", ""});
+    rightBgw->setHeaderHidden(true);
+    rightBgw->header()->setStretchLastSection(true);
+    rightBgw->setColumnWidth(0, 150);
+    colorTop = new QTreeWidgetItem(rightBgw);
+    patternTop = new QTreeWidgetItem(rightBgw);
+
+    colorTop->setText(0, "颜色");
+    patternTop->setText(0, "图案");
+
+    colorChild0 = new QTreeWidgetItem(colorTop);
+    colorChild0->setText(0, "纯色填充");
+    selectedColor = new QPushButton();
+    selectedColor->setIcon(QPixmap(":/icon/palette.png"));
+    rightBgw->setItemWidget(colorChild0, 1, selectedColor);
+
+    patternChild0 = new QTreeWidgetItem(patternTop);
+    patternChild1 = new QTreeWidgetItem(patternTop);
+    patternChild2 = new QTreeWidgetItem(patternTop);
+    patternChild3 = new QTreeWidgetItem(patternTop);
+
+    customizeBg = new QRadioButton("自定义图片填充");
+    repickBtn = new QPushButton("重选");
+
+    rightBgw->setItemWidget(patternChild0, 0, blankBg);
+    rightBgw->setItemWidget(patternChild1, 0, gridBg);
+    rightBgw->setItemWidget(patternChild2, 0, dotBg);
+    rightBgw->setItemWidget(patternChild3, 0, customizeBg);
+    rightBgw->setItemWidget(patternChild3, 1, repickBtn);
+
+    rightBgw->addTopLevelItem(colorTop);
+    rightBgw->addTopLevelItem(patternTop);
+
+    rightTab->addTab(rightBgw, "背景");
+
     //线条样式表
     rightLinew = new QWidget();
     confirm = new QPushButton("确认");
-    cancle = new QPushButton("取消");
+    cancle = new QPushButton("关闭");
     formright = new QFormLayout();
     formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
     // formright->setLabelAlignment(Qt::AlignLeft);
@@ -209,26 +280,6 @@ void MainWindow::initUi()
     rightLinew->setLayout(formright);
     // rightw->setVisible(false);
     rightTab->addTab(rightLinew, "线条");
-
-    //背景样式表
-    rightBgw = new QTreeWidget();
-    rightBgw->setColumnCount(3);
-    rightBgw->setHeaderLabels({"背景选择", "", ""});
-    colorTop = new QTreeWidgetItem(rightBgw);
-    patternTop = new QTreeWidgetItem(rightBgw);
-
-    colorTop->setText(0, "颜色");
-    patternTop->setText(0, "图案");
-
-    colorChild0 = new QTreeWidgetItem(colorTop);
-    colorChild0->setText(0, "纯色填充：");
-    selectedColor = new QPushButton();
-    rightBgw->setItemWidget(colorChild0, 1, selectedColor);
-
-    rightBgw->addTopLevelItem(colorTop);
-    rightBgw->addTopLevelItem(patternTop);
-
-    rightTab->addTab(rightBgw, "背景");
 
     rightTab->setVisible(false);
     mainsplitter->addWidget(rightTab);
@@ -475,19 +526,30 @@ void MainWindow::bindAction()
 	// connect(combinesc, SIGNAL(activated()), this, SLOT(combineSelected()));
 	// connect(seperatesc, SIGNAL(activated()), this, SLOT(seperateSelected()));
 
-    connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
+    connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addDFProcessItem);
     connect(lineBtn, &QPushButton::clicked, this, &MainWindow::addLine);
-    connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addRoundRect);
-    connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
+    connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addDFOptionalProcessItem);
+    connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addDFNodeItem);
     connect(textBtn, &QPushButton::clicked, this, &MainWindow::addText);
     connect(triBtn, &QPushButton::clicked, this, &MainWindow::addTri);
-    connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
-    connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDocShape);
-    connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
-    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
+    connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDFConditionItem);
+    connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDFDocItem);
+    connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addDFManualOperateItem);
+    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addDFEndItem);
     connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
-	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
+    connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addDFDataItem);
+    connect(storeBtn,  &QPushButton::clicked, this, &MainWindow::addDFInternalStoreItem);
+    connect(prepareBtn,  &QPushButton::clicked, this, &MainWindow::addDFPrepareItem);
+
+
+    connect(prectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
+    connect(pellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
+    connect(ptriBtn, &QPushButton::clicked, this, &MainWindow::addTri);
+    connect(prhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
+    connect(ptrapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+    connect(pparellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
     //折线button
+    //connect(polylineBtn, &QPushButton::clicked,this, &MainWindow::addPolyLine);
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
     connect(openTln, &QToolButton::clicked, this, &MainWindow::loadFile);
@@ -543,6 +605,27 @@ void MainWindow::bindAction()
     });
     connect(dotBg, &QRadioButton::toggled, this, [this](bool checked) {
         if(checked) setSceneBg(":/icon/dotBg.png");
+    });
+    connect(customizeBg, &QRadioButton::toggled, this, [this](bool checked) {
+        if(checked) {
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg"));
+            if(!fileName.isEmpty()) {
+                setSceneBg(fileName);
+            }else {
+                blankBg->setChecked(true);
+            }
+        }
+    });
+    connect(repickBtn, &QPushButton::clicked, this, [this](){
+        if(customizeBg->isChecked()) {
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg"));
+            if(!fileName.isEmpty()) setSceneBg(fileName);
+        }
+    });
+    connect(selectedColor, &QPushButton::clicked, this, [this](){
+        QColor color = QColorDialog::getColor(Qt::white, this);
+        if(color.isValid()) scene->setBackgroundBrush(QBrush(color));
+        blankBg->setChecked(true);
     });
 }
 
@@ -614,7 +697,7 @@ void MainWindow::addPre()
 }
 void MainWindow::addParallegram()
 {
-    scene->addParallegramItem();
+	scene->addParagramItem();
 }
 
 void MainWindow::addDocShape()
@@ -777,66 +860,50 @@ void MainWindow::selectTextFont()
 
 void MainWindow::rotateCW()
 {
-	if(scene->selectedItems().isEmpty())
-		view->rotateCW();
-	else
-		scene->rotateCW();
+	if(scene->selectedItems().isEmpty()) view->rotateCW();
+	else scene->rotateCW();
 }
 
 void MainWindow::rotateCCW()
 {
-	if(scene->selectedItems().isEmpty())
-		view->rotateCCW();
-	else
-		scene->rotateCCW();
+	if(scene->selectedItems().isEmpty()) view->rotateCCW();
+	else scene->rotateCCW();
 }
 
 void MainWindow::enlarge()
 {
-	if(scene->selectedItems().isEmpty())
-		view->enlarge();
-	else
-		scene->enlarge();
+	if(scene->selectedItems().isEmpty()) view->enlarge();
+	else scene->enlarge();
 }
 
 void MainWindow::shrink()
 {
-	if(scene->selectedItems().isEmpty())
-		view->shrink();
-	else
-		scene->shrink();
+	if(scene->selectedItems().isEmpty()) view->shrink();
+	else scene->shrink();
 }
 
 void MainWindow::moveLeft()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveLeft();
-	else
-		scene->moveLeft();
+	if(scene->selectedItems().isEmpty()) view->moveLeft();
+	else scene->moveLeft();
 }
 
 void MainWindow::moveRight()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveRight();
-	else
-		scene->moveRight();
+	if(scene->selectedItems().isEmpty()) view->moveRight();
+	else scene->moveRight();
 }
 
 void MainWindow::moveUp()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveUp();
-	else
-		scene->moveUp();
+	if(scene->selectedItems().isEmpty()) view->moveUp();
+	else scene->moveUp();
 }
 
 void MainWindow::moveDown()
 {
-	if(scene->selectedItems().isEmpty())
-		view->moveDown();
-	else
-		scene->moveDown();
+	if(scene->selectedItems().isEmpty()) view->moveDown();
+	else scene->moveDown();
 }
 
 void MainWindow::moveSelectedZUp(){

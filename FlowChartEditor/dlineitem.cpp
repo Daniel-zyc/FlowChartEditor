@@ -30,7 +30,8 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     painter->drawLine(QLineF(beginPoint, endPoint));
 	// 此处应加入根据不同箭头类型进行绘制的代码
-    drawArrow(painter, beginPoint, endPoint, endArrowType);
+    double angle = getAngle(beginPoint, endPoint);
+    drawArrow(painter, angle, endPoint, endArrowType);
 }
 
 void DLineItem::modiToPoint(QPointF p, int id)
