@@ -32,7 +32,8 @@ QSet<int> registeredTypes = QSet<int>(
 				DTextItemType,
 
 				// line
-				DLineItemType
+				DLineItemType,
+				DCurveLineItemType
 			});
 
 int SHOT_STATE = DConst::UNCHANGED;

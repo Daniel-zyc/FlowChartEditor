@@ -38,6 +38,7 @@ public:
 	virtual void unlinkMag(MagPoint *mp);
 
 	virtual void updatePosition();
+	virtual void updateSizePoint();
 
 	virtual void setBeginArrowType(int type);
 	virtual void setEndArrowType(int type);

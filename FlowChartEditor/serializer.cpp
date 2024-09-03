@@ -152,6 +152,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		DLineBase *line = nullptr;
 		switch(type) {
 			case DLineItemType: line = new DLineItem(); break;
+			case DCurveLineItemType: line = new DCurveLineItem(); break;
 		}
 		if(!line || !line->deserialize(in))
 		{

@@ -171,11 +171,16 @@ void DLineBase::updatePosition()
 {
 	if(beginMag) beginPoint = beginMag->mapToItem(this);
 	if(endMag) endPoint = endMag->mapToItem(this);
-	sizes[DConst::ST - 1] = beginPoint;
-	sizes[DConst::ED - 1] = endPoint;
+	updateSizePoint();
 	prepareGeometryChange();
 	updateLine();
 	update();
+}
+
+void DLineBase::updateSizePoint()
+{
+	sizes[DConst::ST - 1] = beginPoint;
+	sizes[DConst::ED - 1] = endPoint;
 }
 
 void DLineBase::setBeginArrowType(int type)
@@ -295,6 +300,7 @@ bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	linkEnd(Serializer::instance().ptrToMag[endPtr]);
 
 	in >> beginArrowType >> endArrowType;
-    updatePosition();
+	updateSizePoint();
+
 	return true;
 }

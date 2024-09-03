@@ -8,7 +8,6 @@ DLineItem::DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 {
 	beginPoint = begin; endPoint = end;
 	updateAll();
-	updatePosition();
 }
 
 QRectF DLineItem::boundingRect() const
@@ -40,11 +39,6 @@ QPainterPath DLineItem::shapeNormal() const
 	return path;
 }
 
-void DLineItem::updateAll()
-{
-	updatePath();
-}
-
 void DLineItem::updateLine()
 {
 	updateAll();
@@ -54,13 +48,19 @@ void DLineItem::updatePath()
 {
 	path.clear();
 	QLineF vec(QPointF{0, 0}, endPoint - beginPoint);
-	vec.setLength(qMax(1.0 * pen().width(), sizePointRadius));
+	vec.setLength(qMax(pen().widthF(), sizePointRadius));
 	vec = vec.normalVector();
 	QPointF dir = vec.p2();
 	QPolygonF poly;
 	poly << (beginPoint + dir) << (endPoint + dir)
 		 << (endPoint - dir) << (beginPoint + dir);
 	path.addPolygon(poly);
+}
+
+void DLineItem::updateAll()
+{
+	updateSizePoint();
+	updatePath();
 }
 
 //================================
@@ -72,6 +72,7 @@ void DLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 
 bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
-	return DLineBase::deserialize(in, fa);
-	updatePosition();
+	if(!DLineBase::deserialize(in, fa)) return false;
+	updateAll();
+	return true;
 }
