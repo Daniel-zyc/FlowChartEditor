@@ -76,6 +76,9 @@ public:
 	void addDFPrepareItem();
 	void addDFProcessItem();
 	void addDFOptionalProcessItem();
+	void addDFConditionItem();
+	void addDFDataItem();
+	void addDFNodeItem();
 
 	void combineSelected();
 	void seperateSelected();

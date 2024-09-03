@@ -26,6 +26,9 @@
 #include "dfprepareitem.h"
 #include "dfprocessitem.h"
 #include "dfoptionalprocessitem.h"
+#include "dfconditionitem.h"
+#include "dfdataitem.h"
+#include "dfnodeitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

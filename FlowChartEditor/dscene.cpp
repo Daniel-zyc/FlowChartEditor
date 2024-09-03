@@ -298,6 +298,24 @@ void DScene::addDFOptionalProcessItem()
 	prepareInsertItem(new DFOptionalProcessItem());
 }
 
+void DScene::addDFConditionItem()
+{
+	qDebug() << "add DFConditionItem";
+	prepareInsertItem(new DFConditionItem());
+}
+
+void DScene::addDFDataItem()
+{
+	qDebug() << "add DFDataItem";
+	prepareInsertItem(new DFDataItem());
+}
+
+void DScene::addDFNodeItem()
+{
+	qDebug() << "add DFNodeItem";
+	prepareInsertItem(new DFNodeItem());
+}
+
 void DScene::addTrapItem()
 {
 	// qDebug() << "add TrapItem";
