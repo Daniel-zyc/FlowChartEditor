@@ -2,33 +2,28 @@
 
 #include "dpolygonbase.h"
 
-#include <QPainter>
-#include <QPolygonF>
-#include <QRectF>
-
-class DDiaItem : public DPolygonBase
+class DFManualOperateItem : public DPolygonBase
 {
 public:
-	enum { Type = DFDiaItemType };
-	DDiaItem(QGraphicsItem *parent = nullptr);
-	DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFManualOperateItemType };
+	DFManualOperateItem(QGraphicsItem *parent = nullptr);
+	DFManualOperateItem(qreal w, qreal h, QGraphicsItem* parent = nullptr);
 
 public:
 	int type() const override { return Type; }
 
-	void modiToPoint(QPointF p, int id) override;
+	void modiToPoint(QPointF, int id) override;
 
 	void updateMagPoint() override;
 	void updateModiPoint() override;
-
-    void check();
 
 public:
 	/**
 	 * @brief serialize
 	 * @param out
-	 * 序列化：DShapeBase -> rect
+	 * 序列化：DShapeBase -> topWidth -> bottomWidth -> height -> c -> rect
 	 */
 	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
 	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };
+

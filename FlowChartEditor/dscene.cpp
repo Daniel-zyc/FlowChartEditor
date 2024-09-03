@@ -225,8 +225,13 @@ void DScene::addPreItem()
 
 void DScene::addTrapItem()
 {
+	// qDebug() << "add TrapItem";
+	// DTrapItem *item = new DTrapItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+
 	qDebug() << "add TrapItem";
-	DTrapItem *item = new DTrapItem();
+	DFManualOperateItem *item = new DFManualOperateItem();
 	state = DConst::INSERT_SHAPE;
 	modifiedShape = item;
 }
@@ -241,39 +246,39 @@ void DScene::addPolyLineItem()
 
 void DScene::combineSelected()
 {
-	QList<QGraphicsItem*> items = selectedItems();
-	int cnt = 0;
-	for(QGraphicsItem* item : items)
-	{
-		if(item->parentItem() != nullptr) continue;
-		cnt++;
-	}
-	if(cnt <= 1) return;
+	// QList<QGraphicsItem*> items = selectedItems();
+	// int cnt = 0;
+	// for(QGraphicsItem* item : items)
+	// {
+	// 	if(item->parentItem() != nullptr) continue;
+	// 	cnt++;
+	// }
+	// if(cnt <= 1) return;
 
-	DItemGroup* group = new DItemGroup();  //创建组合
-	// group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	addItem(group);      //添加到场景中
+	// DItemGroup* group = new DItemGroup();  //创建组合
+	// // group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	// addItem(group);      //添加到场景中
 
-	for(QGraphicsItem* item : items)
-	{
-		if(item->parentItem() != nullptr) continue;
-		group->addToGroup(item);
-	}
+	// for(QGraphicsItem* item : items)
+	// {
+	// 	if(item->parentItem() != nullptr) continue;
+	// 	group->addToGroup(item);
+	// }
 
-	// group->setSelected(false);
+	// // group->setSelected(false);
 }
 
 void DScene::seperateSelected()
 {
-	int cnt=selectedItems().count();
-	if (cnt==1)
-	{
-		DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
-		if(!group) return;
-		destroyItemGroup(group);
-		QList<QGraphicsItem*> items = this->items();
-		// for(QGraphicsItem* item : items) item->setSelected(false);
-	}
+	// int cnt=selectedItems().count();
+	// if (cnt==1)
+	// {
+	// 	DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
+	// 	if(!group) return;
+	// 	destroyItemGroup(group);
+	// 	QList<QGraphicsItem*> items = this->items();
+	// 	// for(QGraphicsItem* item : items) item->setSelected(false);
+	// }
 }
 
 QList<QGraphicsItem *> DScene::getDelete()

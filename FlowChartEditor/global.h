@@ -49,23 +49,27 @@ const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
 enum UserTypes
 {
 	DAbstractBaseType = QGraphicsItem::UserType + 1,
-	DShapeBaseType = QGraphicsItem::UserType + 1,
-	DLineBaseType = QGraphicsItem::UserType + 2,
-	DTextBaseType = QGraphicsItem::UserType + 3,
-	DPolygonBaseType = QGraphicsItem::UserType + 4,
-	DTextItemType = QGraphicsItem::UserType + 5,
-	DRectItemType = QGraphicsItem::UserType + 6,
-	DEllItemType = QGraphicsItem::UserType + 7,
-	DRoundRectItemType = QGraphicsItem::UserType + 8,
-	DLineItemType = QGraphicsItem::UserType + 9,
-	DTriItemType = QGraphicsItem::UserType + 10,
-	DParallegramItemType = QGraphicsItem::UserType + 11,
-	DDocItemType = QGraphicsItem::UserType + 12,
-	DDiaItemType = QGraphicsItem::UserType + 13,
-	DTrapItemType = QGraphicsItem::UserType + 14,
-    DItemGroupType = QGraphicsItem::UserType + 15,
-    DEndItemType = QGraphicsItem::UserType + 16,
-    DPreItemType = QGraphicsItem::UserType + 17
+	DShapeBaseType = QGraphicsItem::UserType + 2,
+	DLineBaseType = QGraphicsItem::UserType + 3,
+	DTextBaseType = QGraphicsItem::UserType + 4,
+	DPolygonBaseType = QGraphicsItem::UserType + 5,
+
+	DTextItemType = QGraphicsItem::UserType + 40,
+
+	DRectItemType = QGraphicsItem::UserType + 100,
+	DEllItemType = QGraphicsItem::UserType + 101,
+	DRoundRectItemType = QGraphicsItem::UserType + 102,
+	DTriItemType = QGraphicsItem::UserType + 103,
+	DParallegramItemType = QGraphicsItem::UserType + 104,
+	DTrapItemType = QGraphicsItem::UserType + 105,
+
+	DFEndItemType = QGraphicsItem::UserType + 200,
+	DFPreItemType = QGraphicsItem::UserType + 201,
+	DFDocItemType = QGraphicsItem::UserType + 202,
+	DFDiaItemType = QGraphicsItem::UserType + 203,
+	DFManualOperateItemType = QGraphicsItem::UserType + 204,
+
+	DLineItemType = QGraphicsItem::UserType + 300
 };
 
 // 常量
