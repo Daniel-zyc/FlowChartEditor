@@ -43,6 +43,10 @@ private:
 	void createToolBar();
 	void bindAction();
     void initUi();
+    void initleftUi();
+    void initrightUi();
+    void connectLeft();
+    void connectRight();
 
 private slots:
     void check();
@@ -75,7 +79,7 @@ private slots:
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
-    void changeLineStyle();
+    void changeLineColor(QColor color);
     void setSceneBg(QString path);
 
     QSet<DTextBase *> getTextBases();
@@ -147,12 +151,14 @@ private:
     QWidget *leftw;
     QGridLayout *flowGrid;
     QGridLayout *primaryGrid;
-    QGridLayout *otherG;
+    QGridLayout *lineGrid;
+    QGridLayout *textGrid;
     QVBoxLayout *leftUpV;
 
     QGroupBox *primaryGroup;
     QGroupBox *flowcGroup;
-    QGroupBox *otherGroup;
+    QGroupBox *lineGroup;
+    QGroupBox *textGroup;
     QPushButton *rectBtn;
     QPushButton *roundRectBtn;
     QPushButton *ellipseBtn;
@@ -167,6 +173,7 @@ private:
     QPushButton *preBtn;
     QPushButton *prepareBtn;
     QPushButton *storeBtn;
+    QPushButton *polyLineBtn;
 
     QPushButton *prectBtn;
     QPushButton *pellipseBtn;
@@ -184,6 +191,10 @@ private:
     QComboBox *lineType;
     QComboBox *arrowType;
     QDoubleSpinBox *linebound;
+    QPushButton *lineConfirm;
+    QPushButton *arrowConfirm;
+    QPushButton *lineboundConfirm;
+    QPushButton *linecolor;
 
     QToolButton *createTln;
     QToolButton *openTln;

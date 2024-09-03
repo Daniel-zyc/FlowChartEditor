@@ -8,6 +8,8 @@
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
 
+extern int PASTE_NUM;
+
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 

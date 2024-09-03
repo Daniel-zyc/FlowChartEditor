@@ -105,12 +105,13 @@ public:
 	void setMenu(QMenu *m) { menu = m; }
 
     void clear();
-    void drawItems(QList<QGraphicsItem*> items);
+    void dDrawItems(QList<QGraphicsItem*> items);
 
     QList<DLineBase*> getSelectedLine();
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
     void changeLineWidth(double width);
+    void changeLineColor(QColor color);
     void setBg(QString path);
 
 	void setView(DView *v) { view = v; }

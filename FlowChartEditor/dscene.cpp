@@ -412,6 +412,18 @@ void DScene::changeLineWidth(double width)
     }
 }
 
+void DScene::changeLineColor(QColor color)
+{
+    qDebug() << "change Line Color";
+    QList<DLineBase*> lines = getSelectedLine();
+
+    for(DLineBase *line : lines) {
+        QPen npen = line->pen();
+        npen.setColor(color);
+        line->setPen(npen);
+    }
+}
+
 void DScene::setBg(QString path)
 {
     QPixmap bg(path);
@@ -589,13 +601,14 @@ QList<DLineBase *> DScene::getSelectedLine()
     return lines;
 }
 
-void DScene::drawItems(QList<QGraphicsItem*> items){
+void DScene::dDrawItems(QList<QGraphicsItem*> items){
     for(QGraphicsItem * item : items)
         if(item->parentItem() == nullptr)
             addItem(item);
 }
 
 void DScene::copySelectedItems(){
+    PASTE_NUM = 1;
     copyData.clear();
     QDataStream out(&copyData,QIODevice::WriteOnly);
 	Serializer::instance().serializeItems(out,this->selectedItems());
@@ -606,5 +619,5 @@ void DScene::pasteItems(){
     QDataStream in(&copyData,QIODevice::ReadOnly);
 	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
     DTool::moveItems(items);
-    drawItems(items);
+    dDrawItems(items);
 }
