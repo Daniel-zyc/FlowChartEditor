@@ -5,7 +5,7 @@
 class DFInternalStoreItem : public DShapeBase
 {
 public:
-	enum { Type = DRectItemType };
+	enum { Type = DFInternalStoreItemType };
 	DFInternalStoreItem(QGraphicsItem *parent = nullptr);
 	DFInternalStoreItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
