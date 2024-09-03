@@ -168,4 +168,7 @@ private:
     QTreeWidget *rightBgw;
     QTreeWidgetItem *colorTop;
     QTreeWidgetItem *patternTop;
+
+    QPushButton *selectedColor;
+    QTreeWidgetItem *colorChild0;
 };
