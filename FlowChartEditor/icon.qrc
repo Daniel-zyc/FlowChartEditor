@@ -53,5 +53,6 @@
         <file>icon/primary/triangle.png</file>
         <file>icon/flowchart/node.png</file>
         <file>icon/polyLine.png</file>
+        <file>icon/palette1.png</file>
     </qresource>
 </RCC>

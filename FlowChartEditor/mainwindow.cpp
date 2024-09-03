@@ -221,6 +221,8 @@ void MainWindow::initrightUi()
     //样式表
     rightTab = new QTabWidget();
     rightTab->setMovable(true);
+    rightTab->setMinimumWidth(230);
+    rightTab->setMaximumWidth(320);
 
     //背景样式表
     blankBg = new QRadioButton("无背景");
@@ -243,7 +245,8 @@ void MainWindow::initrightUi()
     colorChild0 = new QTreeWidgetItem(colorTop);
     colorChild0->setText(0, "纯色填充");
     selectedColor = new QPushButton();
-    selectedColor->setIcon(QPixmap(":/icon/palette.png"));
+    setColorIcon(selectedColor);
+    // selectedColor->setIcon(QPixmap(":/icon/palette.png"));
     rightBgw->setItemWidget(colorChild0, 1, selectedColor);
 
     patternChild0 = new QTreeWidgetItem(patternTop);
@@ -265,8 +268,48 @@ void MainWindow::initrightUi()
 
     rightTab->addTab(rightBgw, "背景");
 
-    //颜色样式表
+    //形状样式表
+    rightShapew = new QWidget();
+    rightShapef = new QFormLayout();
+    QHBoxLayout *frameH = new QHBoxLayout();
+    QHBoxLayout *fillH = new QHBoxLayout();
+    frameColor = new QPushButton();
+    fillColor = new QPushButton();
 
+    setColorIcon(frameColor);
+    setColorIcon(fillColor);
+
+    frameH->addStretch();
+    frameH->addWidget(frameColor);
+    fillH->addStretch();
+    fillH->addWidget(fillColor);
+
+    rightShapef->addRow("边框：", frameH);
+    rightShapef->addRow("填充：", fillH);
+    rightShapew->setLayout(rightShapef);
+
+    rightTab->addTab(rightShapew, "形状");
+
+    //文本样式表
+    rightFontw = new QWidget();
+    rightFontf = new QFormLayout();
+    QHBoxLayout *colorH = new QHBoxLayout();
+    QHBoxLayout *fontH = new QHBoxLayout();
+    textColor = new QPushButton();
+    setColorIcon(textColor);
+    textFont = new QPushButton("字体");
+    textFont->setFixedWidth(100);
+
+    colorH->addStretch();
+    colorH->addWidget(textColor);
+    fontH->addStretch();
+    fontH->addWidget(textFont);
+
+    rightFontf->addRow("文本颜色：", colorH);
+    rightFontf->addRow("文本字体：", fontH);
+
+    rightFontw->setLayout(rightFontf);
+    rightTab->addTab(rightFontw, "文本");
 
     //线条样式表
     rightLinew = new QWidget();
@@ -277,7 +320,13 @@ void MainWindow::initrightUi()
     arrowConfirm = new QPushButton("确认");
     lineboundConfirm  = new QPushButton("确认");
     linecolor  = new QPushButton();
-    linecolor->setIcon(QPixmap(":/icon/palette.png"));
+
+    lineConfirm->setFixedWidth(50);
+    arrowConfirm->setFixedWidth(50);
+    lineboundConfirm->setFixedWidth(50);
+    setColorIcon(linecolor);
+    // linecolor->setIcon(QPixmap(":/icon/palette.png"));
+    // linecolor->setIconSize(linecolor->size());
     formright = new QFormLayout();
     formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
     // formright->setLabelAlignment(Qt::AlignLeft);
@@ -286,7 +335,7 @@ void MainWindow::initrightUi()
     lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
     lineType->addItem(QIcon(":/icon/dashLine.png"), "短划线");
     lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
-    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线        ");
+    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
     lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
     lineH->addWidget(lineType);
     lineH->addWidget(lineConfirm);
@@ -396,7 +445,7 @@ void MainWindow::connectRight()
     });
     connect(customizeBg, &QRadioButton::toggled, this, [this](bool checked) {
         if(checked) {
-            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg"));
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg *.bmp"));
             if(!fileName.isEmpty()) {
                 setSceneBg(fileName);
             }else {
@@ -445,6 +494,10 @@ void MainWindow::connectRight()
         QColor color = QColorDialog::getColor(Qt::white, this);
         scene->changeLineColor(color);
     });
+    connect(frameColor, &QPushButton::clicked, this, &MainWindow::selectFrameCol);
+    connect(fillColor, &QPushButton::clicked, this, &MainWindow::selectFillCol);
+    connect(textColor, &QPushButton::clicked, this, &MainWindow::selectTextCol);
+    connect(textFont, &QPushButton::clicked, this, &MainWindow::selectTextFont);
 }
 
 void MainWindow::createMenu()
@@ -789,8 +842,6 @@ void MainWindow::changeLineColor(QColor color)
     scene->changeLineColor(color);
 }
 
-
-
 void MainWindow::setSceneBg(QString path)
 {
     scene->setBg(path);
@@ -827,9 +878,6 @@ void MainWindow::selectFrameCol()
     for(QGraphicsItem *item : items) {
         DLineItem *line = dynamic_cast<DLineItem *>(item);
         if(line != nullptr) {
-            QPen npen = line->pen();
-            npen.setColor(color);
-            line->setPen(npen);
             continue;
         }
         DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
