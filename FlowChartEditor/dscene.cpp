@@ -285,6 +285,13 @@ void DScene::addLineItem()
 	qDebug() << "add line";
 	prepareInsertItem(new DLineItem());
 }
+void DScene::addManualinItem()
+{
+    qDebug() << "add ManualinItem";
+    DFManualinputItem *item = new DFManualinputItem();
+    state = DConst::INSERT_SHAPE;
+    modifiedShape = item;
+}
 
 void DScene::addPolyLineItem()
 {

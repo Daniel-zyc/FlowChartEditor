@@ -84,6 +84,7 @@ public:
 	void addDFConditionItem();
 	void addDFDataItem();
 	void addDFNodeItem();
+    void addManualinItem();
 	void addDFPredefineItem();
 
 	// 插入文本框

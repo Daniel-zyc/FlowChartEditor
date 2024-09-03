@@ -172,6 +172,7 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
+ //   QPushButton *manualinBtn;
     QPushButton *prepareBtn;
     QPushButton *storeBtn;
     QPushButton *polyLineBtn;

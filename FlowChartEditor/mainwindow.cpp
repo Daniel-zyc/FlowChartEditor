@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actAddTrap);
     m->addAction(ui->actAddPrede);
     m->addAction(ui->actAddEnd);
+    m->addAction(ui->actAddManualinput);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
@@ -136,6 +137,7 @@ void MainWindow::initleftUi()
     triBtn = new QPushButton();
     preBtn = new QPushButton();
     endBtn = new QPushButton();
+    manualinBtn = new QPushButton();
     prepareBtn = new QPushButton();
     storeBtn = new QPushButton();
     polyLineBtn = new QPushButton();
@@ -622,14 +624,15 @@ void MainWindow::bindAction()
 	connect(ui->actAddRoundRect, SIGNAL(triggered(bool)), this, SLOT(addRoundRect()));
 	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
 	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
-	connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
-	connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
-	connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
-	connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
-	connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
-	connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
-	connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDFDocItem()));
-	connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
+    connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
+    connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
+    connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
+    connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
+    connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
+    connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
+    connect(ui->actAddManualinput, SIGNAL(triggered(bool)), this, SLOT(addManualin()));
+    connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
+    connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
     connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
         rightTab->setVisible(true);
