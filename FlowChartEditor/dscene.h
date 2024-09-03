@@ -117,6 +117,9 @@ public:
 	void changeLineWidth(double width);
 	void changeLineColor(QColor color);
 	void setBg(QString path);
+    void changeItemRot();
+    void changeItemScale();
+
 
 	void setView(DView *v) { view = v; }
 

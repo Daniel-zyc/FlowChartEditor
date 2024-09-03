@@ -88,6 +88,8 @@ private slots:
                                   "}");
         button->setFixedWidth(100);
     };
+    void changeItemRot();
+    void changeItemScale();
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -192,16 +194,11 @@ private:
 
     QTabWidget *rightTab;
     QWidget *rightLinew;
-    QPushButton *confirm;
-    QPushButton *cancle;
     QFormLayout *formright;
     QHBoxLayout *rbtnLayout;
     QComboBox *lineType;
     QComboBox *arrowType;
     QDoubleSpinBox *linebound;
-    QPushButton *lineConfirm;
-    QPushButton *arrowConfirm;
-    QPushButton *lineboundConfirm;
     QPushButton *linecolor;
 
     QToolButton *createTln;
@@ -210,26 +207,23 @@ private:
     QToolButton *saveSvgTln;
 
     QGroupBox *bgGroup;
+    QRadioButton *colorBg;
     QRadioButton *blankBg;
     QRadioButton *gridBg;
     QRadioButton *dotBg;
-
-    QTreeWidget *rightBgw;
-    QTreeWidgetItem *colorTop;
-    QTreeWidgetItem *patternTop;
-    QPushButton *selectedColor;
-    QTreeWidgetItem *colorChild0;
-    QTreeWidgetItem *patternChild0;
-    QTreeWidgetItem *patternChild1;
-    QTreeWidgetItem *patternChild2;
-    QTreeWidgetItem *patternChild3;
     QRadioButton *customizeBg;
-    QPushButton *repickBtn;
+
+    QWidget *rightBgw;
+    QFormLayout *rightBgf;
+    QPushButton *reColorBtn;
+    QPushButton *reFileBtn;
 
     QWidget *rightShapew;
     QFormLayout *rightShapef;
     QPushButton *frameColor;
     QPushButton *fillColor;
+    QDoubleSpinBox *rotationBox;
+    QDoubleSpinBox *zoomBox;
 
     QWidget *rightFontw;
     QFormLayout *rightFontf;

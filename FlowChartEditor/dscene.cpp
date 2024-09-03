@@ -423,6 +423,16 @@ void DScene::setBg(QString path)
     setBackgroundBrush(bg);
 }
 
+void DScene::changeItemRot()
+{
+
+}
+
+void DScene::changeItemScale()
+{
+
+}
+
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() != Qt::LeftButton)
