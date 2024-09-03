@@ -163,12 +163,35 @@ void MainWindow::initleftUi()
     storeBtn->setIcon(QPixmap(":/icon/flowchart/store.png"));
     polyLineBtn->setIcon(QPixmap(":icon/polyLine.png"));
 
-	addRectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
-	addEllBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
-	addParagramBtn->setIcon(QPixmap(":/icon/primary/parallgram.png"));
-	addTrapBtn->setIcon(QPixmap(":/icon/primary/trapezoid.png"));
-	addDiaBtn->setIcon(QPixmap(":/icon/primary/rhomb.png"));
-	addTriBtn->setIcon(QPixmap(":/icon/primary/triangle.png"));
+    rectBtn->setToolTip("过程");
+    roundRectBtn->setToolTip("可选过程");
+    ellipseBtn->setToolTip("接点");
+    lineBtn->setToolTip("直线");
+    parellgramBtn->setToolTip("数据");
+    trapBtn->setToolTip("手动操作");
+    rhomBtn->setToolTip("决策");
+    fileBtn->setToolTip("文档");
+    textBtn->setToolTip("文本框");
+    triBtn->setToolTip("摘录");
+    preBtn->setToolTip("预定义过程");
+    endBtn->setToolTip("终止");
+    prepareBtn->setToolTip("准备");
+    storeBtn->setToolTip("内部贮存");
+    polyLineBtn->setToolTip("折线");
+
+    addRectBtn->setToolTip("矩形");
+    addEllBtn->setToolTip("椭圆");
+    addParagramBtn->setToolTip("平行四边形");
+    addTrapBtn->setToolTip("梯形");
+    addDiaBtn->setToolTip("菱形");
+    addTriBtn->setToolTip("三角形");
+
+    addRectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
+    addEllBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
+    addParagramBtn->setIcon(QPixmap(":/icon/primary/parallgram.png"));
+    addTrapBtn->setIcon(QPixmap(":/icon/primary/trapezoid.png"));
+    addDiaBtn->setIcon(QPixmap(":/icon/primary/rhomb.png"));
+    addTriBtn->setIcon(QPixmap(":/icon/primary/triangle.png"));
 
     flowGrid->addWidget(rectBtn, 0, 0);
     flowGrid->addWidget(roundRectBtn, 0, 1);
