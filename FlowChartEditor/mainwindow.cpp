@@ -137,7 +137,6 @@ void MainWindow::initleftUi()
     triBtn = new QPushButton();
     preBtn = new QPushButton();
     endBtn = new QPushButton();
-    manualinBtn = new QPushButton();
     prepareBtn = new QPushButton();
     storeBtn = new QPushButton();
     polyLineBtn = new QPushButton();
