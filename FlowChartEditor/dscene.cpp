@@ -213,14 +213,10 @@ void DScene::addEndItem()
 
 void DScene::addPreItem()
 {
-	// qDebug() << "add Document";
-	// DEndItem *item = new DEndItem();
-	// state = DConst::INSERT_SHAPE;
-	// modifiedShape = item;
- //    DTrapItem *item = new DTrapItem(100,80,80);
- //    item->textItem = new DTextItem(50, 50, "", item);
- //    item->textItem->deleteMagPoint();
- //    addItem(item);
+	qDebug() << "add TrapItem";
+	DFInternalStoreItem *item = new DFInternalStoreItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addTrapItem()

@@ -22,6 +22,7 @@
 #include "ddiaitem.h"
 #include "denditem.h"
 #include "dfmanualoperateitem.h"
+#include "dfinternalstoreitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

@@ -2,12 +2,12 @@
 
 #include "dshapebase.h"
 
-class DRectItem : public DShapeBase
+class DFInternalStoreItem : public DShapeBase
 {
 public:
 	enum { Type = DRectItemType };
-	DRectItem(QGraphicsItem *parent = nullptr);
-	DRectItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	DFInternalStoreItem(QGraphicsItem *parent = nullptr);
+	DFInternalStoreItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }
@@ -20,9 +20,11 @@ public:
 
 	void updateAll();
 	void updateMagPoint();
+	void updateModiPoint();
 
 protected:
 	QRectF rect = QRectF(0, 0, 0, 0);
+	qreal ratiox = 0.1, ratioy = 0.1;
 
 public:
 	/**

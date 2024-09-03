@@ -15,6 +15,7 @@ SOURCES += \
     dellitem.cpp \
     denditem.cpp \
     dfinddialog.cpp \
+    dfinternalstoreitem.cpp \
     dfmanualoperateitem.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     dellitem.h \
     denditem.h \
     dfinddialog.h \
+    dfinternalstoreitem.h \
     dfmanualoperateitem.h \
     ditemgroup.h \
     dlinebase.h \
