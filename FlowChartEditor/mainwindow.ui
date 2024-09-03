@@ -679,6 +679,17 @@
     <string>检查</string>
    </property>
   </action>
+  <action name="actAddManualinput">
+   <property name="text">
+    <string>手动输入图形</string>
+   </property>
+   <property name="toolTip">
+    <string>手动输入图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
