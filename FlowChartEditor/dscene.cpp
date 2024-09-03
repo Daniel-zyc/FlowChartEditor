@@ -572,3 +572,15 @@ void DScene::pasteItems(){
     DTool::moveItems(items);
     drawItems(items);
 }
+
+// 菱形判定至少有一个输入两个输出
+void DScene::check(){
+    QList<QGraphicsItem * > items = this->items();
+    for(QGraphicsItem * item : items){
+        if(dynamic_cast<DDiaItem*>(item)){
+            qDebug() << "找到一个菱形";
+            DDiaItem *diaItem = dynamic_cast<DDiaItem*>(item);
+            diaItem->check();
+        }
+    }
+}

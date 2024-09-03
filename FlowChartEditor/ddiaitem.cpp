@@ -48,3 +48,16 @@ bool DDiaItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 	updateAll();
 	return true;
 }
+void DDiaItem::check(){
+    auto result = getLinedArrowType();
+    int in,out,none;
+    in = std::get<0>(result);
+    out = std::get<1>(result);
+    none =  std::get<2>(result);
+    qDebug() << "进入菱形:" << in;
+    qDebug() << "输出菱形:" << out;
+    qDebug() << "无输入输出:" << none;
+    if(in < 1) qDebug() << "输入不足1";
+    if(out < 2) qDebug() << "输出不足2";
+    qDebug() << none << "个连线未指定类型";
+}

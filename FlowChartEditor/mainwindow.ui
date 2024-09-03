@@ -53,6 +53,7 @@
      <string>帮助</string>
     </property>
     <addaction name="actAboutUs"/>
+    <addaction name="actCheck"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
@@ -673,6 +674,11 @@
   <action name="actAboutUs">
    <property name="text">
     <string>关于我们</string>
+   </property>
+  </action>
+  <action name="actCheck">
+   <property name="text">
+    <string>检查</string>
    </property>
   </action>
  </widget>

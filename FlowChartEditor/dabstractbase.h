@@ -76,6 +76,9 @@ public:
 	virtual void updateAllLinkLines();
 	virtual void unLinkAllLines();
 
+    // 获取图形连线的类型，in，out，none
+    virtual std::tuple<int,int,int> getLinedArrowType();
+
 protected:
 	// 检查是否与调整点碰撞，p 为 item 坐标系下
 	virtual int checkModiPoint(QPointF p) const;
