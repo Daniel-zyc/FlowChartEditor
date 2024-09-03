@@ -100,8 +100,6 @@ public:
     void changeLineWidth(double width);
     void setBg(QString path);
 
-    void check();
-
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

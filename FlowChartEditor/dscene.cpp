@@ -93,7 +93,10 @@ void DScene::moveSelectedZMaxUp(){
         colItems.append(item->collidingItems());
     }
     for(QGraphicsItem * item : colItems)
-        if(!S.contains(item) && item->zValue() > colMax && item->parentItem() == nullptr)
+        if(!S.contains(item)
+            && item->zValue() > colMax
+            && item->parentItem() == nullptr
+            && dynamic_cast<DAbstractBase*>(item) != nullptr)
             colMax = item->zValue();
     if(selectedMin > colMax) return;
     qreal dis = colMax - selectedMin + 1;
@@ -116,7 +119,10 @@ void DScene::moveSelectedZMaxDown(){
         colItems.append(item->collidingItems());
     }
     for(QGraphicsItem * item : colItems)
-        if(!S.contains(item) && item->zValue() < colMin && item->parentItem() == nullptr){
+        if(!S.contains(item)
+            && item->zValue() < colMin
+            && item->parentItem() == nullptr
+            && dynamic_cast<DAbstractBase*>(item) != nullptr){
             colMin = item->zValue();
         }
     if(selectedMax < colMin) return;
@@ -645,16 +651,4 @@ void DScene::pasteItems(){
 	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
     DTool::moveItems(items);
     drawItems(items);
-}
-
-// 菱形判定至少有一个输入两个输出
-void DScene::check(){
-    QList<QGraphicsItem * > items = this->items();
-    for(QGraphicsItem * item : items){
-        if(dynamic_cast<DDiaItem*>(item)){
-            qDebug() << "找到一个菱形";
-            DDiaItem *diaItem = dynamic_cast<DDiaItem*>(item);
-            diaItem->check();
-        }
-    }
 }
