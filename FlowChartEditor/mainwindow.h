@@ -4,6 +4,7 @@
 #include "dview.h"
 #include "dfinddialog.h"
 #include "dtextitem.h"
+#include "inspector.h"
 
 #include <QSet>
 #include <QColorDialog>
@@ -19,6 +20,9 @@
 #include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QTabWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -40,6 +44,7 @@ private:
     void initUi();
 
 private slots:
+    void check();
     void saveAsSvg();
 
 	void addLine();
@@ -118,6 +123,7 @@ private slots:
 private:
 	Ui::MainWindow *ui;
 
+    Inspector *inspector;
 	DScene *scene;
 	DView *view;
     DFindDialog *findDia;
@@ -142,7 +148,8 @@ private:
     QPushButton *endBtn;
     QPushButton *preBtn;
 
-    QWidget *rightw;
+    QTabWidget *rightTab;
+    QWidget *rightLinew;
     QPushButton *confirm;
     QPushButton *cancle;
     QFormLayout *formright;
@@ -160,4 +167,12 @@ private:
     QRadioButton *blankBg;
     QRadioButton *gridBg;
     QRadioButton *dotBg;
+
+    QTreeWidget *rightBgw;
+    QTreeWidgetItem *colorTop;
+    QTreeWidgetItem *patternTop;
+
+    QPushButton *selectedColor;
+    QTreeWidgetItem *colorChild0;
+    QString filePath = nullptr;
 };

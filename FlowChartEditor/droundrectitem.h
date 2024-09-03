@@ -25,7 +25,7 @@ public:
 
 protected:
 	QRectF rect;
-	qreal radiusx = 30, radiusy = 30;
+	qreal ratiox = 0.2, ratioy = 0.2;
 
 public:
 	/**

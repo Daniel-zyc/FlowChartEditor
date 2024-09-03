@@ -93,7 +93,10 @@ void DScene::moveSelectedZMaxUp(){
         colItems.append(item->collidingItems());
     }
     for(QGraphicsItem * item : colItems)
-        if(!S.contains(item) && item->zValue() > colMax && item->parentItem() == nullptr)
+        if(!S.contains(item)
+            && item->zValue() > colMax
+            && item->parentItem() == nullptr
+            && dynamic_cast<DAbstractBase*>(item) != nullptr)
             colMax = item->zValue();
     if(selectedMin > colMax) return;
     qreal dis = colMax - selectedMin + 1;
@@ -116,7 +119,10 @@ void DScene::moveSelectedZMaxDown(){
         colItems.append(item->collidingItems());
     }
     for(QGraphicsItem * item : colItems)
-        if(!S.contains(item) && item->zValue() < colMin && item->parentItem() == nullptr){
+        if(!S.contains(item)
+            && item->zValue() < colMin
+            && item->parentItem() == nullptr
+            && dynamic_cast<DAbstractBase*>(item) != nullptr){
             colMin = item->zValue();
         }
     if(selectedMax < colMin) return;
@@ -127,6 +133,27 @@ void DScene::moveSelectedZMaxDown(){
             qDebug() << "将z值设置为"  << temdis - dis;
             item->setZValue(temdis - dis);
         }
+}
+
+void DScene::prepareInsertItem(DAbstractBase* item)
+{
+	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_SHAPE
+	   || state == DConst::INSERT_LINE)
+	{
+		delete modifiedShape;
+		modifiedShape = nullptr;
+	}
+
+	int type = item->type(); qDebug() << type;
+	if(QGraphicsItem::UserType + 40 <= type
+	   && type < QGraphicsItem::UserType + 100)
+		state = DConst::INSERT_TEXT;
+	if(QGraphicsItem::UserType + 100 <= type
+	   && type < QGraphicsItem::UserType + 300)
+		state = DConst::INSERT_SHAPE;
+	if(QGraphicsItem::UserType + 300 <= type)
+		state = DConst::INSERT_LINE;
+	modifiedShape = item;
 }
 
 void DScene::addTextItem()
@@ -182,58 +209,124 @@ void DScene::addTriItem()
 void DScene::addParallegramItem()
 {
     qDebug() << "add Parallegram";
-    DParallelogramItem *item = new DParallelogramItem(200, 200);
-    item->textItem = new DTextItem(100, 100, "hello world!", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	DParallelogramItem *item = new DParallelogramItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addDocItem()
 {
-    qDebug() << "add Parallegram";
-    DDocItem *item = new DDocItem(200, 200);
-    item->textItem = new DTextItem(100, 100, "hello world!", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Document";
+	DDocItem *item = new DDocItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addDiaItem()
 {
-    qDebug() << "add Diamond";
-    DDiaItem *item = new DDiaItem(100, 100);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Diamond";
+	DDiaItem *item = new DDiaItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addEndItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DEndItem *item = new DEndItem(100,60);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Start/End";
+	DEndItem *item = new DEndItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addPreItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(100,80,80);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	// qDebug() << "add TrapItem";
+	// DFInternalStoreItem *item = new DFInternalStoreItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+
+	// qDebug() << "add TrapItem";
+	// DFPrepareItem *item = new DFPrepareItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+
+	qDebug() << "add TrapItem";
+	DFProcessItem *item = new DFProcessItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
+}
+
+void DScene::addDFDocItem()
+{
+	qDebug() << "add DFDocItem";
+	prepareInsertItem(new DDocItem());
+}
+
+void DScene::addDFEndItem()
+{
+	qDebug() << "add DFEndItem";
+	prepareInsertItem(new DEndItem());
+}
+
+void DScene::addDFManualOperateItem()
+{
+	qDebug() << "add DFManualOperateItem";
+	prepareInsertItem(new DFManualOperateItem());
+}
+
+void DScene::addDFInternalStoreItem()
+{
+	qDebug() << "add DFInternalStoreItem";
+	prepareInsertItem(new DFInternalStoreItem());
+}
+
+void DScene::addDFPrepareItem()
+{
+	qDebug() << "add DFPrepareItem";
+	prepareInsertItem(new DFPrepareItem());
+}
+
+void DScene::addDFProcessItem()
+{
+	qDebug() << "add DFProcessItem";
+	prepareInsertItem(new DFProcessItem());
+}
+
+void DScene::addDFOptionalProcessItem()
+{
+	qDebug() << "add DFOptionalProcessItem";
+	prepareInsertItem(new DFOptionalProcessItem());
+}
+
+void DScene::addDFConditionItem()
+{
+	qDebug() << "add DFConditionItem";
+	prepareInsertItem(new DFConditionItem());
+}
+
+void DScene::addDFDataItem()
+{
+	qDebug() << "add DFDataItem";
+	prepareInsertItem(new DFDataItem());
+}
+
+void DScene::addDFNodeItem()
+{
+	qDebug() << "add DFNodeItem";
+	prepareInsertItem(new DFNodeItem());
 }
 
 void DScene::addTrapItem()
 {
-    qDebug() << "add Document";
-    //    QRectF rect(0, 0, 100, 100); // 你可以根据需要调整矩形的大小和位置
-    DTrapItem *item = new DTrapItem(100,80,80);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	// qDebug() << "add TrapItem";
+	// DTrapItem *item = new DTrapItem();
+	// state = DConst::INSERT_SHAPE;
+	// modifiedShape = item;
+
+	qDebug() << "add TrapItem";
+	DFManualOperateItem *item = new DFManualOperateItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addPolyLineItem()
@@ -246,39 +339,39 @@ void DScene::addPolyLineItem()
 
 void DScene::combineSelected()
 {
-	QList<QGraphicsItem*> items = selectedItems();
-	int cnt = 0;
-	for(QGraphicsItem* item : items)
-	{
-		if(item->parentItem() != nullptr) continue;
-		cnt++;
-	}
-	if(cnt <= 1) return;
+	// QList<QGraphicsItem*> items = selectedItems();
+	// int cnt = 0;
+	// for(QGraphicsItem* item : items)
+	// {
+	// 	if(item->parentItem() != nullptr) continue;
+	// 	cnt++;
+	// }
+	// if(cnt <= 1) return;
 
-	DItemGroup* group = new DItemGroup();  //创建组合
-	// group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	addItem(group);      //添加到场景中
+	// DItemGroup* group = new DItemGroup();  //创建组合
+	// // group->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+	// addItem(group);      //添加到场景中
 
-	for(QGraphicsItem* item : items)
-	{
-		if(item->parentItem() != nullptr) continue;
-		group->addToGroup(item);
-	}
+	// for(QGraphicsItem* item : items)
+	// {
+	// 	if(item->parentItem() != nullptr) continue;
+	// 	group->addToGroup(item);
+	// }
 
-	// group->setSelected(false);
+	// // group->setSelected(false);
 }
 
 void DScene::seperateSelected()
 {
-	int cnt=selectedItems().count();
-	if (cnt==1)
-	{
-		DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
-		if(!group) return;
-		destroyItemGroup(group);
-		QList<QGraphicsItem*> items = this->items();
-		// for(QGraphicsItem* item : items) item->setSelected(false);
-	}
+	// int cnt=selectedItems().count();
+	// if (cnt==1)
+	// {
+	// 	DItemGroup *group = dynamic_cast<DItemGroup*>(selectedItems().at(0));
+	// 	if(!group) return;
+	// 	destroyItemGroup(group);
+	// 	QList<QGraphicsItem*> items = this->items();
+	// 	// for(QGraphicsItem* item : items) item->setSelected(false);
+	// }
 }
 
 QList<QGraphicsItem *> DScene::getDelete()

@@ -11,16 +11,24 @@
 
 #include "dtextitem.h"
 
-#include "ditemgroup.h"
 #include "drectitem.h"
 #include "droundrectitem.h"
 #include "dellitem.h"
 #include "dtriitem.h"
 #include "dparallelogramitem.h"
+#include "dtrapitem.h"
+
 #include "ddocitem.h"
 #include "ddiaitem.h"
-#include "dtrapitem.h"
-#include "dpolylineitem.h"
 #include "denditem.h"
+#include "dfmanualoperateitem.h"
+#include "dfinternalstoreitem.h"
+#include "dfprepareitem.h"
+#include "dfprocessitem.h"
+#include "dfoptionalprocessitem.h"
+#include "dfconditionitem.h"
+#include "dfdataitem.h"
+#include "dfnodeitem.h"
 
 #include "dlineitem.h"
+#include "dpolylineitem.h"

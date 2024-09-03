@@ -65,6 +65,22 @@ QPointF MagPoint::mapToScene()
 	return parent->mapToScene(pos);
 }
 
+std::tuple<int,int,int> MagPoint::linkedLienArrowType(){
+    if(lines == nullptr){
+        return std::make_tuple(0,0,0);
+    }
+    int in = 0,out = 0,no = 0;
+    for(DLineBase *line :std::as_const(*lines)){
+        switch(line->magType(this)){
+            case DConst::OUT:           out ++ ;break;
+            case DConst::IN:            in ++ ;break;
+            case DConst::NO_IN_OR_OUT:  no ++ ; break;
+            default:break;
+        }
+    }
+    return std::make_tuple(in,out,no);
+}
+
 //=====================================================
 // 序列化与反序列化
 void MagPoint::serialize(QDataStream &out) const

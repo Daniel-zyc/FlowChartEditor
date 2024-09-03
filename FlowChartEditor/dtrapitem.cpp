@@ -2,112 +2,51 @@
 #include "magpoint.h"
 
 DTrapItem::DTrapItem(QGraphicsItem *parent)
-    : DShapeBase(parent){}
+	: DTrapItem(minRectSize, minRectSize, parent) {}
 
-DTrapItem::DTrapItem(qreal topWidth,qreal bottomWidth, qreal height, QGraphicsItem *parent)
-    : DTrapItem(parent)
+DTrapItem::DTrapItem(qreal w,qreal h, QGraphicsItem *parent)
+	: DPolygonBase("", parent)
 {
-    this->topWidth = topWidth;
-    this->bottomWidth = bottomWidth;
-    this->height = height;
-
-    modis.resize(1); // 只有一个调整点
-    mags->push_back(new MagPoint(this));
-    mags->push_back(new MagPoint(this));
-    mags->push_back(new MagPoint(this));
-    mags->push_back(new MagPoint(this));
-    setRect(QRectF(-topWidth/2, -height/2, topWidth, height));
-    c=bottomWidth/rect.width();
-
-}
-void DTrapItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option); Q_UNUSED(widget);
-
-    painter->setBrush(brush());
-    painter->setPen(pen());
-
-    QPolygonF polygon;
-    polygon<< QPointF(rect.left(), rect.top())
-            << QPointF(rect.right(), rect.top())
-            << QPointF(rect.right() - (rect.width()- c*rect.width()) / 2, rect.bottom())
-            << QPointF(rect.left() + (rect.width()- c*rect.width()) / 2, rect.bottom());
-
-    painter->drawPolygon(polygon);
-    updateMagPoint();
-    updateModiPoint();
-}
-
-QRectF DTrapItem::sizeRect() const
-{
-    return rect;
-}
-
-QPainterPath DTrapItem::shapeNormal() const
-{
-    QPainterPath path;
-    QPolygonF polygon;
-    polygon<< QPointF(rect.left(), rect.top())
-            << QPointF(rect.right(), rect.top())
-            << QPointF(rect.right() - (rect.width()- c*rect.width()) / 2, rect.bottom())
-            << QPointF(rect.left() + (rect.width()- c*rect.width()) / 2, rect.bottom());
-    path.addPolygon(polygon);
-    return path;
+	modis.resize(1);
+	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
+	polygon << QPointF(-w/4, -h/2) << QPointF(w/4, -h/2)
+			<< QPointF(w/2, h/2) << QPointF(-w/2, h/2);
+	updateAll();
 }
 
 void DTrapItem::updateMagPoint()
 {
-    // 更新磁吸点为各边的中点
-    (*mags)[0]->pos = {(rect.left() + rect.right()) / 2, rect.top()};
-    (*mags)[1]->pos = {(rect.left() + rect.right()) / 2 +c*rect.width()/2+(rect.width()-c*rect.width())/4 , (rect.top() + rect.bottom()) / 2};
-    (*mags)[2]->pos = {(rect.left() + rect.right()) / 2, rect.bottom()};
-    (*mags)[3]->pos = {(rect.left() + rect.right()) / 2 -c*rect.width()/2-(rect.width()-c*rect.width())/4, (rect.top() + rect.bottom()) / 2};
-}
-
-void DTrapItem::updateModiPoint()
-{
-    // 只有一个调整点
-    modis[0] = {rect.left() + (rect.width() - c*rect.width()) / 2, rect.bottom()};
-}
-
-void DTrapItem::sizeToRect(QRectF nrect)
-{
-    setRect(nrect);
+	(*mags)[0]->setPos((polygon[0] + polygon[1]) / 2);
+	(*mags)[1]->setPos((polygon[1] + polygon[2]) / 2);
+	(*mags)[2]->setPos((polygon[2] + polygon[3]) / 2);
+	(*mags)[3]->setPos((polygon[3] + polygon[0]) / 2);
 }
 
 void DTrapItem::modiToPoint(QPointF p, int id)
 {
-    if (id == 0) {
-        if(((rect.right()-p.x())>=rect.width()/2)){
-            qreal newBottomWidth = ((rect.right() - p.x())-rect.width()/2)*2;
-            bottomWidth = qMin(newBottomWidth, rect.width());
-        }else{
-            bottomWidth =0;
-        }
-
-        topWidth = rect.width();
-        c=bottomWidth/rect.width();
-        updateModiPoint();
-    }
+	Q_UNUSED(id);
+	QRectF rc = sizeRect(); qreal nx = p.x();
+	nx = qMin(nx, 0.0); nx = qMax(nx, rc.left());
+	polygon[0].setX(nx); polygon[1].setX(-nx);
+	updateModiPoint();
+	updateMagPoint();
 }
 
-void DTrapItem::setRect(const QRectF &nrect)
+void DTrapItem::updateModiPoint()
 {
-    rect = nrect;
-    updateSizePoint();
-    updateMagPoint();
-    updateModiPoint();
+	modis[0] = polygon[0];
 }
 
-//================================
-// void DTrapItem::serialize(QDataStream &out) const{
-//     DShapeBase::serialize(out);
-//     out << topWidth << bottomWidth;
-//     out << height << c << rect;
-// }
+//==============================================================================
 
-// void DTrapItem::deserialize(QDataStream &in){
-//     DShapeBase::deserialize(in);
-//     in << topWidth << bottomWidth;
-//     in << height << c << rect;
-// }
+void DTrapItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DPolygonBase::serialize(out, fa);
+}
+
+bool DTrapItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DPolygonBase::deserialize(in, fa)) return false;
+	updateAll();
+	return true;
+}

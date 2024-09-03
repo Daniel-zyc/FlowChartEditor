@@ -19,7 +19,8 @@ void DRoundRectItem::paintShape(QPainter *painter, const QStyleOptionGraphicsIte
 
 	painter->setBrush(brush());
 	painter->setPen(pen());
-	painter->drawRoundedRect(rect, radiusx, radiusy);
+	painter->drawRoundedRect(rect, rect.width() * ratiox,
+							 rect.height() * ratioy);
 }
 
 QRectF DRoundRectItem::sizeRect() const
@@ -29,7 +30,10 @@ QRectF DRoundRectItem::sizeRect() const
 
 QPainterPath DRoundRectItem::shapeNormal() const
 {
-	QPainterPath pth; pth.addRoundedRect(rect, radiusx, radiusy); return pth;
+	QPainterPath pth;
+	pth.addRoundedRect(rect, rect.width() * ratiox,
+							 rect.height() * ratioy);
+	return pth;
 }
 
 void DRoundRectItem::updateMagPoint()
@@ -43,11 +47,8 @@ void DRoundRectItem::updateMagPoint()
 
 void DRoundRectItem::updateModiPoint()
 {
-	radiusx = qMin(radiusx, rect.width() / 2); radiusx = qMax(0.0, radiusx);
-	radiusy = qMin(radiusy, rect.height() / 2); radiusy = qMax(0.0, radiusy);
-
-	modis[0] = {rect.left() + radiusx, rect.top()};
-	modis[1] = {rect.left(), rect.top() + radiusy};
+	modis[0] = {rect.left() + rect.width() * ratiox, rect.top()};
+	modis[1] = {rect.left(), rect.top() + rect.height() * ratioy};
 }
 
 void DRoundRectItem::sizeToRect(QRectF nrect)
@@ -60,11 +61,15 @@ void DRoundRectItem::modiToPoint(QPointF p, int id)
 	switch(id)
 	{
 		case 0:
-			radiusx = qAbs(rect.left() - p.x());
+			ratiox = (p.x() - rect.left()) / rect.width();
+			ratiox = qMin(ratiox, 0.5);
+			ratiox = qMax(0.0, ratiox);
 			updateModiPoint();
 			break;
 		case 1:
-			radiusy = qAbs(rect.top() - p.y());
+			ratioy = (p.y() - rect.top()) / rect.height();
+			ratioy = qMin(ratioy, 0.5);
+			ratioy = qMax(0.0, ratioy);
 			updateModiPoint();
 			break;
 	}
@@ -84,14 +89,14 @@ void DRoundRectItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DShapeBase::serialize(out, fa);
 
-	out << rect << radiusx << radiusy;
+	out << rect << ratiox << ratioy;
 }
 
 bool DRoundRectItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
-	in >> rect >> radiusx >> radiusy;
+	in >> rect >> ratiox >> ratioy;
 	updateAll();
 	return true;
 }

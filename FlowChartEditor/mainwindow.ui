@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>17</height>
+     <width>1280</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -53,6 +53,7 @@
      <string>帮助</string>
     </property>
     <addaction name="actAboutUs"/>
+    <addaction name="actCheck"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
@@ -597,9 +598,9 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actLineStyleSheet">
+  <action name="actStyleSheet">
    <property name="text">
-    <string>打开线条样式表</string>
+    <string>打开样式表</string>
    </property>
   </action>
   <action name="actAddPolyLine">
@@ -673,6 +674,11 @@
   <action name="actAboutUs">
    <property name="text">
     <string>关于我们</string>
+   </property>
+  </action>
+  <action name="actCheck">
+   <property name="text">
+    <string>检查</string>
    </property>
   </action>
  </widget>
