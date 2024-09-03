@@ -7,7 +7,7 @@ QSet<int> registeredTypes = QSet<int>(
 				// shape
 				DRectItemType, DRoundRectItemType,
 				DEllItemType,
-				DTriItemType,
+				DTriItemType, DDiaItemType,
 
 				// text
 				DTextItemType,

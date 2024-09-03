@@ -1,34 +1,32 @@
 #pragma once
 
-#include "dshapebase.h"
+#include "dpolygonbase.h"
 
 #include <QPainter>
 #include <QPolygonF>
 #include <QRectF>
 
-class DShapeBase;
-
-class DDiaItem : public DShapeBase
+class DDiaItem : public DPolygonBase
 {
 public:
-    enum { Type = DDiaItemType };
+	enum { Type = DDiaItemType };
+	DDiaItem(QGraphicsItem *parent = nullptr);
+	DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
-    DDiaItem(QGraphicsItem *parent = nullptr);
-    DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+public:
+	int type() const override { return Type; }
 
-    int type() const override { return Type; }
+	void modiToPoint(QPointF p, int id) override;
 
-    void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+	void updateMagPoint() override;
+	void updateModiPoint() override;
 
-    QRectF sizeRect() const override;
-    QPainterPath shapeNormal() const override;
-    void sizeToRect(QRectF nrect) override;
-    void modiToPoint(QPointF p, int id) override;
-
-private:
-    void setRect(const QRectF &nrect);
-    void updateMagPoint();
- //   void updateModiPoint();
-
-    QRectF rect = QRectF(0, 0, 0, 0);
+public:
+	/**
+	 * @brief serialize
+	 * @param out
+	 * 序列化：DShapeBase -> rect
+	 */
+	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };

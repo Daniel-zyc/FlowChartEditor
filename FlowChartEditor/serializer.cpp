@@ -98,6 +98,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DRoundRectItemType: shape = new DRoundRectItem(); break;
 			case DEllItemType: shape = new DEllItem(); break;
 			case DTriItemType: shape = new DTriItem(); break;
+			case DDiaItemType: shape = new DDiaItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{

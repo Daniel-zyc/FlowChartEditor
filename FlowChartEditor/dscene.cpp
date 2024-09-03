@@ -199,11 +199,10 @@ void DScene::addDocItem()
 
 void DScene::addDiaItem()
 {
-    qDebug() << "add Diamond";
-    DDiaItem *item = new DDiaItem(100, 100);
-    item->textItem = new DTextItem(50, 50, "", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Diamond";
+	DDiaItem *item = new DDiaItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addEndItem()
