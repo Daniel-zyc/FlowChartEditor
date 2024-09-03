@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	view = new DView(scene);
 
-    inspector = new Inspector(scene,view);
+    inspector = new Inspector(this,scene,view);
 
 	view->setDragMode(QGraphicsView::RubberBandDrag);
 
@@ -925,4 +925,5 @@ void MainWindow::showAboutUsWindow(){
 
 void MainWindow::check(){
     inspector->check();
+    inspector->show();
 }
