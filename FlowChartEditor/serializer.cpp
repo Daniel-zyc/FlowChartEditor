@@ -114,6 +114,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DFNodeItemType: shape = new DFNodeItem(); break;
 			case DFInformationItemType: shape = new DFInformationItem(); break;
 			case DFManualInputItemType: shape = new DFManualInputItem(); break;
+			case DFPredefineItemType: shape = new DFPredefineItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
