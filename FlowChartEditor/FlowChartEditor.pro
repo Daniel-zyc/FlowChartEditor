@@ -11,24 +11,26 @@ CONFIG += c++17
 SOURCES += \
     aboutuswindow.cpp \
     dabstractbase.cpp \
-    dcurveitem.cpp \
+    dcurvelineitem.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
-    denditem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
+    dfdocumentitem.cpp \
     dfinddialog.cpp \
+    dfinformationitem.cpp \
     dfinternalstoreitem.cpp \
+    dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
-    dinfitem.cpp \
-    ditemgroup.cpp \
+    dfstartenditem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
+    dparagramitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
     drectitem.cpp \
@@ -46,32 +48,32 @@ SOURCES += \
     mainwindow.cpp \
     saveandloadmanager.cpp \
     serializer.cpp \
-    dparallelogramitem.cpp \
-    ddocitem.cpp \
     undomanager.cpp
 
 HEADERS += \
     aboutuswindow.h \
     dabstractbase.h \
     dallitems.h \
-    dcurveitem.h \
+    dcurvelineitem.h \
     ddiaitem.h \
     dellitem.h \
-    denditem.h \
     dfconditionitem.h \
     dfdataitem.h \
+    dfdocumentitem.h \
     dfinddialog.h \
+    dfinformationitem.h \
     dfinternalstoreitem.h \
+    dfmanualinputitem.h \
     dfmanualoperateitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
-    dinfitem.h \
-    ditemgroup.h \
+    dfstartenditem.h \
     dlinebase.h \
     dlineitem.h \
+    dparagramitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
     drectitem.h \
@@ -88,8 +90,6 @@ HEADERS += \
     mainwindow.h \
     saveandloadmanager.h \
     serializer.h \
-    dparallelogramitem.h \
-    ddocitem.h \
     undomanager.h
 
 FORMS += \

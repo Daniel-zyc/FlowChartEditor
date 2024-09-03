@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -677,6 +677,17 @@
   <action name="actCheck">
    <property name="text">
     <string>检查</string>
+   </property>
+  </action>
+  <action name="actAddManualinput">
+   <property name="text">
+    <string>手动输入图形</string>
+   </property>
+   <property name="toolTip">
+    <string>手动输入图形</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
  </widget>

@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actAddTrap);
     m->addAction(ui->actAddPrede);
     m->addAction(ui->actAddEnd);
+    m->addAction(ui->actAddManualinput);
     m->addAction(ui->actSelectFrameCol);
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
@@ -140,12 +141,12 @@ void MainWindow::initleftUi()
     storeBtn = new QPushButton();
     polyLineBtn = new QPushButton();
 
-    prectBtn = new QPushButton();
-    pellipseBtn = new QPushButton();
-    pparellgramBtn = new QPushButton();
-    ptrapBtn = new QPushButton();
-    prhomBtn = new QPushButton();
-    ptriBtn = new QPushButton();
+	addRectBtn = new QPushButton();
+	addEllBtn = new QPushButton();
+	addParagramBtn = new QPushButton();
+	addTrapBtn = new QPushButton();
+	addDiaBtn = new QPushButton();
+	addTriBtn = new QPushButton();
 
     rectBtn->setIcon(QPixmap(":/icon/flowchart/rect.png"));
     roundRectBtn->setIcon(QPixmap(":/icon/flowchart/roundrect.png"));
@@ -163,12 +164,35 @@ void MainWindow::initleftUi()
     storeBtn->setIcon(QPixmap(":/icon/flowchart/store.png"));
     polyLineBtn->setIcon(QPixmap(":icon/polyLine.png"));
 
-    prectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
-    pellipseBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
-    pparellgramBtn->setIcon(QPixmap(":/icon/primary/parallgram.png"));
-    ptrapBtn->setIcon(QPixmap(":/icon/primary/trapezoid.png"));
-    prhomBtn->setIcon(QPixmap(":/icon/primary/rhomb.png"));
-    ptriBtn->setIcon(QPixmap(":/icon/primary/triangle.png"));
+    rectBtn->setToolTip("过程");
+    roundRectBtn->setToolTip("可选过程");
+    ellipseBtn->setToolTip("接点");
+    lineBtn->setToolTip("直线");
+    parellgramBtn->setToolTip("数据");
+    trapBtn->setToolTip("手动操作");
+    rhomBtn->setToolTip("决策");
+    fileBtn->setToolTip("文档");
+    textBtn->setToolTip("文本框");
+    triBtn->setToolTip("摘录");
+    preBtn->setToolTip("预定义过程");
+    endBtn->setToolTip("终止");
+    prepareBtn->setToolTip("准备");
+    storeBtn->setToolTip("内部贮存");
+    polyLineBtn->setToolTip("折线");
+
+    addRectBtn->setToolTip("矩形");
+    addEllBtn->setToolTip("椭圆");
+    addParagramBtn->setToolTip("平行四边形");
+    addTrapBtn->setToolTip("梯形");
+    addDiaBtn->setToolTip("菱形");
+    addTriBtn->setToolTip("三角形");
+
+    addRectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
+    addEllBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
+    addParagramBtn->setIcon(QPixmap(":/icon/primary/parallgram.png"));
+    addTrapBtn->setIcon(QPixmap(":/icon/primary/trapezoid.png"));
+    addDiaBtn->setIcon(QPixmap(":/icon/primary/rhomb.png"));
+    addTriBtn->setIcon(QPixmap(":/icon/primary/triangle.png"));
 
     flowGrid->addWidget(rectBtn, 0, 0);
     flowGrid->addWidget(roundRectBtn, 0, 1);
@@ -183,12 +207,12 @@ void MainWindow::initleftUi()
     flowGrid->addWidget(prepareBtn, 3, 1);
     flowGrid->addWidget(storeBtn, 3, 2);
 
-    primaryGrid->addWidget(prectBtn, 0, 0);
-    primaryGrid->addWidget(pellipseBtn, 0, 1);
-    primaryGrid->addWidget(pparellgramBtn, 0, 2);
-    primaryGrid->addWidget(ptrapBtn, 1, 0);
-    primaryGrid->addWidget(prhomBtn, 1, 1);
-    primaryGrid->addWidget(ptriBtn, 1, 2);
+	primaryGrid->addWidget(addRectBtn, 0, 0);
+	primaryGrid->addWidget(addEllBtn, 0, 1);
+	primaryGrid->addWidget(addParagramBtn, 0, 2);
+	primaryGrid->addWidget(addTrapBtn, 1, 0);
+	primaryGrid->addWidget(addDiaBtn, 1, 1);
+	primaryGrid->addWidget(addTriBtn, 1, 2);
 
     primaryGroup->setLayout(primaryGrid);
     flowcGroup->setLayout(flowGrid);
@@ -373,28 +397,28 @@ void MainWindow::initrightUi()
 
 void MainWindow::connectLeft()
 {
-    connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addDFProcessItem);
-    connect(lineBtn, &QPushButton::clicked, this, &MainWindow::addLine);
-    connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addDFOptionalProcessItem);
-    connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addDFNodeItem);
-    connect(textBtn, &QPushButton::clicked, this, &MainWindow::addText);
-    connect(triBtn, &QPushButton::clicked, this, &MainWindow::addTri);
-    connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDFConditionItem);
-    connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDFDocItem);
-    connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addDFManualOperateItem);
-    connect(endBtn, &QPushButton::clicked, this, &MainWindow::addDFEndItem);
-    connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
-    connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addDFDataItem);
-    connect(storeBtn,  &QPushButton::clicked, this, &MainWindow::addDFInternalStoreItem);
-    connect(prepareBtn,  &QPushButton::clicked, this, &MainWindow::addDFPrepareItem);
-    connect(polyLineBtn,  &QPushButton::clicked, this, &MainWindow::addPolyLine);
+	connect(addRectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
+	connect(addEllBtn, &QPushButton::clicked, this, &MainWindow::addEll);
+	connect(addTriBtn, &QPushButton::clicked, this, &MainWindow::addTri);
+	connect(addDiaBtn, &QPushButton::clicked, this, &MainWindow::addDia);
+	connect(addTrapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
+	connect(addParagramBtn, &QPushButton::clicked, this, &MainWindow::addParagram);
 
-    connect(prectBtn, &QPushButton::clicked, this, &MainWindow::addRect);
-    connect(pellipseBtn, &QPushButton::clicked, this, &MainWindow::addEll);
-    connect(ptriBtn, &QPushButton::clicked, this, &MainWindow::addTri);
-    connect(prhomBtn, &QPushButton::clicked, this, &MainWindow::addDia);
-    connect(ptrapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
-    connect(pparellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
+	connect(rectBtn, &QPushButton::clicked, this, &MainWindow::addDFProcessItem);
+	connect(lineBtn, &QPushButton::clicked, this, &MainWindow::addLine);
+	connect(roundRectBtn, &QPushButton::clicked, this, &MainWindow::addDFOptionalProcessItem);
+	connect(ellipseBtn, &QPushButton::clicked, this, &MainWindow::addDFNodeItem);
+	connect(textBtn, &QPushButton::clicked, this, &MainWindow::addText);
+	connect(triBtn, &QPushButton::clicked, this, &MainWindow::addTri);
+	connect(rhomBtn, &QPushButton::clicked, this, &MainWindow::addDFConditionItem);
+	connect(fileBtn, &QPushButton::clicked, this, &MainWindow::addDFDocItem);
+	connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addDFManualOperateItem);
+	connect(endBtn, &QPushButton::clicked, this, &MainWindow::addDFStartEndItem);
+	connect(preBtn, &QPushButton::clicked, this, &MainWindow::addDFPredefineItem);
+	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addDFDataItem);
+	connect(storeBtn,  &QPushButton::clicked, this, &MainWindow::addDFInternalStoreItem);
+	connect(prepareBtn,  &QPushButton::clicked, this, &MainWindow::addDFPrepareItem);
+	connect(polyLineBtn,  &QPushButton::clicked, this, &MainWindow::addPolyLine);
 }
 
 void MainWindow::connectRight()
@@ -658,17 +682,17 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
-    connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
-    connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
-    connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
-    connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
+	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
+	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
+	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
+	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
-    connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
-    connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
-    connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
+	connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
+	connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
+	connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
 
-    connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
-    connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
+	connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
+	connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
 
 	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
 	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
@@ -681,6 +705,7 @@ void MainWindow::bindAction()
     connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addEnd()));
     connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addPre()));
     connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParallegram()));
+    connect(ui->actAddManualinput, SIGNAL(triggered(bool)), this, SLOT(addManualin()));
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
     connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
@@ -764,67 +789,6 @@ void MainWindow::saveAsSvg()
     painter.begin(&generator);
     view->render(&painter);
     painter.end();
-}
-
-void MainWindow::addLine()
-{
-	scene->addLineItem();
-}
-
-void MainWindow::addRect()
-{
-	scene->addRectItem();
-}
-
-void MainWindow::addRoundRect()
-{
-	scene->addRoundRectItem();
-}
-
-void MainWindow::addEll()
-{
-	scene->addEllItem();
-}
-
-void MainWindow::addText()
-{
-	scene->addTextItem();
-}
-
-void MainWindow::addTri()
-{
-    scene->addTriItem();
-}
-
-void MainWindow::addDia()
-{
-    scene->addDiaItem();
-}
-void MainWindow::addTrap()
-{
-    scene->addTrapItem();
-}
-void MainWindow::addEnd()
-{
-    scene->addEndItem();
-}
-void MainWindow::addPre()
-{
-    scene->addPreItem();
-}
-void MainWindow::addParallegram()
-{
-	scene->addParagramItem();
-}
-
-void MainWindow::addDocShape()
-{
-    scene->addDocItem();
-}
-
-void MainWindow::addPolyLine()
-{
-    scene->addPolyLineItem();
 }
 
 void MainWindow::changeLineType(Qt::PenStyle linestyle)

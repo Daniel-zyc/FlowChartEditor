@@ -9,13 +9,13 @@ QSet<int> registeredTypes = QSet<int>(
 				DRoundRectItemType,
 				DEllItemType,
 				DTriItemType,
-				DFDiaItemType,
-				DParallegramItemType,
+				DDiaItemType,
+				DParagramItemType,
 				DTrapItemType,
 
 				// shape for flowchart
-				DFDocItemType,
-				DFEndItemType,
+				DFDocumentItemType,
+				DFStartEndItemType,
 				DFManualOperateItemType,
 				DFInternalStoreItemType,
 				DFPrepareItemType,

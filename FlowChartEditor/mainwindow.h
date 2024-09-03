@@ -52,22 +52,21 @@ private slots:
     void check();
     void saveAsSvg();
 
-	void addLine();
-	void addRect();
-	void addRoundRect();
-	void addEll();
-	void addText();
-    void addTri();
-    void addDia();
-    void addTrap();
-    void addEnd();
-    void addPre();
-    void addParallegram();
-    void addDocShape();
-	void addPolyLine();
+	void addLine() { scene->addLineItem(); }
+	void addPolyLine() { scene->addPolyLineItem(); }
+	void addCurveLine() { scene->addCurveLineItem(); }
+
+	void addText() { scene->addTextItem(); }
+
+	void addRect() { scene->addRectItem(); }
+	void addRoundRect() { scene->addRoundRectItem(); }
+	void addEll() { scene->addEllItem(); }
+	void addTri() { scene->addTriItem(); }
+	void addDia() { scene->addDiaItem(); }
+	void addTrap() { scene->addTrapItem(); }
+	void addParagram() { scene->addParagramItem(); }
 
 	void addDFDocItem() { scene->addDFDocItem(); }
-	void addDFEndItem() { scene->addDFEndItem(); }
 	void addDFManualOperateItem() { scene->addDFManualOperateItem(); }
 	void addDFInternalStoreItem() { scene->addDFInternalStoreItem(); }
 	void addDFPrepareItem() { scene->addDFPrepareItem(); }
@@ -76,6 +75,8 @@ private slots:
 	void addDFConditionItem() { scene->addDFConditionItem(); }
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
+	void addDFStartEndItem() { scene->addDFStartEndItem(); }
+	void addDFPredefineItem() { scene->addDFPredefineItem(); }
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
@@ -177,16 +178,17 @@ private:
     QPushButton *textBtn;
     QPushButton *endBtn;
     QPushButton *preBtn;
+ //   QPushButton *manualinBtn;
     QPushButton *prepareBtn;
     QPushButton *storeBtn;
     QPushButton *polyLineBtn;
 
-    QPushButton *prectBtn;
-    QPushButton *pellipseBtn;
-    QPushButton *pparellgramBtn;
-    QPushButton *prhomBtn;
-    QPushButton *ptrapBtn;
-    QPushButton *ptriBtn;
+	QPushButton *addRectBtn;
+	QPushButton *addEllBtn;
+	QPushButton *addParagramBtn;
+	QPushButton *addDiaBtn;
+	QPushButton *addTrapBtn;
+	QPushButton *addTriBtn;
 
     QTabWidget *rightTab;
     QWidget *rightLinew;

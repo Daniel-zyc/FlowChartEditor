@@ -10,6 +10,7 @@
 class DPolyLineItem : public DLineBase
 {
 public:
+	enum { Type = DPolyLineItemType };
     DPolyLineItem(QGraphicsItem * parent = nullptr);
     DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent = nullptr);
 

@@ -2,12 +2,12 @@
 
 #include "dpolygonbase.h"
 
-class DParallelogramItem : public DPolygonBase
+class DParagramItem : public DPolygonBase
 {
 public:
-	enum { Type = DParallegramItemType };
-	DParallelogramItem(QGraphicsItem *parent = nullptr);
-	DParallelogramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DParagramItemType };
+	DParagramItem(QGraphicsItem *parent = nullptr);
+	DParagramItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }

@@ -1,10 +1,10 @@
-#include "ddocitem.h"
+#include "dfdocumentitem.h"
 #include "magpoint.h"
 
-DDocItem::DDocItem(QGraphicsItem *parent)
-	: DDocItem(minRectSize, minRectSize, parent) {}
+DFDocumentItem::DFDocumentItem(QGraphicsItem *parent)
+	: DFDocumentItem(minRectSize, minRectSize, parent) {}
 
-DDocItem::DDocItem(qreal w, qreal h, QGraphicsItem *parent)
+DFDocumentItem::DFDocumentItem(qreal w, qreal h, QGraphicsItem *parent)
 	: DShapeBase("", parent)
 {
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
@@ -12,7 +12,7 @@ DDocItem::DDocItem(qreal w, qreal h, QGraphicsItem *parent)
 	updateAll();
 }
 
-void DDocItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFDocumentItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -21,17 +21,17 @@ void DDocItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	painter->drawPath(path);
 }
 
-QRectF DDocItem::sizeRect() const
+QRectF DFDocumentItem::sizeRect() const
 {
 	return rect;
 }
 
-QPainterPath DDocItem::shapeNormal() const
+QPainterPath DFDocumentItem::shapeNormal() const
 {
 	return path;
 }
 
-void DDocItem::updateMagPoint()
+void DFDocumentItem::updateMagPoint()
 {
 	(*mags)[0]->setPos({rect.left(), -rect.height() / 10});
 	(*mags)[1]->setPos({rect.right(), -rect.height() / 10});
@@ -40,7 +40,7 @@ void DDocItem::updateMagPoint()
 	(*mags)[3]->setPos({0, rect.bottom() * 4 / 5});
 }
 
-void DDocItem::updatePath()
+void DFDocumentItem::updatePath()
 {
 	path.clear();
 
@@ -67,17 +67,17 @@ void DDocItem::updatePath()
 	path.closeSubpath();
 }
 
-void DDocItem::sizeToRect(QRectF nrect)
+void DFDocumentItem::sizeToRect(QRectF nrect)
 {
 	rect = nrect; updateAll();
 }
 
-void DDocItem::modiToPoint(QPointF p, int id)
+void DFDocumentItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
-void DDocItem::updateAll()
+void DFDocumentItem::updateAll()
 {
 	updateSizePoint();
 	updatePath();
@@ -86,14 +86,14 @@ void DDocItem::updateAll()
 
 //==============================================================================
 
-void DDocItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DFDocumentItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DShapeBase::serialize(out, fa);
 
 	out << rect;
 }
 
-bool DDocItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DFDocumentItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
