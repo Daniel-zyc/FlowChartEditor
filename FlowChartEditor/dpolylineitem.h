@@ -73,7 +73,11 @@ private:
     int paint_flag = 0;
     //距离形状的最短距离
     double record_dist = 40;
-    //记录最多三个调整点的调整位置
+    /*记录最多三个调整点的调整位置，
+     * 存完拿回去用的时候先更新完线，
+     * 然后调用modiToPoint
+     * id为012，对应的p在QMap里
+    */
     QMap<int,QPointF> modi_pos;
 };
 

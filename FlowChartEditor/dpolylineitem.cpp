@@ -164,8 +164,28 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
 
 QPainterPath DPolyLineItem::shapeNormal() const
 {
-    QGraphicsLineItem item(QLineF(beginPoint, endPoint));
-    return item.shape();
+    int direct = getPaintDirection();
+    QPointF points[6] = {
+        QPointF(beginPoint.x(), beginPoint.y()),
+        QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),
+        //begin_midPoint,
+        QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
+                begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),
+        QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
+                begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),
+        //end_midPoint,
+        QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),
+        QPointF(endPoint.x(), endPoint.y())
+    };
+    QPainterPath path;
+    path.moveTo(points[0]);  // 起始点
+    // 获取数组大小
+    int numPoints = sizeof(points) / sizeof(points[0]);
+    for (int i = 1; i < numPoints; ++i) {
+        path.lineTo(points[i]);  // 连接每个点
+    }
+    // 返回路径
+    return path;
 }
 
 void DPolyLineItem::updateLine()

@@ -248,20 +248,10 @@ void DScene::addEndItem()
 
 void DScene::addPreItem()
 {
-	// qDebug() << "add TrapItem";
-	// DFInternalStoreItem *item = new DFInternalStoreItem();
-	// state = DConst::INSERT_SHAPE;
-	// modifiedShape = item;
-
-	// qDebug() << "add TrapItem";
-	// DFPrepareItem *item = new DFPrepareItem();
-	// state = DConst::INSERT_SHAPE;
-	// modifiedShape = item;
-
-	qDebug() << "add TrapItem";
-	DFProcessItem *item = new DFProcessItem();
-	state = DConst::INSERT_SHAPE;
-	modifiedShape = item;
+    qDebug() << "add PreDefine";
+    DPreItem *item = new DPreItem();
+    state = DConst::INSERT_TEXT;
+    modifiedShape = item;
 }
 
 void DScene::addDFDocItem()
