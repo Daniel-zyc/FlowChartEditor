@@ -108,6 +108,20 @@ void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
 	sizeToPoint(p, sizePointId, mp);
 }
 
+void DAbstractBase::setRotateable(bool state)
+{
+	if(state == isRotateable) return;
+	prepareGeometryChange();
+	isRotateable = state;
+	update();
+}
+
+void DAbstractBase::setScaleable(bool state)
+{
+	if(state == isScaleable) return;
+	isScaleable = state;
+}
+
 int DAbstractBase::checkModiPoint(QPointF p) const
 {
 	qreal r = modiPointRadius;
@@ -197,6 +211,18 @@ void DAbstractBase::updateAllLinkLines()
 void DAbstractBase::unLinkAllLines()
 {
 	for(MagPoint* mag : *mags) mag->unlinkAllLines();
+}
+
+std::tuple<int,int,int> DAbstractBase::getLinedArrowType(){
+    if(mags == nullptr) return std::make_tuple(0,0,0);
+    int in = 0, out = 0, none = 0;
+    for(MagPoint * mag : *mags){
+        auto result = mag->linkedLienArrowType();
+        in += std::get<0>(result);
+        out += std::get<1>(result);
+        none += std::get<2>(result);
+    }
+    return std::make_tuple(in,out,none);
 }
 
 //==============================================================================

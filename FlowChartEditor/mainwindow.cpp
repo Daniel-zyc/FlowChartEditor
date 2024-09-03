@@ -10,6 +10,7 @@
 #include "undomanager.h"
 #include "aboutuswindow.h"
 
+#include <QStringList>
 #include <QFile>
 #include <QTextStream>
 #include <QActionGroup>
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actSelectFillCol);
     m->addAction(ui->actSelectTextCol);
     m->addAction(ui->actSelectTextFont);
-    m->addAction(ui->actLineStyleSheet);
+    m->addAction(ui->actStyleSheet);
     // m->addAction(ui->actMoveSelectedZUp);
     // m->addAction(ui->actMoveSelectedZDown);
     m->addAction(ui->actMoveSelectedMaxZUp);
@@ -159,8 +160,12 @@ void MainWindow::initUi()
     mainsplitter->addWidget(view);
     mainsplitter->setStretchFactor(1, 1);
 
+    //样式表
+    rightTab = new QTabWidget();
+    rightTab->setMovable(true);
+
     //线条样式表
-    rightw = new QWidget();
+    rightLinew = new QWidget();
     confirm = new QPushButton("确认");
     cancle = new QPushButton("取消");
     formright = new QFormLayout();
@@ -171,19 +176,19 @@ void MainWindow::initUi()
     rbtnLayout->addWidget(cancle, 1, Qt::AlignRight);
 
     lineType = new QComboBox();
-    lineType->addItem("实线");
-    lineType->addItem("短划线");
-    lineType->addItem("点线");
-    lineType->addItem("点划线");
-    lineType->addItem("短划线-点-点线");
+    lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
+    lineType->addItem(QIcon(":/icon/dashLine.png"), "短划线");
+    lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
+    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
+    lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
 
     arrowType = new QComboBox();
-    arrowType->addItem("无箭头");
-    arrowType->addItem("箭头");
-    arrowType->addItem("开放型箭头");
-    arrowType->addItem("燕尾箭头");
-    arrowType->addItem("菱形箭头");
-    arrowType->addItem("圆型箭头");
+    arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
+    arrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
+    arrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
+    arrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
+    arrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
+    arrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
 
     linebound = new QDoubleSpinBox();
     linebound->setRange(0, 1000);
@@ -197,9 +202,32 @@ void MainWindow::initUi()
     formright->addRow("线条磅数", linebound);
     formright->addRow(confirm, rbtnLayout);
 
-    rightw->setLayout(formright);
-    rightw->setVisible(false);
-    mainsplitter->addWidget(rightw);
+    rightLinew->setLayout(formright);
+    // rightw->setVisible(false);
+    rightTab->addTab(rightLinew, "线条");
+
+    //背景样式表
+    rightBgw = new QTreeWidget();
+    rightBgw->setColumnCount(3);
+    rightBgw->setHeaderLabels({"背景选择", "", ""});
+    colorTop = new QTreeWidgetItem(rightBgw);
+    patternTop = new QTreeWidgetItem(rightBgw);
+
+    colorTop->setText(0, "颜色");
+    patternTop->setText(0, "图案");
+
+    colorChild0 = new QTreeWidgetItem(colorTop);
+    colorChild0->setText(0, "纯色填充：");
+    selectedColor = new QPushButton();
+    rightBgw->setItemWidget(colorChild0, 1, selectedColor);
+
+    rightBgw->addTopLevelItem(colorTop);
+    rightBgw->addTopLevelItem(patternTop);
+
+    rightTab->addTab(rightBgw, "背景");
+
+    rightTab->setVisible(false);
+    mainsplitter->addWidget(rightTab);
 
     setCentralWidget(mainsplitter);
 }
@@ -359,6 +387,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
     connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
@@ -384,8 +413,8 @@ void MainWindow::bindAction()
     connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDocShape()));
     connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
 
-    connect(ui->actLineStyleSheet, &QAction::triggered, this, [this]() {
-        rightw->setVisible(true);
+    connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
+        rightTab->setVisible(true);
     });
 
     connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
@@ -450,6 +479,7 @@ void MainWindow::bindAction()
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
     connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
     connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
+	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
@@ -459,7 +489,7 @@ void MainWindow::bindAction()
 
     connect(confirm, &QPushButton::clicked, this, &MainWindow::changeLineStyle);
     connect(cancle, &QPushButton::clicked, this, [this]() {
-        rightw->setVisible(false);
+        rightTab->setVisible(false);
     });
 
     connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
@@ -480,22 +510,22 @@ void MainWindow::bindAction()
 
     connect(ui->actNoArrow, &QAction::triggered, this, [this]() {
         // changeEndArrow(static_cast<DConst::LineArrowType>(0));
-        changeEndArrow(0);
+		changeEndArrow(DConst::NONE);
     });
     connect(ui->actArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(1);
+		changeEndArrow(DConst::ARROW);
     });
     connect(ui->actOpenArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(2);
+		changeEndArrow(DConst::OPEN_ARROW);
     });
     connect(ui->actDovetailArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(3);
+		changeEndArrow(DConst::DOVETAIL_ARROW);
     });
     connect(ui->actDiaArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(4);
+		changeEndArrow(DConst::DIAMOND_ARROW);
     });
     connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(5);
+		changeEndArrow(DConst::ROUND_ARROW);
     });
 
     connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
@@ -852,14 +882,13 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    if(filePath == nullptr || filePath == "")
+        filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
-
     QList<QGraphicsItem *> items = scene->selectedItems();
     for(QGraphicsItem *item : items) {
         item->setSelected(false);
     }
-
     SaveAndLoadManager::instance().saveToFile(filePath);
 }
 
@@ -888,4 +917,8 @@ void MainWindow::undo(){
 void MainWindow::showAboutUsWindow(){
     AboutUsWindow* auw = new AboutUsWindow();
     auw->exec();
+}
+
+void MainWindow::check(){
+    scene->check();
 }
