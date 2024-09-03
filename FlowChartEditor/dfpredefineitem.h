@@ -6,7 +6,7 @@
 class DPreItem : public DShapeBase
 {
 public:
-    enum { Type = DFPreItemType };
+	enum { Type = DFPredefineItemType };
     DPreItem(QGraphicsItem *parent = nullptr);
     DPreItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

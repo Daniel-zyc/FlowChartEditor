@@ -206,13 +206,13 @@ void DScene::addTriItem()
 void DScene::addParagramItem()
 {
 	qDebug() << "add Parallegram";
-	prepareInsertItem(new DParallelogramItem());
+	prepareInsertItem(new DParagramItem());
 }
 
 void DScene::addDocItem()
 {
 	qDebug() << "add Document";
-	prepareInsertItem(new DDocItem());
+	prepareInsertItem(new DFDocumentItem());
 }
 
 void DScene::addDiaItem()
@@ -224,7 +224,7 @@ void DScene::addDiaItem()
 void DScene::addEndItem()
 {
 	qDebug() << "add Start/End";
-	prepareInsertItem(new DEndItem());
+	prepareInsertItem(new DFStartEndItem());
 }
 
 void DScene::addPreItem()
@@ -236,13 +236,13 @@ void DScene::addPreItem()
 void DScene::addDFDocItem()
 {
 	qDebug() << "add DFDocItem";
-	prepareInsertItem(new DDocItem());
+	prepareInsertItem(new DFDocumentItem());
 }
 
 void DScene::addDFEndItem()
 {
 	qDebug() << "add DFEndItem";
-	prepareInsertItem(new DEndItem());
+	prepareInsertItem(new DFStartEndItem());
 }
 
 void DScene::addDFManualOperateItem()
