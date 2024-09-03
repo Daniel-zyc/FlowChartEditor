@@ -25,6 +25,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DFDataItemType,
 				DFNodeItemType,
 				DFInformationItemType,
+				DFManualInputItemType,
 
 				// text
 				DTextItemType,

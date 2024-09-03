@@ -221,6 +221,6 @@ namespace DTool
 	// 将要被拷贝的图形进行一定的平移操作
 	void moveItems(const QList<QGraphicsItem*> &items);
 
-	// 过滤掉所有 parent 存在于列表中的元素
+	// 过滤掉所有 parent 存在于列表中的元素，以及所有不是 DAbstractBase 的元素
 	void filterRootBases(QList<QGraphicsItem*> &items);
 };

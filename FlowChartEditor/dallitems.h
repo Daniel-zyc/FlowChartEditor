@@ -33,6 +33,7 @@
 #include "dfdataitem.h"
 #include "dfnodeitem.h"
 #include "dfinformationitem.h"
+#include "dfmanualinputitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

@@ -75,16 +75,16 @@ void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
 
 QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 {
-    // qDebug() << "反序列化开始";
+	// qDebug() << "反序列化开始";
 
 	clearMap();
 
 	qint32 shapeSize, textSize, lineSize;
 	QList<QGraphicsItem* > data;
-	int tmpcnt;
+	int tmpcnt; Q_UNUSED(tmpcnt);
 
-    in >> shapeSize;
-    // qDebug() << "读取到的 shape 数量: " << shapeSize;
+	in >> shapeSize;
+	// qDebug() << "读取到的 shape 数量: " << shapeSize;
 	for(tmpcnt = 0; shapeSize; shapeSize--)
 	{
 		qint32 type; in >> type;
@@ -113,6 +113,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DFDataItemType: shape = new DFDataItem(); break;
 			case DFNodeItemType: shape = new DFNodeItem(); break;
 			case DFInformationItemType: shape = new DFInformationItem(); break;
+			case DFManualInputItemType: shape = new DFManualInputItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
@@ -122,10 +123,10 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		data.push_back(shape);
 		tmpcnt++;
 	}
-    // qDebug() << "成功序列化 shape 数量: " << tmpcnt;
+	// qDebug() << "成功序列化 shape 数量: " << tmpcnt;
 
 	in >> textSize;
-    // qDebug() << "读取到的 text 数量: " << textSize;
+	// qDebug() << "读取到的 text 数量: " << textSize;
 	for(tmpcnt = 0; textSize; textSize--)
 	{
 		DTextItem *text = new DTextItem();
@@ -137,10 +138,10 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		data.push_back(text);
 		tmpcnt++;
 	}
-    // qDebug() << "成功序列化 text 数量: " << tmpcnt;
+	// qDebug() << "成功序列化 text 数量: " << tmpcnt;
 
 	in >> lineSize;
-    // qDebug() << "读取到的 line 数量: " << lineSize;
+	// qDebug() << "读取到的 line 数量: " << lineSize;
 	for(tmpcnt = 0; lineSize; lineSize--)
 	{
 		qint32 type; in >> type;
@@ -159,7 +160,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		data.push_back(line);
 		tmpcnt++;
 	}
-    // qDebug() << "成功序列化 line 数量: " << tmpcnt;
+	// qDebug() << "成功序列化 line 数量: " << tmpcnt;
 
 	return data;
 }
