@@ -339,6 +339,9 @@ void MainWindow::createMenu()
 	ui->viewMenu->addAction(ui->actViewMoveRight);
 	ui->viewMenu->addAction(ui->actViewMoveDown);
 	ui->viewMenu->addAction(ui->actViewMoveUp);
+
+    ui->helpMenu->addAction(ui->actAboutUs);
+    ui->helpMenu->addAction(ui->actCheck);
 }
 
 void MainWindow::createToolBar()

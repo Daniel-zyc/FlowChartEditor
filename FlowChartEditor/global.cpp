@@ -34,6 +34,8 @@ QSet<int> registeredTypes = QSet<int>(
 
 int SHOT_STATE = DConst::UNCHANGED;
 
+int PASTE_NUM = 1;
+
 qreal DTool::degToRad(qreal deg) { return deg / 180 * DConst::PI; }
 
 qreal DTool::radToDeg(qreal rad) { return rad / DConst::PI * 180; }
@@ -59,14 +61,15 @@ bool DTool::inCircle(const QPointF& o, qreal r, const QPointF& p)
 
 void DTool::moveItems(const QList<QGraphicsItem *> &items)
 {
+    int currentCopytNum = PASTE_NUM ++ ;
 	QSet<QGraphicsItem*> S;
 	for (QGraphicsItem* item : items) S.insert(item);
 	for (QGraphicsItem* item : items)
 	{
 		if (item == nullptr || S.contains(item->parentItem())) continue;
 		QPointF curPos = item->pos();
-		item->setPos(curPos.x() + DConst::SHIFT_X,
-					 curPos.y() - DConst::SHIFT_Y);
+        item->setPos(curPos.x() + DConst::SHIFT_X * currentCopytNum,
+                     curPos.y() - DConst::SHIFT_Y * currentCopytNum);
 	}
 }
 

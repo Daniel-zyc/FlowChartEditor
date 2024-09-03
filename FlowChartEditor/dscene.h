@@ -95,7 +95,7 @@ public:
 	void setMenu(QMenu *m) { menu = m; }
 
     void clear();
-    void drawItems(QList<QGraphicsItem*> items);
+    void dDrawItems(QList<QGraphicsItem*> items);
 
     QList<DLineBase*> getSelectedLine();
     void changeLineType(Qt::PenStyle linestyle);
