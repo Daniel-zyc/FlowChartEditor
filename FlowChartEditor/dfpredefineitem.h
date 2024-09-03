@@ -26,5 +26,4 @@ public:
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     qreal ratio = 0.15;
-
 };
