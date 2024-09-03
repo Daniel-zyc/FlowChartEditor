@@ -43,6 +43,7 @@ private:
     void initUi();
 
 private slots:
+    void check();
     void saveAsSvg();
 
 	void addLine();
@@ -171,4 +172,5 @@ private:
 
     QPushButton *selectedColor;
     QTreeWidgetItem *colorChild0;
+    QString filePath = nullptr;
 };

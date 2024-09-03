@@ -155,6 +155,13 @@ namespace DConst
     {
         LINE_Z_VALUE = -100
     };
+
+    enum MagInOrOut
+    {
+        IN = 1,
+        OUT = 2,
+        NO_IN_OR_OUT = 3
+    };
 };
 
 // 工具函数

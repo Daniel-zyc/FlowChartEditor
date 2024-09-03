@@ -261,6 +261,14 @@ void DLineBase::setEndPoint(QPointF p)
 	sizeToPoint(p, DConst::ED-1);
 }
 
+int  DLineBase::magType(MagPoint *mag){
+    if(endArrowType == DConst::NONE && beginArrowType != DConst::NONE)
+        return mag == endMag ? DConst::OUT : DConst::IN;
+    if(endArrowType != DConst::NONE && beginArrowType == DConst::NONE)
+        return mag == endMag ? DConst::IN : DConst::OUT;
+    return DConst::NO_IN_OR_OUT;
+}
+
 //===========================================
 
 void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const

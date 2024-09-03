@@ -46,25 +46,23 @@ public:
 	DTextItem(const QString &text, QGraphicsItem *parent = nullptr);
 	DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *parent = nullptr);
 
+public:
 	int type() const override { return Type; }
 
-public:
 	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
 	QRectF sizeRect() const override;
 	QPainterPath shapeNormal() const override;
 	void sizeToRect(QRectF nrect) override;
 	void modiToPoint(QPointF p, int id) override;
+
+	void updateAll();
+	void updateMagPoint();
 	void deleteMagPoint();
 
 protected:
 	void focusOutEvent(QFocusEvent *event) override;
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-
-private:
-	void setRect(const QRectF &nrect);
-	void updateMagPoint();
 
 public:
 	DTextBase textBase = DTextBase(this);

@@ -387,6 +387,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
     connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
     connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
     connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
@@ -478,6 +479,7 @@ void MainWindow::bindAction()
     connect(trapBtn, &QPushButton::clicked, this, &MainWindow::addTrap);
     connect(endBtn, &QPushButton::clicked, this, &MainWindow::addEnd);
     connect(preBtn, &QPushButton::clicked, this, &MainWindow::addPre);
+	connect(parellgramBtn, &QPushButton::clicked, this, &MainWindow::addParallegram);
     //折线button
 
     // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
@@ -508,22 +510,22 @@ void MainWindow::bindAction()
 
     connect(ui->actNoArrow, &QAction::triggered, this, [this]() {
         // changeEndArrow(static_cast<DConst::LineArrowType>(0));
-        changeEndArrow(0);
+		changeEndArrow(DConst::NONE);
     });
     connect(ui->actArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(1);
+		changeEndArrow(DConst::ARROW);
     });
     connect(ui->actOpenArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(2);
+		changeEndArrow(DConst::OPEN_ARROW);
     });
     connect(ui->actDovetailArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(3);
+		changeEndArrow(DConst::DOVETAIL_ARROW);
     });
     connect(ui->actDiaArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(4);
+		changeEndArrow(DConst::DIAMOND_ARROW);
     });
     connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(5);
+		changeEndArrow(DConst::ROUND_ARROW);
     });
 
     connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
@@ -880,14 +882,13 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-    QString filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    if(filePath == nullptr || filePath == "")
+        filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
     if(filePath == "") return;
-
     QList<QGraphicsItem *> items = scene->selectedItems();
     for(QGraphicsItem *item : items) {
         item->setSelected(false);
     }
-
     SaveAndLoadManager::instance().saveToFile(filePath);
 }
 
@@ -916,4 +917,8 @@ void MainWindow::undo(){
 void MainWindow::showAboutUsWindow(){
     AboutUsWindow* auw = new AboutUsWindow();
     auw->exec();
+}
+
+void MainWindow::check(){
+    scene->check();
 }

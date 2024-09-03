@@ -11,7 +11,9 @@ AboutUsWindow::AboutUsWindow(QWidget *parent) : QDialog(parent) {
     QString markdownText = R"(
         <h1>关于我们</h1>
         <p><b>欢迎</b>访问关于我们. 这是北京理工大学2022级软件工程大三小学期实践项目</p>
-        <p>不啦不啦不啦不啦不啦不啦不啦不啦不啦不啦不啦不啦，通过<a href='https://gitee.com/daniel-zyc/flow-chart-editor.git'>访问</a>我们的gitee代码仓库获取源代码</p>
+        <p>不啦不啦不啦不啦不啦不啦不啦不啦不啦不啦不啦不啦，
+            通过<a href='https://gitee.com/daniel-zyc/flow-chart-editor.git'>访问</a>
+            我们的gitee代码仓库获取源代码</p>
         <ul>
             <li>不啦不啦不啦</li>
             <li>不啦不啦不啦</li>

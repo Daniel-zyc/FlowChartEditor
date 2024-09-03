@@ -12,7 +12,7 @@ public:
 public:
 	int type() const override { return Type; }
 
-	virtual void modiToPoint(QPointF p, int id) override;
+	void modiToPoint(QPointF p, int id) override;
 
 	void updateMagPoint() override;
 	void updateModiPoint() override;
