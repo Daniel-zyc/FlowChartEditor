@@ -21,7 +21,8 @@ void DTriItem::modiToPoint(QPointF p, int id)
 	p.setX(qMax(p.x(), rc.left()));
 	p.setX(qMin(p.x(), rc.right()));
 	polygon[0].setX(p.x());
-	updateAll();
+	updateModiPoint();
+	updateMagPoint();
 }
 
 void DTriItem::updateMagPoint()
