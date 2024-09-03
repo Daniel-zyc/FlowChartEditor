@@ -4,6 +4,7 @@
 #include "dview.h"
 #include "dfinddialog.h"
 #include "dtextitem.h"
+#include "inspector.h"
 
 #include <QSet>
 #include <QColorDialog>
@@ -123,6 +124,7 @@ private slots:
 private:
 	Ui::MainWindow *ui;
 
+    Inspector *inspector;
 	DScene *scene;
 	DView *view;
     DFindDialog *findDia;

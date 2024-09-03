@@ -1,9 +1,6 @@
 #pragma once
 
 #include "dshapebase.h"
-#include <QRectF>
-
-class DShapeBase;
 
 class DRectItem : public DShapeBase
 {

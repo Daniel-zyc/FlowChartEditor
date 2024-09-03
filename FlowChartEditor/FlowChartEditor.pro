@@ -14,13 +14,21 @@ SOURCES += \
     ddiaitem.cpp \
     dellitem.cpp \
     denditem.cpp \
+    dfconditionitem.cpp \
+    dfdataitem.cpp \
     dfinddialog.cpp \
+    dfinternalstoreitem.cpp \
+    dfmanualoperateitem.cpp \
+    dfpredefineitem.cpp \
+    dfnodeitem.cpp \
+    dfoptionalprocessitem.cpp \
+    dfprepareitem.cpp \
+    dfprocessitem.cpp \
     ditemgroup.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
-    dpreitem.cpp \
     drectitem.cpp \
     droundrectitem.cpp \
     dscene.cpp \
@@ -30,6 +38,7 @@ SOURCES += \
     dtriitem.cpp \
     dview.cpp \
     global.cpp \
+    inspector.cpp \
     magpoint.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -46,13 +55,21 @@ HEADERS += \
     ddiaitem.h \
     dellitem.h \
     denditem.h \
+    dfconditionitem.h \
+    dfdataitem.h \
     dfinddialog.h \
+    dfinternalstoreitem.h \
+    dfmanualoperateitem.h \
+    dfpredefineitem.h \
+    dfnodeitem.h \
+    dfoptionalprocessitem.h \
+    dfprepareitem.h \
+    dfprocessitem.h \
     ditemgroup.h \
     dlinebase.h \
     dlineitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
-    dpreitem.h \
     drectitem.h \
     droundrectitem.h \
     dscene.h \
@@ -62,6 +79,7 @@ HEADERS += \
     dtriitem.h \
     dview.h \
     global.h \
+    inspector.h \
     magpoint.h \
     mainwindow.h \
     saveandloadmanager.h \

@@ -45,14 +45,11 @@ void DParallelogramItem::updateModiPoint()
 void DParallelogramItem::modiToPoint(QPointF p, int id)
 {
 	Q_UNUSED(id);
-	QRectF rc = sizeRect();
-	p.setX(qMax(p.x(), rc.left()));
-	p.setX(qMin(p.x(), rc.right()));
-	polygon[0].setX(p.x());
-	polygon[2].setX(-p.x());
+	QRectF rc = sizeRect(); qreal nx = p.x();
+	nx = qMax(nx, rc.left()); nx = qMin(nx, rc.right());
+	polygon[0].setX(nx); polygon[2].setX(-nx);
 	updateModiPoint();
 	updateMagPoint();
-	return;
 }
 
 //==============================================================================

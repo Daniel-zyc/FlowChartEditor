@@ -28,7 +28,7 @@ QRectF DDocItem::sizeRect() const
 
 QPainterPath DDocItem::shapeNormal() const
 {
-	QPainterPath pth; pth.addRect(rect); return pth;
+	return path;
 }
 
 void DDocItem::updateMagPoint()

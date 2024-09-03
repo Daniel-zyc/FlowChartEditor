@@ -2,16 +2,12 @@
 
 #include "dpolygonbase.h"
 
-#include <QPainter>
-#include <QPolygonF>
-#include <QRectF>
-
-class DDiaItem : public DPolygonBase
+class DFDataItem : public DPolygonBase
 {
 public:
-	enum { Type = DFDiaItemType };
-	DDiaItem(QGraphicsItem *parent = nullptr);
-	DDiaItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFDataItemType };
+	DFDataItem(QGraphicsItem *parent = nullptr);
+	DFDataItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
 	int type() const override { return Type; }
@@ -25,8 +21,9 @@ public:
 	/**
 	 * @brief serialize
 	 * @param out
-	 * 序列化：DShapeBase -> rect
+	 * 序列化：DShapeBase -> rect -> radiusx -> radiusy
 	 */
 	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
 	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };
+
