@@ -190,11 +190,10 @@ void DScene::addParallegramItem()
 
 void DScene::addDocItem()
 {
-    qDebug() << "add Parallegram";
-    DDocItem *item = new DDocItem(200, 200);
-    item->textItem = new DTextItem(100, 100, "hello world!", item);
-    item->textItem->deleteMagPoint();
-    addItem(item);
+	qDebug() << "add Document";
+	DDocItem *item = new DDocItem();
+	state = DConst::INSERT_SHAPE;
+	modifiedShape = item;
 }
 
 void DScene::addDiaItem()

@@ -8,6 +8,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DRectItemType, DRoundRectItemType,
 				DEllItemType,
 				DTriItemType, DDiaItemType,
+				DDocItemType,
 
 				// text
 				DTextItemType,
