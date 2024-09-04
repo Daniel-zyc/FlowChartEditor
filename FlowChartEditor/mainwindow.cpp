@@ -847,7 +847,7 @@ void MainWindow::changeLineColor(QColor color)
 
 void MainWindow::setSceneBg(QString path)
 {
-    scene->setBg(path);
+    scene->setBackground(path);
 }
 
 void MainWindow::changeItemRot()
