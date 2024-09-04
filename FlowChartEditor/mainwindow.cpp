@@ -164,7 +164,7 @@ void MainWindow::initrightUi()
     rightShapew = new QTreeWidget();
     rightShapew->setColumnCount(2);
     rightShapew->setHeaderHidden(true);
-    rightShapew->setColumnWidth(0, 120);
+    rightShapew->setColumnWidth(0, 140);
     rightShapew->setSelectionMode(QAbstractItemView::NoSelection);
     borderTop = new QTreeWidgetItem();
     fillTop = new QTreeWidgetItem();
