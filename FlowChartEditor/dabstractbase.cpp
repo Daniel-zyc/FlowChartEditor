@@ -261,6 +261,16 @@ std::tuple<int,int,int> DAbstractBase::getLinedArrowType(){
     return std::make_tuple(in,out,none);
 }
 
+QVariant DAbstractBase::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if(change == QGraphicsItem::ItemPositionHasChanged
+        || change == QGraphicsItem::ItemRotationHasChanged
+        || change == QGraphicsItem::ItemScaleHasChanged)
+        SHOT_STATE = DConst::CHANGED;
+    return value;
+}
+
+
 //==============================================================================
 
 void DAbstractBase::serialize(QDataStream &out, const QGraphicsItem* fa) const

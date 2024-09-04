@@ -333,6 +333,7 @@ void DScene::addDFCardItem()
 void DScene::addDFCompareItem()
 {
     qDebug() << "add 对照";
+    prepareInsertItem(new DFCompareItem());
 }
 
 void DScene::addDFDirecrAccessItem()
@@ -399,6 +400,7 @@ void DScene::addDFSummaryconnItem()
 void DScene::addDFSortItem()
 {
     qDebug() << "add 排序";
+    prepareInsertItem(new DFSortItem());
 }
 
 void DScene::addDFOptionalProcessItem()
@@ -670,7 +672,7 @@ void DScene::changeFillColor(QColor color)
 void DScene::changeFillPic(QPixmap pixmap)
 {
     qDebug() << "change border pic";
-    QList<DShapeBase*> shapes = getSelectedShapes();
+	QList<DShapeBase*> shapes = getSelectedShapes();
     for(DShapeBase* shape : shapes)
     {
         QBrush nbrush = shape->brush();
@@ -1059,9 +1061,9 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	}
 
     if((insert_state != DConst::NONE)
-        && SHOT_STATE == DConst::CHANGED){
+		&& SHOT_STATE == DConst::CHANGED){
         shot();
-        Inspector::instance()->checkAll();
+		Inspector::instance()->checkAll();
     }
 
 	insert_state = DConst::NONE;

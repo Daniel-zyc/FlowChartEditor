@@ -27,6 +27,7 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QMainWindow>
+#include <formworkwidget.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -81,7 +82,7 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-//    void addDFPredefineItem() { scene->addDFSummaryconnItem(); }
+//    void addDFPredefineItem() { scene->addDFCompareItem(); }
     void addDFPredefineItem() { scene->addDFPredefineItem(); }
     void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
     void addDFOrItem() { scene->addDFOrItem();}
@@ -181,6 +182,7 @@ private slots:
 private:
 	Ui::MainWindow *ui;
 
+
     Inspector *inspector;
 	DScene *scene;
 	DView *view;
@@ -191,6 +193,7 @@ private:
     QSplitter *middlesplitter;
 
     QSplitter *mainsplitter;
+
     QWidget *leftw;
     QGridLayout *flowGrid;
     QGridLayout *primaryGrid;
@@ -245,6 +248,7 @@ private:
     QPushButton *addPenBtn;//五边形
     QPushButton *addHexBtn;//六边形
 
+    FormworkWidget *formworkWidget;
     QTabWidget *rightTab;
     QWidget *rightLinew;
     QFormLayout *formright;

@@ -15,6 +15,7 @@ SOURCES += \
     ddiaitem.cpp \
     dellitem.cpp \
     dfcarditem.cpp \
+    dfcompareitem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
     dfdelayitem.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
+    dfsortitem.cpp \
     dfstartenditem.cpp \
     dfsummaryconnitem.cpp \
     dlinebase.cpp \
@@ -47,6 +49,7 @@ SOURCES += \
     dtrapitem.cpp \
     dtriitem.cpp \
     dview.cpp \
+    formworkwidget.cpp \
     global.cpp \
     inspector.cpp \
     magpoint.cpp \
@@ -64,6 +67,7 @@ HEADERS += \
     ddiaitem.h \
     dellitem.h \
     dfcarditem.h \
+    dfcompareitem.h \
     dfconditionitem.h \
     dfdataitem.h \
     dfdelayitem.h \
@@ -80,6 +84,7 @@ HEADERS += \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
+    dfsortitem.h \
     dfstartenditem.h \
     dfsummaryconnitem.h \
     dlinebase.h \
@@ -96,6 +101,7 @@ HEADERS += \
     dtrapitem.h \
     dtriitem.h \
     dview.h \
+    formworkwidget.h \
     global.h \
     inspector.h \
     magpoint.h \
@@ -113,5 +119,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    formwork.qrc \
     icon.qrc \
     qss.qrc
