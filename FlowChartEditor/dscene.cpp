@@ -1000,6 +1000,11 @@ QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
 	return pos;
 }
 
+void DScene::setAutoAlign(bool active)
+{
+	autoAlign = active;
+}
+
 //==============================================================================
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -1112,6 +1117,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	QGraphicsScene::mouseMoveEvent(event);
 
 	//============= auto align =============
+	if(!autoAlign) return;
 	if(drag_state == DConst::NONE || selectedItems().size() > 1)
 		return;
 	QList<DShapeBase*> shapes = getSelectedShapes();
