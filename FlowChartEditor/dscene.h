@@ -82,9 +82,11 @@ public:
 	void addDFNodeItem();
 	void addManualinItem();
 	void addDFPredefineItem();
-	void addManualInputItem();
-	void addDFDelayItem();
+    void addDFDelayItem();
+    void addDFOrItem();
+    void addManualInputItem();
 	void addDFInformationItem();
+    void addDFSummaryconnItem();
 
 	// 插入文本框
 	void addTextItem();

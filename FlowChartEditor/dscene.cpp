@@ -256,6 +256,18 @@ void DScene::addDFProcessItem()
 	prepareInsertItem(new DFProcessItem());
 }
 
+void DScene::addDFOrItem()
+{
+    qDebug() << "add DFOrItem";
+    prepareInsertItem(new DFOrItem());
+}
+
+void DScene::addDFSummaryconnItem()
+{
+    qDebug() << "add DFSummaryconnItem";
+    prepareInsertItem(new DFSummaryconnItem());
+}
+
 void DScene::addDFOptionalProcessItem()
 {
 	qDebug() << "add DFOptionalProcessItem";
