@@ -73,5 +73,7 @@
         <file>icon/flowchart/sort.png</file>
         <file>icon/flowchart/storedata.png</file>
         <file>icon/curve.png</file>
+        <file>icon/primary/hex.png</file>
+        <file>icon/primary/pen.png</file>
     </qresource>
 </RCC>

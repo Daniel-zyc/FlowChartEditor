@@ -2,3 +2,7 @@ QToolButton::menu-indicator {
     image : None;
 }
 
+
+QTreeView::item {
+    height: 30px;
+}

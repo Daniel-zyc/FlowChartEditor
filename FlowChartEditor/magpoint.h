@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include <QPointF>
 
+class DShapeBase;
 class DLineBase;
 
 // 磁吸点类，作为 DAbstractBase 的辅助类
@@ -12,11 +13,11 @@ class MagPoint
 {
 public:
 	// 构造函数，需要指明挂载到的父图形项
-	MagPoint(QGraphicsItem* parent);
+    MagPoint(DShapeBase* parent);
 	// 指定在父图形项坐标系的坐标点
-	MagPoint(const QPointF &p, QGraphicsItem* parent);
+    MagPoint(const QPointF &p, DShapeBase* parent);
 	// 指定在父图形项坐标系的坐标点
-	MagPoint(qreal x, qreal y, QGraphicsItem* parent);
+    MagPoint(qreal x, qreal y, DShapeBase* parent);
 
 	~MagPoint();
 
@@ -45,7 +46,7 @@ public:
 	// 记录上一次刷新时的 scenePos，如果不改变则不刷新
 	QPointF scenePos;
 	// parent 指向挂载到的父图形项
-	QGraphicsItem *parent = nullptr;
+    DShapeBase *parent = nullptr;
     // 获取连线数量
     int linkedLineNum(){if(lines == nullptr) return 0; else return lines->size();}
     // 获取连线的箭头类型数量,int,out,none
