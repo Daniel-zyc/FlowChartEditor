@@ -189,6 +189,9 @@ public:
 	// 自动磁吸参考线
 	QPointF getAutoAlignItemPos(DShapeBase* item);
 
+	// 设置是否开启磁吸线
+	void setAutoAlign(bool active);
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -239,4 +242,6 @@ private:
 	// 用作参考的磁吸线
 	QGraphicsLineItem* magLineH = new QGraphicsLineItem(0, 0, 0, 0);
 	QGraphicsLineItem* magLineV = new QGraphicsLineItem(0, 0, 0, 0);
+
+	bool autoAlign = true;
 };
