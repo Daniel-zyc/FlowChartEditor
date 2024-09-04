@@ -87,6 +87,7 @@ public:
     void addManualinItem();
 	void addDFPredefineItem();
     void addDFDelayItem();
+    void addDFOrItem();
 
 
 	// 插入文本框
