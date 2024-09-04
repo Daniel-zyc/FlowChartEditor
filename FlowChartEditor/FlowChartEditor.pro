@@ -40,6 +40,7 @@ SOURCES += \
     dlineitem.cpp \
     dmultidocitem.cpp \
     dparagramitem.cpp \
+    dpentagonitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
     drectitem.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     dlineitem.h \
     dmultidocitem.h \
     dparagramitem.h \
+    dpentagonitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
     drectitem.h \

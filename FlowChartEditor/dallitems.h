@@ -41,6 +41,7 @@
 #include "dfsortitem.h"
 #include "dfcompareitem.h"
 #include "dfoffpageitem.h"
+#include "dpentagonitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"
