@@ -14,6 +14,7 @@ SOURCES += \
     dclass/base/dlinebase.cpp \
     dclass/base/dpolygonbase.cpp \
     dclass/base/dshapebase.cpp \
+    dclass/base/dtextbase.cpp \
     dclass/basicshape/ddiaitem.cpp \
     dclass/basicshape/dellitem.cpp \
     dclass/basicshape/dparagramitem.cpp \
@@ -73,6 +74,7 @@ HEADERS += \
     dclass/base/dlinebase.h \
     dclass/base/dpolygonbase.h \
     dclass/base/dshapebase.h \
+    dclass/base/dtextbase.h \
     dclass/basicshape/ddiaitem.h \
     dclass/basicshape/dellitem.h \
     dclass/basicshape/dparagramitem.h \

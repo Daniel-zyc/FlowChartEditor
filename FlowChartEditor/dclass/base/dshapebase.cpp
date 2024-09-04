@@ -11,7 +11,11 @@ DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 {
 	textItem = new DTextItem(text, this);
 	textItem->deleteMagPoint();
+}
 
+DShapeBase::~DShapeBase()
+{
+	if(textItem) delete textItem;
 }
 
 QRectF DShapeBase::boundingRect() const

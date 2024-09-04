@@ -21,10 +21,12 @@ public:
     void updateAll();
     void updatePath();
     void updateMagPoint();
+	void updateModiPoint();
 
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     QPainterPath path;
+	qreal ratio;
 
     void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
     bool deserialize(QDataStream &in, QGraphicsItem* fa) override;

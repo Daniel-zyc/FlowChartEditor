@@ -32,13 +32,20 @@ QSet<int> registeredTypes = QSet<int>(
 				DFDelayItemType,
 				DFOrItemType,
 				DFSummaryconnItemType,
+				DFCardItemType,
+				DFCompareItemType,
+				DFMergeItemType,
+				DFOffPageItemType,
+				DFSortItemType,
+				DFStoreDataItemType,
 
 				// text
 				DTextItemType,
 
 				// line
 				DLineItemType,
-				DCurveLineItemType
+				DCurveLineItemType,
+				DPolyLineItemType
 			});
 
 int SHOT_STATE = DConst::UNCHANGED;
@@ -89,13 +96,16 @@ void DTool::filterRootBases(QList<QGraphicsItem*>& items)
         S.insert(item);
     }
 
-    for (int i = items.size() - 1; i >= 0; i--) {
-        if (items[i] == nullptr || !isAbstract(items[i]->type())
-            || S.contains(items[i]->parentItem()))
-        {
-            items.removeAt(i);
-        }
-    }
+	for (int i = 0; i < items.size(); i++)
+	{
+		if (items[i] == nullptr || !isAbstract(items[i]->type())
+			|| S.contains(items[i]->parentItem()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+			i--;
+		}
+	}
 }
 
 void DTool::filterBases(QList<QGraphicsItem*>& items)
@@ -106,6 +116,7 @@ void DTool::filterBases(QList<QGraphicsItem*>& items)
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
+			i--;
 		}
 	}
 }
@@ -137,6 +148,7 @@ void DTool::filterNoparent(QList<DShapeBase*>& items)
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
+			i--;
 		}
 }
 

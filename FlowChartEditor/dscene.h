@@ -243,5 +243,6 @@ private:
 	QGraphicsLineItem* magLineH = new QGraphicsLineItem(0, 0, 0, 0);
 	QGraphicsLineItem* magLineV = new QGraphicsLineItem(0, 0, 0, 0);
 
+	// 设置是否启用自动对齐
 	bool autoAlign = true;
 };

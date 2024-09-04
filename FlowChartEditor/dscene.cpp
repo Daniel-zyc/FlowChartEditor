@@ -94,7 +94,9 @@ DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
 	{
 		if(item->checkMagPoint(p))
 			return item;
-		if((item->isShape() || item->isText()) && item->contains(p))
+		if(item->isShape() && item->contains(p))
+			return nullptr;
+		if(item->isText() && item->parentItem() == nullptr && item->contains(p))
 			return nullptr;
 	}
 	return nullptr;
@@ -310,11 +312,13 @@ void DScene::addDFInternalStoreItem()
 	qDebug() << "add DFInternalStoreItem";
 	prepareInsertItem(new DFInternalStoreItem());
 }
+
 void DScene::addDFPrepareItem()
 {
 	qDebug() << "add DFPrepareItem";
 	prepareInsertItem(new DFPrepareItem());
 }
+
 void DScene::addDFDelayItem()
 {
     qDebug() << "add DFDelayItem";
@@ -326,7 +330,6 @@ void DScene::addDFInformationItem()
 	qDebug() << "add DFInformationItem";
 	prepareInsertItem(new DFInformationItem());
 }
-
 
 void DScene::addDFCardItem()
 {
@@ -490,13 +493,13 @@ void DScene::delSelectedItem()
 			line->unlinkBeginUpdate();
 			line->unlinkEndUpdate();
 		}
+		item->setParentItem(nullptr);
 	}
 	for(DAbstractBase* item : items)
 	{
-		item->setParentItem(nullptr);
-		this->removeItem(item);
+		removeItem(item);
+		delete item;
 	}
-	for(QGraphicsItem *item : items) delete item;
 }
 
 void DScene::setItemSelected(QGraphicsItem * item){

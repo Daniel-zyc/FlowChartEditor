@@ -8,7 +8,8 @@ DFCompareItem::DFCompareItem(qreal w, qreal h, QGraphicsItem *parent)
     : DPolygonBase("", parent)
 {
     for(int i = 0; i < 8; i++) mags->push_back(new MagPoint(this));
-    polygon  << QPointF(0, 0)<< QPointF(w/2, -h/2) << QPointF(-w/2,-h/2) << QPointF(w/2, h/2) << QPointF(-w/2, h/2);
+	polygon << QPointF(0, 0) << QPointF(w/2, h/2) << QPointF(-w/2, h/2)
+			<< QPointF(0, 0) << QPointF(-w/2,-h/2) << QPointF(w/2, -h/2);
     updateAll();
 }
 
@@ -21,7 +22,7 @@ void DFCompareItem::updateMagPoint()
 {
     (*mags)[0]->setPos(polygon[0]);
     (*mags)[1]->setPos((polygon[1] + polygon[2]) / 2);
-    (*mags)[2]->setPos((polygon[3] + polygon[4]) / 2);
+	(*mags)[2]->setPos((polygon[4] + polygon[5]) / 2);
 }
 
 void DFCompareItem::updateModiPoint()

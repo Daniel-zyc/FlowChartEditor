@@ -14,7 +14,7 @@ public:
 	enum { Type = DShapeBaseType };
 	DShapeBase(QGraphicsItem *parent = nullptr);
 	DShapeBase(const QString &text, QGraphicsItem *parent = nullptr);
-	~DShapeBase() = default;
+	~DShapeBase();
 
 public:
 	virtual int type() const override { return Type; }
