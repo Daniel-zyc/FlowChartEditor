@@ -52,7 +52,7 @@ void MagPoint::setPos(const QPointF& p)
 
 void MagPoint::unlinkAllLines()
 {
-	for(DLineBase* line : *lines) line->unlinkMag(this);
+	for(DLineBase* line : *lines) line->unlinkMagUpdate(this);
 	lines->clear();
 }
 

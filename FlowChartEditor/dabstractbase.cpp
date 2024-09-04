@@ -216,8 +216,9 @@ bool DAbstractBase::checkMagPoint(QPointF p) const
 {
 	p = mapFromScene(p);
 	qreal r = magPointCollideRadius;
-	for(int i = 0; i < mags->size(); i++) if(DTool::inCircle((*mags)[i]->pos, r, p))
-		return true;
+	for(int i = 0; i < mags->size(); i++)
+		if(DTool::inCircle((*mags)[i]->pos, r, p))
+			return true;
 	return false;
 }
 

@@ -107,7 +107,7 @@ void DLineBase::linkEnd(MagPoint *mp)
 	endMag = mp; mp->addLine(this); endPoint = mp->mapToItem(this);
 }
 
-void DLineBase::unlinkBegin()
+void DLineBase::unlinkBeginUpdate()
 {
 	if(beginMag)
 	{
@@ -118,7 +118,7 @@ void DLineBase::unlinkBegin()
 	updatePosition();
 }
 
-void DLineBase::unlinkEnd()
+void DLineBase::unlinkEndUpdate()
 {
 	if(endMag)
 	{
@@ -129,7 +129,7 @@ void DLineBase::unlinkEnd()
 	updatePosition();
 }
 
-void DLineBase::unlinkMag(MagPoint* mp)
+void DLineBase::unlinkMagUpdate(MagPoint* mp)
 {
 	if(beginMag == mp)
 	{
@@ -144,6 +144,24 @@ void DLineBase::unlinkMag(MagPoint* mp)
 	updatePosition();
 }
 
+void DLineBase::unlinkBegin()
+{
+	if(beginMag)
+	{
+		beginMag->deleteLine(this);
+		beginMag = nullptr;
+	}
+}
+
+void DLineBase::unlinkEnd()
+{
+	if(endMag)
+	{
+		endMag->deleteLine(this);
+		endMag = nullptr;
+	}
+}
+
 void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 {
 	switch(id)
@@ -153,7 +171,7 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 			else
 			{
 				// qDebug() << "unlinkBegin";
-				unlinkBegin();
+				unlinkBeginUpdate();
 				beginPoint = p;
 			}
 			break;
@@ -162,7 +180,7 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 			else
 			{
 				// qDebug() << "unlinkEnd";
-				unlinkEnd();
+				unlinkEndUpdate();
 				endPoint = p;
 			}
 			break;
@@ -310,6 +328,22 @@ bool DLineBase::ifLinedSameMag(DLineBase *line){
     if(line->beginMag != nullptr && this->endMag != nullptr && line->beginMag == this->endMag) return true;
     if(line->beginMag != nullptr && this->beginMag != nullptr && line->beginMag == this->beginMag) return true;
     return false;
+}
+
+void DLineBase::checkAutoUnlinkLine()
+{
+	if(beginMag)
+	{
+		QPointF p = beginMag->mapToItem(this);
+		if(!DTool::inCircle(p, globalScale + 1.0, beginPoint))
+			unlinkBegin();
+	}
+	if(endMag)
+	{
+		QPointF p = endMag->mapToItem(this);
+		if(!DTool::inCircle(p, globalScale + 1.0, endPoint))
+			unlinkEnd();
+	}
 }
 
 //==============================================================================

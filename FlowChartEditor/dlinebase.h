@@ -33,9 +33,12 @@ public:
 	virtual void linkBegin(MagPoint *mp);
 	virtual void linkEnd(MagPoint *mp);
 
+	virtual void unlinkBeginUpdate();
+	virtual void unlinkEndUpdate();
+	virtual void unlinkMagUpdate(MagPoint *mp);
+
 	virtual void unlinkBegin();
 	virtual void unlinkEnd();
-	virtual void unlinkMag(MagPoint *mp);
 
 	virtual void updatePosition();
 	virtual void updateSizePoint();
@@ -56,6 +59,9 @@ public:
     bool ifLinkedWith(DAbstractBase *item);
     // 判断是否与某一个line连接同一个magPoint
     bool ifLinedSameMag(DLineBase *line);
+
+	void checkAutoUnlinkLine();
+
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;
@@ -67,10 +73,12 @@ protected:
 	virtual void updateLine() = 0;
 	//==========================================================================
 
+	// 检测图形变化，并调整图形
+	// virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
 protected:
 	QPointF beginPoint = QPoint(0, 0), endPoint = QPointF(0, 0);
 	MagPoint *beginMag = nullptr, *endMag = nullptr;
-
 
 private:
 	int interactType = DConst::NONE;

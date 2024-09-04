@@ -482,8 +482,8 @@ void DScene::delSelectedItem()
 		if((shape = dynamic_cast<DShapeBase*>(item))) shape->unLinkAllLines();
 		else if((line = dynamic_cast<DLineBase*>(item)))
 		{
-			line->unlinkBegin();
-			line->unlinkEnd();
+			line->unlinkBeginUpdate();
+			line->unlinkEndUpdate();
 		}
 	}
 	for(DAbstractBase* item : items)
@@ -941,7 +941,8 @@ QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
 	QList<DShapeBase*> shapes = DTool::itemToShape(items);
 	DTool::filterNoparent(shapes);
 
-	removeItem(magLineH); removeItem(magLineV);
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
 
 	QPointF pos = item->pos();
 	QRectF rc = item->mapRectToScene(item->sizeRect());
@@ -1136,11 +1137,17 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		Inspector::instance()->checkAll();
 	}
 
+	if(drag_state != DConst::NONE)
+	{
+		for(DLineBase* line : getSelectedLines())
+			line->checkAutoUnlinkLine();
+	}
+
 	insert_state = DConst::NONE;
 	inter_state = DConst::NONE;
 	drag_state = DConst::NONE;
-	removeItem(magLineH);
-	removeItem(magLineV);
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
 	modifiedShape = nullptr;
 
 mouseReleaseEventPass:
