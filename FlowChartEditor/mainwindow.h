@@ -85,8 +85,7 @@ private slots:
     void addDFCardItem() { scene->addDFCardItem();}
     void addDFManualinputItem() { scene->addManualinItem(); }
     void addDFDelayItem() { scene->addDFDelayItem(); }
-	void addDFManualInputItem() { scene->addManualInputItem(); }
-    void addDFCardItem(){scene->addDFCardItem();}
+    void addDFManualInputItem() { scene->addManualInputItem(); }
     void addDFCompareItem(){scene->addDFCompareItem();}
     void addDFDirecrAccessItem() {scene->addDFDirecrAccessItem();}
     void addDFDiskItem(){scene->addDFDiskItem();}

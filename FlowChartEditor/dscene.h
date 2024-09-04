@@ -105,7 +105,6 @@ public:
     void addDFSequentialAccessItem();
     void addDFStoreDataItem();
     void addDFSummaryconnItem();
-    void addDFCardItem();
 
 	// 插入文本框
 	void addTextItem();
