@@ -19,8 +19,8 @@ public:
 	void rotateCCW(qreal deg = DView::defaultRotateDelta)
 	{ setRotation(DTool::degMod(rotation + deg)); }
 
-	void resetScale() { setScale(1.0); }
-	void setScale(qreal scale = 1.0);
+	void resetScale() { setScale(1.0/globalScale); }
+	void setScale(qreal scale = 1.0/globalScale);
 	void enlarge(qreal ratio = DView::defaultScaleRatio)
 	{
 		setScale(scale * ratio);
@@ -45,7 +45,7 @@ protected:
 	void init();
 
 protected:
-	qreal scale = 1.0, rotation = 0.0;
+	qreal scale = 1.0/globalScale, rotation = 0.0;
 
 	static qreal defaultRotateDelta;
 	static qreal defaultScaleRatio;

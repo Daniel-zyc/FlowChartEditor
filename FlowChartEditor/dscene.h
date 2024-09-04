@@ -114,7 +114,12 @@ public:
 	// 删除
 	void delSelectedItem();
 
-	// 获取某位置上的磁吸点
+    // 设置的单个图形选中
+    void setItemSelected(QGraphicsItem * item);
+
+    // 检测某图形是否碰撞
+    bool getCollision(QGraphicsItem * item);
+
 	DAbstractBase* getMagItemOnPoint(QPointF p);
 
 	// 设置画布的菜单、设置绑定在画布上的窗口

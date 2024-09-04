@@ -138,3 +138,7 @@ bool DTool::isFlowChartShape(int type)
 {
 	return QGraphicsItem::UserType + 200 <= type && type < QGraphicsItem::UserType + 300;
 }
+
+int DTool::getErrorLevel(int type){
+    return type > 100;
+}

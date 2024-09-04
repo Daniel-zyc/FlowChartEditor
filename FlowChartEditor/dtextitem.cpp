@@ -15,6 +15,7 @@ DTextBase::DTextBase(const QString &text, QGraphicsItem *parent)
 {
 	document()->setPlainText(text);
 	focusToCenter();
+	setScale(globalScale);
 }
 
 void DTextBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -117,7 +118,7 @@ void DTextItem::deleteMagPoint()
 
 void DTextItem::updateAll()
 {
-	textBase.setTextWidth(rect.width() - maxBorderRadius*2);
+	textBase.setTextWidth((rect.width() - maxBorderRadius*2) / globalScale);
 	updateSizePoint();
 	updateMagPoint();
 }

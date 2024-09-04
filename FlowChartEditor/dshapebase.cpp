@@ -11,6 +11,7 @@ DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 {
 	textItem = new DTextItem(text, this);
 	textItem->deleteMagPoint();
+
 }
 
 QRectF DShapeBase::boundingRect() const
@@ -190,6 +191,11 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 		case DConst::NONE: break;
 	}
 	return nrc;
+}
+
+bool DShapeBase::isTextEmpty(){
+    if(textItem == nullptr) return false;
+    return textItem->textBase.toPlainText() == "";
 }
 
 //==============================================================================

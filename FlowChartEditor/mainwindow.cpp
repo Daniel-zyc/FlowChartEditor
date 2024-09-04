@@ -101,15 +101,25 @@ MainWindow::~MainWindow()
 void MainWindow::initUi()
 {
     initleftUi();
-    initrightUi();
+    initmiddleUi();
+    // initrightUi();
 
     mainsplitter->addWidget(leftw);
-    mainsplitter->addWidget(view);
+    mainsplitter->addWidget(middlesplitter);
     mainsplitter->setStretchFactor(1, 1);
     mainsplitter->addWidget(rightTab);
 
 
     setCentralWidget(mainsplitter);
+}
+
+void MainWindow::initmiddleUi(){
+    middlesplitter = new QSplitter(Qt::Vertical,this);
+    middlesplitter->addWidget(view);
+
+    middlesplitter->addWidget(inspector);
+    middlesplitter->setStretchFactor(0, 3);
+    middlesplitter->setStretchFactor(1, 1);
 }
 
 void MainWindow::initleftUi()
@@ -284,10 +294,11 @@ void MainWindow::initleftUi()
     leftUpV->addWidget(lineGroup);
     leftUpV->addWidget(textGroup);
     leftUpV->addStretch();
-}
 
-void MainWindow::initrightUi()
-{
+    mainsplitter->addWidget(leftw);
+
+    mainsplitter->setStretchFactor(1, 1);
+
     //样式表
     rightTab = new QTabWidget();
     rightTab->setMovable(true);
@@ -1097,6 +1108,6 @@ void MainWindow::showAboutUsWindow(){
 }
 
 void MainWindow::check(){
-    inspector->check();
+    inspector->checkAll();
     inspector->show();
 }

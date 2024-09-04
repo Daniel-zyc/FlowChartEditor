@@ -45,6 +45,7 @@ private:
 	void bindAction();
     void initUi();
     void initleftUi();
+    void initmiddleUi();
     void initrightUi();
     void connectLeft();
     void connectRight();
@@ -173,6 +174,8 @@ private:
     DFindDialog *findDia;
     QColorDialog *colorDia;
     QFontDialog *fontDia;
+
+    QSplitter *middlesplitter;
 
     QSplitter *mainsplitter;
     QWidget *leftw;

@@ -2,45 +2,69 @@
 #define INSPECTOR_H
 #include "dscene.h"
 #include "dview.h"
-#include "qlabel.h"
-#include <QDialog>
+#include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QListWidget>
 
-struct errorItem{
+struct errorMessage{
+    int errorType;
     QString message;
-    QGraphicsItem * item;
+    DAbstractBase * item;
 };
 
-class Inspector : public QDialog
+class Inspector : public QWidget
 {
+    Q_OBJECT
 public:
-    Inspector(QWidget *parent = nullptr,DScene *scene = nullptr,DView *view = nullptr);
+    explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
+    ~Inspector();
 
-    void check();
+    void checkAll();
+    void checkItem(QGraphicsItem * item);
+    void checkItems(QList<QGraphicsItem*> item);
+
+    void checkChartFlowItem(QGraphicsItem * item);
+    void checkLineItem(QGraphicsItem * item);
+    void checkOtherItem(QGraphicsItem * item);
+
+    void restoreView();
+    void updateErrorList();
 
 private:
     DScene *scene;
-    DView * view;
+    DView *view;
 
-    QList<errorItem> errorMessage;
-
-    QGridLayout *gridLayout = new QGridLayout();
-    QPushButton *forwardBtn = new QPushButton("向前");
-    QPushButton *backwardBtn = new QPushButton("向后");
-    QLabel *message = new QLabel;
+    QList<errorMessage> errorMessage;
 
     QPointF originalCentrer;
     QTransform originalTransform;
 
-    void restoreView();
-protected:
-    void closeEvent(QCloseEvent *event) override;
-private slots:
-    void forward();
-    void backward();
+    QListWidget *errorListWidget;
 
-    int index;
+    void showAllType();
+
+    void showErrorsOnly();
+
+    void showFlowChartErrorsOnly();
+
+    bool ifShowErrorOnly = false;
+
+    bool ifShowFlowChartErrorsOnly = false;
+
+private slots:
+    void onItemClicked(QListWidgetItem *item);
+
+    // 清空所有错误
+    void clearAllErrors();
+
+    // 仅显示错误不显示警告
+    void onShowErrorActionClicked();
+
+    // 仅显示流程图错误
+    void onShowFlowChartErrorsClicked();
+
+    void onCloseActionClicked();
 };
 
 #endif // INSPECTOR_H
