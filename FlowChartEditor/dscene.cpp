@@ -399,6 +399,7 @@ void DScene::addDFSummaryconnItem()
 void DScene::addDFSortItem()
 {
     qDebug() << "add 排序";
+    prepareInsertItem(new DFSortItem());
 }
 
 void DScene::addDFOptionalProcessItem()
@@ -669,7 +670,7 @@ void DScene::changeFillColor(QColor color)
 void DScene::changeFillPic(QPixmap pixmap)
 {
     qDebug() << "change border pic";
-    QList<DShapeBase*> shapes = getSelectedShape();
+    QList<DShapeBase*> shapes = getSelectedShapes();
     for(DShapeBase* shape : shapes)
     {
         QBrush nbrush = shape->brush();
