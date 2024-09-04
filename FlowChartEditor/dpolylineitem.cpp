@@ -209,7 +209,7 @@ QPainterPath DPolyLineItem::shapeNormal() const
 
 void DPolyLineItem::updateLine()
 {
-    qDebug() << "update" << clock();
+    //qDebug() << "update" << clock();
     updatePolyLineType();
     updateBeginMidPoint();
     updateEndMidPoint();
@@ -307,7 +307,6 @@ int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
         temp = abs(mapToScene(item.bottomLeft()).y() - point.y());
         if(temp < min_dis) min_dis = temp,item_direct = 3;
     }
-    qDebug() << "min_dis:" << min_dis;
     return item_direct;
 }
 //相对位置 1234右上开始顺时针
@@ -627,4 +626,28 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         //end_midPoint = ed_midPoint;
     }
     qDebug() << "line_type:" << line_type << "midPoint:" << midPoint;
+}
+
+//=============================================
+
+void DPolyLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+    DLineBase::serialize(out, fa);
+    out << st_x_offset << st_y_offset << ed_x_offset << ed_y_offset;
+    out << mid_x_shift << mid_y_shift;
+    out << begin_midPoint << end_midPoint << midPoint;
+    out << modis_num << line_type << record_dist;
+    out << modi_pos;
+}
+
+bool DPolyLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+    if(!DLineBase::deserialize(in, fa)) return false;
+    in << st_x_offset << st_y_offset << ed_x_offset << ed_y_offset;
+    in << mid_x_shift << mid_y_shift;
+    in << begin_midPoint << end_midPoint << midPoint;
+    in << modis_num << line_type << record_dist;
+    in << modi_pos;
+    updateLine();
+    return true;
 }
