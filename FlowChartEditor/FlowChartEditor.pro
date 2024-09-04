@@ -14,6 +14,7 @@ SOURCES += \
     dcurvelineitem.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
+    dfcarditem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
     dfdelayitem.cpp \
@@ -23,12 +24,14 @@ SOURCES += \
     dfinternalstoreitem.cpp \
     dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
+    dfmergeitem.cpp \
     dforitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
+    dfsortitem.cpp \
     dfstartenditem.cpp \
     dfsummaryconnitem.cpp \
     dlinebase.cpp \
@@ -62,6 +65,7 @@ HEADERS += \
     dcurvelineitem.h \
     ddiaitem.h \
     dellitem.h \
+    dfcarditem.h \
     dfconditionitem.h \
     dfdataitem.h \
     dfdelayitem.h \
@@ -71,12 +75,14 @@ HEADERS += \
     dfinternalstoreitem.h \
     dfmanualinputitem.h \
     dfmanualoperateitem.h \
+    dfmergeitem.h \
     dforitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
+    dfsortitem.h \
     dfstartenditem.h \
     dfsummaryconnitem.h \
     dlinebase.h \

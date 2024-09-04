@@ -2,17 +2,18 @@
 #include "dlinebase.h"
 #include "dabstractbase.h"
 #include "serializer.h"
+#include "dshapebase.h"
 
-MagPoint::MagPoint(QGraphicsItem* parent)
+MagPoint::MagPoint(DShapeBase* parent)
 	: MagPoint({0, 0}, parent) {}
 
-MagPoint::MagPoint(const QPointF &p, QGraphicsItem* parent)
+MagPoint::MagPoint(const QPointF &p, DShapeBase* parent)
 	: pos(p), parent(parent), lines(new QSet<DLineBase*>())
 {
 	scenePos = mapToScene();
 }
 
-MagPoint::MagPoint(qreal x, qreal y, QGraphicsItem* parent)
+MagPoint::MagPoint(qreal x, qreal y, DShapeBase* parent)
 	: MagPoint({x, y}, parent) {}
 
 MagPoint::~MagPoint()
@@ -93,5 +94,5 @@ void MagPoint::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	qintptr thisPtr; in >> thisPtr; Serializer::instance().ptrToMag[thisPtr] = this;
 	in >> pos;
-	parent = fa;
+    parent = dynamic_cast<DShapeBase*>(fa);
 }

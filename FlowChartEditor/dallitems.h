@@ -35,7 +35,10 @@
 #include "dforitem.h"
 #include "dfsummaryconnitem.h"
 #include "dfinformationitem.h"
+#include "dfcarditem.h"
 #include "dmultidocitem.h"
+#include "dfmergeitem.h"
+#include "dfsortitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

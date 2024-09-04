@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 
     setWindowTitle("Flowchart Editor");
-    // 绑定序列化管理
+    // 绑定序列化管�?
 	scene = new DScene(this);
 
 	// scene->removeItem(rect);
@@ -61,6 +61,13 @@ MainWindow::MainWindow(QWidget *parent)
     m->addAction(ui->actMoveSelectedMaxZUp);
     m->addAction(ui->actMoveSelectedMaxZDown);
 
+    QFile qssfile(":/stylesheet.qss");
+    if(qssfile.open(QFile::ReadOnly)) {
+        QTextStream textstream(&qssfile);
+        QString stylesheet = textstream.readAll();
+        setStyleSheet(stylesheet);
+        qssfile.close();
+    }
 
     findDia = new DFindDialog();
 
@@ -90,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
     bindAction();
     connectLeft();
     connectRight();
-	// 调试用
+	// 调试�?
 	// scene->addDFNodeItem();
 }
 
@@ -103,7 +110,7 @@ void MainWindow::initUi()
 {
     initleftUi();
     initmiddleUi();
-    // initrightUi();
+    initrightUi();
 
     mainsplitter->addWidget(leftw);
     mainsplitter->addWidget(middlesplitter);
@@ -123,6 +130,219 @@ void MainWindow::initmiddleUi(){
     middlesplitter->setStretchFactor(1, 1);
 }
 
+void MainWindow::initrightUi()
+{
+    //样式�?
+    rightTab = new QTabWidget();
+    rightTab->setMovable(true);
+    rightTab->setFixedWidth(260);
+    // rightTab->setMinimumWidth(230);
+    // rightTab->setMaximumWidth(320);
+
+    //背景样式�?
+    rightBgw = new QWidget();
+    rightBgf = new QFormLayout();
+    blankBg = new QRadioButton("无背�?");
+    colorBg = new QRadioButton("纯色填充");
+    gridBg = new QRadioButton("网格");
+    dotBg = new QRadioButton("点状");
+    reColorBtn = new QPushButton("选择颜色");
+    reFileBtn = new QPushButton("选择文件");
+
+    blankBg->setChecked(true);
+    customizeBg = new QRadioButton("自定义图片填�?");
+    rightBgf->addRow(blankBg);
+    rightBgf->addRow(colorBg, reColorBtn);
+    rightBgf->addRow(gridBg);
+    rightBgf->addRow(dotBg);
+    rightBgf->addRow(customizeBg, reFileBtn);
+
+    rightBgw->setLayout(rightBgf);
+    rightTab->addTab(rightBgw, "背景");
+
+    //形状样式�?
+    rightShapew = new QTreeWidget();
+    rightShapew->setColumnCount(2);
+    rightShapew->setHeaderHidden(true);
+    rightShapew->setColumnWidth(0, 120);
+    rightShapew->setSelectionMode(QAbstractItemView::NoSelection);
+    borderTop = new QTreeWidgetItem();
+    fillTop = new QTreeWidgetItem();
+    rotTop = new QTreeWidgetItem();
+    scaleTop = new QTreeWidgetItem();
+    borderChildColor = new QTreeWidgetItem();
+    borderChildType = new QTreeWidgetItem();
+    borderChildWidth = new QTreeWidgetItem();
+    fillChildColor = new QTreeWidgetItem();
+    fillChildType = new QTreeWidgetItem();
+    fillChildPic = new QTreeWidgetItem();
+    borderTop->setText(0, "边框");
+    fillTop->setText(0, "填充");
+    scaleTop->setText(0, "缩放比例�?");
+    rotTop->setText(0, "旋转角度�?");
+    borderChildColor->setText(0, "边框颜色�?");
+    borderChildType->setText(0, "边框样式�?");
+    borderChildWidth->setText(0, "边框宽度�?");
+    fillChildColor->setText(0, "填充颜色");
+    fillChildType->setText(0, "填充样式");
+
+    rightShapew->addTopLevelItem(borderTop);
+    rightShapew->addTopLevelItem(fillTop);
+    rightShapew->addTopLevelItem(rotTop);
+    rightShapew->addTopLevelItem(scaleTop);
+
+    borderTop->addChild(borderChildColor);
+    borderTop->addChild(borderChildType);
+    borderTop->addChild(borderChildWidth);
+    fillTop->addChild(fillChildColor);
+    fillTop->addChild(fillChildType);
+    fillTop->addChild(fillChildPic);
+
+    rotationBox = new QSpinBox();
+    scaleBox = new QSpinBox();
+    borderColor = new QPushButton();
+    borderStyle = new QComboBox();
+    borderWidth = new QDoubleSpinBox();
+    fillColor = new QPushButton();
+    fillType = new QComboBox();
+    customizePic = new QCheckBox("自定义图�?");
+    customizePic->setChecked(false);
+    picfile = new QPushButton("选择文件");
+
+    rotationBox->setFixedHeight(25);
+    scaleBox->setFixedHeight(25);
+    borderColor->setFixedHeight(25);
+    borderStyle->setFixedHeight(25);
+    borderWidth->setFixedHeight(25);
+    fillColor->setFixedHeight(25);
+    fillType->setFixedHeight(25);
+    picfile->setFixedHeight(25);
+
+    borderStyle->addItem(QIcon(":/icon/solidLine.png"), "实线");
+    borderStyle->addItem(QIcon(":/icon/dashLine.png"), "短划�?");
+    borderStyle->addItem(QIcon(":/icon/dotLine.png"), "点线");
+    borderStyle->addItem(QIcon(":/icon/dashDotLine.png"), "点划�?");
+    borderStyle->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
+
+    borderWidth->setRange(0, 30);
+    borderWidth->setSingleStep(0.25);
+    borderWidth->setValue(1);
+    borderWidth->setSuffix("�?");
+    borderWidth->setWrapping(true);
+
+    fillType->addItem("无图�?");
+    fillType->addItem("实心图案");
+    fillType->addItem("密实图案1");
+    fillType->addItem("密实图案2");
+    fillType->addItem("密实图案3");
+    fillType->addItem("密实图案4");
+    fillType->addItem("密实图案5");
+    fillType->addItem("密实图案6");
+    fillType->addItem("密实图案7");
+    fillType->addItem("水平线图�?");
+    fillType->addItem("垂直线图�?");
+    fillType->addItem("十字线图�?");
+    fillType->addItem("左斜线图�?");
+    fillType->addItem("右倾线图案");
+    fillType->addItem("倾斜十字线图�?");
+    // fillType->addItem("线性渐变图�?");
+    // fillType->addItem("径向渐变图案");
+    // fillType->addItem("圆锥渐变图案");
+    // fillType->addItem("纹理图案");
+
+    rotationBox->setRange(0, 360);
+    rotationBox->setSingleStep(1);
+    rotationBox->setSuffix("°");
+    rotationBox->setValue(0);
+    rotationBox->setWrapping(true);
+    scaleBox->setRange(100, 100000);
+    scaleBox->setSingleStep(1);
+    scaleBox->setValue(100);
+    scaleBox->setSuffix("%");
+    scaleBox->setWrapping(true);
+
+    setColorIcon(borderColor);
+    setColorIcon(fillColor);
+
+    rightShapew->setItemWidget(fillChildPic, 0, customizePic);
+    rightShapew->setItemWidget(fillChildPic, 1, picfile);
+    rightShapew->setItemWidget(borderChildType, 1, borderStyle);
+    rightShapew->setItemWidget(borderChildWidth, 1, borderWidth);
+    rightShapew->setItemWidget(fillChildColor, 1, fillColor);
+    rightShapew->setItemWidget(fillChildType, 1, fillType);
+    rightShapew->setItemWidget(rotTop, 1, rotationBox);
+    rightShapew->setItemWidget(scaleTop, 1, scaleBox);
+
+    borderTop->setExpanded(true);
+    fillTop->setExpanded(true);
+
+    rightTab->addTab(rightShapew, "形状");
+
+    //文本样式�?
+    rightFontw = new QWidget();
+    rightFontf = new QFormLayout();
+    QHBoxLayout *colorH = new QHBoxLayout();
+    QHBoxLayout *fontH = new QHBoxLayout();
+    textColor = new QPushButton();
+    setColorIcon(textColor);
+    textFont = new QPushButton("字体");
+    textFont->setFixedWidth(100);
+
+    colorH->addStretch();
+    colorH->addWidget(textColor);
+    fontH->addStretch();
+    fontH->addWidget(textFont);
+
+    rightFontf->addRow("文本颜色�?", colorH);
+    rightFontf->addRow("文本字体�?", fontH);
+
+    rightFontw->setLayout(rightFontf);
+    rightTab->addTab(rightFontw, "文本");
+
+    //线条样式�?
+    rightLinew = new QWidget();
+    linecolor  = new QPushButton();
+    QHBoxLayout *linecolorH = new QHBoxLayout();
+    setColorIcon(linecolor);
+    formright = new QFormLayout();
+    formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
+
+    linecolorH->addStretch();
+    linecolorH->addWidget(linecolor);
+
+    lineType = new QComboBox();
+    lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
+    lineType->addItem(QIcon(":/icon/dashLine.png"), "短划�?");
+    lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
+    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划�?");
+    lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
+
+    arrowType = new QComboBox();
+    arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭�?");
+    arrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
+    arrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
+    arrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
+    arrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
+    arrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
+
+    linebound = new QDoubleSpinBox();
+    linebound->setRange(0, 30);
+    linebound->setSingleStep(0.25);
+    linebound->setValue(1);
+    linebound->setSuffix("�?");
+    linebound->setWrapping(true);
+
+    formright->addRow("线条颜色�?", linecolorH);
+    formright->addRow("线条类型�?", lineType);
+    formright->addRow("结尾箭头�?", arrowType);
+    formright->addRow("线条磅数�?", linebound);
+
+    rightLinew->setLayout(formright);
+    // rightw->setVisible(false);
+    rightTab->addTab(rightLinew, "线条");
+    formworkWidget = new FormworkWidget();
+    rightTab->addTab(formworkWidget,"模板");
+
 void MainWindow::initleftUi()
 {
     //图形页面
@@ -132,7 +352,7 @@ void MainWindow::initleftUi()
     flowGrid = new QGridLayout();
     primaryGrid = new QGridLayout();
     primaryGroup = new QGroupBox("基本图形");
-    flowcGroup = new QGroupBox("流程图图形");
+    flowcGroup = new QGroupBox("流程图图�?");
     lineGroup = new QGroupBox("线条");
     textGroup = new QGroupBox("文本");
 
@@ -167,6 +387,7 @@ void MainWindow::initleftUi()
     postponeBtn = new QPushButton();
     sequentialaccessBtn = new QPushButton();
     storedataBtn = new QPushButton();
+    sortBtn = new QPushButton();
 
 	addRectBtn = new QPushButton();
 	addEllBtn = new QPushButton();
@@ -174,6 +395,8 @@ void MainWindow::initleftUi()
 	addTrapBtn = new QPushButton();
 	addDiaBtn = new QPushButton();
 	addTriBtn = new QPushButton();
+    addPenBtn = new QPushButton();
+    addHexBtn = new QPushButton();
 
     curveBtn->setIcon(QPixmap(":/icon/curve.png"));
     rectBtn->setIcon(QPixmap(":/icon/flowchart/rect.png"));
@@ -206,18 +429,19 @@ void MainWindow::initleftUi()
     postponeBtn->setIcon(QPixmap(":/icon/flowchart/postpone.png"));
     sequentialaccessBtn->setIcon(QPixmap(":/icon/flowchart/sequentialaccess.png"));
     storedataBtn->setIcon(QPixmap(":/icon/flowchart/storedata.png"));
+    sortBtn->setIcon(QPixmap(":/icon/flowchart/sort.png"));
 
     rectBtn->setToolTip("过程");
-    roundRectBtn->setToolTip("可选过程");
+    roundRectBtn->setToolTip("可选过�?");
     ellipseBtn->setToolTip("接点");
     lineBtn->setToolTip("直线");
     parellgramBtn->setToolTip("数据");
     trapBtn->setToolTip("手动操作");
     rhomBtn->setToolTip("决策");
     fileBtn->setToolTip("文档");
-    textBtn->setToolTip("文本框");
+    textBtn->setToolTip("文本�?");
     triBtn->setToolTip("摘录");
-    preBtn->setToolTip("预定义过程");
+    preBtn->setToolTip("预定义过�?");
     endBtn->setToolTip("终止");
     prepareBtn->setToolTip("准备");
     storeBtn->setToolTip("内部贮存");
@@ -225,10 +449,10 @@ void MainWindow::initleftUi()
 
     addRectBtn->setToolTip("矩形");
     addEllBtn->setToolTip("椭圆");
-    addParagramBtn->setToolTip("平行四边形");
+    addParagramBtn->setToolTip("平行四边�?");
     addTrapBtn->setToolTip("梯形");
     addDiaBtn->setToolTip("菱形");
-    addTriBtn->setToolTip("三角形");
+    addTriBtn->setToolTip("三角�?");
 
     addRectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
     addEllBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
@@ -236,41 +460,46 @@ void MainWindow::initleftUi()
     addTrapBtn->setIcon(QPixmap(":/icon/primary/trapezoid.png"));
     addDiaBtn->setIcon(QPixmap(":/icon/primary/rhomb.png"));
     addTriBtn->setIcon(QPixmap(":/icon/primary/triangle.png"));
+    addPenBtn->setIcon(QPixmap(":/icon/primary/pen.png"));
+    addHexBtn->setIcon(QPixmap(":/icon/primary/hex.png"));
 
     flowGrid->addWidget(rectBtn, 0, 0);
     flowGrid->addWidget(roundRectBtn, 0, 1);
     flowGrid->addWidget(ellipseBtn, 0, 2);
-    flowGrid->addWidget(parellgramBtn, 1, 0);
-    flowGrid->addWidget(trapBtn, 1, 1);
-    flowGrid->addWidget(rhomBtn, 1, 2);
-    flowGrid->addWidget(fileBtn, 2, 0);
-    flowGrid->addWidget(triBtn, 2, 1);
-    flowGrid->addWidget(preBtn, 2, 2);
-    flowGrid->addWidget(endBtn, 3, 0);
-    flowGrid->addWidget(prepareBtn, 3, 1);
-    flowGrid->addWidget(storeBtn, 3, 2);
-    flowGrid->addWidget(aggreconnectBtn, 4, 0);
-    flowGrid->addWidget(cardBtn, 4, 1);
-    flowGrid->addWidget(compareBtn, 4, 2);
-    flowGrid->addWidget(dataBtn, 5, 0);
-    flowGrid->addWidget(directaccessBtn, 5, 1);
-    flowGrid->addWidget(diskBtn, 5, 2);
-    flowGrid->addWidget(displayBtn, 6, 0);
-    flowGrid->addWidget(manulinputBtn, 6, 1);
-    flowGrid->addWidget(mergeBtn, 6, 2);
-    flowGrid->addWidget(multidocBtn, 7, 0);
-    flowGrid->addWidget(offpageBtn, 7, 1);
-    flowGrid->addWidget(orBtn, 7, 2);
-    flowGrid->addWidget(postponeBtn, 8, 0);
-    flowGrid->addWidget(sequentialaccessBtn, 8, 1);
-    flowGrid->addWidget(storedataBtn, 8, 2);
+    flowGrid->addWidget(parellgramBtn, 0, 3);
+    flowGrid->addWidget(trapBtn, 1, 0);
+    flowGrid->addWidget(rhomBtn, 1, 1);
+    flowGrid->addWidget(fileBtn, 1, 2);
+    flowGrid->addWidget(triBtn, 1, 3);
+    flowGrid->addWidget(preBtn, 2, 0);
+    flowGrid->addWidget(endBtn, 2, 1);
+    flowGrid->addWidget(prepareBtn, 2, 2);
+    flowGrid->addWidget(storeBtn, 2, 3);
+    flowGrid->addWidget(aggreconnectBtn, 3, 0);
+    flowGrid->addWidget(cardBtn, 3, 1);
+    flowGrid->addWidget(compareBtn, 3, 2);
+    flowGrid->addWidget(dataBtn, 3, 3);
+    flowGrid->addWidget(directaccessBtn, 4, 0);
+    flowGrid->addWidget(diskBtn, 4, 1);
+    flowGrid->addWidget(displayBtn, 4, 2);
+    flowGrid->addWidget(manulinputBtn, 4, 3);
+    flowGrid->addWidget(mergeBtn, 5, 0);
+    flowGrid->addWidget(multidocBtn, 5, 1);
+    flowGrid->addWidget(offpageBtn, 5, 2);
+    flowGrid->addWidget(orBtn, 5, 3);
+    flowGrid->addWidget(postponeBtn, 6, 0);
+    flowGrid->addWidget(sequentialaccessBtn, 6, 1);
+    flowGrid->addWidget(storedataBtn, 6, 2);
+    flowGrid->addWidget(sortBtn, 6, 3);
 
 	primaryGrid->addWidget(addRectBtn, 0, 0);
 	primaryGrid->addWidget(addEllBtn, 0, 1);
 	primaryGrid->addWidget(addParagramBtn, 0, 2);
-	primaryGrid->addWidget(addTrapBtn, 1, 0);
-	primaryGrid->addWidget(addDiaBtn, 1, 1);
-	primaryGrid->addWidget(addTriBtn, 1, 2);
+    primaryGrid->addWidget(addTrapBtn, 0, 3);
+    primaryGrid->addWidget(addDiaBtn, 1, 0);
+    primaryGrid->addWidget(addTriBtn, 1, 1);
+    primaryGrid->addWidget(addPenBtn, 1, 2);
+    primaryGrid->addWidget(addHexBtn, 1, 3);
 
     primaryGroup->setLayout(primaryGrid);
     flowcGroup->setLayout(flowGrid);
@@ -299,142 +528,6 @@ void MainWindow::initleftUi()
     mainsplitter->addWidget(leftw);
 
     mainsplitter->setStretchFactor(1, 1);
-
-    //样式表
-    rightTab = new QTabWidget();
-    rightTab->setMovable(true);
-    rightTab->setMinimumWidth(230);
-    rightTab->setMaximumWidth(320);
-
-    //背景样式表
-    rightBgw = new QWidget();
-    rightBgf = new QFormLayout();
-    blankBg = new QRadioButton("无背景");
-    colorBg = new QRadioButton("纯色填充");
-    gridBg = new QRadioButton("网格");
-    dotBg = new QRadioButton("点状");
-    reColorBtn = new QPushButton("选择颜色");
-    reFileBtn = new QPushButton("选择文件");
-
-    blankBg->setChecked(true);
-    customizeBg = new QRadioButton("自定义图片填充");
-    rightBgf->addRow(blankBg);
-    rightBgf->addRow(colorBg, reColorBtn);
-    rightBgf->addRow(gridBg);
-    rightBgf->addRow(dotBg);
-    rightBgf->addRow(customizeBg, reFileBtn);
-
-    rightBgw->setLayout(rightBgf);
-    rightTab->addTab(rightBgw, "背景");
-
-    //形状样式表
-    rightShapew = new QWidget();
-    rightShapef = new QFormLayout();
-    rotationBox = new QSpinBox();
-    zoomBox = new QSpinBox();
-    QHBoxLayout *frameH = new QHBoxLayout();
-    QHBoxLayout *fillH = new QHBoxLayout();
-    QHBoxLayout *rotH = new QHBoxLayout();
-    QHBoxLayout *zoomH = new QHBoxLayout();
-    frameColor = new QPushButton();
-    fillColor = new QPushButton();
-
-    rotationBox->setRange(0, 360);
-    rotationBox->setSingleStep(1);
-    rotationBox->setSuffix("°");
-    rotationBox->setValue(0);
-    rotationBox->setWrapping(true);
-    zoomBox->setRange(1, 10000);
-    zoomBox->setSingleStep(1);
-    zoomBox->setValue(1);
-    zoomBox->setSuffix("%");
-    zoomBox->setWrapping(true);
-    rotH->addStretch();
-    rotH->addWidget(rotationBox);
-    zoomH->addStretch();
-    zoomH->addWidget(zoomBox);
-
-    setColorIcon(frameColor);
-    setColorIcon(fillColor);
-
-    frameH->addStretch();
-    frameH->addWidget(frameColor);
-    fillH->addStretch();
-    fillH->addWidget(fillColor);
-
-    rightShapef->addRow("边框：", frameH);
-    rightShapef->addRow("填充：", fillH);
-    rightShapef->addRow("旋转角度", rotH);
-    rightShapef->addRow("缩放比例：", zoomH);
-    rightShapew->setLayout(rightShapef);
-
-    rightTab->addTab(rightShapew, "形状");
-
-    //文本样式表
-    rightFontw = new QWidget();
-    rightFontf = new QFormLayout();
-    QHBoxLayout *colorH = new QHBoxLayout();
-    QHBoxLayout *fontH = new QHBoxLayout();
-    textColor = new QPushButton();
-    setColorIcon(textColor);
-    textFont = new QPushButton("字体");
-    textFont->setFixedWidth(100);
-
-    colorH->addStretch();
-    colorH->addWidget(textColor);
-    fontH->addStretch();
-    fontH->addWidget(textFont);
-
-    rightFontf->addRow("文本颜色：", colorH);
-    rightFontf->addRow("文本字体：", fontH);
-
-    rightFontw->setLayout(rightFontf);
-    rightTab->addTab(rightFontw, "文本");
-
-    //线条样式表
-    rightLinew = new QWidget();
-    linecolor  = new QPushButton();
-    QHBoxLayout *linecolorH = new QHBoxLayout();
-    setColorIcon(linecolor);
-    formright = new QFormLayout();
-    formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
-
-    linecolorH->addStretch();
-    linecolorH->addWidget(linecolor);
-
-    lineType = new QComboBox();
-    lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
-    lineType->addItem(QIcon(":/icon/dashLine.png"), "短划线");
-    lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
-    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
-    lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
-
-    arrowType = new QComboBox();
-    arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
-    arrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
-    arrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
-    arrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
-    arrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
-    arrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
-
-    linebound = new QDoubleSpinBox();
-    linebound->setRange(0, 30);
-    linebound->setSingleStep(0.25);
-    linebound->setValue(1);
-    linebound->setSuffix("磅");
-    linebound->setWrapping(true);
-
-    formright->addRow("线条颜色：", linecolorH);
-    formright->addRow("线条类型：", lineType);
-    formright->addRow("箭头类型：", arrowType);
-    formright->addRow("线条磅数：", linebound);
-
-    rightLinew->setLayout(formright);
-    // rightw->setVisible(false);
-    rightTab->addTab(rightLinew, "线条");
-    formworkWidget = new FormworkWidget();
-    rightTab->addTab(formworkWidget,"模板");
-
     // rightTab->setVisible(false);
 }
 
@@ -465,7 +558,7 @@ void MainWindow::connectLeft()
     connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFSummaryconnItem);
     connect(cardBtn,  &QPushButton::clicked, this, &MainWindow::addDFCardItem);
     connect(compareBtn,  &QPushButton::clicked, this, &MainWindow::addDFCompareItem);
-    connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
+    //connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
     connect(directaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
     connect(diskBtn,  &QPushButton::clicked, this, &MainWindow::addDFDiskItem);
     connect(displayBtn,  &QPushButton::clicked, this, &MainWindow::addDFDisplayItem);
@@ -478,6 +571,9 @@ void MainWindow::connectLeft()
     connect(sequentialaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFSequentialAccessItem);
     connect(storedataBtn, &QPushButton::clicked, this, &MainWindow::addDFStoreDataItem);
     connect(curveBtn, &QPushButton::clicked, this, &MainWindow::addCurveLine);
+    connect(addPenBtn, &QPushButton::clicked, this, &MainWindow::addpentagon);
+    connect(addHexBtn, &QPushButton::clicked, this, &MainWindow::addhexagon);
+    connect(sortBtn, &QPushButton::clicked, this, &MainWindow::addDFSortItem);
 }
 
 void MainWindow::connectRight()
@@ -498,31 +594,19 @@ void MainWindow::connectRight()
         changeLineType(Qt::DashDotDotLine);
     });
 
-    connect(ui->actNoArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(0);
-    });
-    connect(ui->actArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(1);
-    });
-    connect(ui->actOpenArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(2);
-    });
-    connect(ui->actDovetailArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(3);
-    });
-    connect(ui->actDiaArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(4);
-    });
-    connect(ui->actRoundArrow, &QAction::triggered, this, [this]() {
-        changeEndArrow(5);
-    });
+    connect(ui->actNoArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
+    connect(ui->actArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
+    connect(ui->actOpenArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
+    connect(ui->actDovetailArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
+    connect(ui->actDiaArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
+    connect(ui->actRoundArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
 
     connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
         if(checked) setSceneBg(":/icon/blankBg.png");
     });
     connect(reColorBtn, &QPushButton::clicked, this, [this]() {
         if(colorBg->isChecked()) {
-            QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+            QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
             if(color.isValid()) scene->setBackgroundBrush(QBrush(color));
             else blankBg->setChecked(true);
         }
@@ -545,7 +629,7 @@ void MainWindow::connectRight()
     });
     connect(lineType, &QComboBox::currentIndexChanged, this, [this]() {
         int penstyle = lineType->currentIndex();
-        qDebug() << "penstyle;" << penstyle;
+        // qDebug() << "penstyle;" << penstyle;
         switch(penstyle) {
         case 0: changeLineType(Qt::SolidLine); break;
         case 1: changeLineType(Qt::DashLine); break;
@@ -554,26 +638,36 @@ void MainWindow::connectRight()
         case 4: changeLineType(Qt::DashDotDotLine); break;
         }
     });
-    connect(arrowType, &QComboBox::currentIndexChanged, this, [this]() {
-        int arrowstyle = arrowType->currentIndex();
-        changeEndArrow(arrowstyle);
-    });
+    connect(arrowType, &QComboBox::currentIndexChanged, this, &MainWindow::changeEndArrow);
     connect(linebound, &QDoubleSpinBox::valueChanged, this, [this]() {
-        scene->changeLineWidth(linebound->value());
+        scene->changeLineWidth(linebound->value() * globalScale);
     });
     connect(linecolor, &QPushButton::clicked, this, [this](){
-        QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+        QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
         scene->changeLineColor(color);
     });
-    connect(frameColor, &QPushButton::clicked, this, &MainWindow::selectFrameCol);
-    connect(fillColor, &QPushButton::clicked, this, &MainWindow::selectFillCol);
-    connect(textColor, &QPushButton::clicked, this, &MainWindow::selectTextCol);
-    connect(textFont, &QPushButton::clicked, this, &MainWindow::selectTextFont);
-    connect(rotationBox, &QSpinBox::valueChanged, this, [this]() {
-        scene->changeLineWidth(linebound->value());
+    connect(borderColor, &QPushButton::clicked, this, &MainWindow::changeBorderColor);
+    connect(fillColor, &QPushButton::clicked, this, &MainWindow::changeFillColor);
+    connect(textColor, &QPushButton::clicked, this, &MainWindow::changeTextCol);
+    connect(textFont, &QPushButton::clicked, this, &MainWindow::changeTextFont);
+    connect(rotationBox, &QSpinBox::valueChanged, this, &MainWindow::changeItemRot);
+    connect(scaleBox, &QSpinBox::valueChanged, this, &MainWindow::changeItemScale);
+    connect(borderStyle, &QComboBox::currentIndexChanged, this, &MainWindow::changeBorderType);
+    connect(borderWidth, &QDoubleSpinBox::valueChanged, this, &MainWindow::changeBorderWidth);
+    connect(fillType, &QComboBox::currentIndexChanged, this, &MainWindow::changeFillType);
+    connect(picfile, &QPushButton::clicked, this, [this]() {
+        if(customizePic->isChecked()) {
+            QString filename = QFileDialog::getOpenFileName(this, "打开图片", "", ("Image(*.svg *.png *.jpg *.bmp"));
+            if(!filename.isEmpty()) {
+                QPixmap pixmap(filename);
+                scene->changeFillPic(pixmap);
+            }
+        }
     });
-    connect(zoomBox, &QSpinBox::valueChanged, this, [this]() {
-        scene->changeLineWidth(linebound->value());
+    connect(customizePic, &QCheckBox::checkStateChanged, this, [this]() {
+        if(!customizePic->isChecked()) {
+            scene->changeFillColor(Qt::white);
+        }
     });
 }
 
@@ -688,14 +782,6 @@ void MainWindow::createMenu()
 
 void MainWindow::createToolBar()
 {
-    QFile qssfile(":/stylesheet.qss");
-    if(qssfile.open(QFile::ReadOnly)) {
-        QTextStream textstream(&qssfile);
-        QString stylesheet = textstream.readAll();
-        setStyleSheet(stylesheet);
-        qssfile.close();
-    }
-
     saveSvgTln = new QToolButton();
     saveSvgTln->addAction(ui->actSvgFile);
     saveSvgTln->setIcon(QIcon(":/icon/savesvg.png"));
@@ -761,10 +847,10 @@ void MainWindow::bindAction()
         rightTab->setVisible(true);
     });
 
-    connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
-    connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
-    connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
-    connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(selectTextFont()));
+    connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(changeFillColor()));
+    connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(changeBorderColor()));
+    connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(changeTextCol()));
+    connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(changeTextFont()));
 
     connect(ui->actMoveSelectedZUp,SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
     connect(ui->actMoveSelectedZDown,SIGNAL(triggered(bool)),this, SLOT(moveSelectedZDown()));
@@ -840,9 +926,15 @@ void MainWindow::changeLineType(Qt::PenStyle linestyle)
     scene->changeLineType(linestyle);
 }
 
-void MainWindow::changeEndArrow(int endArrowType)
+void MainWindow::changeBeginArrow(int beginArrowType)
 {
-    scene->changeEndArrow(endArrowType);
+    scene->changeBeginArrow(beginArrowType);
+}
+
+void MainWindow::changeEndArrow()
+{
+    int arrowstyle = arrowType->currentIndex();
+    scene->changeEndArrow(arrowstyle);
 }
 
 void MainWindow::changeLineColor(QColor color)
@@ -857,12 +949,77 @@ void MainWindow::setSceneBg(QString path)
 
 void MainWindow::changeItemRot()
 {
-    scene->changeItemRot();
+    scene->changeItemRot(rotationBox->value());
 }
+
 
 void MainWindow::changeItemScale()
 {
-    scene->changeItemScale();
+    scene->changeItemScale(scaleBox->value() / 100.0);
+}
+
+void MainWindow::changeBorderType()
+{
+    int penstyle = lineType->currentIndex();
+    // qDebug() << "penstyle;" << penstyle;
+    switch(penstyle) {
+    case 0: scene->changeBorderType(Qt::SolidLine); break;
+    case 1: scene->changeBorderType(Qt::DashLine); break;
+    case 2: scene->changeBorderType(Qt::DotLine); break;
+    case 3: scene->changeBorderType(Qt::DashDotLine); break;
+    case 4: scene->changeBorderType(Qt::DashDotDotLine); break;
+    }
+}
+
+void MainWindow::changeBorderWidth()
+{
+    qreal width = borderWidth->value() * globalScale;
+    scene->changeBorderWidth(width);
+}
+
+void MainWindow::changeBorderColor()
+{
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
+    scene->changeBorderColor(color);
+}
+
+void MainWindow::changeFillType()
+{
+    int brushstyle = fillType->currentIndex();
+    switch(brushstyle) {
+    case 0: scene->changeFillType(Qt::NoBrush); break;
+    case 1: scene->changeFillType(Qt::SolidPattern); break;
+    case 2: scene->changeFillType(Qt::Dense1Pattern); break;
+    case 3: scene->changeFillType(Qt::Dense2Pattern); break;
+    case 4: scene->changeFillType(Qt::Dense3Pattern); break;
+    case 5: scene->changeFillType(Qt::Dense4Pattern); break;
+    case 6: scene->changeFillType(Qt::Dense5Pattern); break;
+    case 7: scene->changeFillType(Qt::Dense6Pattern); break;
+    case 8: scene->changeFillType(Qt::Dense7Pattern); break;
+    case 9: scene->changeFillType(Qt::HorPattern); break;
+    case 10: scene->changeFillType(Qt::VerPattern); break;
+    case 11: scene->changeFillType(Qt::CrossPattern); break;
+    case 12: scene->changeFillType(Qt::BDiagPattern); break;
+    case 13: scene->changeFillType(Qt::FDiagPattern); break;
+    case 14: scene->changeFillType(Qt::DiagCrossPattern); break;
+    case 15: scene->changeFillType(Qt::LinearGradientPattern); break;
+    case 16: scene->changeFillType(Qt::RadialGradientPattern); break;
+    case 17: scene->changeFillType(Qt::ConicalGradientPattern); break;
+    case 18: scene->changeFillType(Qt::TexturePattern); break;
+    }
+    customizePic->setCheckState(Qt::Unchecked);
+}
+
+void MainWindow::changeFillColor()
+{
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
+    scene->changeFillColor(color);
+    customizePic->setCheckState(Qt::Unchecked);
+}
+
+void MainWindow::changeFillPic()
+{
+
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()
@@ -889,81 +1046,17 @@ QSet<DTextBase *> MainWindow::getTextBases()
     return texts;
 }
 
-void MainWindow::selectFrameCol()
+void MainWindow::changeTextCol()
 {
-    QList<QGraphicsItem *> items = scene->selectedItems();
-    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    for(QGraphicsItem *item : items) {
-        DLineItem *line = dynamic_cast<DLineItem *>(item);
-        if(line != nullptr) {
-            continue;
-        }
-        DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
-        if(shape != nullptr) {
-            DTextItem *text = dynamic_cast<DTextItem *>(shape);
-            if(text != nullptr) continue;
-            QPen npen = shape->pen();
-            npen.setColor(color);
-            shape->setPen(npen);
-        }
-    }
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
+    scene->changeTextColor(color);
 }
 
-void MainWindow::selectFillCol()
+void MainWindow::changeTextFont()
 {
-    QList<QGraphicsItem *> items = scene->selectedItems();
-    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    // qDebug() << items;
-    // qDebug() << color;
-    for(QGraphicsItem *item : items) {
-        DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
-        if(shape != nullptr) {
-            DTextItem *text = dynamic_cast<DTextItem *>(shape);
-            if(text != nullptr) continue;
-            QBrush nbrush = shape->brush();
-            nbrush.setColor(color);
-            shape->setBrush(nbrush);
-        }
-    }
-}
-
-void MainWindow::selectTextCol()
-{
-    QSet<DTextBase *> texts = getTextBases();
-    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    // qDebug() << items;
-    // qDebug() << color;
-
-    QTextCharFormat charformat;
-    charformat.setForeground(color);
-    // charformat.setForeground(color);
-    for(DTextBase *tbase : texts) {
-        QTextCursor cursor(tbase->document());
-        // if(cursor.hasSelection()) {
-        //     // qDebug() << "has selection";
-        //     cursor.mergeCharFormat(charformat);
-        // }
-        // cursor.beginEditBlock();
-        cursor.movePosition(QTextCursor::Start);
-        while(!cursor.isNull() && !cursor.atEnd()) {
-            cursor.select(QTextCursor::BlockUnderCursor);
-            cursor.mergeCharFormat(charformat);
-            cursor.movePosition(QTextCursor::NextBlock);
-		}
-        // cursor.endEditBlock();
-    }
-}
-
-void MainWindow::selectTextFont()
-{
-    QSet<DTextBase *> texts = getTextBases();
     bool flag = true;
     QFont font = fontDia->getFont(&flag, this);
-    if(flag) {
-        for(DTextBase *tbase : texts) {
-            tbase->document()->setDefaultFont(font);
-        }
-    }
+    if(flag) scene->changeTextFont(font);
 }
 
 void MainWindow::rotateCW()
