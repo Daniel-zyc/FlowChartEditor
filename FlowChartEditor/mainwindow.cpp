@@ -417,7 +417,7 @@ void MainWindow::initleftUi()
     arrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
 
     linebound = new QDoubleSpinBox();
-    linebound->setRange(0, 1000);
+    linebound->setRange(0, 30);
     linebound->setSingleStep(0.25);
     linebound->setValue(1);
     linebound->setSuffix("磅");
@@ -692,30 +692,23 @@ void MainWindow::createToolBar()
         qssfile.close();
     }
 
-    createTln = new QToolButton();
-    openTln = new QToolButton();
-    saveTln = new QToolButton();
     saveSvgTln = new QToolButton();
-
-    createTln->addAction(ui->actNewFile);
-    openTln->addAction(ui->actOpenFile);
-    saveTln->addAction(ui->actSaveFile);
     saveSvgTln->addAction(ui->actSvgFile);
-
-    createTln->setIcon(QIcon(":/icon/createfile.png"));
-    openTln->setIcon(QIcon(":/icon/openfile.png"));
-    saveTln->setIcon(QIcon(":/icon/savefile.png"));
     saveSvgTln->setIcon(QIcon(":/icon/savesvg.png"));
-
-    createTln->setToolTip("新建文件");
-    openTln->setToolTip("打开文件");
-    saveTln->setToolTip("保存文件");
     saveSvgTln->setToolTip("导出Svg格式");
 
-    ui->headToolBar->addWidget(createTln);
-    ui->headToolBar->addWidget(openTln);
-    ui->headToolBar->addWidget(saveTln);
+    ui->headToolBar->addAction(ui->actNewFile);
+    ui->headToolBar->addAction(ui->actOpenFile);
+    ui->headToolBar->addAction(ui->actSaveFile);
     ui->headToolBar->addWidget(saveSvgTln);
+    ui->headToolBar->addSeparator();
+
+    ui->headToolBar->addAction(ui->actEnlarge);
+    ui->headToolBar->addAction(ui->actShrink);
+    ui->headToolBar->addSeparator();
+
+    ui->headToolBar->addAction(ui->actUndo);
+    ui->headToolBar->addAction(ui->actRedo);
 
     // ui->headToolBar->addAction(ui->actAddLine);
     // ui->headToolBar->addAction(ui->actAddRect);
@@ -814,16 +807,12 @@ void MainWindow::bindAction()
 	// connect(combinesc, SIGNAL(activated()), this, SLOT(combineSelected()));
 	// connect(seperatesc, SIGNAL(activated()), this, SLOT(seperateSelected()));
 
-
-    // connect(createTln, &QToolButton::clicked, this, &MainWindow::)
-    connect(openTln, &QToolButton::clicked, this, &MainWindow::loadFile);
-    connect(saveTln, &QToolButton::clicked, this, &MainWindow::saveFile);
     connect(saveSvgTln, &QToolButton::clicked, this, &MainWindow::saveAsSvg);
 }
 
 void MainWindow::saveAsSvg()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file");
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamge(*.svg"));
     if(filePath == "") return;
     QSvgGenerator generator;
     generator.setFileName(filePath);

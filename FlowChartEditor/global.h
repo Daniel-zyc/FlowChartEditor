@@ -23,7 +23,7 @@ constexpr qreal magPointCollideRadius = 10 * globalScale;
 constexpr qreal modiPointRadius = 5 * globalScale;
 constexpr qreal rotPointRadius = 5 * globalScale;
 constexpr qreal rotPointMargin = 30 * globalScale;
-constexpr qreal maxPenWidth = 5 * globalScale;
+constexpr qreal maxPenWidth = 30 * globalScale;
 constexpr qreal maxPointRadius =
 	qMax(qMax(sizePointRadius, magPointRadius),
 		 qMax(magPointCollideRadius, modiPointRadius));
