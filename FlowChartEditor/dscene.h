@@ -186,6 +186,12 @@ public:
 	void itemHorizEven();
 	void itemVertiEven();
 
+	// 自动磁吸参考线
+	QPointF getAutoAlignItemPos(DShapeBase* item);
+
+	// 设置是否开启磁吸线
+	void setAutoAlign(bool active);
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -217,8 +223,12 @@ private:
 	int insert_state = DConst::NONE;
 
 	// 交互状态
-	// 分为 size, modi, rot
+	// 分为 none, size, modi, rot
 	int inter_state = DConst::NONE;
+
+	// 记录是否在拖拽图形
+	// 分为 none, draging
+	int drag_state = DConst::NONE;
 
 	// 记录当前画布上显示 magPoint 的图形
 	DAbstractBase *showMagedItem = nullptr;
@@ -228,4 +238,10 @@ private:
 
 	// 画布的剪切板
 	QByteArray copyData;
+
+	// 用作参考的磁吸线
+	QGraphicsLineItem* magLineH = new QGraphicsLineItem(0, 0, 0, 0);
+	QGraphicsLineItem* magLineV = new QGraphicsLineItem(0, 0, 0, 0);
+
+	bool autoAlign = true;
 };

@@ -118,7 +118,7 @@ void DTextItem::deleteMagPoint()
 
 void DTextItem::updateAll()
 {
-	textBase.setTextWidth((rect.width() - maxBorderRadius*2) / globalScale);
+	textBase.setTextWidth((rect.width() - sizePointRadius*2) / globalScale);
 	updateSizePoint();
 	updateMagPoint();
 }

@@ -120,7 +120,6 @@ private slots:
 
     void changeFillType();
     void changeFillColor();
-    void changeFillPic();
 
     QSet<DTextBase *> getTextBases();
     void changeTextCol();
@@ -201,8 +200,10 @@ private:
     QFontDialog *fontDia;
 
     QSplitter *middlesplitter;
-
     QSplitter *mainsplitter;
+
+    QCheckBox *isInspect;
+    QCheckBox *isOpenReference;
 
     QWidget *leftw;
     QGridLayout *flowGrid;

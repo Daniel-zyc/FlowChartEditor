@@ -874,6 +874,13 @@ void MainWindow::createToolBar()
 
 	ui->headToolBar->addAction(ui->actUndo);
 	ui->headToolBar->addAction(ui->actRedo);
+    ui->headToolBar->addSeparator();
+
+    isInspect = new QCheckBox("开启检查");
+    isOpenReference = new QCheckBox("开启参照");
+    isOpenReference->setCheckState(Qt::Checked);
+    ui->headToolBar->addWidget(isInspect);
+    ui->headToolBar->addWidget(isOpenReference);
 
 	// ui->headToolBar->addAction(ui->actAddLine);
 	// ui->headToolBar->addAction(ui->actAddRect);
@@ -966,6 +973,21 @@ void MainWindow::bindAction()
 	connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
 
 	connect(saveSvgTln, &QToolButton::clicked, this, &MainWindow::saveAsSvg);
+    connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
+        if(!isInspect->isChecked()) {
+            inspector->hide();
+            inspector->restoreView();
+        }else {
+            check();
+        }
+    });
+    // connect(isOpenReference, &QCheckBox::checkStateChanged, this, [this]() {
+    //     if(!isOpenReference->isChecked()) {
+    //         scene->changeFillColor(Qt::white);
+    //     }else {
+
+    //     }
+    // });
 }
 
 void MainWindow::saveAsSvg()
@@ -1083,11 +1105,6 @@ void MainWindow::changeFillColor()
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
 	scene->changeFillColor(color);
 	customizePic->setCheckState(Qt::Unchecked);
-}
-
-void MainWindow::changeFillPic()
-{
-
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()

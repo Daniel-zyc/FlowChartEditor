@@ -1,5 +1,6 @@
 #include "global.h"
 #include "dabstractbase.h"
+#include "dshapebase.h"
 
 #include <cmath>
 
@@ -116,6 +117,27 @@ QList<DAbstractBase*> DTool::itemsToBases(const QList<QGraphicsItem*> &items)
 		if(item && isAbstract(item->type()))
 			bases.push_back(dynamic_cast<DAbstractBase*>(item));
 	return bases;
+}
+
+
+QList<DShapeBase*> DTool::itemToShape(const QList<QGraphicsItem*>& items)
+{
+	QList<DShapeBase*> bases;
+	for(QGraphicsItem* item : items)
+		if(item && isShape(item->type()))
+			bases.push_back(dynamic_cast<DShapeBase*>(item));
+	return bases;
+}
+
+
+void DTool::filterNoparent(QList<DShapeBase*>& items)
+{
+	for (int i = 0; i < items.size(); i++)
+		if(!items[i] || items[i]->parentItem())
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+		}
 }
 
 bool DTool::isShape(int type)
