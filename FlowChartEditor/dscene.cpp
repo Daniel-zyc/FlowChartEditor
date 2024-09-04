@@ -668,7 +668,7 @@ void DScene::changeFillColor(QColor color)
 void DScene::changeFillPic(QPixmap pixmap)
 {
     qDebug() << "change border pic";
-    QList<DShapeBase*> shapes = getSelectedShape();
+	QList<DShapeBase*> shapes = getSelectedShapes();
     for(DShapeBase* shape : shapes)
     {
         QBrush nbrush = shape->brush();
@@ -1057,9 +1057,9 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	}
 
     if((insert_state != DConst::NONE)
-        && SHOT_STATE == DConst::CHANGED){
+		&& SHOT_STATE == DConst::CHANGED){
         shot();
-        Inspector::instance()->checkAll();
+		Inspector::instance()->checkAll();
     }
 
 	insert_state = DConst::NONE;
