@@ -82,14 +82,15 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
-
+    /*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
     painter->drawEllipse(end_midPoint,5,5);
     painter->setBrush(Qt::blue);
     painter->drawEllipse(QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),5,5);
     painter->drawEllipse(QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),5,5);
-    //绘制箭头
+    */
+//绘制箭头
     qreal angle;
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
         angle = getAngle(points[4],points[5]);
