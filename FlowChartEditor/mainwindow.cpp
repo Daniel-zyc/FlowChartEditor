@@ -463,7 +463,7 @@ void MainWindow::connectLeft()
     connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFSummaryconnItem);
     connect(cardBtn,  &QPushButton::clicked, this, &MainWindow::addDFCardItem);
     connect(compareBtn,  &QPushButton::clicked, this, &MainWindow::addDFCompareItem);
-    connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
+    //connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
     connect(directaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
     connect(diskBtn,  &QPushButton::clicked, this, &MainWindow::addDFDiskItem);
     connect(displayBtn,  &QPushButton::clicked, this, &MainWindow::addDFDisplayItem);

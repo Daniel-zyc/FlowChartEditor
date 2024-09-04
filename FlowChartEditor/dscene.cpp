@@ -318,6 +318,7 @@ void DScene::addDFInformationItem()
 void DScene::addDFCardItem()
 {
     qDebug() << "add 卡片";
+    prepareInsertItem(new DFCardItem());
 }
 
 void DScene::addDFCompareItem()
@@ -383,12 +384,6 @@ void DScene::addDFSummaryconnItem()
 {
     qDebug() << "add DFSummaryconnItem";
     prepareInsertItem(new DFSummaryconnItem());
-}
-
-void DScene::addDFCardItem()
-{
-    qDebug() << "add DFSummaryconnItem";
-    prepareInsertItem(new DFCardItem());
 }
 
 void DScene::addDFOptionalProcessItem()
