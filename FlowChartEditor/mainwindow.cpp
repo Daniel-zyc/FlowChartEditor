@@ -160,31 +160,31 @@ void MainWindow::initrightUi()
 	rightBgw->setLayout(rightBgf);
 	rightTab->addTab(rightBgw, "背景");
 
-	//形状样式表
-	rightShapew = new QTreeWidget();
-	rightShapew->setColumnCount(2);
-	rightShapew->setHeaderHidden(true);
-	rightShapew->setColumnWidth(0, 120);
-	rightShapew->setSelectionMode(QAbstractItemView::NoSelection);
-	borderTop = new QTreeWidgetItem();
-	fillTop = new QTreeWidgetItem();
-	rotTop = new QTreeWidgetItem();
-	scaleTop = new QTreeWidgetItem();
-	borderChildColor = new QTreeWidgetItem();
-	borderChildType = new QTreeWidgetItem();
-	borderChildWidth = new QTreeWidgetItem();
-	fillChildColor = new QTreeWidgetItem();
-	fillChildType = new QTreeWidgetItem();
-	fillChildPic = new QTreeWidgetItem();
-	borderTop->setText(0, "边框");
-	fillTop->setText(0, "填充");
-	scaleTop->setText(0, "缩放比例：");
-	rotTop->setText(0, "旋转角度：");
-	borderChildColor->setText(0, "边框颜色：");
-	borderChildType->setText(0, "边框样式：");
-	borderChildWidth->setText(0, "边框宽度：");
-	fillChildColor->setText(0, "填充颜色");
-	fillChildType->setText(0, "填充样式");
+    //形状样式表
+    rightShapew = new QTreeWidget();
+    rightShapew->setColumnCount(2);
+    rightShapew->setHeaderHidden(true);
+    rightShapew->setColumnWidth(0, 140);
+    rightShapew->setSelectionMode(QAbstractItemView::NoSelection);
+    borderTop = new QTreeWidgetItem();
+    fillTop = new QTreeWidgetItem();
+    rotTop = new QTreeWidgetItem();
+    scaleTop = new QTreeWidgetItem();
+    borderChildColor = new QTreeWidgetItem();
+    borderChildType = new QTreeWidgetItem();
+    borderChildWidth = new QTreeWidgetItem();
+    fillChildColor = new QTreeWidgetItem();
+    fillChildType = new QTreeWidgetItem();
+    fillChildPic = new QTreeWidgetItem();
+    borderTop->setText(0, "边框");
+    fillTop->setText(0, "填充");
+    scaleTop->setText(0, "缩放比例：");
+    rotTop->setText(0, "旋转角度：");
+    borderChildColor->setText(0, "边框颜色：");
+    borderChildType->setText(0, "边框样式：");
+    borderChildWidth->setText(0, "边框宽度：");
+    fillChildColor->setText(0, "填充颜色");
+    fillChildType->setText(0, "填充样式");
 
 	rightShapew->addTopLevelItem(borderTop);
 	rightShapew->addTopLevelItem(fillTop);
