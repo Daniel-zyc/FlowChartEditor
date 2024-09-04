@@ -7,7 +7,7 @@ class DFOrItem;
 class DFOrItem : public DShapeBase
 {
 public:
-    enum { Type = DEllItemType };
+    enum { Type = DFOrItemType };
     DFOrItem(QGraphicsItem *parent = nullptr);
     DFOrItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 

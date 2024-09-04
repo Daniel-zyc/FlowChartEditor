@@ -32,7 +32,8 @@
 #include "dfconditionitem.h"
 #include "dfdataitem.h"
 #include "dfnodeitem.h"
-#include"dforitem.h"
+#include "dforitem.h"
+#include "dfsummaryconnitem.h"
 #include "dfinformationitem.h"
 
 #include "dlineitem.h"

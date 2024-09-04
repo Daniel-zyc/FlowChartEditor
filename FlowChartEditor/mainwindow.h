@@ -76,12 +76,12 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-//    void addDFPredefineItem() { scene->addDFPredefineItem(); }
-   void addDFPredefineItem() { scene->addDFPredefineItem(); }
-//    void addDFOrItem() { scene->addDFOrItem;}
+//    void addDFPredefineItem() { scene->addDFSummaryconnItem(); }
+    void addDFPredefineItem() { scene->addDFPredefineItem(); }
+    void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
+    void addDFOrItem() { scene->addDFOrItem();}
     void addDFManualinputItem() { scene->addManualinItem(); }
-//    void addDFDelayItem() { scene->addDFDelayItem(); }
-	void addDFPredefineItem() { scene->addDFPredefineItem(); }
+    void addDFDelayItem() { scene->addDFDelayItem(); }
 	void addDFManualInputItem() { scene->addManualInputItem(); }
 
     void changeLineType(Qt::PenStyle linestyle);

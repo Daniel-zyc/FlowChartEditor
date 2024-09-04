@@ -88,9 +88,9 @@ public:
 	void addDFPredefineItem();
     void addDFDelayItem();
     void addDFOrItem();
-	void addManualInputItem();
-	void addDFDelayItem();
+    void addManualInputItem();
 	void addDFInformationItem();
+    void addDFSummaryconnItem();
 
 
 	// 插入文本框
