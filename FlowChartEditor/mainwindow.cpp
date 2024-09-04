@@ -545,8 +545,8 @@ void MainWindow::createMenu()
 
     lineType->addMenu(arrowTypeM);
     lineType->addMenu(lineTypeM);
-    // ui->styleMenu->addMenu(lineType);
-    scene->menu->addMenu(lineType);
+	// ui->styleMenu->addMenu(lineType);
+	scene->getMenu()->addMenu(lineType);
 
 	ui->fileMenu->addAction(ui->actNewFile);
 	ui->fileMenu->addAction(ui->actOpenFile);

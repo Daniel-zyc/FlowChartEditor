@@ -5,9 +5,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
-#include <QGraphicsLineItem>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsSceneEvent>
 #include <QMenu>
 
 class DAbstractBase;
@@ -25,8 +23,7 @@ public:
 	DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
 
 public:
-	QMenu *menu = nullptr;
-
+	// 获取被选中图形中的根图形，只包含 AbstractBase 下的图形
 	QList<DAbstractBase*> getRootSelectedBases();
 
 	// 对选中对象的旋转设置
@@ -57,7 +54,6 @@ public:
 	void moveSelectedZUp(qreal value = DScene::defaultMoveZUp) { moveSelectedZ(value); }
 	void moveSelectedZDown(qreal value = DScene::defaultMoveZDown) { moveSelectedZ(-value); }
 	void moveSelectedZ(qreal value = 0.0);
-
 	void moveSelectedZMaxUp();
 	void moveSelectedZMaxDown();
 
@@ -90,7 +86,6 @@ public:
 	void addDFDelayItem();
 	void addDFInformationItem();
 
-
 	// 插入文本框
 	void addTextItem();
 
@@ -104,15 +99,20 @@ public:
 	void pasteItems();
 
 	// 删除
-	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
 
+	// 获取某位置上的磁吸点
 	DAbstractBase* getMagItemOnPoint(QPointF p);
-	DAbstractBase* getInterItemOnPoint(QPointF p);
 
+	// 设置画布的菜单、设置绑定在画布上的窗口
 	void setMenu(QMenu *m) { menu = m; }
+	void setView(DView *v) { view = v; }
 
+	// 清空画布
 	void clear();
+
+	QMenu* getMenu() { return menu; }
+
 	void dDrawItems(QList<QGraphicsItem*> items);
 
 	QList<DLineBase*> getSelectedLine();
@@ -121,11 +121,8 @@ public:
 	void changeLineWidth(double width);
 	void changeLineColor(QColor color);
 	void setBg(QString path);
-    void changeItemRot();
-    void changeItemScale();
-
-
-	void setView(DView *v) { view = v; }
+	void changeItemRot();
+	void changeItemScale();
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -134,25 +131,40 @@ protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
 private:
+	// 初始化画布，设定参数
 	void init();
+	// 对画布进行快照
 	void shot();
 
 private:
-	static qreal defaultRotateDelta;
-	static qreal defaultScaleRatio;
-	static int defaultMoveDist;
-	static qreal defaultMoveZUp;
-	static qreal defaultMoveZDown;
+	// 调整参数
+	static qreal defaultRotateDelta; // 旋转时的角度
+	static qreal defaultScaleRatio;  // 缩放时的比例
+	static int defaultMoveDist;      // 默认移动距离
+	static qreal defaultMoveZUp;     // 上移时默认 Z 值
+	static qreal defaultMoveZDown;   // 下移时默认 Z 值
 
 	// 绑定的 view 窗口，在本使用情形下，有且仅会有一个窗口
-	DView *view;
+	// 并且不应该为空指针
+	DView *view = nullptr;
+	// 画布的菜单
+	QMenu *menu = nullptr;
 
-	int state = DConst::NONE;
-	int moditype = DConst::NONE;
+	// 插入状态
+	// 大体上分为 none, insert, after_insert
+	int insert_state = DConst::NONE;
 
+	// 交互状态
+	// 分为 size, modi, rot
+	int inter_state = DConst::NONE;
+
+	// 记录当前画布上显示 magPoint 的图形
 	DAbstractBase *showMagedItem = nullptr;
+
+	// 记录当前交互图形的指针
 	DAbstractBase *modifiedShape = nullptr;
 
+	// 画布的剪切板
 	QByteArray copyData;
 };
 

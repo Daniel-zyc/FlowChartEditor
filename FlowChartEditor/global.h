@@ -83,7 +83,7 @@ enum UserTypes
 	DFNodeItemType = QGraphicsItem::UserType + 211,
 	DFManualInputItemType = QGraphicsItem::UserType + 212,
 	DFInformationItemType = QGraphicsItem::UserType + 213,
-    DFDelayItemType = QGraphicsItem::UserType + 214,
+	DFDelayItemType = QGraphicsItem::UserType + 214,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
@@ -186,6 +186,8 @@ namespace DConst
     };
 };
 
+class DAbstractBase;
+
 // 工具函数
 namespace DTool
 {
@@ -227,4 +229,9 @@ namespace DTool
 
 	// 过滤掉所有 parent 存在于列表中的元素，以及所有不是 DAbstractBase 的元素
 	void filterRootBases(QList<QGraphicsItem*> &items);
+
+	// 过滤掉所有不是 DAbstractBase 的元素
+	void filterBases(QList<QGraphicsItem*> &items);
+
+	QList<DAbstractBase*> itemsToBases(QList<QGraphicsItem*> & items);
 };

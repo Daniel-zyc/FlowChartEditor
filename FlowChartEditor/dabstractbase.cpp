@@ -49,6 +49,11 @@ void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	if(showMagPoint) paintMagPoint(painter, option, widget);
 }
 
+bool DAbstractBase::isAbstract()
+{
+	return DTool::isAbstract(type());
+}
+
 bool DAbstractBase::isShape()
 {
 	return DTool::isShape(type());
