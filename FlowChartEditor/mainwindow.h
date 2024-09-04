@@ -165,6 +165,9 @@ private slots:
     void undo();
 
     void showAboutUsWindow();
+
+	void myDebug();
+
 private:
 	Ui::MainWindow *ui;
 
