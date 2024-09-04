@@ -176,20 +176,34 @@ void MainWindow::initrightUi()
     fillChildColor = new QTreeWidgetItem();
     fillChildType = new QTreeWidgetItem();
     fillChildPic = new QTreeWidgetItem();
+    lineTop = new QTreeWidgetItem();
+    lineChildColor = new QTreeWidgetItem();
+    lineChildType = new QTreeWidgetItem();
+    lineChildBeginArrow = new QTreeWidgetItem();
+    lineChildEndArrow = new QTreeWidgetItem();
+    lineChildWidth = new QTreeWidgetItem();
+
     borderTop->setText(0, "边框");
     fillTop->setText(0, "填充");
     scaleTop->setText(0, "缩放比例：");
     rotTop->setText(0, "旋转角度：");
+    lineTop->setText(0, "线条");
     borderChildColor->setText(0, "边框颜色：");
     borderChildType->setText(0, "边框样式：");
     borderChildWidth->setText(0, "边框宽度：");
     fillChildColor->setText(0, "填充颜色");
     fillChildType->setText(0, "填充样式");
+    lineChildColor->setText(0, "线条颜色");
+    lineChildType->setText(0, "线条类型");
+    lineChildBeginArrow->setText(0, "开始箭头");
+    lineChildEndArrow->setText(0, "结束箭头");
+    lineChildWidth->setText(0, "线条磅数");
 
 	rightShapew->addTopLevelItem(borderTop);
 	rightShapew->addTopLevelItem(fillTop);
 	rightShapew->addTopLevelItem(rotTop);
 	rightShapew->addTopLevelItem(scaleTop);
+    rightShapew->addTopLevelItem(lineTop);
 
 	borderTop->addChild(borderChildColor);
 	borderTop->addChild(borderChildType);
@@ -197,6 +211,11 @@ void MainWindow::initrightUi()
 	fillTop->addChild(fillChildColor);
 	fillTop->addChild(fillChildType);
 	fillTop->addChild(fillChildPic);
+    lineTop->addChild(lineChildColor);
+    lineTop->addChild(lineChildType);
+    lineTop->addChild(lineChildBeginArrow);
+    lineTop->addChild(lineChildEndArrow);
+    lineTop->addChild(lineChildWidth);
 
 	rotationBox = new QSpinBox();
 	scaleBox = new QSpinBox();
@@ -208,6 +227,39 @@ void MainWindow::initrightUi()
 	customizePic = new QCheckBox("自定义图片");
 	customizePic->setChecked(false);
 	picfile = new QPushButton("选择文件");
+    linecolor  = new QPushButton();
+    lineType = new QComboBox();
+    endarrowType = new QComboBox();
+    linebound = new QDoubleSpinBox();
+    beginarrowType = new QComboBox();
+
+    setColorIcon(linecolor);
+
+    lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
+    lineType->addItem(QIcon(":/icon/dashLine.png"), "短划线");
+    lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
+    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
+    lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
+
+    endarrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
+    endarrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
+    endarrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
+    endarrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
+    endarrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
+    endarrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
+
+    beginarrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
+    beginarrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
+    beginarrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
+    beginarrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
+    beginarrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
+    beginarrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
+
+    linebound->setRange(0, 30);
+    linebound->setSingleStep(0.25);
+    linebound->setValue(1);
+    linebound->setSuffix("磅");
+    linebound->setWrapping(true);
 
 	rotationBox->setFixedHeight(25);
 	scaleBox->setFixedHeight(25);
@@ -216,7 +268,12 @@ void MainWindow::initrightUi()
 	borderWidth->setFixedHeight(25);
 	fillColor->setFixedHeight(25);
 	fillType->setFixedHeight(25);
-	picfile->setFixedHeight(25);
+    picfile->setFixedHeight(25);
+    lineType->setFixedHeight(25);
+    endarrowType->setFixedHeight(25);
+    beginarrowType->setFixedHeight(25);
+    linebound->setFixedHeight(25);
+    linecolor->setFixedHeight(25);
 
 	borderStyle->addItem(QIcon(":/icon/solidLine.png"), "实线");
 	borderStyle->addItem(QIcon(":/icon/dashLine.png"), "短划线");
@@ -266,27 +323,65 @@ void MainWindow::initrightUi()
 
 	rightShapew->setItemWidget(fillChildPic, 0, customizePic);
 	rightShapew->setItemWidget(fillChildPic, 1, picfile);
+    rightShapew->setItemWidget(borderChildColor, 1, borderColor);
 	rightShapew->setItemWidget(borderChildType, 1, borderStyle);
 	rightShapew->setItemWidget(borderChildWidth, 1, borderWidth);
 	rightShapew->setItemWidget(fillChildColor, 1, fillColor);
 	rightShapew->setItemWidget(fillChildType, 1, fillType);
 	rightShapew->setItemWidget(rotTop, 1, rotationBox);
 	rightShapew->setItemWidget(scaleTop, 1, scaleBox);
+    rightShapew->setItemWidget(lineChildColor, 1, linecolor);
+    rightShapew->setItemWidget(lineChildType, 1, lineType);
+    rightShapew->setItemWidget(lineChildEndArrow, 1, endarrowType);
+    rightShapew->setItemWidget(lineChildBeginArrow, 1, beginarrowType);
+    rightShapew->setItemWidget(lineChildWidth, 1, linebound);
 
 	borderTop->setExpanded(true);
-	fillTop->setExpanded(true);
+    fillTop->setExpanded(true);
+    lineTop->setExpanded(true);
 
 	rightTab->addTab(rightShapew, "形状");
+
+    //样式样式表
+    rightStylew = new QWidget();
+    rightStylef = new QFormLayout();
+    QHBoxLayout *alignH = new QHBoxLayout();
+    QHBoxLayout *layerH = new QHBoxLayout();
+    alignBox = new QComboBox();
+    layerBox = new QComboBox();
+
+    alignBox->addItem("左对齐");
+    alignBox->addItem("水平居中");
+    alignBox->addItem("右对齐");
+    alignBox->addItem("顶端对齐");
+    alignBox->addItem("垂直居中");
+    alignBox->addItem("底端对齐");
+    alignBox->addItem("横向中轴均匀分布");
+    alignBox->addItem("纵向中轴均匀分布");
+
+    layerBox->addItem("上移一层");
+    layerBox->addItem("置于顶层");
+    layerBox->addItem("下移一层");
+    layerBox->addItem("置于底层");
+
+    alignH->addStretch();
+    alignH->addWidget(alignBox);
+    layerH->addStretch();
+    layerH->addWidget(layerBox);
+    rightStylef->addRow("对齐：", alignH);
+    rightStylef->addRow("层次：", layerH);
+    rightStylew->setLayout(rightStylef);
+    rightTab->addTab(rightStylew, "样式");
 
 	//文本样式表
 	rightFontw = new QWidget();
 	rightFontf = new QFormLayout();
 	QHBoxLayout *colorH = new QHBoxLayout();
 	QHBoxLayout *fontH = new QHBoxLayout();
-	textColor = new QPushButton();
-	setColorIcon(textColor);
-	textFont = new QPushButton("字体");
-	textFont->setFixedWidth(100);
+    textColor = new QPushButton();
+    setColorIcon(textColor);
+    textFont = new QPushButton("字体");
+    textFont->setFixedWidth(100);
 
 	colorH->addStretch();
 	colorH->addWidget(textColor);
@@ -299,47 +394,7 @@ void MainWindow::initrightUi()
 	rightFontw->setLayout(rightFontf);
 	rightTab->addTab(rightFontw, "文本");
 
-	//线条样式表
-	rightLinew = new QWidget();
-	linecolor  = new QPushButton();
-	QHBoxLayout *linecolorH = new QHBoxLayout();
-	setColorIcon(linecolor);
-	formright = new QFormLayout();
-	formright->setRowWrapPolicy(QFormLayout::DontWrapRows);
-
-	linecolorH->addStretch();
-	linecolorH->addWidget(linecolor);
-
-	lineType = new QComboBox();
-	lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
-	lineType->addItem(QIcon(":/icon/dashLine.png"), "短划线");
-	lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
-	lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
-	lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
-
-	arrowType = new QComboBox();
-	arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
-	arrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
-	arrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
-	arrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
-	arrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
-	arrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
-
-	linebound = new QDoubleSpinBox();
-	linebound->setRange(0, 30);
-	linebound->setSingleStep(0.25);
-	linebound->setValue(1);
-	linebound->setSuffix("磅");
-	linebound->setWrapping(true);
-
-	formright->addRow("线条颜色：", linecolorH);
-	formright->addRow("线条类型：", lineType);
-	formright->addRow("结尾箭头：", arrowType);
-	formright->addRow("线条磅数：", linebound);
-
-	rightLinew->setLayout(formright);
 	// rightw->setVisible(false);
-	rightTab->addTab(rightLinew, "线条");
 	formworkWidget = new FormworkWidget();
 	rightTab->addTab(formworkWidget,"模板");
 }
@@ -628,7 +683,7 @@ void MainWindow::connectRight()
 			}
 		}
 	});
-	connect(lineType, &QComboBox::currentIndexChanged, this, [this]() {
+    connect(lineType, &QComboBox::activated, this, [this]() {
 		int penstyle = lineType->currentIndex();
 		// qDebug() << "penstyle;" << penstyle;
 		switch(penstyle) {
@@ -639,7 +694,8 @@ void MainWindow::connectRight()
 		case 4: changeLineType(Qt::DashDotDotLine); break;
 		}
 	});
-	connect(arrowType, &QComboBox::currentIndexChanged, this, &MainWindow::changeEndArrow);
+    connect(endarrowType, &QComboBox::activated, this, &MainWindow::changeEndArrow);
+    connect(beginarrowType, &QComboBox::activated, this, &MainWindow::changeBeginArrow);
 	connect(linebound, &QDoubleSpinBox::valueChanged, this, [this]() {
 		scene->changeLineWidth(linebound->value() * globalScale);
 	});
@@ -653,9 +709,9 @@ void MainWindow::connectRight()
 	connect(textFont, &QPushButton::clicked, this, &MainWindow::changeTextFont);
 	connect(rotationBox, &QSpinBox::valueChanged, this, &MainWindow::changeItemRot);
 	connect(scaleBox, &QSpinBox::valueChanged, this, &MainWindow::changeItemScale);
-	connect(borderStyle, &QComboBox::currentIndexChanged, this, &MainWindow::changeBorderType);
+    connect(borderStyle, &QComboBox::activated, this, &MainWindow::changeBorderType);
 	connect(borderWidth, &QDoubleSpinBox::valueChanged, this, &MainWindow::changeBorderWidth);
-	connect(fillType, &QComboBox::currentIndexChanged, this, &MainWindow::changeFillType);
+    connect(fillType, &QComboBox::activated, this, &MainWindow::changeFillType);
 	connect(picfile, &QPushButton::clicked, this, [this]() {
 		if(customizePic->isChecked()) {
 			QString filename = QFileDialog::getOpenFileName(this, "打开图片", "", ("Image(*.svg *.png *.jpg *.bmp"));
@@ -670,6 +726,8 @@ void MainWindow::connectRight()
 			scene->changeFillColor(Qt::white);
 		}
 	});
+    connect(alignBox, &QComboBox::activated, this, &MainWindow::changeAlign);
+    connect(layerBox, &QComboBox::activated, this, &MainWindow::changeLayer);
 }
 
 void MainWindow::createMenu()
@@ -888,16 +946,8 @@ void MainWindow::bindAction()
 	connect(ui->actMoveDown, SIGNAL(triggered(bool)), this, SLOT(moveDown()));
 
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
-	// connect(ui->actCombine, SIGNAL(triggered(bool)), this, SLOT(combineSelected()));
- //    connect(ui->actSeperate, SIGNAL(triggered(bool)), this, SLOT(seperateSelected()));
-
 	QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
-	// QShortcut *combinesc = new QShortcut(QKeySequence("ctrl+G"), this);
-	// QShortcut *seperatesc = new QShortcut(QKeySequence("ctrl+shift+G"), this);
-
 	connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
-	// connect(combinesc, SIGNAL(activated()), this, SLOT(combineSelected()));
-	// connect(seperatesc, SIGNAL(activated()), this, SLOT(seperateSelected()));
 
 	connect(saveSvgTln, &QToolButton::clicked, this, &MainWindow::saveAsSvg);
 }
@@ -927,14 +977,15 @@ void MainWindow::changeLineType(Qt::PenStyle linestyle)
 	scene->changeLineType(linestyle);
 }
 
-void MainWindow::changeBeginArrow(int beginArrowType)
+void MainWindow::changeBeginArrow()
 {
+    int beginArrowType = beginarrowType->currentIndex();
 	scene->changeBeginArrow(beginArrowType);
 }
 
 void MainWindow::changeEndArrow()
 {
-	int arrowstyle = arrowType->currentIndex();
+    int arrowstyle = endarrowType->currentIndex();
 	scene->changeEndArrow(arrowstyle);
 }
 
@@ -961,9 +1012,9 @@ void MainWindow::changeItemScale()
 
 void MainWindow::changeBorderType()
 {
-	int penstyle = lineType->currentIndex();
+    int bordertype = borderStyle->currentIndex();
 	// qDebug() << "penstyle;" << penstyle;
-	switch(penstyle) {
+    switch(bordertype) {
 	case 0: scene->changeBorderType(Qt::SolidLine); break;
 	case 1: scene->changeBorderType(Qt::DashLine); break;
 	case 2: scene->changeBorderType(Qt::DotLine); break;
@@ -1128,6 +1179,17 @@ void MainWindow::moveSelectedMaxZDown(){
 	else scene->moveSelectedZMaxDown();
 }
 
+void MainWindow::changeLayer()
+{
+    int layer = layerBox->currentIndex();
+    switch(layer) {
+    // case 0 : itemLeftAlign(); break;
+    case 1 : moveSelectedMaxZUp(); break;
+    // case 2 : itemRightAlign(); break;
+    case 3 : moveSelectedMaxZDown(); break;
+    }
+}
+
 void MainWindow::findandReplace()
 {
 	findDia->docs.clear();
@@ -1193,6 +1255,21 @@ void MainWindow::undo(){
 void MainWindow::showAboutUsWindow(){
 	AboutUsWindow* auw = new AboutUsWindow();
 	auw->exec();
+}
+
+void MainWindow::changeAlign()
+{
+    int align = alignBox->currentIndex();
+    switch(align) {
+    case 0 : itemLeftAlign(); break;
+    case 1 : itemHorizAlign(); break;
+    case 2 : itemRightAlign(); break;
+    case 3 : itemTopAlign(); break;
+    case 4 : itemVertiAlign(); break;
+    case 5 : itemBottomAlign(); break;
+    case 6 : itemHorizEven(); break;
+    case 7 : itemVertiEven(); break;
+    }
 }
 
 void MainWindow::myDebug()
