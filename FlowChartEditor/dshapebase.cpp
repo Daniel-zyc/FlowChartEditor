@@ -101,6 +101,17 @@ void DShapeBase::setInsertItem()
 	sizePointId = DConst::BR - 1;
 }
 
+void DShapeBase::updateTextItemWidth()
+{
+	if(textItem == nullptr) return;
+	QRectF rc = textItem->sizeRect();
+	qreal maxWidth = sizeRect().width() - sizePointRadius*2;
+	if(rc.width() <= maxWidth) return;
+	rc.setWidth(maxWidth);
+	rc.moveCenter({0, 0});
+	textItem->sizeToRect(rc);
+}
+
 bool DShapeBase::checkRotPoint(QPointF p) const
 {
 	qreal r = rotPointRadius; QPointF rp = rotPoint;
@@ -121,6 +132,7 @@ void DShapeBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 
 	sizeToRect(nrect);
 	updateSizePoint();
+	updateTextItemWidth();
 	setPos(cent);
 }
 
@@ -163,7 +175,9 @@ QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value
 	if(change == QGraphicsItem::ItemPositionHasChanged
 	   || change == QGraphicsItem::ItemRotationHasChanged
 	   || change == QGraphicsItem::ItemScaleHasChanged)
+	{
 		updateAllLinkLines();
+	}
 	return value;
 }
 

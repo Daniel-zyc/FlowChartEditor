@@ -46,6 +46,8 @@ public:
 	// 设置为正在插入这个腿型
 	virtual void setInsertItem() override;
 
+	virtual void updateTextItemWidth();
+
 public:
 	//==========================================================================
 	// 图形的大小框
