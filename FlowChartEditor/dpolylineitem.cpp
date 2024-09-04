@@ -82,14 +82,14 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
-    /*
+/*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
     painter->drawEllipse(end_midPoint,5,5);
     painter->setBrush(Qt::blue);
     painter->drawEllipse(QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),5,5);
     painter->drawEllipse(QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),5,5);
-    */
+*/
 //绘制箭头
     qreal angle;
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
@@ -97,11 +97,14 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     else angle = getAngle(points[3],points[5]);
     drawArrow(painter, angle, endPoint, endArrowType);
     //绘制sizerect
-    /*
+/*
     if(beginMag) {
-        QRectF begin_rect = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
+        QRectF begin_rect = beginMag->parent->mapRectToScene(beginMag->parent->boundingRect());
         painter->setBrush(Qt::NoBrush);
         painter->setPen(Qt::blue);
+        painter->drawRect(begin_rect);
+        begin_rect = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
+        painter->setPen(Qt::yellow);
         painter->drawRect(begin_rect);
     }
 */
@@ -370,11 +373,9 @@ QPointF DPolyLineItem::getBoundingPoint(int point, int type)
     QRectF item,bound;
     if(!point && beginMag) {
         item = beginMag->parent->boundingRect();
-        //item = beginMag->parent->sizeRect();
         bound = beginMag->parent->mapRectToScene(item);
     } else if(point && endMag) {
         item = endMag->parent->boundingRect();
-        //item = endMag->parent->sizeRect();
         bound = endMag->parent->mapRectToScene(item);
     }
     qDebug() << "bound:" << bound.left() << bound.right() << bound.top() << bound.bottom();
@@ -603,6 +604,7 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
             } else if(temp_relative_pos == 2) {
                 end_line_type = 3;
                 ed_midPoint = getBoundingPoint(1,3);
+                qDebug() << ed_midPoint;
             }
         }
         break;

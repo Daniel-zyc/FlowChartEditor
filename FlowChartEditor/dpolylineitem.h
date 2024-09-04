@@ -70,8 +70,6 @@ private:
     int modis_num = 1;
     //折线类型
     int line_type = 0;
-    //绘制标记
-    int paint_flag = 0;
     //距离形状的最短距离
     double record_dist = 120;
     /*记录最多三个调整点的调整位置，
