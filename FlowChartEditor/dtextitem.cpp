@@ -71,7 +71,8 @@ DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *paren
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
 	rect = QRect(-w/2, -h/2, w, h);
 	updateAll();
-	isRotateable = parent == nullptr;
+	isRotateable = (parent == nullptr);
+	isScaleable = (parent == nullptr);
 }
 
 void DTextItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
