@@ -187,6 +187,8 @@ private slots:
     void itemVertiEven() {scene->itemVertiEven();}
     void changeAlign();
 
+    void setAutoAlign();
+
 	void myDebug();
 
 private:

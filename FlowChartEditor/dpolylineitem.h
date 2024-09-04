@@ -72,12 +72,18 @@ private:
     int line_type = 0;
     //距离形状的最短距离
     double record_dist = 120;
-    /*记录最多三个调整点的调整位置，
-     * 存完拿回去用的时候先更新完线，
-     * 然后调用modiToPoint
-     * id为012，对应的p在QMap里
-    */
+
     QMap<int,QPointF> modi_pos;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：父类 DLineBase 序列化
+     */
+    void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
+    bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
+
 };
 
 #endif // DPOLYLINEITEM_H

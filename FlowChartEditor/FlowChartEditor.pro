@@ -13,6 +13,8 @@ SOURCES += \
     dabstractbase.cpp \
     dcurvelineitem.cpp \
     ddiaitem.cpp \
+    ddirectstorageitem.cpp \
+    ddiskitem.cpp \
     dellitem.cpp \
     dfcarditem.cpp \
     dfcompareitem.cpp \
@@ -35,10 +37,12 @@ SOURCES += \
     dfprocessitem.cpp \
     dfsortitem.cpp \
     dfstartenditem.cpp \
+    dfstoredataitem.cpp \
     dfsummaryconnitem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dmultidocitem.cpp \
+    dorderstorageitem.cpp \
     dparagramitem.cpp \
     dpentagonitem.cpp \
     dpolygonbase.cpp \
@@ -47,6 +51,7 @@ SOURCES += \
     droundrectitem.cpp \
     dscene.cpp \
     dshapebase.cpp \
+    dshowitem.cpp \
     dtextitem.cpp \
     dtrapitem.cpp \
     dtriitem.cpp \
@@ -67,6 +72,8 @@ HEADERS += \
     dallitems.h \
     dcurvelineitem.h \
     ddiaitem.h \
+    ddirectstorageitem.h \
+    ddiskitem.h \
     dellitem.h \
     dfcarditem.h \
     dfcompareitem.h \
@@ -89,10 +96,12 @@ HEADERS += \
     dfprocessitem.h \
     dfsortitem.h \
     dfstartenditem.h \
+    dfstoredataitem.h \
     dfsummaryconnitem.h \
     dlinebase.h \
     dlineitem.h \
     dmultidocitem.h \
+    dorderstorageitem.h \
     dparagramitem.h \
     dpentagonitem.h \
     dpolygonbase.h \
@@ -101,6 +110,7 @@ HEADERS += \
     droundrectitem.h \
     dscene.h \
     dshapebase.h \
+    dshowitem.h \
     dtextitem.h \
     dtrapitem.h \
     dtriitem.h \
