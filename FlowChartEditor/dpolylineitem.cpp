@@ -320,26 +320,26 @@ void DPolyLineItem::updateBeginMidPoint()
     int direct = getPaintDirection();
     begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * direct + mid_x_shift * (direct ^ 1),
                              (beginPoint.y() + st_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-    /*
+
     if(st_x_offset > 0 && begin_midPoint.x() < beginPoint.x() + st_x_offset) {
         st_x_offset = begin_midPoint.x() - beginPoint.x();
     } else if(st_x_offset < 0 && begin_midPoint.x() > beginPoint.x() + st_x_offset) {
         st_x_offset = begin_midPoint.x() - beginPoint.x();
     }
-    */
+
 }
 void DPolyLineItem::updateEndMidPoint()
 {
     int direct = getPaintDirection();
     end_midPoint = QPointF((endPoint.x() + ed_x_offset) * direct + mid_x_shift * (direct ^ 1),
                            (endPoint.y() + ed_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-    /*
+
     if(ed_x_offset > 0 && end_midPoint.x() < endPoint.x() + ed_x_offset) {
         ed_x_offset = end_midPoint.x() - endPoint.x();
     } else if(ed_x_offset < 0 && end_midPoint.x() > endPoint.x() + ed_x_offset) {
         ed_x_offset = end_midPoint.x() - endPoint.x();
     }
-    */
+
 }
 
 void DPolyLineItem::updatePolyLineType()
