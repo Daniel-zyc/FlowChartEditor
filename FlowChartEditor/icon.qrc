@@ -72,5 +72,6 @@
         <file>icon/flowchart/sequentialaccess.png</file>
         <file>icon/flowchart/sort.png</file>
         <file>icon/flowchart/storedata.png</file>
+        <file>icon/curve.png</file>
     </qresource>
 </RCC>

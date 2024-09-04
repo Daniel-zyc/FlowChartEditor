@@ -17,13 +17,14 @@
 #include <QToolButton>
 #include <QFormLayout>
 #include <QComboBox>
-#include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QTabWidget>
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -53,7 +54,7 @@ private slots:
     void check();
     void saveAsSvg();
 
-	void addLine() { scene->addCurveLineItem(); }
+    void addLine() { scene->addLineItem(); }
 	void addPolyLine() { scene->addPolyLineItem(); }
 	void addCurveLine() { scene->addCurveLineItem(); }
 
@@ -77,6 +78,7 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
+    void addDFInformationItem() {scene->addDFInformationItem();}
 //    void addDFPredefineItem() { scene->addDFSummaryconnItem(); }
     void addDFPredefineItem() { scene->addDFPredefineItem(); }
     void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
@@ -84,18 +86,14 @@ private slots:
     void addDFManualinputItem() { scene->addManualinItem(); }
     void addDFDelayItem() { scene->addDFDelayItem(); }
 	void addDFManualInputItem() { scene->addManualInputItem(); }
-    void addDFAgrreConnectItem(){scene->addDFAgrreConnectItem();}
     void addDFCardItem(){scene->addDFCardItem();}
     void addDFCompareItem(){scene->addDFCompareItem();}
     void addDFDirecrAccessItem() {scene->addDFDirecrAccessItem();}
     void addDFDiskItem(){scene->addDFDiskItem();}
     void addDFDisplayItem(){scene->addDFDisplayItem();}
-    // void addDFManulInputItem(){scene->addDFManulInputItem();}
     void addDFMergeItem(){scene->addDFMergeItem();}
     void addDFMultiDocItem(){scene->addDFMultiDocItem();}
     void addDFOffPageItem(){scene->addDFOffPageItem();}
-    // void addDFOrItem(){scene->addDFOrItem();}
-    void addDFPostPoneItem(){scene->addDFPostPoneItem();}
     void addDFSequentialAccessItem(){scene->addDFSequentialAccessItem();}
     void addDFStoreDataItem(){scene->addDFStoreDataItem();}
 
@@ -222,6 +220,7 @@ private:
     QPushButton *postponeBtn;
     QPushButton *sequentialaccessBtn;
     QPushButton *storedataBtn;
+    QPushButton *curveBtn;
 
 	QPushButton *addRectBtn;
 	QPushButton *addEllBtn;
@@ -239,9 +238,6 @@ private:
     QDoubleSpinBox *linebound;
     QPushButton *linecolor;
 
-    QToolButton *createTln;
-    QToolButton *openTln;
-    QToolButton *saveTln;
     QToolButton *saveSvgTln;
 
     QGroupBox *bgGroup;
@@ -260,8 +256,8 @@ private:
     QFormLayout *rightShapef;
     QPushButton *frameColor;
     QPushButton *fillColor;
-    QDoubleSpinBox *rotationBox;
-    QDoubleSpinBox *zoomBox;
+    QSpinBox *rotationBox;
+    QSpinBox *zoomBox;
 
     QWidget *rightFontw;
     QFormLayout *rightFontf;

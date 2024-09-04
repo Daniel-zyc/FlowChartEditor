@@ -25,6 +25,12 @@ public:
 public:
 	// 获取被选中图形中的根图形，只包含 AbstractBase 下的图形
 	QList<DAbstractBase*> getRootSelectedBases();
+	// 获取磁吸点与 p 碰撞的图形
+	DAbstractBase* getMagItemOnPoint(QPointF p);
+	// 获取所有被选中的线条
+	QList<DLineBase*> getSelectedLine();
+	// 获取所有被选中的图形（包括文本框）
+	QList<DShapeBase*> getSelectedShape();
 
 	// 对选中对象的旋转设置
 	void resetRotation() { setRotation(0.0); }
@@ -86,18 +92,14 @@ public:
     void addDFOrItem();
     void addManualInputItem();
 	void addDFInformationItem();
-    void addDFAgrreConnectItem();
     void addDFCardItem();
     void addDFCompareItem();
-    // void addDFDataItem();
     void addDFDirecrAccessItem();
     void addDFDiskItem();
     void addDFDisplayItem();
-    void addDFManulInputItem();
     void addDFMergeItem();
     void addDFMultiDocItem();
     void addDFOffPageItem();
-    // void addDFOrItem();
     void addDFPostPoneItem();
     void addDFSequentialAccessItem();
     void addDFStoreDataItem();
@@ -111,7 +113,8 @@ public:
 	void addPolyLineItem();
 	void addCurveLineItem();
 
-	// 复制、粘贴
+	// 全选、复制、粘贴
+	void selectAllItems();
 	void copySelectedItems();
 	void pasteItems();
 
@@ -130,27 +133,36 @@ public:
      */
     bool ifCollision(QGraphicsItem * item);
 
-	DAbstractBase* getMagItemOnPoint(QPointF p);
-
 	// 设置画布的菜单、设置绑定在画布上的窗口
 	void setMenu(QMenu *m) { menu = m; }
 	void setView(DView *v) { view = v; }
+	// 获取菜单
+	QMenu* getMenu() { return menu; }
 
 	// 清空画布
 	void clear();
 
-	QMenu* getMenu() { return menu; }
-
 	void dDrawItems(QList<QGraphicsItem*> items);
 
-	QList<DLineBase*> getSelectedLine();
+	// 调整选中对象的样式
 	void changeLineType(Qt::PenStyle linestyle);
-	void changeEndArrow(int endArrowType);
-	void changeLineWidth(double width);
+	void changeLineWidth(qreal width);
 	void changeLineColor(QColor color);
-	void setBg(QString path);
-	void changeItemRot();
-	void changeItemScale();
+
+	void changeEndArrow(int endArrowType);
+	void changeBeginArrow(int beginArrowType);
+
+	void changeBorderType(Qt::PenStyle linestyle);
+	void changeBorderWidth(qreal width);
+	void changeBorderColor(QColor color);
+
+	void changeFillType(Qt::BrushStyle brushstyle);
+	void changeFillColor(QColor color);
+
+	void changeItemRot(qreal deg = 0.0) { setRotation(deg); }
+	void changeItemScale(qreal scl = 1.0) { setScale(scl); }
+
+	void setBackground(QString path);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

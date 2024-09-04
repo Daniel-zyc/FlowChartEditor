@@ -13,15 +13,17 @@ extern int PASTE_NUM;
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 
-// 大小、磁吸、磁吸碰撞、调整、旋转点半径
+// 将画面上的所有物品大小放大的倍数，同时视角缩小相应的倍数
+constexpr qreal globalScale = 4;
 
-constexpr qreal sizePointRadius = 5;
-constexpr qreal magPointRadius = 5;
-constexpr qreal magPointCollideRadius = 10;
-constexpr qreal modiPointRadius = 5;
-constexpr qreal rotPointRadius = 5;
-constexpr qreal rotPointMargin = 30;
-constexpr qreal maxPenWidth = 30;
+// 大小、磁吸、磁吸碰撞、调整、旋转点半径
+constexpr qreal sizePointRadius = 5 * globalScale;
+constexpr qreal magPointRadius = 5 * globalScale;
+constexpr qreal magPointCollideRadius = 10 * globalScale;
+constexpr qreal modiPointRadius = 5 * globalScale;
+constexpr qreal rotPointRadius = 5 * globalScale;
+constexpr qreal rotPointMargin = 30 * globalScale;
+constexpr qreal maxPenWidth = 30 * globalScale;
 constexpr qreal maxPointRadius =
 	qMax(qMax(sizePointRadius, magPointRadius),
 		 qMax(magPointCollideRadius, modiPointRadius));
@@ -30,26 +32,29 @@ constexpr qreal maxLineRaidus = qMax(maxBorderRadius, maxPenWidth * 5);
 constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
 
 // 各个图形以及边框的画笔和画刷
-inline const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
-inline const QPen modiPointPen(Qt::black, 1, Qt::SolidLine);
+const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
+const QPen modiPointPen(Qt::black, globalScale, Qt::SolidLine);
 
-inline const QBrush sizePointBrush(Qt::white, Qt::SolidPattern);
-inline const QPen sizePointPen(Qt::black, 1, Qt::SolidLine);
+const QBrush sizePointBrush(Qt::white, Qt::SolidPattern);
+const QPen sizePointPen(Qt::black, globalScale, Qt::SolidLine);
 
-inline const QBrush magPointBrush(Qt::darkGray, Qt::SolidPattern);
-inline const QPen magPointPen(Qt::darkGray, 1, Qt::SolidLine);
+const QBrush magPointBrush(Qt::darkGray, Qt::SolidPattern);
+const QPen magPointPen(Qt::darkGray, globalScale, Qt::SolidLine);
 
-inline const QBrush magPointCollideBursh(Qt::gray, Qt::SolidPattern);
-inline const QPen magPointColidePen(Qt::gray, Qt::SolidLine);
+const QBrush magPointCollideBursh(Qt::gray, Qt::SolidPattern);
+const QPen magPointColidePen(Qt::NoPen);
 
-inline const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
-inline const QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
+const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
+const QPen rotPointPen = QPen(Qt::black, globalScale, Qt::SolidLine);
 
-inline const QBrush selectRectBrush = QBrush(Qt::NoBrush);
-inline const QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
+const QBrush selectRectBrush = QBrush(Qt::NoBrush);
+const QPen selectRectPen = QPen(Qt::black, globalScale, Qt::DashLine);
 
-inline const QBrush groupRectBrush = QBrush(Qt::NoBrush);
-inline const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
+const QBrush groupRectBrush = QBrush(Qt::NoBrush);
+const QPen groupRectPen = QPen(Qt::black, globalScale, Qt::SolidLine);
+
+const QBrush defaultBrush = QBrush(Qt::white, Qt::SolidPattern);
+const QPen defaultPen = QPen(Qt::black, globalScale, Qt::SolidLine);
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -286,5 +291,5 @@ namespace DTool
 	// 过滤掉所有不是 DAbstractBase 的元素
 	void filterBases(QList<QGraphicsItem*> &items);
 
-	QList<DAbstractBase*> itemsToBases(QList<QGraphicsItem*> & items);
+	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
 };

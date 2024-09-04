@@ -92,8 +92,6 @@ public:
     bool isTextEmpty();
 
 protected:
-	// 旋转点大小和其中心距离 sizeRect 的距离
-	qreal rotPointRadius = 5, rotPointMargin = 30;
 	// 旋转点位置
 	QPointF rotPoint = {0, 0};
 	

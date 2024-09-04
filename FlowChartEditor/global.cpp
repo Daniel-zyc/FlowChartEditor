@@ -106,7 +106,7 @@ void DTool::filterBases(QList<QGraphicsItem*>& items)
 	}
 }
 
-QList<DAbstractBase*> DTool::itemsToBases(QList<QGraphicsItem*>& items)
+QList<DAbstractBase*> DTool::itemsToBases(const QList<QGraphicsItem*> &items)
 {
 	QList<DAbstractBase*> bases;
 	for(QGraphicsItem* item : items)
