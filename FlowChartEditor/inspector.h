@@ -1,46 +1,70 @@
 #ifndef INSPECTOR_H
 #define INSPECTOR_H
+
 #include "dscene.h"
 #include "dview.h"
-#include "qlabel.h"
-#include <QDialog>
+#include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QListWidget>
 
-struct errorItem{
+struct errorMessage {
+    int errorType;
     QString message;
-    QGraphicsItem * item;
+    DAbstractBase *item;
 };
 
-class Inspector : public QDialog
-{
+class Inspector : public QWidget {
+    Q_OBJECT
 public:
-    Inspector(QWidget *parent = nullptr,DScene *scene = nullptr,DView *view = nullptr);
+    static Inspector* instance(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
 
-    void check();
+    ~Inspector();
+
+    void checkAll();
+    void checkItem(QGraphicsItem *item);
+    void checkItems(QList<QGraphicsItem*> item);
+
+    void checkTextItem(QGraphicsItem *item);
+    void checkChartFlowItem(QGraphicsItem *item);
+    void checkLineItem(QGraphicsItem *item);
+    void checkOtherItem(QGraphicsItem *item);
+
+    void restoreView();
+    void updateErrorList();
 
 private:
+    explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
+
+    static Inspector* m_instance;
+
     DScene *scene;
-    DView * view;
+    DView *view;
 
-    QList<errorItem> errorMessage;
-
-    QGridLayout *gridLayout = new QGridLayout();
-    QPushButton *forwardBtn = new QPushButton("向前");
-    QPushButton *backwardBtn = new QPushButton("向后");
-    QLabel *message = new QLabel;
+    QList<errorMessage> errorMessage;
 
     QPointF originalCentrer;
     QTransform originalTransform;
 
-    void restoreView();
-protected:
-    void closeEvent(QCloseEvent *event) override;
-private slots:
-    void forward();
-    void backward();
+    QListWidget *errorListWidget;
 
-    int index;
+    void showAllType();
+    void showErrorsOnly();
+    void showFlowChartErrorsOnly();
+
+    bool ifShowErrorOnly = false;
+    bool ifShowFlowChartErrorsOnly = false;
+
+    QAction* showErrorAction;
+
+    QAction* showFlowChartErrorsAction;
+
+private slots:
+    void onItemClicked(QListWidgetItem *item);
+    void clearAllErrors();
+    void onShowErrorActionClicked();
+    void onShowFlowChartErrorsClicked();
+    void onCloseActionClicked();
 };
 
 #endif // INSPECTOR_H

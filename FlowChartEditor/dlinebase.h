@@ -50,7 +50,12 @@ public:
 
     // 获取某个磁吸点的类型
     int magType(MagPoint *mag);
-
+    // 判断是否有回环
+    bool ifHasRound();
+    // 判断是否与某一个abstractBase相连
+    bool ifLinkedWith(DAbstractBase *item);
+    // 判断是否与某一个line连接同一个magPoint
+    bool ifLinedSameMag(DLineBase *line);
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;

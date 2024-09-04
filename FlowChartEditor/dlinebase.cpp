@@ -6,6 +6,8 @@ DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
 {
 	sizes.resize(2);
+	isScaleable = false;
+	isRotateable = false;
 }
 
 void DLineBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -210,7 +212,7 @@ void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoi
 	QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
 										 sin(angle - DConst::PI / 6) * arrowSize);
 
-	QBrush qbrush = brush(); qbrush.setColor(pen().color()); setBrush(qbrush);
+	painter->setBrush(QBrush(pen().color(), Qt::SolidPattern));
 	painter->setPen(Qt::NoPen);
 	switch (arrowType) {
 		case DConst::NONE: {
@@ -223,6 +225,7 @@ void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoi
 			break;
 		}
 		case DConst::OPEN_ARROW: {
+			painter->setPen(pen());
 			painter->drawLine(endPoint, arrowP1);
 			painter->drawLine(endPoint, arrowP2);
 			break;
@@ -277,6 +280,35 @@ int  DLineBase::magType(MagPoint *mag){
     if(endArrowType != DConst::NONE && beginArrowType == DConst::NONE)
         return mag == endMag ? DConst::IN : DConst::OUT;
     return DConst::NO_IN_OR_OUT;
+}
+
+bool DLineBase::ifHasRound(){
+    if(endMag == nullptr
+        || beginMag == nullptr
+        || endMag->parent == nullptr
+        || beginMag->parent == nullptr)
+        return false;
+    if(endMag->parent == beginMag->parent) return true;
+    return false;
+}
+
+bool DLineBase::ifLinkedWith(DAbstractBase *item){
+    if(endMag != nullptr
+        && endMag->parent != nullptr
+        && endMag->parent == item) return true;
+    if(beginMag != nullptr
+        && beginMag->parent != nullptr
+        && beginMag->parent == item) return true;
+    qDebug() << "无连线";
+    return false;
+}
+
+bool DLineBase::ifLinedSameMag(DLineBase *line){
+    if(line->endMag != nullptr && this->endMag != nullptr && line->endMag == this->endMag) return true;
+    if(line->endMag != nullptr && this->beginMag != nullptr && line->endMag == this->beginMag) return true;
+    if(line->beginMag != nullptr && this->endMag != nullptr && line->beginMag == this->endMag) return true;
+    if(line->beginMag != nullptr && this->beginMag != nullptr && line->beginMag == this->beginMag) return true;
+    return false;
 }
 
 //==============================================================================

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "dabstractbase.h"
 
 #include <cmath>
 
@@ -27,6 +28,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DFInformationItemType,
 				DFManualInputItemType,
 				DFPredefineItemType,
+				DFDelayItemType,
 
 				// text
 				DTextItemType,
@@ -79,17 +81,39 @@ void DTool::moveItems(const QList<QGraphicsItem *> &items)
 
 void DTool::filterRootBases(QList<QGraphicsItem*>& items)
 {
-	QSet<QGraphicsItem*> S;
-	for(QGraphicsItem* item : items) S.insert(item);
+    QSet<QGraphicsItem*> S;
+    for (QGraphicsItem* item : items) {
+        S.insert(item);
+    }
+
+    for (int i = items.size() - 1; i >= 0; i--) {
+        if (items[i] == nullptr || !isAbstract(items[i]->type())
+            || S.contains(items[i]->parentItem()))
+        {
+            items.removeAt(i);
+        }
+    }
+}
+
+void DTool::filterBases(QList<QGraphicsItem*>& items)
+{
 	for (int i = 0; i < items.size(); i++)
 	{
-		if(items[i] == nullptr || !isAbstract(items[i]->type())
-		   || S.contains(items[i]->parentItem()))
+		if(items[i] == nullptr || !isAbstract(items[i]->type()))
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
 		}
 	}
+}
+
+QList<DAbstractBase*> DTool::itemsToBases(const QList<QGraphicsItem*> &items)
+{
+	QList<DAbstractBase*> bases;
+	for(QGraphicsItem* item : items)
+		if(item && isAbstract(item->type()))
+			bases.push_back(dynamic_cast<DAbstractBase*>(item));
+	return bases;
 }
 
 bool DTool::isShape(int type)
@@ -109,10 +133,14 @@ bool DTool::isText(int type)
 
 bool DTool::isAbstract(int type)
 {
-	return QGraphicsItem::UserType <= type;
+	return QGraphicsItem::UserType <= type && type != DTextBaseType;
 }
 
 bool DTool::isFlowChartShape(int type)
 {
 	return QGraphicsItem::UserType + 200 <= type && type < QGraphicsItem::UserType + 300;
+}
+
+int DTool::getErrorLevel(int type){
+    return type > 100;
 }

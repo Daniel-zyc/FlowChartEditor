@@ -27,19 +27,18 @@ void UndoManager::undo(){
 
     printStackSize();
     if(scene == nullptr || undoStack.empty()) return;
-    if(redoStack.empty() && !undoStack.empty()) redoStack.push(undoStack.pop());        // 当前快照移动
-    QByteArray data = undoStack.pop();
+    if(undoStack.size() > 1) redoStack.push(undoStack.pop());
+    if(undoStack.empty()) return;
+    QByteArray data = undoStack.top();
     QDataStream in(&data,QIODevice::ReadOnly);
     QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);
     scene->clear(); scene->dDrawItems(items);
-    redoStack.push(data);
     trimStack();
 }
 
 void UndoManager::redo(){
     printStackSize();
     if(scene == nullptr || redoStack.empty()) return;
-    if(undoStack.empty() && !redoStack.empty()) undoStack.push(redoStack.pop());
     QByteArray data = redoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
     QList<QGraphicsItem *> items = Serializer::instance().deserializeItems(in);

@@ -52,6 +52,8 @@
         <file>icon/primary/trapezoid.png</file>
         <file>icon/primary/triangle.png</file>
         <file>icon/flowchart/node.png</file>
+        <file>icon/warning.png</file>
+        <file>icon/error.png</file>
         <file>icon/polyLine.png</file>
         <file>icon/palette1.png</file>
         <file>icon/flowchart/aggreconnect.png</file>
@@ -70,5 +72,6 @@
         <file>icon/flowchart/sequentialaccess.png</file>
         <file>icon/flowchart/sort.png</file>
         <file>icon/flowchart/storedata.png</file>
+        <file>icon/curve.png</file>
     </qresource>
 </RCC>

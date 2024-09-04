@@ -5,7 +5,6 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QStyleOptionGraphicsItem>
-#include "serializer.h"
 
 DTextBase::DTextBase(QGraphicsItem *parent)
 	: DTextBase("", parent) {}
@@ -15,6 +14,7 @@ DTextBase::DTextBase(const QString &text, QGraphicsItem *parent)
 {
 	document()->setPlainText(text);
 	focusToCenter();
+	setScale(globalScale);
 }
 
 void DTextBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -70,8 +70,8 @@ DTextItem::DTextItem(qreal w, qreal h, const QString &text, QGraphicsItem *paren
 	for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
 	rect = QRect(-w/2, -h/2, w, h);
 	updateAll();
-
-	isRotateable = parent == nullptr;
+	isRotateable = (parent == nullptr);
+	isScaleable = (parent == nullptr);
 }
 
 void DTextItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -118,7 +118,7 @@ void DTextItem::deleteMagPoint()
 
 void DTextItem::updateAll()
 {
-	textBase.setTextWidth(rect.width() - maxBorderRadius*2);
+	textBase.setTextWidth((rect.width() - maxBorderRadius*2) / globalScale);
 	updateSizePoint();
 	updateMagPoint();
 }
@@ -171,4 +171,8 @@ bool DTextItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 	updateAll();
 	setRotateable(fa == nullptr);
 	return true;
+}
+
+bool DTextItem::isTextEmpty(){
+    return textBase.toPlainText().isEmpty();
 }

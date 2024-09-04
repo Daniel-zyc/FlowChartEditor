@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -73,6 +73,9 @@
    </attribute>
   </widget>
   <action name="actNewFile">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+   </property>
    <property name="text">
     <string>新建</string>
    </property>
@@ -81,6 +84,9 @@
    </property>
   </action>
   <action name="actOpenFile">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
+   </property>
    <property name="text">
     <string>打开</string>
    </property>
@@ -89,6 +95,9 @@
    </property>
   </action>
   <action name="actSaveFile">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentSave"/>
+   </property>
    <property name="text">
     <string>保存</string>
    </property>
@@ -162,6 +171,9 @@
    </property>
   </action>
   <action name="actEnlarge">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ZoomIn"/>
+   </property>
    <property name="text">
     <string>放大</string>
    </property>
@@ -170,6 +182,9 @@
    </property>
   </action>
   <action name="actShrink">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ZoomOut"/>
+   </property>
    <property name="text">
     <string>缩小</string>
    </property>
@@ -181,6 +196,9 @@
    </property>
   </action>
   <action name="actRotateCCW">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ObjectRotateRight"/>
+   </property>
    <property name="text">
     <string>向左旋转</string>
    </property>
@@ -189,6 +207,9 @@
    </property>
   </action>
   <action name="actRotateCW">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ObjectRotateLeft"/>
+   </property>
    <property name="text">
     <string>向右旋转</string>
    </property>
@@ -197,6 +218,9 @@
    </property>
   </action>
   <action name="actHelp">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::HelpAbout"/>
+   </property>
    <property name="text">
     <string>查看文档</string>
    </property>
@@ -261,6 +285,9 @@
    </property>
   </action>
   <action name="actCopy">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditCopy"/>
+   </property>
    <property name="text">
     <string>复制</string>
    </property>
@@ -269,6 +296,9 @@
    </property>
   </action>
   <action name="actCut">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditCut"/>
+   </property>
    <property name="text">
     <string>剪切</string>
    </property>
@@ -277,6 +307,9 @@
    </property>
   </action>
   <action name="actPaste">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditPaste"/>
+   </property>
    <property name="text">
     <string>粘贴</string>
    </property>
@@ -333,6 +366,9 @@
    </property>
   </action>
   <action name="actUndo">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditUndo"/>
+   </property>
    <property name="text">
     <string>撤销</string>
    </property>
@@ -341,6 +377,9 @@
    </property>
   </action>
   <action name="actRedo">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditRedo"/>
+   </property>
    <property name="text">
     <string>重做</string>
    </property>
@@ -670,6 +709,9 @@
    </property>
   </action>
   <action name="actAboutUs">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::HelpAbout"/>
+   </property>
    <property name="text">
     <string>关于我们</string>
    </property>
@@ -688,6 +730,20 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actDebug">
+   <property name="text">
+    <string>Debug用Action</string>
+   </property>
+   <property name="toolTip">
+    <string>Debug用Action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+D</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
