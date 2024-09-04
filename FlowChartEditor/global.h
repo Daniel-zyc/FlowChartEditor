@@ -84,6 +84,8 @@ enum UserTypes
 	DFManualInputItemType = QGraphicsItem::UserType + 212,
 	DFInformationItemType = QGraphicsItem::UserType + 213,
     DFDelayItemType = QGraphicsItem::UserType + 214,
+    DFOrItemType = QGraphicsItem::UserType + 215,
+    DFSummaryconnItemType = QGraphicsItem::UserType + 216,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
@@ -233,6 +235,8 @@ namespace DConst
     };
 };
 
+class DAbstractBase;
+
 // 工具函数
 namespace DTool
 {
@@ -277,4 +281,8 @@ namespace DTool
 
     // 获取错误等级
     int getErrorLevel(int ErrorType);
+	// 过滤掉所有不是 DAbstractBase 的元素
+	void filterBases(QList<QGraphicsItem*> &items);
+
+	QList<DAbstractBase*> itemsToBases(QList<QGraphicsItem*> & items);
 };

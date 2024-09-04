@@ -23,12 +23,14 @@ SOURCES += \
     dfinternalstoreitem.cpp \
     dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
+    dforitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
     dfstartenditem.cpp \
+    dfsummaryconnitem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dmultidocitem.cpp \
@@ -68,12 +70,14 @@ HEADERS += \
     dfinternalstoreitem.h \
     dfmanualinputitem.h \
     dfmanualoperateitem.h \
+    dforitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
     dfstartenditem.h \
+    dfsummaryconnitem.h \
     dlinebase.h \
     dlineitem.h \
     dmultidocitem.h \

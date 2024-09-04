@@ -77,8 +77,27 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-	void addDFPredefineItem() { scene->addDFPredefineItem(); }
+//    void addDFPredefineItem() { scene->addDFSummaryconnItem(); }
+    void addDFPredefineItem() { scene->addDFPredefineItem(); }
+    void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
+    void addDFOrItem() { scene->addDFOrItem();}
+    void addDFManualinputItem() { scene->addManualinItem(); }
+    void addDFDelayItem() { scene->addDFDelayItem(); }
 	void addDFManualInputItem() { scene->addManualInputItem(); }
+    void addDFAgrreConnectItem(){scene->addDFAgrreConnectItem();}
+    void addDFCardItem(){scene->addDFCardItem();}
+    void addDFCompareItem(){scene->addDFCompareItem();}
+    void addDFDirecrAccessItem() {scene->addDFDirecrAccessItem();}
+    void addDFDiskItem(){scene->addDFDiskItem();}
+    void addDFDisplayItem(){scene->addDFDisplayItem();}
+    // void addDFManulInputItem(){scene->addDFManulInputItem();}
+    void addDFMergeItem(){scene->addDFMergeItem();}
+    void addDFMultiDocItem(){scene->addDFMultiDocItem();}
+    void addDFOffPageItem(){scene->addDFOffPageItem();}
+    void addDFOrItem(){scene->addDFOrItem();}
+    void addDFPostPoneItem(){scene->addDFPostPoneItem();}
+    void addDFSequentialAccessItem(){scene->addDFSequentialAccessItem();}
+    void addDFStoreDataItem(){scene->addDFStoreDataItem();}
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
@@ -188,6 +207,21 @@ private:
     QPushButton *prepareBtn;
     QPushButton *storeBtn;
     QPushButton *polyLineBtn;
+    QPushButton *aggreconnectBtn;
+    QPushButton *cardBtn;
+    QPushButton *compareBtn;
+    QPushButton *dataBtn;
+    QPushButton *directaccessBtn;
+    QPushButton *diskBtn;
+    QPushButton *displayBtn;
+    QPushButton *manulinputBtn;
+    QPushButton *mergeBtn;
+    QPushButton *multidocBtn;
+    QPushButton *offpageBtn;
+    QPushButton *orBtn;
+    QPushButton *postponeBtn;
+    QPushButton *sequentialaccessBtn;
+    QPushButton *storedataBtn;
 
 	QPushButton *addRectBtn;
 	QPushButton *addEllBtn;

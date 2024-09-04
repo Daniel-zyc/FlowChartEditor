@@ -6,6 +6,8 @@ DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
 {
 	sizes.resize(2);
+	isScaleable = false;
+	isRotateable = false;
 }
 
 void DLineBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
