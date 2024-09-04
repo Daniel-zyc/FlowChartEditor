@@ -252,6 +252,76 @@ void DScene::addDFInformationItem()
 	prepareInsertItem(new DFInformationItem());
 }
 
+void DScene::addDFAgrreConnectItem()
+{
+    qDebug() << "add 汇总连接";
+}
+
+void DScene::addDFCardItem()
+{
+    qDebug() << "add 卡片";
+}
+
+void DScene::addDFCompareItem()
+{
+    qDebug() << "add 对照";
+}
+
+void DScene::addDFDirecrAccessItem()
+{
+    qDebug() << "add 直接访问存储器";
+}
+
+void DScene::addDFDiskItem()
+{
+    qDebug() << "add 磁盘";
+}
+
+void DScene::addDFDisplayItem()
+{
+    qDebug() << "add 显示";
+}
+
+void DScene::addDFManulInputItem()
+{
+    qDebug() << "add 手动输入";
+}
+
+void DScene::addDFMergeItem()
+{
+    qDebug() << "add 合并";
+}
+
+void DScene::addDFMultiDocItem()
+{
+    qDebug() << "add 多文档";
+}
+
+void DScene::addDFOffPageItem()
+{
+    qDebug() << "add 离页连接符";
+}
+
+void DScene::addDFOrItem()
+{
+    qDebug() << "add 或者";
+}
+
+void DScene::addDFPostPoneItem()
+{
+    qDebug() << "add 延期";
+}
+
+void DScene::addDFSequentialAccessItem()
+{
+    qDebug() << "add 顺序访问存储器";
+}
+
+void DScene::addDFStoreDataItem()
+{
+    qDebug() << "add 存储数据";
+}
+
 void DScene::addDFProcessItem()
 {
 	qDebug() << "add DFProcessItem";

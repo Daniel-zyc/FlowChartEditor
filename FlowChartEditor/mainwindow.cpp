@@ -140,6 +140,21 @@ void MainWindow::initleftUi()
     prepareBtn = new QPushButton();
     storeBtn = new QPushButton();
     polyLineBtn = new QPushButton();
+    aggreconnectBtn = new QPushButton();
+    cardBtn = new QPushButton();
+    compareBtn = new QPushButton();
+    dataBtn = new QPushButton();
+    directaccessBtn = new QPushButton();
+    diskBtn = new QPushButton();
+    displayBtn = new QPushButton();
+    manulinputBtn = new QPushButton();
+    mergeBtn = new QPushButton();
+    multidocBtn = new QPushButton();
+    offpageBtn = new QPushButton();
+    orBtn = new QPushButton();
+    postponeBtn = new QPushButton();
+    sequentialaccessBtn = new QPushButton();
+    storedataBtn = new QPushButton();
 
 	addRectBtn = new QPushButton();
 	addEllBtn = new QPushButton();
@@ -163,6 +178,21 @@ void MainWindow::initleftUi()
     prepareBtn->setIcon(QPixmap(":/icon/flowchart/prepare.png"));
     storeBtn->setIcon(QPixmap(":/icon/flowchart/store.png"));
     polyLineBtn->setIcon(QPixmap(":icon/polyLine.png"));
+    aggreconnectBtn->setIcon(QPixmap(":/icon/flowchart/aggreconnect.png"));
+    cardBtn->setIcon(QPixmap(":/icon/flowchart/card.png"));
+    compareBtn->setIcon(QPixmap(":/icon/flowchart/compare.png"));
+    dataBtn->setIcon(QPixmap(":/icon/flowchart/data.png"));
+    directaccessBtn->setIcon(QPixmap(":/icon/flowchart/directaccess.png"));
+    diskBtn->setIcon(QPixmap(":/icon/flowchart/disk.png"));
+    displayBtn->setIcon(QPixmap(":/icon/flowchart/display.png"));
+    manulinputBtn->setIcon(QPixmap(":/icon/flowchart/manulinput.png"));
+    mergeBtn->setIcon(QPixmap(":/icon/flowchart/merge.png"));
+    multidocBtn->setIcon(QPixmap(":/icon/flowchart/multidoc.png"));
+    offpageBtn->setIcon(QPixmap(":/icon/flowchart/offpage.png"));
+    orBtn->setIcon(QPixmap(":/icon/flowchart/or.png"));
+    postponeBtn->setIcon(QPixmap(":/icon/flowchart/postpone.png"));
+    sequentialaccessBtn->setIcon(QPixmap(":/icon/flowchart/sequentialaccess.png"));
+    storedataBtn->setIcon(QPixmap(":/icon/flowchart/storedata.png"));
 
     rectBtn->setToolTip("过程");
     roundRectBtn->setToolTip("可选过程");
@@ -206,6 +236,21 @@ void MainWindow::initleftUi()
     flowGrid->addWidget(endBtn, 3, 0);
     flowGrid->addWidget(prepareBtn, 3, 1);
     flowGrid->addWidget(storeBtn, 3, 2);
+    flowGrid->addWidget(aggreconnectBtn, 4, 0);
+    flowGrid->addWidget(cardBtn, 4, 1);
+    flowGrid->addWidget(compareBtn, 4, 2);
+    flowGrid->addWidget(dataBtn, 5, 0);
+    flowGrid->addWidget(directaccessBtn, 5, 1);
+    flowGrid->addWidget(diskBtn, 5, 2);
+    flowGrid->addWidget(displayBtn, 6, 0);
+    flowGrid->addWidget(manulinputBtn, 6, 1);
+    flowGrid->addWidget(mergeBtn, 6, 2);
+    flowGrid->addWidget(multidocBtn, 7, 0);
+    flowGrid->addWidget(offpageBtn, 7, 1);
+    flowGrid->addWidget(orBtn, 7, 2);
+    flowGrid->addWidget(postponeBtn, 8, 0);
+    flowGrid->addWidget(sequentialaccessBtn, 8, 1);
+    flowGrid->addWidget(storedataBtn, 8, 2);
 
 	primaryGrid->addWidget(addRectBtn, 0, 0);
 	primaryGrid->addWidget(addEllBtn, 0, 1);
@@ -402,6 +447,22 @@ void MainWindow::connectLeft()
 	connect(storeBtn,  &QPushButton::clicked, this, &MainWindow::addDFInternalStoreItem);
 	connect(prepareBtn,  &QPushButton::clicked, this, &MainWindow::addDFPrepareItem);
 	connect(polyLineBtn,  &QPushButton::clicked, this, &MainWindow::addPolyLine);
+    connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFAgrreConnectItem);
+    connect(cardBtn,  &QPushButton::clicked, this, &MainWindow::addDFCardItem);
+    connect(compareBtn,  &QPushButton::clicked, this, &MainWindow::addDFCompareItem);
+    // connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
+    connect(directaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
+    connect(diskBtn,  &QPushButton::clicked, this, &MainWindow::addDFDiskItem);
+    connect(displayBtn,  &QPushButton::clicked, this, &MainWindow::addDFDisplayItem);
+    // connect(manulinputBtn,  &QPushButton::clicked, this, &MainWindow::addDFMultiDocItem);
+    connect(mergeBtn,  &QPushButton::clicked, this, &MainWindow::addDFMergeItem);
+    connect(multidocBtn,  &QPushButton::clicked, this, &MainWindow::addDFMultiDocItem);
+    connect(offpageBtn,  &QPushButton::clicked, this, &MainWindow::addDFOffPageItem);
+    connect(orBtn,  &QPushButton::clicked, this, &MainWindow::addDFOrItem);
+    connect(postponeBtn,  &QPushButton::clicked, this, &MainWindow::addDFPostPoneItem);
+    connect(sequentialaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFSequentialAccessItem);
+    connect(storedataBtn,  &QPushButton::clicked, this, &MainWindow::addDFStoreDataItem);
+
 }
 
 void MainWindow::connectRight()
