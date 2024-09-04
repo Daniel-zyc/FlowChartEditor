@@ -86,18 +86,14 @@ public:
     void addDFOrItem();
     void addManualInputItem();
 	void addDFInformationItem();
-    void addDFAgrreConnectItem();
     void addDFCardItem();
     void addDFCompareItem();
-    // void addDFDataItem();
     void addDFDirecrAccessItem();
     void addDFDiskItem();
     void addDFDisplayItem();
-    void addDFManulInputItem();
     void addDFMergeItem();
     void addDFMultiDocItem();
     void addDFOffPageItem();
-    void addDFOrItem();
     void addDFPostPoneItem();
     void addDFSequentialAccessItem();
     void addDFStoreDataItem();

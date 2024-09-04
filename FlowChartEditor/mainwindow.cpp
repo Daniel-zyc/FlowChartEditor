@@ -125,6 +125,7 @@ void MainWindow::initleftUi()
     lineGroup = new QGroupBox("线条");
     textGroup = new QGroupBox("文本");
 
+    curveBtn = new QPushButton();
     rectBtn = new QPushButton();
     roundRectBtn = new QPushButton();
     ellipseBtn = new QPushButton();
@@ -163,6 +164,7 @@ void MainWindow::initleftUi()
 	addDiaBtn = new QPushButton();
 	addTriBtn = new QPushButton();
 
+    curveBtn->setIcon(QPixmap(":/icon/curve.png"));
     rectBtn->setIcon(QPixmap(":/icon/flowchart/rect.png"));
     roundRectBtn->setIcon(QPixmap(":/icon/flowchart/roundrect.png"));
     ellipseBtn->setIcon(QPixmap(":/icon/flowchart/node.png"));
@@ -268,8 +270,7 @@ void MainWindow::initleftUi()
     lineGrid = new QGridLayout();
     lineGrid->addWidget(lineBtn, 0, 0);
     lineGrid->addWidget(polyLineBtn, 0, 1);
-    QLabel *noneLabel = new QLabel();
-    lineGrid->addWidget(noneLabel, 0, 2);
+    lineGrid->addWidget(curveBtn, 0, 2);
     lineGroup->setLayout(lineGrid);
 
     textGrid = new QGridLayout();
@@ -317,8 +318,8 @@ void MainWindow::initrightUi()
     //形状样式表
     rightShapew = new QWidget();
     rightShapef = new QFormLayout();
-    rotationBox = new QDoubleSpinBox();
-    zoomBox = new QDoubleSpinBox();
+    rotationBox = new QSpinBox();
+    zoomBox = new QSpinBox();
     QHBoxLayout *frameH = new QHBoxLayout();
     QHBoxLayout *fillH = new QHBoxLayout();
     QHBoxLayout *rotH = new QHBoxLayout();
@@ -447,22 +448,22 @@ void MainWindow::connectLeft()
 	connect(storeBtn,  &QPushButton::clicked, this, &MainWindow::addDFInternalStoreItem);
 	connect(prepareBtn,  &QPushButton::clicked, this, &MainWindow::addDFPrepareItem);
 	connect(polyLineBtn,  &QPushButton::clicked, this, &MainWindow::addPolyLine);
-    connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFAgrreConnectItem);
+    connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFSummaryconnItem);
     connect(cardBtn,  &QPushButton::clicked, this, &MainWindow::addDFCardItem);
     connect(compareBtn,  &QPushButton::clicked, this, &MainWindow::addDFCompareItem);
-    // connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
+    connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
     connect(directaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
     connect(diskBtn,  &QPushButton::clicked, this, &MainWindow::addDFDiskItem);
     connect(displayBtn,  &QPushButton::clicked, this, &MainWindow::addDFDisplayItem);
-    // connect(manulinputBtn,  &QPushButton::clicked, this, &MainWindow::addDFMultiDocItem);
+    connect(manulinputBtn,  &QPushButton::clicked, this, &MainWindow::addDFManualinputItem);
     connect(mergeBtn,  &QPushButton::clicked, this, &MainWindow::addDFMergeItem);
     connect(multidocBtn,  &QPushButton::clicked, this, &MainWindow::addDFMultiDocItem);
     connect(offpageBtn,  &QPushButton::clicked, this, &MainWindow::addDFOffPageItem);
     connect(orBtn,  &QPushButton::clicked, this, &MainWindow::addDFOrItem);
-    connect(postponeBtn,  &QPushButton::clicked, this, &MainWindow::addDFPostPoneItem);
+    connect(postponeBtn,  &QPushButton::clicked, this, &MainWindow::addDFDelayItem);
     connect(sequentialaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFSequentialAccessItem);
-    connect(storedataBtn,  &QPushButton::clicked, this, &MainWindow::addDFStoreDataItem);
-
+    connect(storedataBtn, &QPushButton::clicked, this, &MainWindow::addDFStoreDataItem);
+    connect(curveBtn, &QPushButton::clicked, this, &MainWindow::addCurveLine);
 }
 
 void MainWindow::connectRight()
@@ -541,15 +542,7 @@ void MainWindow::connectRight()
     });
     connect(arrowType, &QComboBox::currentIndexChanged, this, [this]() {
         int arrowstyle = arrowType->currentIndex();
-        // qDebug() << "arrowstyle" << arrowstyle;
-        switch(arrowstyle) {
-        case 0: changeEndArrow(0); break;
-        case 1: changeEndArrow(1); break;
-        case 2: changeEndArrow(2); break;
-        case 3: changeEndArrow(3); break;
-        case 4: changeEndArrow(4); break;
-        case 5: changeEndArrow(5); break;
-        }
+        changeEndArrow(arrowstyle);
     });
     connect(linebound, &QDoubleSpinBox::valueChanged, this, [this]() {
         scene->changeLineWidth(linebound->value());
@@ -562,10 +555,10 @@ void MainWindow::connectRight()
     connect(fillColor, &QPushButton::clicked, this, &MainWindow::selectFillCol);
     connect(textColor, &QPushButton::clicked, this, &MainWindow::selectTextCol);
     connect(textFont, &QPushButton::clicked, this, &MainWindow::selectTextFont);
-    connect(rotationBox, &QDoubleSpinBox::valueChanged, this, [this]() {
+    connect(rotationBox, &QSpinBox::valueChanged, this, [this]() {
         scene->changeLineWidth(linebound->value());
     });
-    connect(zoomBox, &QDoubleSpinBox::valueChanged, this, [this]() {
+    connect(zoomBox, &QSpinBox::valueChanged, this, [this]() {
         scene->changeLineWidth(linebound->value());
     });
 }

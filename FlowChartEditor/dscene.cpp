@@ -250,10 +250,6 @@ void DScene::addDFInformationItem()
 	prepareInsertItem(new DFInformationItem());
 }
 
-void DScene::addDFAgrreConnectItem()
-{
-    qDebug() << "add 汇总连接";
-}
 
 void DScene::addDFCardItem()
 {
@@ -280,11 +276,6 @@ void DScene::addDFDisplayItem()
     qDebug() << "add 显示";
 }
 
-void DScene::addDFManulInputItem()
-{
-    qDebug() << "add 手动输入";
-}
-
 void DScene::addDFMergeItem()
 {
     qDebug() << "add 合并";
@@ -300,15 +291,6 @@ void DScene::addDFOffPageItem()
     qDebug() << "add 离页连接符";
 }
 
-void DScene::addDFOrItem()
-{
-    qDebug() << "add 或者";
-}
-
-void DScene::addDFPostPoneItem()
-{
-    qDebug() << "add 延期";
-}
 
 void DScene::addDFSequentialAccessItem()
 {
