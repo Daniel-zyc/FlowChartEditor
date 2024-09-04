@@ -45,6 +45,7 @@ SOURCES += \
     dtrapitem.cpp \
     dtriitem.cpp \
     dview.cpp \
+    formworkwidget.cpp \
     global.cpp \
     inspector.cpp \
     magpoint.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
     dtrapitem.h \
     dtriitem.h \
     dview.h \
+    formworkwidget.h \
     global.h \
     inspector.h \
     magpoint.h \
@@ -109,5 +111,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    formwork.qrc \
     icon.qrc \
     qss.qrc

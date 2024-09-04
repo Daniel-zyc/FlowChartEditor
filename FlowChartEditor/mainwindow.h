@@ -26,6 +26,7 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QMainWindow>
+#include <formworkwidget.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -171,6 +172,7 @@ private slots:
 private:
 	Ui::MainWindow *ui;
 
+
     Inspector *inspector;
 	DScene *scene;
 	DView *view;
@@ -181,6 +183,7 @@ private:
     QSplitter *middlesplitter;
 
     QSplitter *mainsplitter;
+
     QWidget *leftw;
     QGridLayout *flowGrid;
     QGridLayout *primaryGrid;
@@ -232,6 +235,7 @@ private:
 	QPushButton *addTrapBtn;
 	QPushButton *addTriBtn;
 
+    FormworkWidget *formworkWidget;
     QTabWidget *rightTab;
     QWidget *rightLinew;
     QFormLayout *formright;

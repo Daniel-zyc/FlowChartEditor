@@ -432,6 +432,8 @@ void MainWindow::initleftUi()
     rightLinew->setLayout(formright);
     // rightw->setVisible(false);
     rightTab->addTab(rightLinew, "线条");
+    formworkWidget = new FormworkWidget();
+    rightTab->addTab(formworkWidget,"模板");
 
     // rightTab->setVisible(false);
 }

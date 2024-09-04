@@ -982,7 +982,7 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	}
 
     if((insert_state != DConst::NONE)
-        && SHOT_STATE == DConst::CHANGED){
+        || SHOT_STATE == DConst::CHANGED){
         shot();
         Inspector::instance()->checkAll();
     }

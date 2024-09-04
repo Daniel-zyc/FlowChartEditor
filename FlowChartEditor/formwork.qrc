@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/OneRect">
+        <file>formwork/formwork1/OneRect.svg</file>
+    </qresource>
+    <qresource prefix="/OneEllipse">
+        <file>formwork/formwork2/OneEllipse.svg</file>
+    </qresource>
+</RCC>

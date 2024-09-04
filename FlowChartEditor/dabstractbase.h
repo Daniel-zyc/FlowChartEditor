@@ -131,6 +131,8 @@ protected:
 	// 是否显示磁吸点
 	bool showMagPoint = false;
 
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
 public:
 	/**
 	 * @brief serialize
