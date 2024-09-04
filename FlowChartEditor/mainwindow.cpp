@@ -981,13 +981,7 @@ void MainWindow::bindAction()
             check();
         }
     });
-    // connect(isOpenReference, &QCheckBox::checkStateChanged, this, [this]() {
-    //     if(!isOpenReference->isChecked()) {
-    //         scene->changeFillColor(Qt::white);
-    //     }else {
-
-    //     }
-    // });
+    connect(isOpenReference, &QCheckBox::checkStateChanged, this, &MainWindow::setAutoAlign);
 }
 
 void MainWindow::saveAsSvg()
@@ -1303,6 +1297,12 @@ void MainWindow::changeAlign()
     case 6 : itemHorizEven(); break;
     case 7 : itemVertiEven(); break;
     }
+}
+
+void MainWindow::setAutoAlign()
+{
+    if(isOpenReference->isChecked()) scene->setAutoAlign(true);
+    else scene->setAutoAlign(false);
 }
 
 void MainWindow::myDebug()
