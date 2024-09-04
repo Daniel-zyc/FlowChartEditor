@@ -246,6 +246,12 @@ void DScene::addDFDelayItem()
     prepareInsertItem(new DFDelayItem());
 }
 
+void DScene::addDFInformationItem()
+{
+	qDebug() << "add DFInformationItem";
+	prepareInsertItem(new DFInformationItem());
+}
+
 void DScene::addDFProcessItem()
 {
 	qDebug() << "add DFProcessItem";
@@ -284,8 +290,14 @@ void DScene::addDFNodeItem()
 
 void DScene::addDFPredefineItem()
 {
-	qDebug() << "add DFNodeItem";
+	qDebug() << "add DFPredefineItem";
 	prepareInsertItem(new DFPredefineItem());
+}
+
+void DScene::addManualInputItem()
+{
+	qDebug() << "add DFManualInput";
+	prepareInsertItem(new DFManualInputItem());
 }
 
 //=============================== line item ====================================
@@ -298,7 +310,7 @@ void DScene::addLineItem()
 void DScene::addManualinItem()
 {
     qDebug() << "add ManualinItem";
-    DFManualinputItem *item = new DFManualinputItem();
+	DFManualInputItem *item = new DFManualInputItem();
     state = DConst::INSERT_SHAPE;
     modifiedShape = item;
 }
@@ -431,6 +443,16 @@ void DScene::setBg(QString path)
 {
     QPixmap bg(path);
     setBackgroundBrush(bg);
+}
+
+void DScene::changeItemRot()
+{
+
+}
+
+void DScene::changeItemScale()
+{
+
 }
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

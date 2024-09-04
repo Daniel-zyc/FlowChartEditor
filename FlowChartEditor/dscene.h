@@ -84,10 +84,13 @@ public:
 	void addDFConditionItem();
 	void addDFDataItem();
 	void addDFNodeItem();
-    void addManualinItem();
+	void addManualinItem();
 	void addDFPredefineItem();
     void addDFDelayItem();
     void addDFOrItem();
+	void addManualInputItem();
+	void addDFDelayItem();
+	void addDFInformationItem();
 
 
 	// 插入文本框
@@ -120,6 +123,9 @@ public:
 	void changeLineWidth(double width);
 	void changeLineColor(QColor color);
 	void setBg(QString path);
+    void changeItemRot();
+    void changeItemScale();
+
 
 	void setView(DView *v) { view = v; }
 
