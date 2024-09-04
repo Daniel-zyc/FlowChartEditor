@@ -262,11 +262,13 @@ void DScene::addParagramItem()
 void DScene::addpentagonItem()
 {
     qDebug() << "add 五边形";
+
 }
 
 void DScene::addhexagonItem()
 {
     qDebug() << "add 六边形";
+    prepareInsertItem(new DFPrepareItem());
 }
 
 void DScene::addDiaItem()
@@ -366,6 +368,7 @@ void DScene::addDFMultiDocItem()
 void DScene::addDFOffPageItem()
 {
     qDebug() << "add 离页连接符";
+    prepareInsertItem(new DFOffPageItem());
 }
 
 
@@ -506,13 +509,9 @@ bool DScene::ifCollision(QGraphicsItem * item){
         if(lineBase == nullptr) return false;
         for (int i = items.size() - 1; i >= 0; i--) {
             DAbstractBase *abstractBase = dynamic_cast<DAbstractBase*>(items[i]);
-            if (abstractBase == nullptr) {
-                items.removeAt(i);
-                continue;
-            }
 
             // 去除与其有连线的图形
-            if (lineBase->ifLinkedWith(abstractBase)) {
+            if (abstractBase != nullptr && lineBase->ifLinkedWith(abstractBase)) {
                 qDebug() << "去除有连线";
                 items.removeAt(i);
                 continue;
@@ -538,23 +537,18 @@ bool DScene::ifCollision(QGraphicsItem * item){
     }
 
     if(DTool::isShape(base->type())){
+        qDebug() << "开始检测图形碰撞";
+        qDebug() << items.size();
         DShapeBase *shapeBase = dynamic_cast<DShapeBase*>(base);
         if(shapeBase == nullptr) return false;
         for (int i = items.size() - 1; i >= 0; i--) {
-            DAbstractBase *otherShapeBase = dynamic_cast<DAbstractBase*>(items[i]);
-            if (otherShapeBase == nullptr) {
-                items.removeAt(i);
-                continue;
-            }
-            // 去除文本框的碰撞
             DTextItem *otherTextItem = dynamic_cast<DTextItem*>(items[i]);
             if (otherTextItem) {
                 items.removeAt(i);
                 continue;
             }
-
             DLineBase *otherlineBase = dynamic_cast<DLineBase*>(items[i]);
-            if (otherlineBase->ifLinkedWith(shapeBase)) {
+            if (otherlineBase != nullptr && otherlineBase->ifLinkedWith(shapeBase)) {
                 items.removeAt(i);
                 continue;
             }
@@ -1061,7 +1055,7 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	}
 
     if((insert_state != DConst::NONE)
-		&& SHOT_STATE == DConst::CHANGED){
+        || SHOT_STATE == DConst::CHANGED){
         shot();
 		Inspector::instance()->checkAll();
     }

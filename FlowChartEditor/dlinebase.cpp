@@ -296,11 +296,11 @@ bool DLineBase::ifHasRound(){
 bool DLineBase::ifLinkedWith(DAbstractBase *item){
     if(endMag != nullptr
         && endMag->parent != nullptr
-        && endMag->parent == dynamic_cast<DShapeBase*>(item)) return true;
+        && endMag->parent == item)return true;
     if(beginMag != nullptr
         && beginMag->parent != nullptr
-        && beginMag->parent == dynamic_cast<DShapeBase*>(item)) return true;
-    qDebug() << "无连线";
+        && beginMag->parent == item)return true;
+
     return false;
 }
 

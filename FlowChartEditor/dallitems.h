@@ -40,6 +40,7 @@
 #include "dfmergeitem.h"
 #include "dfsortitem.h"
 #include "dfcompareitem.h"
+#include "dfoffpageitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

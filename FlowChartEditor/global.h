@@ -95,6 +95,7 @@ enum UserTypes
     DFMergeItemType = QGraphicsItem::UserType + 218,
     DFSortItemType = QGraphicsItem::UserType + 219,
     DFCompareItemType = QGraphicsItem::UserType + 220,
+    DFOffPageItemType = QGraphicsItem::UserType + 221,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
@@ -311,3 +312,5 @@ const FormworkData FormworkDataList[] = {
     { ":/OneRect/formwork/formwork1/OneRect.svg", "../../formwork/formwork1/OneRect.bit", "一个矩形", "仅仅是一个矩形" },
     { ":/OneEllipse/formwork/formwork2/OneEllipse.svg", "../../formwork/formwork2/OneEllipse.bit", "一个椭圆", "仅仅是一个椭圆" }
 };
+
+const int FormworkDataListSize = sizeof(FormworkDataList) / sizeof(FormworkDataList[0]);
