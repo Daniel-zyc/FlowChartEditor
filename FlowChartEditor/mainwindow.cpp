@@ -681,6 +681,7 @@ void MainWindow::createMenu()
 
     ui->helpMenu->addAction(ui->actAboutUs);
     ui->helpMenu->addAction(ui->actCheck);
+	ui->helpMenu->addAction(ui->actDebug);
 }
 
 void MainWindow::createToolBar()
@@ -726,6 +727,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
 	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
@@ -1095,6 +1097,12 @@ void MainWindow::undo(){
 void MainWindow::showAboutUsWindow(){
     AboutUsWindow* auw = new AboutUsWindow();
     auw->exec();
+}
+
+void MainWindow::myDebug()
+{
+	qDebug() << "debug triggered";
+	scene->itemVertiEven();
 }
 
 void MainWindow::check(){

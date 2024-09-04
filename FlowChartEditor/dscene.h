@@ -23,14 +23,15 @@ public:
 	DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
 
 public:
-	// 获取被选中图形中的根图形，只包含 AbstractBase 下的图形
+	// 获取被选中图形中的根图形（parent不在列表里），只包含 AbstractBase 下的图形
 	QList<DAbstractBase*> getRootSelectedBases();
 	// 获取磁吸点与 p 碰撞的图形
 	DAbstractBase* getMagItemOnPoint(QPointF p);
 	// 获取所有被选中的线条
-	QList<DLineBase*> getSelectedLine();
+	QList<DLineBase*> getSelectedLines();
 	// 获取所有被选中的图形（包括文本框）
-	QList<DShapeBase*> getSelectedShape();
+	QList<DShapeBase*> getSelectedShapes();
+	QList<DShapeBase*> getNoparentSelectedShapes();
 
 	// 对选中对象的旋转设置
 	void resetRotation() { setRotation(0.0); }
@@ -163,6 +164,17 @@ public:
 	void changeItemScale(qreal scl = 1.0) { setScale(scl); }
 
 	void setBackground(QString path);
+
+	// 对齐
+	void itemTopAlign();
+	void itemBottomAlign();
+	void itemLeftAlign();
+	void itemRightAlign();
+	void itemHorizAlign();
+	void itemVertiAlign();
+
+	void itemHorizEven();
+	void itemVertiEven();
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

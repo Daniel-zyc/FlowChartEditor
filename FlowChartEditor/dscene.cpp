@@ -53,7 +53,7 @@ QList<DAbstractBase*> DScene::getRootSelectedBases()
 	return DTool::itemsToBases(items);
 }
 
-QList<DLineBase *> DScene::getSelectedLine()
+QList<DLineBase *> DScene::getSelectedLines()
 {
 	QList<DAbstractBase*> items = DTool::itemsToBases(selectedItems());
 	QList<DLineBase*> lines;
@@ -63,12 +63,23 @@ QList<DLineBase *> DScene::getSelectedLine()
 	return lines;
 }
 
-QList<DShapeBase*> DScene::getSelectedShape()
+QList<DShapeBase*> DScene::getSelectedShapes()
 {
 	QList<DAbstractBase*> items = DTool::itemsToBases(selectedItems());
 	QList<DShapeBase*> shapes;
 	for(DAbstractBase* item : items)
 		if(item->isShape() || item->isText())
+			shapes.push_back(dynamic_cast<DShapeBase*>(item));
+	return shapes;
+}
+
+QList<DShapeBase*> DScene::getNoparentSelectedShapes()
+{
+	QList<DAbstractBase*> items = DTool::itemsToBases(selectedItems());
+	QList<DShapeBase*> shapes;
+	for(DAbstractBase* item : items)
+		if(item->parentItem() == nullptr &&
+		   (item->isShape() || item->isText()))
 			shapes.push_back(dynamic_cast<DShapeBase*>(item));
 	return shapes;
 }
@@ -543,7 +554,7 @@ bool DScene::ifCollision(QGraphicsItem * item){
 void DScene::changeLineType(Qt::PenStyle linestyle)
 {
 	qDebug() << "change Line Type";
-	for(DLineBase *line : getSelectedLine()) {
+	for(DLineBase *line : getSelectedLines()) {
 		QPen npen = line->pen();
 		npen.setStyle(linestyle);
 		line->setPen(npen);
@@ -553,7 +564,7 @@ void DScene::changeLineType(Qt::PenStyle linestyle)
 void DScene::changeLineWidth(qreal width)
 {
 	qDebug() << "change Line Width";
-	for(DLineBase *line : getSelectedLine()) {
+	for(DLineBase *line : getSelectedLines()) {
 		QPen npen = line->pen();
 		npen.setWidthF(width);
 		line->setPen(npen);
@@ -563,7 +574,7 @@ void DScene::changeLineWidth(qreal width)
 void DScene::changeLineColor(QColor color)
 {
 	qDebug() << "change Line Color";
-	for(DLineBase *line : getSelectedLine()) {
+	for(DLineBase *line : getSelectedLines()) {
 		QPen npen = line->pen();
 		npen.setColor(color);
 		line->setPen(npen);
@@ -573,21 +584,21 @@ void DScene::changeLineColor(QColor color)
 void DScene::changeBeginArrow(int beginArrowType)
 {
 	qDebug() << "change Line beginArrow";
-	for(DLineBase *line : getSelectedLine())
+	for(DLineBase *line : getSelectedLines())
 		line->setBeginArrowType(beginArrowType);
 }
 
 void DScene::changeEndArrow(int endArrowType)
 {
 	qDebug() << "change Line endArrow";
-	for(DLineBase *line : getSelectedLine())
+	for(DLineBase *line : getSelectedLines())
 		line->setEndArrowType(endArrowType);
 }
 
 void DScene::changeBorderType(Qt::PenStyle linestyle)
 {
 	qDebug() << "change border type";
-	for(DShapeBase* shape : getSelectedShape())
+	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QPen npen = shape->pen();
 		npen.setStyle(linestyle);
@@ -598,7 +609,7 @@ void DScene::changeBorderType(Qt::PenStyle linestyle)
 void DScene::changeBorderWidth(qreal width)
 {
 	qDebug() << "change border width";
-	for(DShapeBase* shape : getSelectedShape())
+	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QPen npen = shape->pen();
 		npen.setWidthF(width);
@@ -609,7 +620,7 @@ void DScene::changeBorderWidth(qreal width)
 void DScene::changeBorderColor(QColor color)
 {
 	qDebug() << "change border color";
-	for(DShapeBase* shape : getSelectedShape())
+	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QPen npen = shape->pen();
 		npen.setColor(color);
@@ -620,7 +631,7 @@ void DScene::changeBorderColor(QColor color)
 void DScene::changeFillType(Qt::BrushStyle brushstyle)
 {
 	qDebug() << "change fill type";
-	for(DShapeBase* shape : getSelectedShape())
+	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QBrush nbrush = shape->brush();
 		nbrush.setStyle(brushstyle);
@@ -631,7 +642,7 @@ void DScene::changeFillType(Qt::BrushStyle brushstyle)
 void DScene::changeFillColor(QColor color)
 {
 	qDebug() << "change border width";
-	for(DShapeBase* shape : getSelectedShape())
+	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QBrush nbrush = shape->brush();
 		nbrush.setColor(color);
@@ -643,6 +654,210 @@ void DScene::setBackground(QString path)
 {
     QPixmap bg(path);
     setBackgroundBrush(bg);
+}
+
+//==============================================================================
+
+void DScene::itemTopAlign()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getTop = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).top();
+	};
+
+	qreal topMin = getTop(shapes[0]);
+	for(DShapeBase* shape : shapes)
+		topMin = qMin(topMin, getTop(shape));
+
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setY(p.y() + topMin - getTop(shape));
+		shape->setPos(p);
+	}
+}
+
+void DScene::itemBottomAlign()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getBottom = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).bottom();
+	};
+
+	qreal bottomMax = getBottom(shapes[0]);
+	for(DShapeBase* shape : shapes)
+		bottomMax = qMax(bottomMax, getBottom(shape));
+
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setY(p.y() + bottomMax - getBottom(shape));
+		shape->setPos(p);
+	}
+}
+
+void DScene::itemLeftAlign()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getLeft = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).left();
+	};
+
+	qreal leftMin = getLeft(shapes[0]);
+	for(DShapeBase* shape : shapes)
+		leftMin = qMin(leftMin, getLeft(shape));
+
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setX(p.x() + leftMin - getLeft(shape));
+		shape->setPos(p);
+	}
+}
+
+void DScene::itemRightAlign()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getRight = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).right();
+	};
+
+	qreal rightMax = getRight(shapes[0]);
+	for(DShapeBase* shape : shapes)
+		rightMax = qMax(rightMax, getRight(shape));
+
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setX(p.x() + rightMax - getRight(shape));
+		shape->setPos(p);
+	}
+}
+
+void DScene::itemHorizAlign()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getCentX = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).center().x();
+	};
+
+	qreal rightMax = getCentX(shapes[0]);
+	qreal leftMin = getCentX(shapes[0]);
+	for(DShapeBase* shape : shapes)
+	{
+		rightMax = qMax(rightMax, getCentX(shape));
+		leftMin = qMin(leftMin, getCentX(shape));
+	}
+
+	qreal target = (rightMax + leftMin) / 2;
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setX(p.x() + target - getCentX(shape));
+		shape->setPos(p);
+	}
+}
+
+void DScene::itemVertiAlign()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getCentY = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).center().y();
+	};
+
+	qreal bottomMax = getCentY(shapes[0]);
+	qreal topMin = getCentY(shapes[0]);
+	for(DShapeBase* shape : shapes)
+	{
+		bottomMax = qMax(bottomMax, getCentY(shape));
+		topMin = qMin(topMin, getCentY(shape));
+	}
+
+	qreal target = (bottomMax + topMin) / 2;
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setY(p.y() + target - getCentY(shape));
+		shape->setPos(p);
+	}
+}
+
+void DScene::itemHorizEven()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getCentX = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).center().x();
+	};
+
+	std::sort(shapes.begin(), shapes.end(),
+			  [&](DShapeBase* x, DShapeBase* y) -> bool {
+		return getCentX(x) < getCentX(y);
+	});
+
+	qreal rightMax = getCentX(shapes[0]);
+	qreal leftMin = getCentX(shapes[0]);
+	for(DShapeBase* shape : shapes)
+	{
+		rightMax = qMax(rightMax, getCentX(shape));
+		leftMin = qMin(leftMin, getCentX(shape));
+	}
+
+	qreal target = leftMin;
+	qreal step = (rightMax - leftMin) / (shapes.size() - 1);
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setX(p.x() + target - getCentX(shape));
+		shape->setPos(p);
+		target += step;
+	}
+}
+
+void DScene::itemVertiEven()
+{
+	QList<DShapeBase*> shapes = getNoparentSelectedShapes();
+	if(shapes.size() <= 1) return;
+
+	auto getCentY = [](DShapeBase* shape) -> qreal {
+		return shape->mapRectToScene(shape->sizeRect()).center().y();
+	};
+
+	std::sort(shapes.begin(), shapes.end(),
+			  [&](DShapeBase* x, DShapeBase* y) -> bool {
+		return getCentY(x) < getCentY(y);
+	});
+
+	qreal bottomMax = getCentY(shapes[0]);
+	qreal topMin = getCentY(shapes[0]);
+	for(DShapeBase* shape : shapes)
+	{
+		bottomMax = qMax(bottomMax, getCentY(shape));
+		topMin = qMin(topMin, getCentY(shape));
+	}
+
+	qreal target = topMin;
+	qreal step = (bottomMax - topMin) / (shapes.size() - 1);
+	for(DShapeBase* shape : shapes)
+	{
+		QPointF p = shape->pos();
+		p.setY(p.y() + target - getCentY(shape));
+		shape->setPos(p);
+		target += step;
+	}
 }
 
 //==============================================================================

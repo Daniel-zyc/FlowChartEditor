@@ -291,5 +291,6 @@ namespace DTool
 	// 过滤掉所有不是 DAbstractBase 的元素
 	void filterBases(QList<QGraphicsItem*> &items);
 
+	// 将 item 转为 abstract base，会进行检查
 	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
 };
