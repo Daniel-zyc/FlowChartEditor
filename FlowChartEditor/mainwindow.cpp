@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 
     setWindowTitle("Flowchart Editor");
-    // 绑定序列化管理
+    // 绑定序列化管�?
 	scene = new DScene(this);
 
 	// scene->removeItem(rect);
@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
     bindAction();
     connectLeft();
     connectRight();
-	// 调试用
+	// 调试�?
 	// scene->addDFNodeItem();
 }
 
@@ -132,17 +132,17 @@ void MainWindow::initmiddleUi(){
 
 void MainWindow::initrightUi()
 {
-    //样式表
+    //样式�?
     rightTab = new QTabWidget();
     rightTab->setMovable(true);
     rightTab->setFixedWidth(260);
     // rightTab->setMinimumWidth(230);
     // rightTab->setMaximumWidth(320);
 
-    //背景样式表
+    //背景样式�?
     rightBgw = new QWidget();
     rightBgf = new QFormLayout();
-    blankBg = new QRadioButton("无背景");
+    blankBg = new QRadioButton("无背�?");
     colorBg = new QRadioButton("纯色填充");
     gridBg = new QRadioButton("网格");
     dotBg = new QRadioButton("点状");
@@ -150,7 +150,7 @@ void MainWindow::initrightUi()
     reFileBtn = new QPushButton("选择文件");
 
     blankBg->setChecked(true);
-    customizeBg = new QRadioButton("自定义图片填充");
+    customizeBg = new QRadioButton("自定义图片填�?");
     rightBgf->addRow(blankBg);
     rightBgf->addRow(colorBg, reColorBtn);
     rightBgf->addRow(gridBg);
@@ -160,7 +160,7 @@ void MainWindow::initrightUi()
     rightBgw->setLayout(rightBgf);
     rightTab->addTab(rightBgw, "背景");
 
-    //形状样式表
+    //形状样式�?
     rightShapew = new QTreeWidget();
     rightShapew->setColumnCount(2);
     rightShapew->setHeaderHidden(true);
@@ -178,11 +178,11 @@ void MainWindow::initrightUi()
     fillChildPic = new QTreeWidgetItem();
     borderTop->setText(0, "边框");
     fillTop->setText(0, "填充");
-    scaleTop->setText(0, "缩放比例：");
-    rotTop->setText(0, "旋转角度：");
-    borderChildColor->setText(0, "边框颜色：");
-    borderChildType->setText(0, "边框样式：");
-    borderChildWidth->setText(0, "边框宽度：");
+    scaleTop->setText(0, "缩放比例�?");
+    rotTop->setText(0, "旋转角度�?");
+    borderChildColor->setText(0, "边框颜色�?");
+    borderChildType->setText(0, "边框样式�?");
+    borderChildWidth->setText(0, "边框宽度�?");
     fillChildColor->setText(0, "填充颜色");
     fillChildType->setText(0, "填充样式");
 
@@ -205,7 +205,7 @@ void MainWindow::initrightUi()
     borderWidth = new QDoubleSpinBox();
     fillColor = new QPushButton();
     fillType = new QComboBox();
-    customizePic = new QCheckBox("自定义图片");
+    customizePic = new QCheckBox("自定义图�?");
     customizePic->setChecked(false);
     picfile = new QPushButton("选择文件");
 
@@ -219,18 +219,18 @@ void MainWindow::initrightUi()
     picfile->setFixedHeight(25);
 
     borderStyle->addItem(QIcon(":/icon/solidLine.png"), "实线");
-    borderStyle->addItem(QIcon(":/icon/dashLine.png"), "短划线");
+    borderStyle->addItem(QIcon(":/icon/dashLine.png"), "短划�?");
     borderStyle->addItem(QIcon(":/icon/dotLine.png"), "点线");
-    borderStyle->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
+    borderStyle->addItem(QIcon(":/icon/dashDotLine.png"), "点划�?");
     borderStyle->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
 
     borderWidth->setRange(0, 30);
     borderWidth->setSingleStep(0.25);
     borderWidth->setValue(1);
-    borderWidth->setSuffix("磅");
+    borderWidth->setSuffix("�?");
     borderWidth->setWrapping(true);
 
-    fillType->addItem("无图案");
+    fillType->addItem("无图�?");
     fillType->addItem("实心图案");
     fillType->addItem("密实图案1");
     fillType->addItem("密实图案2");
@@ -239,13 +239,13 @@ void MainWindow::initrightUi()
     fillType->addItem("密实图案5");
     fillType->addItem("密实图案6");
     fillType->addItem("密实图案7");
-    fillType->addItem("水平线图案");
-    fillType->addItem("垂直线图案");
-    fillType->addItem("十字线图案");
-    fillType->addItem("左斜线图案");
+    fillType->addItem("水平线图�?");
+    fillType->addItem("垂直线图�?");
+    fillType->addItem("十字线图�?");
+    fillType->addItem("左斜线图�?");
     fillType->addItem("右倾线图案");
-    fillType->addItem("倾斜十字线图案");
-    // fillType->addItem("线性渐变图案");
+    fillType->addItem("倾斜十字线图�?");
+    // fillType->addItem("线性渐变图�?");
     // fillType->addItem("径向渐变图案");
     // fillType->addItem("圆锥渐变图案");
     // fillType->addItem("纹理图案");
@@ -278,7 +278,7 @@ void MainWindow::initrightUi()
 
     rightTab->addTab(rightShapew, "形状");
 
-    //文本样式表
+    //文本样式�?
     rightFontw = new QWidget();
     rightFontf = new QFormLayout();
     QHBoxLayout *colorH = new QHBoxLayout();
@@ -293,13 +293,13 @@ void MainWindow::initrightUi()
     fontH->addStretch();
     fontH->addWidget(textFont);
 
-    rightFontf->addRow("文本颜色：", colorH);
-    rightFontf->addRow("文本字体：", fontH);
+    rightFontf->addRow("文本颜色�?", colorH);
+    rightFontf->addRow("文本字体�?", fontH);
 
     rightFontw->setLayout(rightFontf);
     rightTab->addTab(rightFontw, "文本");
 
-    //线条样式表
+    //线条样式�?
     rightLinew = new QWidget();
     linecolor  = new QPushButton();
     QHBoxLayout *linecolorH = new QHBoxLayout();
@@ -312,13 +312,13 @@ void MainWindow::initrightUi()
 
     lineType = new QComboBox();
     lineType->addItem(QIcon(":/icon/solidLine.png"), "实线");
-    lineType->addItem(QIcon(":/icon/dashLine.png"), "短划线");
+    lineType->addItem(QIcon(":/icon/dashLine.png"), "短划�?");
     lineType->addItem(QIcon(":/icon/dotLine.png"), "点线");
-    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划线");
+    lineType->addItem(QIcon(":/icon/dashDotLine.png"), "点划�?");
     lineType->addItem(QIcon(":/icon/dashDDLine.png"), "双点划线");
 
     arrowType = new QComboBox();
-    arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭头");
+    arrowType->addItem(QIcon(":/icon/noArrow.png"), "无箭�?");
     arrowType->addItem(QIcon(":/icon/arrow.png"), "箭头");
     arrowType->addItem(QIcon(":/icon/openArrow.png"), "开放型箭头");
     arrowType->addItem(QIcon(":/icon/dovetailArrow.png"), "燕尾箭头");
@@ -329,18 +329,19 @@ void MainWindow::initrightUi()
     linebound->setRange(0, 30);
     linebound->setSingleStep(0.25);
     linebound->setValue(1);
-    linebound->setSuffix("磅");
+    linebound->setSuffix("�?");
     linebound->setWrapping(true);
 
-    formright->addRow("线条颜色：", linecolorH);
-    formright->addRow("线条类型：", lineType);
-    formright->addRow("结尾箭头：", arrowType);
-    formright->addRow("线条磅数：", linebound);
+    formright->addRow("线条颜色�?", linecolorH);
+    formright->addRow("线条类型�?", lineType);
+    formright->addRow("结尾箭头�?", arrowType);
+    formright->addRow("线条磅数�?", linebound);
 
     rightLinew->setLayout(formright);
     // rightw->setVisible(false);
     rightTab->addTab(rightLinew, "线条");
-}
+    formworkWidget = new FormworkWidget();
+    rightTab->addTab(formworkWidget,"模板");
 
 void MainWindow::initleftUi()
 {
@@ -351,7 +352,7 @@ void MainWindow::initleftUi()
     flowGrid = new QGridLayout();
     primaryGrid = new QGridLayout();
     primaryGroup = new QGroupBox("基本图形");
-    flowcGroup = new QGroupBox("流程图图形");
+    flowcGroup = new QGroupBox("流程图图�?");
     lineGroup = new QGroupBox("线条");
     textGroup = new QGroupBox("文本");
 
@@ -431,16 +432,16 @@ void MainWindow::initleftUi()
     sortBtn->setIcon(QPixmap(":/icon/flowchart/sort.png"));
 
     rectBtn->setToolTip("过程");
-    roundRectBtn->setToolTip("可选过程");
+    roundRectBtn->setToolTip("可选过�?");
     ellipseBtn->setToolTip("接点");
     lineBtn->setToolTip("直线");
     parellgramBtn->setToolTip("数据");
     trapBtn->setToolTip("手动操作");
     rhomBtn->setToolTip("决策");
     fileBtn->setToolTip("文档");
-    textBtn->setToolTip("文本框");
+    textBtn->setToolTip("文本�?");
     triBtn->setToolTip("摘录");
-    preBtn->setToolTip("预定义过程");
+    preBtn->setToolTip("预定义过�?");
     endBtn->setToolTip("终止");
     prepareBtn->setToolTip("准备");
     storeBtn->setToolTip("内部贮存");
@@ -448,10 +449,10 @@ void MainWindow::initleftUi()
 
     addRectBtn->setToolTip("矩形");
     addEllBtn->setToolTip("椭圆");
-    addParagramBtn->setToolTip("平行四边形");
+    addParagramBtn->setToolTip("平行四边�?");
     addTrapBtn->setToolTip("梯形");
     addDiaBtn->setToolTip("菱形");
-    addTriBtn->setToolTip("三角形");
+    addTriBtn->setToolTip("三角�?");
 
     addRectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
     addEllBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
@@ -605,7 +606,7 @@ void MainWindow::connectRight()
     });
     connect(reColorBtn, &QPushButton::clicked, this, [this]() {
         if(colorBg->isChecked()) {
-            QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+            QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
             if(color.isValid()) scene->setBackgroundBrush(QBrush(color));
             else blankBg->setChecked(true);
         }
@@ -642,7 +643,7 @@ void MainWindow::connectRight()
         scene->changeLineWidth(linebound->value() * globalScale);
     });
     connect(linecolor, &QPushButton::clicked, this, [this](){
-        QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+        QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
         scene->changeLineColor(color);
     });
     connect(borderColor, &QPushButton::clicked, this, &MainWindow::changeBorderColor);
@@ -978,7 +979,7 @@ void MainWindow::changeBorderWidth()
 
 void MainWindow::changeBorderColor()
 {
-    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
     scene->changeBorderColor(color);
 }
 
@@ -1011,7 +1012,7 @@ void MainWindow::changeFillType()
 
 void MainWindow::changeFillColor()
 {
-    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
     scene->changeFillColor(color);
     customizePic->setCheckState(Qt::Unchecked);
 }
@@ -1047,7 +1048,7 @@ QSet<DTextBase *> MainWindow::getTextBases()
 
 void MainWindow::changeTextCol()
 {
-    QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+    QColor color = colorDia->getColor(Qt::white, this, "颜色选择�?", QColorDialog::ShowAlphaChannel);
     scene->changeTextColor(color);
 }
 
