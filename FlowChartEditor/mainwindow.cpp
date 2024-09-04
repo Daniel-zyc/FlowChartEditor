@@ -101,7 +101,7 @@ MainWindow::~MainWindow()
 void MainWindow::initUi()
 {
     initleftUi();
-    initrightUi();
+    // initrightUi();
 
     mainsplitter->addWidget(leftw);
     mainsplitter->addWidget(view);
@@ -238,7 +238,6 @@ void MainWindow::initleftUi()
     leftUpV->addWidget(lineGroup);
     leftUpV->addWidget(textGroup);
     leftUpV->addStretch();
-}
 
     mainsplitter->addWidget(leftw);
 

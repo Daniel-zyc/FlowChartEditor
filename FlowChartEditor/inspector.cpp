@@ -53,7 +53,7 @@ Inspector::~Inspector() {
  * 平行四边形判定一个输入一个输出
  */
 void Inspector::checkAll(){
-    qDebug() << "check";
+    clearAllItems();
     if(scene == nullptr || view == nullptr) return;
     originalCentrer = view->mapToScene(view->viewport()->rect().center());
     originalTransform = view->transform();
@@ -67,7 +67,9 @@ void Inspector::checkItems(QList<QGraphicsItem *> items){
 
 void Inspector::checkItem(QGraphicsItem *item){
     DAbstractBase *abstractItem = dynamic_cast<DAbstractBase *>(item);
-    if(abstractItem->type() > 200 && abstractItem->type() < 300)    checkDItem(abstractItem);
+    if(!abstractItem) return;
+    if(DTool::isFlowChartShape(abstractItem->type()))  checkDItem(abstractItem);
+    else checkOtherItem(abstractItem);
 }
 
 void Inspector::checkDItem(QGraphicsItem *item){
@@ -81,6 +83,18 @@ void Inspector::checkDItem(QGraphicsItem *item){
         errorMessage.append({NoLinkedItem,tr("图形无连接"),abstractItem});
         return;
     }
+    switch(abstractItem->type()){
+    }
+}
+
+void Inspector::checkOtherItem(QGraphicsItem * item){
+    DAbstractBase *abstractItem = dynamic_cast<DAbstractBase *>(item);
+    auto result = abstractItem->getLinedArrowType();
+    int in,out,none;
+    in = std::get<0>(result);
+    out = std::get<1>(result);
+    none = std::get<2>(result);
+
     switch(abstractItem->type()){
     case DDiaItem::Type:
     {
@@ -98,7 +112,6 @@ void Inspector::checkDItem(QGraphicsItem *item){
     }
     }
 }
-
 void Inspector::restoreView(){
     if(view == nullptr) return;
     view->setTransform(originalTransform);
@@ -106,9 +119,10 @@ void Inspector::restoreView(){
 }
 
 void Inspector::updateErrorList() {
-    clearAllItems();
+    qDebug() << "update list";
 
     for (const auto &error : errorMessage) {
+        qDebug() << "add";
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(error.message );
         item->setTextAlignment(Qt::AlignCenter);  // 设置文本居中
@@ -147,8 +161,6 @@ void Inspector::clearAllItems() {
     errorListWidget->clear();
     errorMessage.clear();
 }
-
-
 
 void Inspector::showErrorsOnly() {
     for (int i = 0; i < errorListWidget->count(); ++i) {
