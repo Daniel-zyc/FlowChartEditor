@@ -91,6 +91,7 @@ public:
     void addManualInputItem();
 	void addDFInformationItem();
     void addDFSummaryconnItem();
+    void addDFCardItem();
 
 
 	// 插入文本框

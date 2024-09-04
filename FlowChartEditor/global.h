@@ -86,6 +86,7 @@ enum UserTypes
     DFDelayItemType = QGraphicsItem::UserType + 214,
     DFOrItemType = QGraphicsItem::UserType + 215,
     DFSummaryconnItemType = QGraphicsItem::UserType + 216,
+    DFCardItemType = QGraphicsItem::UserType + 217,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,

@@ -270,6 +270,12 @@ void DScene::addDFSummaryconnItem()
     prepareInsertItem(new DFSummaryconnItem());
 }
 
+void DScene::addDFCardItem()
+{
+    qDebug() << "add DFSummaryconnItem";
+    prepareInsertItem(new DFCardItem());
+}
+
 void DScene::addDFOptionalProcessItem()
 {
 	qDebug() << "add DFOptionalProcessItem";
