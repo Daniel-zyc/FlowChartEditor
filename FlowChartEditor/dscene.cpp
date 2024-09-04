@@ -382,6 +382,7 @@ void DScene::addDFSequentialAccessItem()
 void DScene::addDFStoreDataItem()
 {
     qDebug() << "add 存储数据";
+    prepareInsertItem(new DFStoreDataItem());
 }
 
 void DScene::addDFProcessItem()
