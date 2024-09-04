@@ -94,7 +94,7 @@ private slots:
     void addDFMergeItem(){scene->addDFMergeItem();}
     void addDFMultiDocItem(){scene->addDFMultiDocItem();}
     void addDFOffPageItem(){scene->addDFOffPageItem();}
-    void addDFOrItem(){scene->addDFOrItem();}
+    // void addDFOrItem(){scene->addDFOrItem();}
     void addDFPostPoneItem(){scene->addDFPostPoneItem();}
     void addDFSequentialAccessItem(){scene->addDFSequentialAccessItem();}
     void addDFStoreDataItem(){scene->addDFStoreDataItem();}

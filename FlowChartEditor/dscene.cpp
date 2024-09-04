@@ -300,10 +300,10 @@ void DScene::addDFOffPageItem()
     qDebug() << "add 离页连接符";
 }
 
-void DScene::addDFOrItem()
-{
-    qDebug() << "add 或者";
-}
+// void DScene::addDFOrItem()
+// {
+//     qDebug() << "add 或者";
+// }
 
 void DScene::addDFPostPoneItem()
 {
@@ -430,13 +430,74 @@ void DScene::setItemSelected(QGraphicsItem * item){
     item->setSelected(true);
 }
 
-bool DScene::getCollision(QGraphicsItem * item){
+bool DScene::ifCollision(QGraphicsItem * item){
     QList<QGraphicsItem * >items = item->collidingItems();
-    DTool::filterRootBases(items);
+    if(items.empty()) return false;
+    DTool::filterRootBases(items);      // 过滤子item和非abstractBase的item
+    DAbstractBase * base = dynamic_cast<DAbstractBase *>(item);
+    // 线条碰撞的检测，应该屏蔽与同一个磁吸点连线的和所连接的图形以及文本框
+    if(DTool::isLine(base->type())){
+        DLineBase *lineBase = dynamic_cast<DLineBase*>(base);
+        if(lineBase == nullptr) return false;
+        for (int i = items.size() - 1; i >= 0; i--) {
+            DAbstractBase *abstractBase = dynamic_cast<DAbstractBase*>(items[i]);
+            if (abstractBase == nullptr) {
+                items.removeAt(i);
+                continue;
+            }
 
+            // 去除与其有连线的图形
+            if (lineBase->ifLinkedWith(abstractBase)) {
+                qDebug() << "去除有连线";
+                items.removeAt(i);
+                continue;
+            }
 
+            // 去除连接相同磁吸点的线
+            DLineBase *otherLineBase = dynamic_cast<DLineBase*>(items[i]);
+            if (otherLineBase != nullptr && lineBase->ifLinedSameMag(otherLineBase)) {
+                qDebug() << "去除有相同磁吸点";
+                items.removeAt(i);
+                continue;
+            }
 
-    if(!items.empty()) return true;
+            // 去除文本框的碰撞
+            DTextItem *textItem = dynamic_cast<DTextItem*>(items[i]);
+            if (textItem) {
+                items.removeAt(i);
+                continue;
+            }
+        }
+        if(items.empty()) return false;
+        return true;
+    }
+
+    if(DTool::isShape(base->type())){
+        DShapeBase *shapeBase = dynamic_cast<DShapeBase*>(base);
+        if(shapeBase == nullptr) return false;
+        for (int i = items.size() - 1; i >= 0; i--) {
+            DAbstractBase *otherShapeBase = dynamic_cast<DAbstractBase*>(items[i]);
+            if (otherShapeBase == nullptr) {
+                items.removeAt(i);
+                continue;
+            }
+            // 去除文本框的碰撞
+            DTextItem *otherTextItem = dynamic_cast<DTextItem*>(items[i]);
+            if (otherTextItem) {
+                items.removeAt(i);
+                continue;
+            }
+
+            DLineBase *otherlineBase = dynamic_cast<DLineBase*>(items[i]);
+            if (otherlineBase->ifLinkedWith(shapeBase)) {
+                items.removeAt(i);
+                continue;
+            }
+        }
+        if(items.empty()) return false;
+        return true;
+    }
+
     return false;
 }
 

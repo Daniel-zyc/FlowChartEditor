@@ -97,7 +97,7 @@ public:
     void addDFMergeItem();
     void addDFMultiDocItem();
     void addDFOffPageItem();
-    void addDFOrItem();
+    // void addDFOrItem();
     void addDFPostPoneItem();
     void addDFSequentialAccessItem();
     void addDFStoreDataItem();
@@ -121,8 +121,14 @@ public:
     // 设置的单个图形选中
     void setItemSelected(QGraphicsItem * item);
 
-    // 检测某图形是否碰撞
-    bool getCollision(QGraphicsItem * item);
+    /**
+     * @brief ifCollision
+     * @param item
+     * @return
+     * 碰撞检测，线条屏蔽与相同磁吸点连接的线条、与其连接的图形、文本框
+     * 图形屏蔽与其连接的线条、文本框
+     */
+    bool ifCollision(QGraphicsItem * item);
 
 	DAbstractBase* getMagItemOnPoint(QPointF p);
 
