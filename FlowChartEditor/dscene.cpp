@@ -137,7 +137,6 @@ void DScene::moveSelected(int distx, int disty)
 	}
 }
 
-
 void DScene::moveSelectedZ(qreal value){
     for(QGraphicsItem *item : selectedItems()){
         if(item->parentItem() != nullptr) continue;
@@ -260,6 +259,16 @@ void DScene::addParagramItem()
 	prepareInsertItem(new DParagramItem());
 }
 
+void DScene::addpentagonItem()
+{
+    qDebug() << "add 五边形";
+}
+
+void DScene::addhexagonItem()
+{
+    qDebug() << "add 六边形";
+}
+
 void DScene::addDiaItem()
 {
 	qDebug() << "add Diamond";
@@ -324,6 +333,7 @@ void DScene::addDFCardItem()
 void DScene::addDFCompareItem()
 {
     qDebug() << "add 对照";
+    prepareInsertItem(new DFCompareItem());
 }
 
 void DScene::addDFDirecrAccessItem()
@@ -344,6 +354,7 @@ void DScene::addDFDisplayItem()
 void DScene::addDFMergeItem()
 {
     qDebug() << "add 合并";
+    prepareInsertItem(new DFMergeItem());
 }
 
 void DScene::addDFMultiDocItem()
@@ -384,6 +395,12 @@ void DScene::addDFSummaryconnItem()
 {
     qDebug() << "add DFSummaryconnItem";
     prepareInsertItem(new DFSummaryconnItem());
+}
+
+void DScene::addDFSortItem()
+{
+    qDebug() << "add 排序";
+    prepareInsertItem(new DFSortItem());
 }
 
 void DScene::addDFOptionalProcessItem()
@@ -489,13 +506,9 @@ bool DScene::ifCollision(QGraphicsItem * item){
         if(lineBase == nullptr) return false;
         for (int i = items.size() - 1; i >= 0; i--) {
             DAbstractBase *abstractBase = dynamic_cast<DAbstractBase*>(items[i]);
-            if (abstractBase == nullptr) {
-                items.removeAt(i);
-                continue;
-            }
 
             // 去除与其有连线的图形
-            if (lineBase->ifLinkedWith(abstractBase)) {
+            if (abstractBase != nullptr && lineBase->ifLinkedWith(abstractBase)) {
                 qDebug() << "去除有连线";
                 items.removeAt(i);
                 continue;
@@ -521,23 +534,18 @@ bool DScene::ifCollision(QGraphicsItem * item){
     }
 
     if(DTool::isShape(base->type())){
+        qDebug() << "开始检测图形碰撞";
+        qDebug() << items.size();
         DShapeBase *shapeBase = dynamic_cast<DShapeBase*>(base);
         if(shapeBase == nullptr) return false;
         for (int i = items.size() - 1; i >= 0; i--) {
-            DAbstractBase *otherShapeBase = dynamic_cast<DAbstractBase*>(items[i]);
-            if (otherShapeBase == nullptr) {
-                items.removeAt(i);
-                continue;
-            }
-            // 去除文本框的碰撞
             DTextItem *otherTextItem = dynamic_cast<DTextItem*>(items[i]);
             if (otherTextItem) {
                 items.removeAt(i);
                 continue;
             }
-
             DLineBase *otherlineBase = dynamic_cast<DLineBase*>(items[i]);
-            if (otherlineBase->ifLinkedWith(shapeBase)) {
+            if (otherlineBase != nullptr && otherlineBase->ifLinkedWith(shapeBase)) {
                 items.removeAt(i);
                 continue;
             }
@@ -634,8 +642,8 @@ void DScene::changeFillType(Qt::BrushStyle brushstyle)
 	qDebug() << "change fill type";
 	for(DShapeBase* shape : getSelectedShapes())
 	{
-		QBrush nbrush = shape->brush();
-		nbrush.setStyle(brushstyle);
+        QBrush nbrush = shape->brush();
+        nbrush.setStyle(brushstyle);
 		shape->setBrush(nbrush);
 	}
 }
@@ -646,9 +654,70 @@ void DScene::changeFillColor(QColor color)
 	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QBrush nbrush = shape->brush();
+        nbrush.setStyle(Qt::SolidPattern);
 		nbrush.setColor(color);
 		shape->setBrush(nbrush);
 	}
+}
+
+void DScene::changeFillPic(QPixmap pixmap)
+{
+    qDebug() << "change border pic";
+	QList<DShapeBase*> shapes = getSelectedShapes();
+    for(DShapeBase* shape : shapes)
+    {
+        QBrush nbrush = shape->brush();
+        nbrush.setTexture(pixmap);
+        shape->setBrush(nbrush);
+    }
+}
+
+QSet<DTextBase *> DScene::getTextBases()
+{
+    QSet<DTextBase *> texts;
+    QList<QGraphicsItem *> items = selectedItems();
+    for(QGraphicsItem *item : items) {
+        DTextItem *textitem = dynamic_cast<DTextItem *>(item);
+        if(textitem != nullptr) {
+            texts.insert(&(textitem->textBase));
+            continue;
+        }
+        DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
+        if(shape != nullptr) {
+            texts.insert(&(shape->textItem->textBase));
+            continue;
+        }
+        DTextBase *textbase = dynamic_cast<DTextBase *>(item);
+        if(textbase != nullptr) {
+            // qDebug() << "text not null";
+            texts.insert(textbase);
+        }
+    }
+    return texts;
+}
+
+void DScene::changeTextColor(QColor color)
+{
+    QSet<DTextBase *> texts = getTextBases();
+    QTextCharFormat charformat;
+    charformat.setForeground(color);
+    for(DTextBase *tbase : texts) {
+        QTextCursor cursor(tbase->document());
+        cursor.movePosition(QTextCursor::Start);
+        while(!cursor.isNull() && !cursor.atEnd()) {
+            cursor.select(QTextCursor::BlockUnderCursor);
+            cursor.mergeCharFormat(charformat);
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+}
+
+void DScene::changeTextFont(QFont font)
+{
+    QSet<DTextBase *> texts = getTextBases();
+    for(DTextBase *tbase : texts) {
+        tbase->document()->setDefaultFont(font);
+    }
 }
 
 void DScene::setBackground(QString path)
@@ -983,9 +1052,9 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	}
 
     if((insert_state != DConst::NONE)
-        && SHOT_STATE == DConst::CHANGED){
+        || SHOT_STATE == DConst::CHANGED){
         shot();
-        Inspector::instance()->checkAll();
+		Inspector::instance()->checkAll();
     }
 
 	insert_state = DConst::NONE;

@@ -92,6 +92,9 @@ enum UserTypes
     DFOrItemType = QGraphicsItem::UserType + 215,
     DFSummaryconnItemType = QGraphicsItem::UserType + 216,
     DFCardItemType = QGraphicsItem::UserType + 217,
+    DFMergeItemType = QGraphicsItem::UserType + 218,
+    DFSortItemType = QGraphicsItem::UserType + 219,
+    DFCompareItemType = QGraphicsItem::UserType + 220,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
@@ -294,4 +297,17 @@ namespace DTool
 
 	// 将 item 转为 abstract base，会进行检查
 	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
+};
+
+struct FormworkData
+{
+    QString imgPath;
+    QString FilePath;
+    QString Title;
+    QString Detail;
+};
+
+const FormworkData FormworkDataList[] = {
+    { ":/OneRect/formwork/formwork1/OneRect.svg", "../../formwork/formwork1/OneRect.bit", "一个矩形", "仅仅是一个矩形" },
+    { ":/OneEllipse/formwork/formwork2/OneEllipse.svg", "../../formwork/formwork2/OneEllipse.bit", "一个椭圆", "仅仅是一个椭圆" }
 };

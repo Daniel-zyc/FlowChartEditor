@@ -65,18 +65,18 @@ void DFOrItem::updateAll()
 
 //======================================
 
-// void DFOrItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
-// {
-//     DShapeBase::serialize(out, fa);
+void DFOrItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DShapeBase::serialize(out, fa);
 
-//     out << rect;
-// }
+	out << rect;
+}
 
-// bool DFOrItem::deserialize(QDataStream &in, QGraphicsItem* fa)
-// {
-//     if(!DShapeBase::deserialize(in, fa)) return false;
+bool DFOrItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DShapeBase::deserialize(in, fa)) return false;
 
-//     in >> rect;
-//     updateAll();
-//     return true;
-// }
+	in >> rect;
+	updateAll();
+	return true;
+}
