@@ -35,6 +35,7 @@ SOURCES += \
     dfprocessitem.cpp \
     dfsortitem.cpp \
     dfstartenditem.cpp \
+    dfstoredataitem.cpp \
     dfsummaryconnitem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
     dfprocessitem.h \
     dfsortitem.h \
     dfstartenditem.h \
+    dfstoredataitem.h \
     dfsummaryconnitem.h \
     dlinebase.h \
     dlineitem.h \
