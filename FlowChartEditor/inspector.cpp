@@ -16,14 +16,14 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
     showErrorAction = new QAction("屏蔽警告", this);
     showFlowChartErrorsAction = new QAction("仅显示流程图图形错误", this);  // 新的按钮
     QAction *refreshAction = new QAction("刷新", this);
-    QAction *closeAction = new QAction("关闭", this);
+    // QAction *closeAction = new QAction("关闭", this);
 
     toolBar->addAction(clearAllAction);
     toolBar->addAction(showErrorAction);
     toolBar->addAction(showFlowChartErrorsAction);
     toolBar->addSeparator();
     toolBar->addAction(refreshAction);
-    toolBar->addAction(closeAction);
+    // toolBar->addAction(closeAction);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(toolBar);
@@ -33,10 +33,10 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
 
     connect(errorListWidget, &QListWidget::itemClicked, this, &Inspector::onItemClicked);
     connect(clearAllAction, &QAction::triggered, this, &Inspector::clearAllErrors);
-    connect(showErrorAction, &QAction::triggered, this, &Inspector::showErrorsOnly);
-    connect(showFlowChartErrorsAction, &QAction::triggered, this, &Inspector::showFlowChartErrorsOnly);
+    connect(showErrorAction, &QAction::triggered, this, &Inspector::onShowErrorActionClicked);
+    connect(showFlowChartErrorsAction, &QAction::triggered, this, &Inspector::onShowFlowChartErrorsClicked);
     connect(refreshAction, &QAction::triggered, this, &Inspector::checkAll);
-    connect(closeAction, &QAction::triggered, this, &Inspector::onCloseActionClicked);
+    // connect(closeAction, &QAction::triggered, this, &Inspector::onCloseActionClicked);
 
     updateErrorList();
 }
@@ -46,7 +46,6 @@ Inspector::~Inspector() {
 }
 
 void Inspector::checkAll(){
-    qDebug() << "check";
     clearAllErrors();
     if(scene == nullptr || view == nullptr) return;
     originalCentrer = view->mapToScene(view->viewport()->rect().center());
@@ -57,6 +56,7 @@ void Inspector::checkAll(){
 }
 
 void Inspector::checkItems(QList<QGraphicsItem *> items){
+    qDebug() << "check item";
     DTool::filterRootBases(items);      // 线+一般图形+流程图图形+文本框
     for(QGraphicsItem * item : items)
         checkItem(item);
@@ -88,7 +88,6 @@ Inspector* Inspector::instance(QWidget *parent, DScene *scene, DView *view) {
 }
 
 void Inspector::checkTextItem(QGraphicsItem *item){
-    qDebug() << "检测文本";
     DTextItem *textItem = dynamic_cast<DTextItem * >(item);
     if(textItem == nullptr) return;
     if(textItem->isTextEmpty())
@@ -112,6 +111,7 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
             .append({ChartFlowHasNoTypeArrow,tr("流程图图形未指定连线类型"),shapeBase});
     if(scene->ifCollision(shapeBase))
         errorMessage.append({CollisionItem,tr("流程图图形发生碰撞"),shapeBase});
+    qDebug() << "here";
     switch(shapeBase->type()){
     case DFProcessItem::Type:
         if(in < 1)
@@ -220,8 +220,10 @@ void Inspector::updateErrorList() {
 
     for (const auto &error : errorMessage) {
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(error.message);
-
+        QString errorText = QString(":%1  位置:(%2,%3)")
+                                .arg(error.message)
+                                .arg(error.item->pos().x()).arg(error.item->pos().y());
+        item->setText(errorText);
         if (DTool::getErrorLevel(error.errorType) == ERROR) {
             item->setIcon(QIcon(":/icon/error.png").pixmap(16, 16)); // 调整图标大小
         } else if (DTool::getErrorLevel(error.errorType) == WARNING) {
@@ -299,8 +301,7 @@ void Inspector::onShowFlowChartErrorsClicked(){
     if(ifShowFlowChartErrorsOnly) {
         showFlowChartErrorsOnly();
         showFlowChartErrorsAction->setText("显示普通图形问题");
-    }
-    else{
+    }else{
         showAllType();
         showFlowChartErrorsAction->setText("屏蔽普通图形错误");
     }

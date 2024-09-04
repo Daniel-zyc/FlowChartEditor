@@ -29,7 +29,6 @@ private slots:
 private:
     QGridLayout *gridLayout;
     QList<QPushButton*> items;
-    QList<FormworkData> itemsData;  // 保存每个 item 对应的文件路径
     QPoint tooltipPos;
 };
 

@@ -81,8 +81,7 @@ private slots:
 	void addDFConditionItem() { scene->addDFConditionItem(); }
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
-	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-//    void addDFPredefineItem() { scene->addDFCompareItem(); }
+    void addDFStartEndItem() { scene->addDFStartEndItem(); }
     void addDFPredefineItem() { scene->addDFPredefineItem(); }
     void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
     void addDFOrItem() { scene->addDFOrItem();}
@@ -102,7 +101,7 @@ private slots:
     void addDFSortItem(){scene->addDFSortItem();}
 
     void changeLineType(Qt::PenStyle linestyle);
-    void changeBeginArrow(int beginArrowType);
+    void changeBeginArrow();
     void changeEndArrow();
     void changeLineColor(QColor color);
     void setSceneBg(QString path);
@@ -121,7 +120,6 @@ private slots:
 
     void changeFillType();
     void changeFillColor();
-    void changeFillPic();
 
     QSet<DTextBase *> getTextBases();
     void changeTextCol();
@@ -141,6 +139,7 @@ private slots:
 
     void moveSelectedMaxZUp();
     void moveSelectedMaxZDown();
+    void changeLayer();
 
 	void viewRotateCW() { view->rotateCW(); }
 	void viewRotateCCW() { view->rotateCCW(); }
@@ -177,11 +176,21 @@ private slots:
 
     void showAboutUsWindow();
 
+    void itemTopAlign() {scene->itemTopAlign();}
+    void itemBottomAlign() {scene->itemBottomAlign();}
+    void itemLeftAlign() {scene->itemLeftAlign();}
+    void itemRightAlign() {scene->itemRightAlign();}
+    void itemHorizAlign() {scene->itemHorizAlign();}
+    void itemVertiAlign() {scene->itemVertiAlign();}
+
+    void itemHorizEven() {scene->itemHorizEven();}
+    void itemVertiEven() {scene->itemVertiEven();}
+    void changeAlign();
+
 	void myDebug();
 
 private:
 	Ui::MainWindow *ui;
-
 
     Inspector *inspector;
 	DScene *scene;
@@ -191,8 +200,10 @@ private:
     QFontDialog *fontDia;
 
     QSplitter *middlesplitter;
-
     QSplitter *mainsplitter;
+
+    QCheckBox *isInspect;
+    QCheckBox *isOpenReference;
 
     QWidget *leftw;
     QGridLayout *flowGrid;
@@ -250,11 +261,9 @@ private:
 
     FormworkWidget *formworkWidget;
     QTabWidget *rightTab;
-    QWidget *rightLinew;
-    QFormLayout *formright;
-    QHBoxLayout *rbtnLayout;
     QComboBox *lineType;
-    QComboBox *arrowType;
+    QComboBox *endarrowType;
+    QComboBox *beginarrowType;
     QDoubleSpinBox *linebound;
     QPushButton *linecolor;
 
@@ -272,6 +281,11 @@ private:
     QPushButton *reColorBtn;
     QPushButton *reFileBtn;
 
+    QWidget *rightStylew;
+    QFormLayout *rightStylef;
+    QComboBox *alignBox;
+    QComboBox *layerBox;
+
     QTreeWidget *rightShapew;
     QTreeWidgetItem *borderTop;
     QTreeWidgetItem *borderChildColor;
@@ -283,6 +297,12 @@ private:
     QTreeWidgetItem *fillChildPic;
     QTreeWidgetItem *rotTop;
     QTreeWidgetItem *scaleTop;
+    QTreeWidgetItem *lineTop;
+    QTreeWidgetItem *lineChildColor;
+    QTreeWidgetItem *lineChildType;
+    QTreeWidgetItem *lineChildEndArrow;
+    QTreeWidgetItem *lineChildBeginArrow;
+    QTreeWidgetItem *lineChildWidth;
     QPushButton *borderColor;
     QComboBox *borderStyle;
     QDoubleSpinBox *borderWidth;

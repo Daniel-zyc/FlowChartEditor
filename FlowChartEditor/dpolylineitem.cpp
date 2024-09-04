@@ -82,19 +82,32 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
-
+/*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
     painter->drawEllipse(end_midPoint,5,5);
     painter->setBrush(Qt::blue);
     painter->drawEllipse(QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),5,5);
     painter->drawEllipse(QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),5,5);
-
+*/
+//绘制箭头
     qreal angle;
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
         angle = getAngle(points[4],points[5]);
     else angle = getAngle(points[3],points[5]);
     drawArrow(painter, angle, endPoint, endArrowType);
+    //绘制sizerect
+/*
+    if(beginMag) {
+        QRectF begin_rect = beginMag->parent->mapRectToScene(beginMag->parent->boundingRect());
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(Qt::blue);
+        painter->drawRect(begin_rect);
+        begin_rect = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
+        painter->setPen(Qt::yellow);
+        painter->drawRect(begin_rect);
+    }
+*/
 }
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
@@ -277,23 +290,21 @@ int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
 {
     int item_direct = 0;
     double min_dis = 0x3f3f3f3f, temp = 0;
-    qDebug() << "item:" << item.left() << item.top();
-    qDebug() << "center:" << center.x() << center.y();
-    qDebug() << point.x();
-    if(abs(center.x() + item.left() - point.x()) < 40) {
-        temp = abs(center.x() + item.left() - point.x());
+
+    if(abs(mapToScene(item.topLeft()).x() - point.x()) < item.width() / 2) {
+        temp = abs(mapToScene(item.topLeft()).x() - point.x());
         if(temp < min_dis) min_dis = temp,item_direct = 4;
     }
-    if(abs(center.x() + item.right() - point.x()) < 40) {
-        temp = abs(center.x() + item.right() - point.x());
+    if(abs(mapToScene(item.topRight()).x() - point.x()) <= item.width() / 2) {
+        temp = abs(mapToScene(item.topRight()).x() - point.x());
         if(temp < min_dis) min_dis = temp,item_direct = 2;
     }
-    if(abs(center.y() + item.top() - point.y()) < 40) {
-        temp = abs(center.y() + item.top() - point.y());
+    if(abs(mapToScene(item.topLeft()).y() - point.y()) < item.height() / 2) {
+        temp = abs(mapToScene(item.topLeft()).y() - point.y());
         if(temp < min_dis) min_dis = temp,item_direct = 1;
     }
-    if(abs(center.y() + item.bottom() - point.y()) < 40) {
-        temp = abs(center.y() + item.bottom() - point.y());
+    if(abs(mapToScene(item.bottomLeft()).y() - point.y()) <= item.height() / 2) {
+        temp = abs(mapToScene(item.bottomLeft()).y() - point.y());
         if(temp < min_dis) min_dis = temp,item_direct = 3;
     }
     qDebug() << "min_dis:" << min_dis;
@@ -312,26 +323,26 @@ void DPolyLineItem::updateBeginMidPoint()
     int direct = getPaintDirection();
     begin_midPoint = QPointF((beginPoint.x() + st_x_offset) * direct + mid_x_shift * (direct ^ 1),
                              (beginPoint.y() + st_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-    /*
+
     if(st_x_offset > 0 && begin_midPoint.x() < beginPoint.x() + st_x_offset) {
         st_x_offset = begin_midPoint.x() - beginPoint.x();
     } else if(st_x_offset < 0 && begin_midPoint.x() > beginPoint.x() + st_x_offset) {
         st_x_offset = begin_midPoint.x() - beginPoint.x();
     }
-    */
+
 }
 void DPolyLineItem::updateEndMidPoint()
 {
     int direct = getPaintDirection();
     end_midPoint = QPointF((endPoint.x() + ed_x_offset) * direct + mid_x_shift * (direct ^ 1),
                            (endPoint.y() + ed_y_offset) * (direct ^ 1) + mid_y_shift * direct);
-    /*
+
     if(ed_x_offset > 0 && end_midPoint.x() < endPoint.x() + ed_x_offset) {
         ed_x_offset = end_midPoint.x() - endPoint.x();
     } else if(ed_x_offset < 0 && end_midPoint.x() > endPoint.x() + ed_x_offset) {
         ed_x_offset = end_midPoint.x() - endPoint.x();
     }
-    */
+
 }
 
 void DPolyLineItem::updatePolyLineType()
@@ -340,6 +351,7 @@ void DPolyLineItem::updatePolyLineType()
     int begin_item_direct = 0, end_item_direct = 0;
     QRectF st_item, ed_item;
     QPointF st_center,ed_center;
+
     if(beginMag) {
         st_item = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
         st_center = beginMag->parent->pos();
@@ -592,6 +604,7 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
             } else if(temp_relative_pos == 2) {
                 end_line_type = 3;
                 ed_midPoint = getBoundingPoint(1,3);
+                qDebug() << ed_midPoint;
             }
         }
         break;

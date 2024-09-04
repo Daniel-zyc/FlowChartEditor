@@ -26,6 +26,7 @@ SOURCES += \
     dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
     dfmergeitem.cpp \
+    dfoffpageitem.cpp \
     dforitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
     dlineitem.cpp \
     dmultidocitem.cpp \
     dparagramitem.cpp \
+    dpentagonitem.cpp \
     dpolygonbase.cpp \
     dpolylineitem.cpp \
     drectitem.cpp \
@@ -78,6 +80,7 @@ HEADERS += \
     dfmanualinputitem.h \
     dfmanualoperateitem.h \
     dfmergeitem.h \
+    dfoffpageitem.h \
     dforitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \
@@ -91,6 +94,7 @@ HEADERS += \
     dlineitem.h \
     dmultidocitem.h \
     dparagramitem.h \
+    dpentagonitem.h \
     dpolygonbase.h \
     dpolylineitem.h \
     drectitem.h \
