@@ -59,6 +59,8 @@ public:
 	void updateMagPoint();
 	void deleteMagPoint();
 
+    bool isTextEmpty() override;
+
 protected:
 	void focusOutEvent(QFocusEvent *event) override;
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;

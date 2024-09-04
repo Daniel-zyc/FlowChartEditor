@@ -89,7 +89,7 @@ public:
 	// 图形自己的文本框
 	DTextItem *textItem = nullptr;
     // 文本框是否空白
-    bool isTextEmpty();
+    virtual bool isTextEmpty();
 
 protected:
 	// 旋转点位置

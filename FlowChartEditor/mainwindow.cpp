@@ -79,7 +79,8 @@ MainWindow::MainWindow(QWidget *parent)
 	view = new DView(scene);
 	scene->setView(view);
 
-	inspector = new Inspector(this,scene,view);
+    inspector = Inspector::instance(this,scene,view);
+    inspector->hide();
 
     initUi();
 
