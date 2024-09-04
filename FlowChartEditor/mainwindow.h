@@ -81,7 +81,7 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-//    void addDFPredefineItem() { scene->addDFSortItem(); }
+//    void addDFPredefineItem() { scene->addDFCompareItem(); }
     void addDFPredefineItem() { scene->addDFPredefineItem(); }
     void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
     void addDFOrItem() { scene->addDFOrItem();}

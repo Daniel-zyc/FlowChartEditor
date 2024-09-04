@@ -15,6 +15,7 @@ SOURCES += \
     ddiaitem.cpp \
     dellitem.cpp \
     dfcarditem.cpp \
+    dfcompareitem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
     dfdelayitem.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     ddiaitem.h \
     dellitem.h \
     dfcarditem.h \
+    dfcompareitem.h \
     dfconditionitem.h \
     dfdataitem.h \
     dfdelayitem.h \

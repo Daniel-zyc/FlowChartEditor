@@ -333,6 +333,7 @@ void DScene::addDFCardItem()
 void DScene::addDFCompareItem()
 {
     qDebug() << "add 对照";
+    prepareInsertItem(new DFCompareItem());
 }
 
 void DScene::addDFDirecrAccessItem()

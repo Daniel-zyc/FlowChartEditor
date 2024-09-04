@@ -39,6 +39,7 @@
 #include "dmultidocitem.h"
 #include "dfmergeitem.h"
 #include "dfsortitem.h"
+#include "dfcompareitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"
