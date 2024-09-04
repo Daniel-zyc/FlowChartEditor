@@ -366,6 +366,7 @@ void DScene::addDFMultiDocItem()
 void DScene::addDFOffPageItem()
 {
     qDebug() << "add 离页连接符";
+    prepareInsertItem(new DFOffPageItem());
 }
 
 

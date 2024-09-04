@@ -95,6 +95,7 @@ enum UserTypes
     DFMergeItemType = QGraphicsItem::UserType + 218,
     DFSortItemType = QGraphicsItem::UserType + 219,
     DFCompareItemType = QGraphicsItem::UserType + 220,
+    DFOffPageItemType = QGraphicsItem::UserType + 221,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
