@@ -337,6 +337,7 @@ void DScene::addDFMergeItem()
 void DScene::addDFMultiDocItem()
 {
     qDebug() << "add 多文档";
+    prepareInsertItem(new DMultiDocItem());
 }
 
 void DScene::addDFOffPageItem()
