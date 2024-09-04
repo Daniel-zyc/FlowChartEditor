@@ -467,18 +467,10 @@ void DScene::changeLineWidth(double width)
 {
     qDebug() << "change Line Width";
     QList<DLineBase*> lines = getSelectedLine();
-    QMessageBox msgBox;
-    msgBox.setText("提示");
-
-    // if(lines.count() < 1) {
-    //     msgBox.setInformativeText("请选中线条");
-    //     msgBox.exec();
-    //     return;
-    // }
 
     for(DLineBase *line : lines) {
         QPen npen = line->pen();
-        npen.setWidth(width);
+        npen.setWidth(width * globalScale);
         line->setPen(npen);
     }
 }

@@ -238,9 +238,6 @@ private:
     QDoubleSpinBox *linebound;
     QPushButton *linecolor;
 
-    QToolButton *createTln;
-    QToolButton *openTln;
-    QToolButton *saveTln;
     QToolButton *saveSvgTln;
 
     QGroupBox *bgGroup;
