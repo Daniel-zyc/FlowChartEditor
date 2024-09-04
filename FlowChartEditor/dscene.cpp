@@ -5,6 +5,7 @@
 #include "serializer.h"
 
 #include <QMessageBox>
+#include <inspector.h>
 
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.1;
@@ -764,10 +765,10 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
-    if((!selectedItems().empty()
-		|| insert_state != DConst::NONE)
+    if((insert_state != DConst::NONE)
         && SHOT_STATE == DConst::CHANGED){
         shot();
+        Inspector::instance()->checkAll();
     }
 
 	insert_state = DConst::NONE;
