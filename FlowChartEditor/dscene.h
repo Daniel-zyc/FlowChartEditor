@@ -6,6 +6,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QGraphicsSceneEvent>
+#include <QTextCursor>
+#include <QTextCharFormat>
 #include <QMenu>
 
 class DAbstractBase;
@@ -74,6 +76,8 @@ public:
 	void addDiaItem();
 	void addTrapItem();
 	void addParagramItem();
+    void addpentagonItem();
+    void addhexagonItem();
 
 	// 插入流程图图形
 	void addDFDocItem();
@@ -104,6 +108,7 @@ public:
     void addDFSequentialAccessItem();
     void addDFStoreDataItem();
     void addDFSummaryconnItem();
+    void addDFSortItem();
 
 	// 插入文本框
 	void addTextItem();
@@ -152,6 +157,11 @@ public:
 
 	void changeFillType(Qt::BrushStyle brushstyle);
 	void changeFillColor(QColor color);
+    void changeFillPic(QPixmap pixmap);
+
+    QSet<DTextBase *> getTextBases();
+    void changeTextColor(QColor color);
+    void changeTextFont(QFont font);
 
 	void changeItemRot(qreal deg = 0.0) { setRotation(deg); }
 	void changeItemScale(qreal scl = 1.0) { setScale(scl); }
