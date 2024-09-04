@@ -15,7 +15,7 @@ DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 
 QRectF DShapeBase::boundingRect() const
 {
-	qreal r = maxPointRadius;
+	qreal r = maxBorderRadius;
 	qreal top = qMax(r, rotPointMargin + rotPointRadius);
 	return sizeRect().normalized().adjusted(-r, -top, r, r);
 }

@@ -32,6 +32,7 @@
 #include "dfconditionitem.h"
 #include "dfdataitem.h"
 #include "dfnodeitem.h"
+#include "dfinformationitem.h"
 
 #include "dlineitem.h"
 #include "dpolylineitem.h"

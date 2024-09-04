@@ -52,7 +52,7 @@ private slots:
     void check();
     void saveAsSvg();
 
-	void addLine() { scene->addLineItem(); }
+	void addLine() { scene->addCurveLineItem(); }
 	void addPolyLine() { scene->addPolyLineItem(); }
 	void addCurveLine() { scene->addCurveLineItem(); }
 

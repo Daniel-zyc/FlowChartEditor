@@ -9,16 +9,13 @@ DCurveLineItem::DCurveLineItem(QPointF begin, QPointF end, QGraphicsItem *parent
     : DLineBase(parent)
 {
 	modis.resize(1);
-	beginPoint = begin; endPoint = end;
-	tip = (beginPoint + endPoint) / 2;
-	updatePath();
-	updateModiPoint();
-	updatePosition();
+	beginPoint = begin; endPoint = end; tip = (beginPoint + endPoint) / 2;
+	updateAll();
 }
 
 QRectF DCurveLineItem::boundingRect() const
 {
-	qreal r = maxPointRadius;
+	qreal r = maxBorderRadius;
 	QPolygonF poly; poly << beginPoint << endPoint << tip;
 	return poly.boundingRect().adjusted(-r, -r, r, r);
 }
@@ -36,27 +33,30 @@ void DCurveLineItem::updatePath()
 	if(endPoint.y() > beginPoint.y()) bulge = -bulge;
 	if(qAbs(angle) > DConst::PI / 4 && qAbs(angle) < DConst::PI * 3 / 4) {
 		bulge = -bulge;
-		if(endPoint.x() < beginPoint.x() || endPoint.y() > beginPoint.y()) bulge = -bulge;
+		if(endPoint.x() < beginPoint.x()) bulge = -bulge;
+		if(endPoint.y() > beginPoint.y()) bulge = -bulge;
 	}
 	if(qAbs(angle) <= DConst::PI / 4 || qAbs(angle) >= DConst::PI * 3 / 4) {
 		waveHeight = qAbs(beginPoint.y() - endPoint.y()) / 2;
 
-		controlPoint = QPointF(beginPoint.x() * 1 / 10 + tip.x() * 9 / 10, beginPoint.y() * 1 / 10 + tip.y() * 9 / 10 + waveHeight * bulge);
+		controlPoint = QPointF(beginPoint.x() * 1 / 10 + tip.x() * 9 / 10,
+							   beginPoint.y() * 1 / 10 + tip.y() * 9 / 10 + waveHeight * bulge);
 		path.quadTo(controlPoint, tip);
 
-		controlPoint = QPointF(tip.x() * 9 / 10 + endPoint.x() * 1 / 10, tip.y() * 9 / 10 + endPoint.y() * 1 / 10 - waveHeight * bulge);
+		controlPoint = QPointF(tip.x() * 9 / 10 + endPoint.x() * 1 / 10,
+							   tip.y() * 9 / 10 + endPoint.y() * 1 / 10 - waveHeight * bulge);
 		path.quadTo(controlPoint, endPoint);
 	} else {
 		waveHeight = qAbs(beginPoint.x() - endPoint.x()) / 2;
 
-		controlPoint = QPointF(beginPoint.x() * 1 / 10 + tip.x() * 9 / 10 + waveHeight * bulge, beginPoint.y() * 1 / 10 + tip.y() * 9 / 10);
+		controlPoint = QPointF(beginPoint.x() * 1 / 10 + tip.x() * 9 / 10 + waveHeight * bulge,
+							   beginPoint.y() * 1 / 10 + tip.y() * 9 / 10);
 		path.quadTo(controlPoint, tip);
 
-		controlPoint = QPointF(tip.x() * 9 / 10 + endPoint.x() * 1 / 10 - waveHeight * bulge, tip.y() * 9 / 10 + endPoint.y() * 1 / 10);
+		controlPoint = QPointF(tip.x() * 9 / 10 + endPoint.x() * 1 / 10 - waveHeight * bulge,
+							   tip.y() * 9 / 10 + endPoint.y() * 1 / 10);
 		path.quadTo(controlPoint, endPoint);
 	}
-
-	qDebug() << path;
 }
 
 void DCurveLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -94,35 +94,53 @@ void DCurveLineItem::modiToPoint(QPointF p, int id)
 	Q_UNUSED(id);
 	if(qAbs(angle) < DConst::PI / 4 || qAbs(angle) > DConst::PI * 3 / 4) tip.setX(p.x());
 	else tip.setY(p.y());
-	updateModiPoint();
-	updatePath();
+	updateAll();
 }
 
 QPainterPath DCurveLineItem::shapeNormal() const
 {
-	return path;
+	qreal r = qMax(pen().widthF() / 2, sizePointRadius);
+	QPainterPath pth1 = path.toReversed();
+	QPainterPath pth2 = path;
+	if(qAbs(angle) < DConst::PI / 4 || qAbs(angle) > DConst::PI * 3 / 4)
+	{
+		pth1.translate(0, r);
+		pth2.translate(0, -r);
+	}
+	else
+	{
+		pth1.translate(r, 0);
+		pth2.translate(-r, 0);
+	}
+	pth1.connectPath(pth2);
+	return pth1;
 }
 
 void DCurveLineItem::updateLine()
 {
-	tip = (beginPoint + endPoint) / 2;
+	tip = (beginPoint + endPoint) / 2; updateAll();
+}
+
+void DCurveLineItem::updateAll()
+{
 	angle = getAngle(beginPoint, endPoint);
+	updateSizePoint();
 	updateModiPoint();
 	updatePath();
 }
 
 //================================
 
-// void DCurveItem::serialize(QDataStream &out) const{
-//     // qDebug() << "DLineItem serializing";
-//     DLineBase::serialize(out);
+void DCurveLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DLineBase::serialize(out, fa);
+	out << tip;
+}
 
-//     out << tip << angle;
-// }
-
-// void DCurveItem::deserialize(QDataStream &in){
-//     // qDebug() << "DLineItem deserializing";
-//     DLineBase::deserialize(in);
-
-//     in << tip << angle;
-// }
+bool DCurveLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DLineBase::deserialize(in, fa)) return false;
+	in >> tip;
+	updateAll();
+	return true;
+}

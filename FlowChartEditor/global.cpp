@@ -24,12 +24,16 @@ QSet<int> registeredTypes = QSet<int>(
 				DFConditionItemType,
 				DFDataItemType,
 				DFNodeItemType,
+				DFInformationItemType,
+				DFManualInputItemType,
+				DFPredefineItemType,
 
 				// text
 				DTextItemType,
 
 				// line
-				DLineItemType
+				DLineItemType,
+				DCurveLineItemType
 			});
 
 int SHOT_STATE = DConst::UNCHANGED;
