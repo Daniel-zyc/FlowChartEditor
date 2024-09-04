@@ -25,4 +25,7 @@ public:
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     QPainterPath path;
+
+	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };

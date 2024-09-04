@@ -28,6 +28,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DFInformationItemType,
 				DFManualInputItemType,
 				DFPredefineItemType,
+				DFDelayItemType,
 
 				// text
 				DTextItemType,
@@ -131,7 +132,7 @@ bool DTool::isText(int type)
 
 bool DTool::isAbstract(int type)
 {
-	return QGraphicsItem::UserType <= type;
+	return QGraphicsItem::UserType <= type && type != DTextBaseType;
 }
 
 bool DTool::isFlowChartShape(int type)

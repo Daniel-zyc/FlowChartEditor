@@ -1,8 +1,6 @@
 #pragma once
 #include "dshapebase.h"
 
-class DFSummaryconnItem;
-
 class DFSummaryconnItem : public DShapeBase
 {
 public:

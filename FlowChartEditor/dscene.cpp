@@ -80,7 +80,7 @@ DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
 	{
 		if(item->checkMagPoint(p))
 			return item;
-		if(item->contains(p))
+		if((item->isShape() || item->isText()) && item->contains(p))
 			return nullptr;
 	}
 	return nullptr;
@@ -640,7 +640,11 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	{
 		if(modifiedShape->checkInterPoint(p))
 			inter_state = modifiedShape->setInterPoint(p);
-		else inter_state = DConst::NONE;
+		else
+		{
+			inter_state = DConst::NONE;
+			modifiedShape = nullptr;
+		}
 	}
 
 	QGraphicsScene::mousePressEvent(event);
@@ -659,7 +663,8 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	}
 
 	MagPoint *magPoint = nullptr;
-	if(modifiedShape && modifiedShape->isLine())
+	if((inter_state == DConst::SIZE && modifiedShape && modifiedShape->isLine())
+	   || insert_state == DConst::INSERT_LINE)
 	{
 		DAbstractBase* shape = getMagItemOnPoint(p);
 		if(shape)
