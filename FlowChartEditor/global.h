@@ -289,5 +289,5 @@ namespace DTool
 	// 过滤掉所有不是 DAbstractBase 的元素
 	void filterBases(QList<QGraphicsItem*> &items);
 
-	QList<DAbstractBase*> itemsToBases(QList<QGraphicsItem*> & items);
+	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
 };
