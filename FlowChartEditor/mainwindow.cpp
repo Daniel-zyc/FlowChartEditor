@@ -447,6 +447,22 @@ void MainWindow::initleftUi()
 	prepareBtn->setToolTip("准备");
 	storeBtn->setToolTip("内部贮存");
 	polyLineBtn->setToolTip("折线");
+    aggreconnectBtn->setToolTip("汇总连接");
+    cardBtn->setToolTip("卡片");
+    compareBtn->setToolTip("对照");
+    dataBtn->setToolTip("资料带");
+    directaccessBtn->setToolTip("直接访问存储器");
+    diskBtn->setToolTip("磁盘");
+    displayBtn->setToolTip("显示");
+    manulinputBtn->setToolTip("手动输入");
+    mergeBtn->setToolTip("合并");
+    multidocBtn->setToolTip("多文件");
+    offpageBtn->setToolTip("离页连接符");
+    orBtn->setToolTip("或者");
+    postponeBtn->setToolTip("延期");
+    sequentialaccessBtn->setToolTip("顺序访问存储器");
+    storedataBtn->setToolTip("存储数据");
+    sortBtn->setToolTip("排序");
 
 	addRectBtn->setToolTip("矩形");
 	addEllBtn->setToolTip("椭圆");
