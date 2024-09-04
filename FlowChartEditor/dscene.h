@@ -207,4 +207,3 @@ private:
 	// 画布的剪切板
 	QByteArray copyData;
 };
-
