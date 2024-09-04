@@ -86,7 +86,8 @@ MainWindow::MainWindow(QWidget *parent)
 	view = new DView(scene);
 	scene->setView(view);
 
-	inspector = new Inspector(this,scene,view);
+    inspector = Inspector::instance(this,scene,view);
+    inspector->hide();
 
     initUi();
 
@@ -555,7 +556,7 @@ void MainWindow::connectLeft()
     connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFSummaryconnItem);
     connect(cardBtn,  &QPushButton::clicked, this, &MainWindow::addDFCardItem);
     connect(compareBtn,  &QPushButton::clicked, this, &MainWindow::addDFCompareItem);
-    connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
+    //connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
     connect(directaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
     connect(diskBtn,  &QPushButton::clicked, this, &MainWindow::addDFDiskItem);
     connect(displayBtn,  &QPushButton::clicked, this, &MainWindow::addDFDisplayItem);
@@ -760,6 +761,7 @@ void MainWindow::createMenu()
 
     ui->helpMenu->addAction(ui->actAboutUs);
     ui->helpMenu->addAction(ui->actCheck);
+	ui->helpMenu->addAction(ui->actDebug);
 }
 
 void MainWindow::createToolBar()
@@ -797,6 +799,7 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
 	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
@@ -1171,6 +1174,12 @@ void MainWindow::undo(){
 void MainWindow::showAboutUsWindow(){
     AboutUsWindow* auw = new AboutUsWindow();
     auw->exec();
+}
+
+void MainWindow::myDebug()
+{
+	qDebug() << "debug triggered";
+	scene->itemVertiEven();
 }
 
 void MainWindow::check(){

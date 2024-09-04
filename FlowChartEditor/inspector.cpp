@@ -3,6 +3,8 @@
 #include <QCloseEvent>
 #include <QLineEdit>
 
+Inspector* Inspector::m_instance = nullptr;
+
 Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
     : QWidget(parent), scene(scene), view(view) {
 
@@ -11,8 +13,8 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
     // 创建工具栏
     QToolBar *toolBar = new QToolBar(this);
     QAction *clearAllAction = new QAction("清空所有项", this);
-    QAction *showErrorAction = new QAction("屏蔽警告", this);
-    QAction *showFlowChartErrorsAction = new QAction("仅显示流程图图形错误", this);  // 新的按钮
+    showErrorAction = new QAction("屏蔽警告", this);
+    showFlowChartErrorsAction = new QAction("仅显示流程图图形错误", this);  // 新的按钮
     QAction *refreshAction = new QAction("刷新", this);
     QAction *closeAction = new QAction("关闭", this);
 
@@ -40,9 +42,11 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
 }
 
 Inspector::~Inspector() {
+    m_instance = nullptr;
 }
 
 void Inspector::checkAll(){
+    qDebug() << "check";
     clearAllErrors();
     if(scene == nullptr || view == nullptr) return;
     originalCentrer = view->mapToScene(view->viewport()->rect().center());
@@ -51,8 +55,9 @@ void Inspector::checkAll(){
     checkItems(items);
     updateErrorList();
 }
+
 void Inspector::checkItems(QList<QGraphicsItem *> items){
-    DTool::filterRootBases(items);      // 线+一般图形+流程图图形
+    DTool::filterRootBases(items);      // 线+一般图形+流程图图形+文本框
     for(QGraphicsItem * item : items)
         checkItem(item);
 }
@@ -60,9 +65,34 @@ void Inspector::checkItems(QList<QGraphicsItem *> items){
 void Inspector::checkItem(QGraphicsItem *item){
     DAbstractBase *abstractItem = dynamic_cast<DAbstractBase *>(item);
     if(abstractItem == nullptr) return;
-    if(DTool::isLine(abstractItem->type())) checkLineItem(abstractItem);                    // 检查线
-    if(DTool::isFlowChartShape(abstractItem->type()))  checkChartFlowItem(abstractItem);    // 检查流程图
-    else checkOtherItem(abstractItem);                                                      // 检查一般图形
+    if(DTool::isText(abstractItem->type())) {
+        checkTextItem(abstractItem);
+        return;
+    }
+    if(DTool::isLine(abstractItem->type())){
+        checkLineItem(abstractItem);
+        return;
+    }
+    if(DTool::isFlowChartShape(abstractItem->type())){
+        checkChartFlowItem(abstractItem);
+        return;
+    }
+    else checkOtherItem(abstractItem);
+}
+
+Inspector* Inspector::instance(QWidget *parent, DScene *scene, DView *view) {
+    if (!m_instance) {
+        m_instance = new Inspector(parent, scene, view);
+    }
+    return m_instance;
+}
+
+void Inspector::checkTextItem(QGraphicsItem *item){
+    qDebug() << "检测文本";
+    DTextItem *textItem = dynamic_cast<DTextItem * >(item);
+    if(textItem == nullptr) return;
+    if(textItem->isTextEmpty())
+        errorMessage.append({EmptyText,tr("未填充文字的文本框"),textItem});
 }
 
 void Inspector::checkChartFlowItem(QGraphicsItem *item){
@@ -74,13 +104,14 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
     out = std::get<1>(result);
     none = std::get<2>(result);
     qDebug() << in << out << none;
-    if(!in && !out && !none){
+    if(!in && !out && !none)
         errorMessage
             .append({ChartFlowNoLinedItem,tr("无连接的孤立流程图图形图形"),shapeBase});
-    }
     if(none)
         errorMessage
-            .append({ChartFlowHasNoTypeArrow,tr("存在未指定箭头类型的流程图图形"),shapeBase});
+            .append({ChartFlowHasNoTypeArrow,tr("流程图图形未指定连线类型"),shapeBase});
+    if(scene->ifCollision(shapeBase))
+        errorMessage.append({CollisionItem,tr("流程图图形发生碰撞"),shapeBase});
     switch(shapeBase->type()){
     case DFProcessItem::Type:
         if(in < 1)
@@ -91,12 +122,12 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
                 .append({DFProcessShouldHasMoreThanOneOut,tr("过程图形需要至少一个输出"),shapeBase});
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFProcessNoName,tr("过程图形未指定"),shapeBase});
+                .append({DFProcessNoName,tr("过程图形未指定文本"),shapeBase});
         break;
     case DFNodeItem::Type:
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFNodeItemNoName,tr("连接符号未指定"),shapeBase});
+                .append({DFNodeItemNoName,tr("连接符号未指定文本"),shapeBase});
         break;
     case DFDataItem::Type:
         if((in == 0 && out != 1)
@@ -111,7 +142,7 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
                 .append({DFManualOperateItemShouldHasOneOut,tr("手动操作符至少有一个输出,但是当前%1个").arg(out),shapeBase});
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFManualOperateItemNoName,tr("手动操作符未指定"),shapeBase});
+                .append({DFManualOperateItemNoName,tr("手动操作符未指定文本"),shapeBase});
         break;
     case DFConditionItem::Type:
         if(in < 1)
@@ -122,12 +153,12 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
                 .append({DFConditionItemShouldHasMoreThanTwoOut,tr("决策图形需要至少一个输出"),shapeBase});
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFConditionItemNoName,tr("决策图形未指定"),shapeBase});
+                .append({DFConditionItemNoName,tr("决策图形未指定文本"),shapeBase});
         break;
     case DFDocumentItem::Type:
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFDocumentItemNoName,tr("文档图形未指定"),shapeBase});
+                .append({DFDocumentItemNoName,tr("文档图形未指定文本"),shapeBase});
         break;
     case DFPredefineItem::Type:
         if(in < 1)
@@ -138,7 +169,7 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
                 .append({DFPredefineItemShouldHasMoreThanOneOut,tr("预定义图形需要至少一个输出"),shapeBase});
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFPredefineItemNoName,tr("预定义图形未指定"),shapeBase});
+                .append({DFPredefineItemNoName,tr("预定义图形未指定文本"),shapeBase});
         break;
     case DFStartEndItem::Type:
         if((in == 0 && out != 1)
@@ -149,12 +180,12 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
     case DFPrepareItem::Type:
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFPrepareItemNoName,tr("准备图形未指定"),shapeBase});
+                .append({DFPrepareItemNoName,tr("准备图形未指定文本"),shapeBase});
         break;
     case DFInternalStoreItem::Type:
         if(shapeBase->isTextEmpty())
             errorMessage
-                .append({DFInternalStoreItemNoName,tr("内部存储图形图形未指定"),shapeBase});
+                .append({DFInternalStoreItemNoName,tr("内部存储图形图形未指定文本"),shapeBase});
         break;
     }
 }
@@ -163,6 +194,7 @@ void Inspector::checkLineItem(QGraphicsItem * item){
     DLineBase * lineBase = dynamic_cast<DLineBase *>(item);
     if(lineBase == nullptr) return;
     if(lineBase->ifHasRound()) errorMessage.append({RoundLine,tr("回环连线"),lineBase});
+    if(scene->ifCollision(lineBase)) errorMessage.append({CollisionItem,tr("连线碰撞"),lineBase});
 }
 
 void Inspector::checkOtherItem(QGraphicsItem * item){
@@ -187,16 +219,12 @@ void Inspector::restoreView(){
 void Inspector::updateErrorList() {
 
     for (const auto &error : errorMessage) {
-        qDebug() << "add";
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(error.message);
-        item->setTextAlignment(Qt::AlignCenter);  // 设置文本居中
 
         if (DTool::getErrorLevel(error.errorType) == ERROR) {
-            item->setBackground(QColor(202,89,99, 200));  // 使用半透明的红色
             item->setIcon(QIcon(":/icon/error.png").pixmap(16, 16)); // 调整图标大小
         } else if (DTool::getErrorLevel(error.errorType) == WARNING) {
-            item->setBackground(QColor(199,141,99, 200));  // 使用半透明的黄色
             item->setIcon(QIcon(":/icon/warning.png").pixmap(16, 16)); // 调整图标大小
         }
         item->setData(Qt::UserRole, QVariant::fromValue(static_cast<void*>(error.item)));
@@ -205,7 +233,7 @@ void Inspector::updateErrorList() {
 
         QListWidgetItem *separator = new QListWidgetItem();
         separator->setSizeHint(QSize(0, 1));
-        separator->setBackground(QColor(200, 200, 200));  // 使用较浅的灰色
+        separator->setBackground(QColor(200, 200, 200));
         errorListWidget->addItem(separator);
     }
 }
@@ -241,10 +269,15 @@ void Inspector::showErrorsOnly() {
 }
 
 void Inspector::onShowErrorActionClicked(){
-    if(ifShowErrorOnly) ifShowErrorOnly = false;
-    else ifShowErrorOnly = true;
-    if(ifShowErrorOnly) showErrorsOnly();
-    else showAllType();
+    ifShowErrorOnly = !ifShowErrorOnly;
+    if(ifShowErrorOnly){
+        showErrorsOnly();
+        showErrorAction->setText("显示警告");
+    }
+    else{
+        showAllType();
+        showErrorAction->setText("屏蔽警告");
+    }
 }
 
 void Inspector::showFlowChartErrorsOnly(){
@@ -253,16 +286,24 @@ void Inspector::showFlowChartErrorsOnly(){
         QVariant itemData = item->data(Qt::UserRole);
         DAbstractBase *abstractItem = static_cast<DAbstractBase*>(itemData.value<void*>());
         if(abstractItem == nullptr) continue;
-        if(DTool::isFlowChartShape(abstractItem->type())) item->setHidden(false);
+        if(DTool::isFlowChartShape(abstractItem->type())
+            || DTool::isLine(abstractItem->type())
+            || DTool::isText(abstractItem->type()))
+            item->setHidden(false);
         else item->setHidden(true);
     }
 }
 
 void Inspector::onShowFlowChartErrorsClicked(){
-    if(ifShowFlowChartErrorsOnly) ifShowErrorOnly = false;
-    else ifShowFlowChartErrorsOnly = true;
-    if(ifShowFlowChartErrorsOnly) showFlowChartErrorsOnly();
-    else showAllType();
+    ifShowFlowChartErrorsOnly = !ifShowFlowChartErrorsOnly;
+    if(ifShowFlowChartErrorsOnly) {
+        showFlowChartErrorsOnly();
+        showFlowChartErrorsAction->setText("显示普通图形问题");
+    }
+    else{
+        showAllType();
+        showFlowChartErrorsAction->setText("屏蔽普通图形错误");
+    }
 }
 
 void Inspector::onCloseActionClicked(){

@@ -91,6 +91,7 @@ enum UserTypes
     DFDelayItemType = QGraphicsItem::UserType + 214,
     DFOrItemType = QGraphicsItem::UserType + 215,
     DFSummaryconnItemType = QGraphicsItem::UserType + 216,
+    DFCardItemType = QGraphicsItem::UserType + 217,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
@@ -132,11 +133,13 @@ enum ErrorType
     ChartFlowNoLinedItem = 17,           // 流程图图形独立无连线
     ChartFlowHasNoTypeArrow = 180,      // 流程图图形存在未指定连线
 
-    NomalItemNoLinedItem = 18,       // 一般图形独立无连线
+    NomalItemNoLinedItem = 190,       // 一般图形独立无连线
 
-    RoundLine = 19 ,              // 回环连线
+    RoundLine = 20 ,              // 回环连线
 
-    CollisionItem = 200              // 碰撞图形
+    CollisionItem = 210,              // 碰撞图形
+
+    EmptyText = 22                      // 空的文本框
 };
 enum ErrorLevel
 {
@@ -289,5 +292,6 @@ namespace DTool
 	// 过滤掉所有不是 DAbstractBase 的元素
 	void filterBases(QList<QGraphicsItem*> &items);
 
+	// 将 item 转为 abstract base，会进行检查
 	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
 };

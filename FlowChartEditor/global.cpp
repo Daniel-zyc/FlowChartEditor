@@ -28,6 +28,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DFInformationItemType,
 				DFManualInputItemType,
 				DFPredefineItemType,
+				DFDelayItemType,
 
 				// text
 				DTextItemType,
@@ -80,17 +81,18 @@ void DTool::moveItems(const QList<QGraphicsItem *> &items)
 
 void DTool::filterRootBases(QList<QGraphicsItem*>& items)
 {
-	QSet<QGraphicsItem*> S;
-	for(QGraphicsItem* item : items) S.insert(item);
-	for (int i = 0; i < items.size(); i++)
-	{
-		if(items[i] == nullptr || !isAbstract(items[i]->type())
-		   || S.contains(items[i]->parentItem()))
-		{
-			qSwap(items[i], items.back());
-			items.pop_back();
-		}
-	}
+    QSet<QGraphicsItem*> S;
+    for (QGraphicsItem* item : items) {
+        S.insert(item);
+    }
+
+    for (int i = items.size() - 1; i >= 0; i--) {
+        if (items[i] == nullptr || !isAbstract(items[i]->type())
+            || S.contains(items[i]->parentItem()))
+        {
+            items.removeAt(i);
+        }
+    }
 }
 
 void DTool::filterBases(QList<QGraphicsItem*>& items)
@@ -131,7 +133,7 @@ bool DTool::isText(int type)
 
 bool DTool::isAbstract(int type)
 {
-	return QGraphicsItem::UserType <= type;
+	return QGraphicsItem::UserType <= type && type != DTextBaseType;
 }
 
 bool DTool::isFlowChartShape(int type)

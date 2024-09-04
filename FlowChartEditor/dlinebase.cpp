@@ -1,6 +1,7 @@
 #include "dlinebase.h"
 #include "magpoint.h"
 #include "serializer.h"
+#include "dshapebase.h"
 
 DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
@@ -292,6 +293,24 @@ bool DLineBase::ifHasRound(){
     return false;
 }
 
+bool DLineBase::ifLinkedWith(DAbstractBase *item){
+    if(endMag != nullptr
+        && endMag->parent != nullptr
+        && endMag->parent == dynamic_cast<DShapeBase*>(item)) return true;
+    if(beginMag != nullptr
+        && beginMag->parent != nullptr
+        && beginMag->parent == dynamic_cast<DShapeBase*>(item)) return true;
+    qDebug() << "无连线";
+    return false;
+}
+
+bool DLineBase::ifLinedSameMag(DLineBase *line){
+    if(line->endMag != nullptr && this->endMag != nullptr && line->endMag == this->endMag) return true;
+    if(line->endMag != nullptr && this->beginMag != nullptr && line->endMag == this->beginMag) return true;
+    if(line->beginMag != nullptr && this->endMag != nullptr && line->beginMag == this->endMag) return true;
+    if(line->beginMag != nullptr && this->beginMag != nullptr && line->beginMag == this->beginMag) return true;
+    return false;
+}
 
 //==============================================================================
 

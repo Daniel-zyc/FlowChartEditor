@@ -78,3 +78,19 @@ void DFDelayItem::updateAll()
     updatePath();
     updateMagPoint();
 }
+
+void DFDelayItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+	DShapeBase::serialize(out, fa);
+
+	out << rect;
+}
+
+bool DFDelayItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+	if(!DShapeBase::deserialize(in, fa)) return false;
+
+	in >> rect;
+	updateAll();
+	return true;
+}

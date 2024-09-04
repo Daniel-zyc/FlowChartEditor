@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dshapebase.h"
-#include <QRectF>
+
 class DFStartEndItem : public DShapeBase
 {
 public:

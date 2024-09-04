@@ -14,6 +14,7 @@ SOURCES += \
     dcurvelineitem.cpp \
     ddiaitem.cpp \
     dellitem.cpp \
+    dfcarditem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
     dfdelayitem.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     dcurvelineitem.h \
     ddiaitem.h \
     dellitem.h \
+    dfcarditem.h \
     dfconditionitem.h \
     dfdataitem.h \
     dfdelayitem.h \

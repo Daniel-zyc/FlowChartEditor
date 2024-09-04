@@ -81,15 +81,14 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-    void addDFInformationItem() {scene->addDFInformationItem();}
 //    void addDFPredefineItem() { scene->addDFSummaryconnItem(); }
     void addDFPredefineItem() { scene->addDFPredefineItem(); }
     void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
     void addDFOrItem() { scene->addDFOrItem();}
+    void addDFCardItem() { scene->addDFCardItem();}
     void addDFManualinputItem() { scene->addManualinItem(); }
     void addDFDelayItem() { scene->addDFDelayItem(); }
-	void addDFManualInputItem() { scene->addManualInputItem(); }
-    void addDFCardItem(){scene->addDFCardItem();}
+    void addDFManualInputItem() { scene->addManualInputItem(); }
     void addDFCompareItem(){scene->addDFCompareItem();}
     void addDFDirecrAccessItem() {scene->addDFDirecrAccessItem();}
     void addDFDiskItem(){scene->addDFDiskItem();}
@@ -176,6 +175,9 @@ private slots:
     void undo();
 
     void showAboutUsWindow();
+
+	void myDebug();
+
 private:
 	Ui::MainWindow *ui;
 

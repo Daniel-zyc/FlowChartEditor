@@ -1,5 +1,6 @@
 #ifndef INSPECTOR_H
 #define INSPECTOR_H
+
 #include "dscene.h"
 #include "dview.h"
 #include <QWidget>
@@ -7,31 +8,36 @@
 #include <QGridLayout>
 #include <QListWidget>
 
-struct errorMessage{
+struct errorMessage {
     int errorType;
     QString message;
-    DAbstractBase * item;
+    DAbstractBase *item;
 };
 
-class Inspector : public QWidget
-{
+class Inspector : public QWidget {
     Q_OBJECT
 public:
-    explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
+    static Inspector* instance(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
+
     ~Inspector();
 
     void checkAll();
-    void checkItem(QGraphicsItem * item);
+    void checkItem(QGraphicsItem *item);
     void checkItems(QList<QGraphicsItem*> item);
 
-    void checkChartFlowItem(QGraphicsItem * item);
-    void checkLineItem(QGraphicsItem * item);
-    void checkOtherItem(QGraphicsItem * item);
+    void checkTextItem(QGraphicsItem *item);
+    void checkChartFlowItem(QGraphicsItem *item);
+    void checkLineItem(QGraphicsItem *item);
+    void checkOtherItem(QGraphicsItem *item);
 
     void restoreView();
     void updateErrorList();
 
 private:
+    explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
+
+    static Inspector* m_instance;
+
     DScene *scene;
     DView *view;
 
@@ -43,27 +49,21 @@ private:
     QListWidget *errorListWidget;
 
     void showAllType();
-
     void showErrorsOnly();
-
     void showFlowChartErrorsOnly();
 
     bool ifShowErrorOnly = false;
-
     bool ifShowFlowChartErrorsOnly = false;
+
+    QAction* showErrorAction;
+
+    QAction* showFlowChartErrorsAction;
 
 private slots:
     void onItemClicked(QListWidgetItem *item);
-
-    // 清空所有错误
     void clearAllErrors();
-
-    // 仅显示错误不显示警告
     void onShowErrorActionClicked();
-
-    // 仅显示流程图错误
     void onShowFlowChartErrorsClicked();
-
     void onCloseActionClicked();
 };
 

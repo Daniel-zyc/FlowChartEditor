@@ -2,8 +2,6 @@
 
 #include "dshapebase.h"
 
-class DFOrItem;
-
 class DFOrItem : public DShapeBase
 {
 public:
