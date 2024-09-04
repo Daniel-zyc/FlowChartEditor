@@ -86,6 +86,21 @@ public:
     void addDFOrItem();
     void addManualInputItem();
 	void addDFInformationItem();
+    void addDFAgrreConnectItem();
+    void addDFCardItem();
+    void addDFCompareItem();
+    // void addDFDataItem();
+    void addDFDirecrAccessItem();
+    void addDFDiskItem();
+    void addDFDisplayItem();
+    void addDFManulInputItem();
+    void addDFMergeItem();
+    void addDFMultiDocItem();
+    void addDFOffPageItem();
+    void addDFOrItem();
+    void addDFPostPoneItem();
+    void addDFSequentialAccessItem();
+    void addDFStoreDataItem();
     void addDFSummaryconnItem();
 
 	// 插入文本框
@@ -103,7 +118,12 @@ public:
 	// 删除
 	void delSelectedItem();
 
-	// 获取某位置上的磁吸点
+    // 设置的单个图形选中
+    void setItemSelected(QGraphicsItem * item);
+
+    // 检测某图形是否碰撞
+    bool getCollision(QGraphicsItem * item);
+
 	DAbstractBase* getMagItemOnPoint(QPointF p);
 
 	// 设置画布的菜单、设置绑定在画布上的窗口

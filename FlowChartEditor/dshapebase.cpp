@@ -193,6 +193,11 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 	return nrc;
 }
 
+bool DShapeBase::isTextEmpty(){
+    if(textItem == nullptr) return false;
+    return textItem->textBase.toPlainText() == "";
+}
+
 //==============================================================================
 
 void DShapeBase::serialize(QDataStream &out, const QGraphicsItem* fa) const

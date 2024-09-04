@@ -7,7 +7,7 @@
 
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
-
+// 全局变量，记录同一个图形拷贝次数，用于计算错开距离
 extern int PASTE_NUM;
 
 // 序列化时用来判断某图形是否参与序列化
@@ -95,6 +95,53 @@ enum UserTypes
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
 	DPolyLineItemType = QGraphicsItem::UserType + 302
+};
+
+enum ErrorType
+{
+    DFProcessShouldHasMoreThanOneIn = 1,                        // 过程矩形一输入
+    DFProcessShouldHasMoreThanOneOut = 2,                        // 过程矩形一输出
+    DFProcessNoName = 3,
+
+    DFNodeItemNoName = 400,                 // 连接符号无清晰标注
+
+    DFDataItemShouldOnlyInOrOut = 5,        // 数据应该只一个输入或输出
+    DFDataItemNoName,
+
+    DFManualOperateItemShouldHasOneOut = 6, // 手动操作符至少一个输出
+    DFManualOperateItemNoName = 700,        // 手动操作未指定
+
+    DFConditionItemShouldHasOneIn = 8,          // 决策符号需要一个输入
+    DFConditionItemShouldHasMoreThanTwoOut = 9, // 决策符号至少两个输出
+    DFConditionItemNoName = 10,                  // 决策符号未指定
+
+    DFDocumentItemNoName = 110,                 // 文档图形未指定
+
+    // 摘录
+
+    DFPredefineItemShouldHasMoreThanOneIn = 12,          // 预定义至少一个输入
+    DFPredefineItemShouldHasMoreThanOneOut = 13,            // 预定义至少一个输出
+    DFPredefineItemNoName,
+
+    DFEndItemShouldOnlyInOrOut = 14,                        // 终止开始符号只有一个输入或一个输出
+
+    DFPrepareItemNoName = 15,                           // 准备图形未指定
+
+    DFInternalStoreItemNoName = 16,                          // 内部存储未指定
+
+    ChartFlowNoLinedItem = 17,           // 流程图图形独立无连线
+    ChartFlowHasNoTypeArrow = 180,      // 流程图图形存在未指定连线
+
+    NomalItemNoLinedItem = 18,       // 一般图形独立无连线
+
+    RoundLine = 19 ,              // 回环连线
+
+    CollisionItem = 200              // 碰撞图形
+};
+enum ErrorLevel
+{
+    WARNING = 1,
+    ERROR = 0
 };
 
 // 常量
@@ -237,6 +284,8 @@ namespace DTool
 	// 过滤掉所有 parent 存在于列表中的元素，以及所有不是 DAbstractBase 的元素
 	void filterRootBases(QList<QGraphicsItem*> &items);
 
+    // 获取错误等级
+    int getErrorLevel(int ErrorType);
 	// 过滤掉所有不是 DAbstractBase 的元素
 	void filterBases(QList<QGraphicsItem*> &items);
 
