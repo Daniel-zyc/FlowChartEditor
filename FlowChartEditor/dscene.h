@@ -124,8 +124,14 @@ public:
     // 设置的单个图形选中
     void setItemSelected(QGraphicsItem * item);
 
-    // 检测某图形是否碰撞
-    bool getCollision(QGraphicsItem * item);
+    /**
+     * @brief ifCollision
+     * @param item
+     * @return
+     * 碰撞检测，线条屏蔽与相同磁吸点连接的线条、与其连接的图形、文本框
+     * 图形屏蔽与其连接的线条、文本框
+     */
+    bool ifCollision(QGraphicsItem * item);
 
 	// 设置画布的菜单、设置绑定在画布上的窗口
 	void setMenu(QMenu *m) { menu = m; }
