@@ -353,6 +353,7 @@ void DScene::addDFDisplayItem()
 void DScene::addDFMergeItem()
 {
     qDebug() << "add 合并";
+    prepareInsertItem(new DFMergeItem());
 }
 
 void DScene::addDFMultiDocItem()
