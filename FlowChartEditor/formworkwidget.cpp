@@ -57,7 +57,6 @@ void FormworkWidget::addItem(const FormworkData &data) {
 
     gridLayout->addWidget(itemButton, row, col);
     items.append(itemButton);
-    itemsData.append(data);  // 保存文件路径
 
     connect(itemButton, &QPushButton::clicked, this, &FormworkWidget::handleItemClick);
 
@@ -68,9 +67,8 @@ void FormworkWidget::handleItemClick() {
     QPushButton *button = qobject_cast<QPushButton*>(sender());
     if (button) {
         int index = items.indexOf(button);
-        if (index != -1 && index < itemsData.size()) {
-            QString filePath = itemsData[index].FilePath;
-            qDebug() << "File path:" << filePath;
+        if (index != -1 && index < FormworkDataListSize) {
+            QString filePath = FormworkDataList[index].FilePath;
             SaveAndLoadManager::instance().loadFromFile(filePath);
         }
     }
