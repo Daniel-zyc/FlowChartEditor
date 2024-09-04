@@ -660,6 +660,7 @@ void DScene::changeFillColor(QColor color)
 	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QBrush nbrush = shape->brush();
+        nbrush.setStyle(Qt::SolidPattern);
 		nbrush.setColor(color);
 		shape->setBrush(nbrush);
 	}
@@ -668,7 +669,7 @@ void DScene::changeFillColor(QColor color)
 void DScene::changeFillPic(QPixmap pixmap)
 {
     qDebug() << "change border pic";
-    QList<DShapeBase*> shapes = getSelectedShape();
+    QList<DShapeBase*> shapes = getSelectedShapes();
     for(DShapeBase* shape : shapes)
     {
         QBrush nbrush = shape->brush();

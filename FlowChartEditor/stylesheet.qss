@@ -6,3 +6,7 @@ QToolButton::menu-indicator {
 QTreeView::item {
     height: 30px;
 }
+
+QTreeWidget::item:column(1) {
+    padding-left: auto;
+}
