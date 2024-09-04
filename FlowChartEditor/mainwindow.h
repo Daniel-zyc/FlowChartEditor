@@ -3,7 +3,7 @@
 #include "dscene.h"
 #include "dview.h"
 #include "dfinddialog.h"
-#include "dtextitem.h"
+#include "dclass/text/dtextitem.h"
 #include "inspector.h"
 
 #include <QSet>

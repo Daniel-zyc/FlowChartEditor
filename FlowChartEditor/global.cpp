@@ -1,6 +1,6 @@
 #include "global.h"
-#include "dabstractbase.h"
-#include "dshapebase.h"
+#include "dclass/base/dabstractbase.h"
+#include "dclass/base/dshapebase.h"
 
 #include <cmath>
 

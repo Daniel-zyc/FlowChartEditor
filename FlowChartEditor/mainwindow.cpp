@@ -3,8 +3,8 @@
 #include <QSvgGenerator>
 #include <QPainter>
 #include <QFileDialog>
-#include "dlineitem.h"
-#include "dshapebase.h"
+#include "dclass/line/dlineitem.h"
+#include "dclass/base/dshapebase.h"
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
