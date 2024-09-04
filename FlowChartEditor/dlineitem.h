@@ -3,29 +3,28 @@
 #include "global.h"
 #include "dlinebase.h"
 
-class DShapeBase;
-
 class DLineItem : public DLineBase
 {
 public:
 	enum { Type = DLineItemType };
 	DLineItem(QGraphicsItem *parent = nullptr);
 	DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent = nullptr);
-
 	~DLineItem() = default;
 
+public:
 	int type() const override { return Type; }
 
 	QRectF boundingRect() const override;
-
-protected:
 	void paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
 	void modiToPoint(QPointF p, int id) override;
-
 	QPainterPath shapeNormal() const override;
 
+	void updateAll();
 	void updateLine() override;
+	void updatePath();
+
+protected:
+	QPainterPath path;
 
 public:
 	/**

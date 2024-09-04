@@ -11,11 +11,12 @@ DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 {
 	textItem = new DTextItem(text, this);
 	textItem->deleteMagPoint();
+
 }
 
 QRectF DShapeBase::boundingRect() const
 {
-	qreal r = maxPointRadius;
+	qreal r = maxBorderRadius;
 	qreal top = qMax(r, rotPointMargin + rotPointRadius);
 	return sizeRect().normalized().adjusted(-r, -top, r, r);
 }
@@ -190,6 +191,11 @@ QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
 		case DConst::NONE: break;
 	}
 	return nrc;
+}
+
+bool DShapeBase::isTextEmpty(){
+    if(textItem == nullptr) return false;
+    return textItem->textBase.toPlainText() == "";
 }
 
 //==============================================================================

@@ -6,6 +6,8 @@ DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
 {
 	sizes.resize(2);
+	isScaleable = false;
+	isRotateable = false;
 }
 
 void DLineBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -171,11 +173,16 @@ void DLineBase::updatePosition()
 {
 	if(beginMag) beginPoint = beginMag->mapToItem(this);
 	if(endMag) endPoint = endMag->mapToItem(this);
-	sizes[DConst::ST - 1] = beginPoint;
-	sizes[DConst::ED - 1] = endPoint;
+	updateSizePoint();
 	prepareGeometryChange();
 	updateLine();
 	update();
+}
+
+void DLineBase::updateSizePoint()
+{
+	sizes[DConst::ST - 1] = beginPoint;
+	sizes[DConst::ED - 1] = endPoint;
 }
 
 void DLineBase::setBeginArrowType(int type)
@@ -190,65 +197,69 @@ void DLineBase::setEndArrowType(int type)
 	update();
 }
 
-double DLineBase::getAngle(const QPointF &beginPoint, const QPointF &endPoint)
+qreal DLineBase::getAngle(const QPointF &beginPoint, const QPointF &endPoint)
 {
     QLineF line(beginPoint, endPoint);
     double angle = atan2(line.dy(), line.dx());
     return angle;
 }
 
-void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType, qreal arrowSize)
+void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType)
 {
-    QPointF arrowP1 = endPoint - QPointF(cos(angle + DConst::PI / 6) * arrowSize,
-                                         sin(angle + DConst::PI / 6) * arrowSize);
-    QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
-                                         sin(angle - DConst::PI / 6) * arrowSize);
+	qreal arrowSize = pen().widthF() * 10;
+	QPointF arrowP1 = endPoint - QPointF(cos(angle + DConst::PI / 6) * arrowSize,
+										 sin(angle + DConst::PI / 6) * arrowSize);
+	QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
+										 sin(angle - DConst::PI / 6) * arrowSize);
 
-    switch (arrowType) {
-    case DConst::NONE: {
-        break;
-    }
-    case DConst::ARROW: {
-        QPolygonF arrow;
-        arrow << endPoint << arrowP1 << arrowP2;
-        painter->drawPolygon(arrow);
-        break;
-    }
-    case DConst::OPEN_ARROW: {
-        painter->drawLine(endPoint, arrowP1);
-        painter->drawLine(endPoint, arrowP2);
-        break;
-    }
-    case DConst::DOVETAIL_ARROW: {
-        QPointF dovetailTip = endPoint - QPointF(cos(angle) * arrowSize,
-                                                 sin(angle) * arrowSize);
-        QPointF dovetailP1 = arrowP1 - QPointF(cos(angle) * arrowSize / 2,
-                                               sin(angle) * arrowSize / 2);
-        QPointF dovetailP2 = arrowP2 - QPointF(cos(angle) * arrowSize / 2,
-                                               sin(angle) * arrowSize / 2);
-        QPolygonF dovetail;
-        dovetail << endPoint << dovetailP1 << dovetailTip << dovetailP2;
-        painter->drawPolygon(dovetail);
-        break;
-    }
-    case DConst::DIAMOND_ARROW: {
-        QPointF diamondTip = endPoint - QPointF(cos(angle) * arrowSize,
-                                                sin(angle) * arrowSize);
-        QPointF diamondP1 = endPoint - QPointF(cos(angle + DConst::PI / 4) * arrowSize / sqrt(2),
-                                               sin(angle + DConst::PI / 4) * arrowSize / sqrt(2));
-        QPointF diamondP2 = endPoint - QPointF(cos(angle - DConst::PI / 4) * arrowSize / sqrt(2),
-                                               sin(angle - DConst::PI / 4) * arrowSize / sqrt(2));
-        QPolygonF diamond;
-        diamond << endPoint << diamondP1 << diamondTip << diamondP2;
-        painter->drawPolygon(diamond);
-        break;
-    }
-    case DConst::ROUND_ARROW: {
-        painter->drawEllipse(endPoint, arrowSize / 2, arrowSize / 2);
-        break;
-    }
-    default: break;
-    }
+	painter->setBrush(QBrush(pen().color(), Qt::SolidPattern));
+	painter->setPen(Qt::NoPen);
+	switch (arrowType) {
+		case DConst::NONE: {
+			break;
+		}
+		case DConst::ARROW: {
+			QPolygonF arrow;
+			arrow << endPoint << arrowP1 << arrowP2;
+			painter->drawPolygon(arrow);
+			break;
+		}
+		case DConst::OPEN_ARROW: {
+			painter->setPen(pen());
+			painter->drawLine(endPoint, arrowP1);
+			painter->drawLine(endPoint, arrowP2);
+			break;
+		}
+		case DConst::DOVETAIL_ARROW: {
+			QPointF dovetailTip = endPoint - QPointF(cos(angle) * arrowSize,
+													 sin(angle) * arrowSize);
+			QPointF dovetailP1 = arrowP1 - QPointF(cos(angle) * arrowSize / 2,
+												   sin(angle) * arrowSize / 2);
+			QPointF dovetailP2 = arrowP2 - QPointF(cos(angle) * arrowSize / 2,
+												   sin(angle) * arrowSize / 2);
+			QPolygonF dovetail;
+			dovetail << endPoint << dovetailP1 << dovetailTip << dovetailP2;
+			painter->drawPolygon(dovetail);
+			break;
+		}
+		case DConst::DIAMOND_ARROW: {
+			QPointF diamondTip = endPoint - QPointF(cos(angle) * arrowSize,
+													sin(angle) * arrowSize);
+			QPointF diamondP1 = endPoint - QPointF(cos(angle + DConst::PI / 4) * arrowSize / sqrt(2),
+												   sin(angle + DConst::PI / 4) * arrowSize / sqrt(2));
+			QPointF diamondP2 = endPoint - QPointF(cos(angle - DConst::PI / 4) * arrowSize / sqrt(2),
+												   sin(angle - DConst::PI / 4) * arrowSize / sqrt(2));
+			QPolygonF diamond;
+			diamond << endPoint << diamondP1 << diamondTip << diamondP2;
+			painter->drawPolygon(diamond);
+			break;
+		}
+		case DConst::ROUND_ARROW: {
+			painter->drawEllipse(endPoint, arrowSize / 2, arrowSize / 2);
+			break;
+		}
+		default: break;
+	}
 }
 
 void DLineBase::setBeginPoint(QPointF p)
@@ -271,7 +282,18 @@ int  DLineBase::magType(MagPoint *mag){
     return DConst::NO_IN_OR_OUT;
 }
 
-//===========================================
+bool DLineBase::ifHasRound(){
+    if(endMag == nullptr
+        || beginMag == nullptr
+        || endMag->parent == nullptr
+        || beginMag->parent == nullptr)
+        return false;
+    if(endMag->parent == beginMag->parent) return true;
+    return false;
+}
+
+
+//==============================================================================
 
 void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
@@ -292,6 +314,7 @@ bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	linkEnd(Serializer::instance().ptrToMag[endPtr]);
 
 	in >> beginArrowType >> endArrowType;
-    updatePosition();
+	updateSizePoint();
+
 	return true;
 }

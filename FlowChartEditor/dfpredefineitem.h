@@ -26,4 +26,8 @@ public:
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     qreal ratio = 0.15;
+
+public:
+	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
+	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };

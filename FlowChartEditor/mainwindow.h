@@ -17,13 +17,14 @@
 #include <QToolButton>
 #include <QFormLayout>
 #include <QComboBox>
-#include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QTabWidget>
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -44,6 +45,7 @@ private:
 	void bindAction();
     void initUi();
     void initleftUi();
+    void initmiddleUi();
     void initrightUi();
     void connectLeft();
     void connectRight();
@@ -52,7 +54,7 @@ private slots:
     void check();
     void saveAsSvg();
 
-	void addLine() { scene->addLineItem(); }
+    void addLine() { scene->addLineItem(); }
 	void addPolyLine() { scene->addPolyLineItem(); }
 	void addCurveLine() { scene->addCurveLineItem(); }
 
@@ -76,7 +78,24 @@ private slots:
 	void addDFDataItem() { scene->addDFDataItem(); }
 	void addDFNodeItem() { scene->addDFNodeItem(); }
 	void addDFStartEndItem() { scene->addDFStartEndItem(); }
-	void addDFPredefineItem() { scene->addDFPredefineItem(); }
+    void addDFInformationItem() {scene->addDFInformationItem();}
+//    void addDFPredefineItem() { scene->addDFSummaryconnItem(); }
+    void addDFPredefineItem() { scene->addDFPredefineItem(); }
+    void addDFSummaryconnItem() { scene->addDFSummaryconnItem(); }
+    void addDFOrItem() { scene->addDFOrItem();}
+    void addDFManualinputItem() { scene->addManualinItem(); }
+    void addDFDelayItem() { scene->addDFDelayItem(); }
+	void addDFManualInputItem() { scene->addManualInputItem(); }
+    void addDFCardItem(){scene->addDFCardItem();}
+    void addDFCompareItem(){scene->addDFCompareItem();}
+    void addDFDirecrAccessItem() {scene->addDFDirecrAccessItem();}
+    void addDFDiskItem(){scene->addDFDiskItem();}
+    void addDFDisplayItem(){scene->addDFDisplayItem();}
+    void addDFMergeItem(){scene->addDFMergeItem();}
+    void addDFMultiDocItem(){scene->addDFMultiDocItem();}
+    void addDFOffPageItem(){scene->addDFOffPageItem();}
+    void addDFSequentialAccessItem(){scene->addDFSequentialAccessItem();}
+    void addDFStoreDataItem(){scene->addDFStoreDataItem();}
 
     void changeLineType(Qt::PenStyle linestyle);
     void changeEndArrow(int endArrowType);
@@ -88,6 +107,8 @@ private slots:
                                   "}");
         button->setFixedWidth(100);
     };
+    void changeItemRot();
+    void changeItemScale();
 
     QSet<DTextBase *> getTextBases();
     void selectFrameCol();
@@ -154,6 +175,8 @@ private:
     QColorDialog *colorDia;
     QFontDialog *fontDia;
 
+    QSplitter *middlesplitter;
+
     QSplitter *mainsplitter;
     QWidget *leftw;
     QGridLayout *flowGrid;
@@ -182,6 +205,22 @@ private:
     QPushButton *prepareBtn;
     QPushButton *storeBtn;
     QPushButton *polyLineBtn;
+    QPushButton *aggreconnectBtn;
+    QPushButton *cardBtn;
+    QPushButton *compareBtn;
+    QPushButton *dataBtn;
+    QPushButton *directaccessBtn;
+    QPushButton *diskBtn;
+    QPushButton *displayBtn;
+    QPushButton *manulinputBtn;
+    QPushButton *mergeBtn;
+    QPushButton *multidocBtn;
+    QPushButton *offpageBtn;
+    QPushButton *orBtn;
+    QPushButton *postponeBtn;
+    QPushButton *sequentialaccessBtn;
+    QPushButton *storedataBtn;
+    QPushButton *curveBtn;
 
 	QPushButton *addRectBtn;
 	QPushButton *addEllBtn;
@@ -192,44 +231,33 @@ private:
 
     QTabWidget *rightTab;
     QWidget *rightLinew;
-    QPushButton *confirm;
-    QPushButton *cancle;
     QFormLayout *formright;
     QHBoxLayout *rbtnLayout;
     QComboBox *lineType;
     QComboBox *arrowType;
     QDoubleSpinBox *linebound;
-    QPushButton *lineConfirm;
-    QPushButton *arrowConfirm;
-    QPushButton *lineboundConfirm;
     QPushButton *linecolor;
 
-    QToolButton *createTln;
-    QToolButton *openTln;
-    QToolButton *saveTln;
     QToolButton *saveSvgTln;
 
     QGroupBox *bgGroup;
+    QRadioButton *colorBg;
     QRadioButton *blankBg;
     QRadioButton *gridBg;
     QRadioButton *dotBg;
-
-    QTreeWidget *rightBgw;
-    QTreeWidgetItem *colorTop;
-    QTreeWidgetItem *patternTop;
-    QPushButton *selectedColor;
-    QTreeWidgetItem *colorChild0;
-    QTreeWidgetItem *patternChild0;
-    QTreeWidgetItem *patternChild1;
-    QTreeWidgetItem *patternChild2;
-    QTreeWidgetItem *patternChild3;
     QRadioButton *customizeBg;
-    QPushButton *repickBtn;
+
+    QWidget *rightBgw;
+    QFormLayout *rightBgf;
+    QPushButton *reColorBtn;
+    QPushButton *reFileBtn;
 
     QWidget *rightShapew;
     QFormLayout *rightShapef;
     QPushButton *frameColor;
     QPushButton *fillColor;
+    QSpinBox *rotationBox;
+    QSpinBox *zoomBox;
 
     QWidget *rightFontw;
     QFormLayout *rightFontf;

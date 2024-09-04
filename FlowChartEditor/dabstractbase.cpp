@@ -4,7 +4,8 @@
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
-	setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
+	setBrush(defaultBrush);
+	setPen(defaultPen);
 	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
 			 | QGraphicsItem::ItemSendsGeometryChanges);
 	mags = new QList<MagPoint*>();
@@ -49,9 +50,19 @@ void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	if(showMagPoint) paintMagPoint(painter, option, widget);
 }
 
+bool DAbstractBase::isAbstract()
+{
+	return DTool::isAbstract(type());
+}
+
 bool DAbstractBase::isShape()
 {
 	return DTool::isShape(type());
+}
+
+bool DAbstractBase::isFLowChartShape()
+{
+	return DTool::isFlowChartShape(type());
 }
 
 bool DAbstractBase::isLine()

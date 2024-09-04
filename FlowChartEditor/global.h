@@ -7,45 +7,54 @@
 
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
-
+// 全局变量，记录同一个图形拷贝次数，用于计算错开距离
 extern int PASTE_NUM;
 
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 
+// 将画面上的所有物品大小放大的倍数，同时视角缩小相应的倍数
+constexpr qreal globalScale = 4;
+
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
-constexpr qreal sizePointRadius = 5;
-constexpr qreal magPointRadius = 5;
-constexpr qreal magPointCollideRadius = 10;
-constexpr qreal modiPointRadius = 5;
-constexpr qreal rotPointRadius = 5;
-constexpr qreal rotPointMargin = 30;
+constexpr qreal sizePointRadius = 5 * globalScale;
+constexpr qreal magPointRadius = 5 * globalScale;
+constexpr qreal magPointCollideRadius = 10 * globalScale;
+constexpr qreal modiPointRadius = 5 * globalScale;
+constexpr qreal rotPointRadius = 5 * globalScale;
+constexpr qreal rotPointMargin = 30 * globalScale;
+constexpr qreal maxPenWidth = 30 * globalScale;
 constexpr qreal maxPointRadius =
 	qMax(qMax(sizePointRadius, magPointRadius),
 		 qMax(magPointCollideRadius, modiPointRadius));
+constexpr qreal maxBorderRadius = qMax(maxPointRadius, maxPenWidth / 2);
+constexpr qreal maxLineRaidus = qMax(maxBorderRadius, maxPenWidth * 5);
 constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
 
 // 各个图形以及边框的画笔和画刷
 const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
-const QPen modiPointPen(Qt::black, 1, Qt::SolidLine);
+const QPen modiPointPen(Qt::black, globalScale, Qt::SolidLine);
 
 const QBrush sizePointBrush(Qt::white, Qt::SolidPattern);
-const QPen sizePointPen(Qt::black, 1, Qt::SolidLine);
+const QPen sizePointPen(Qt::black, globalScale, Qt::SolidLine);
 
 const QBrush magPointBrush(Qt::darkGray, Qt::SolidPattern);
-const QPen magPointPen(Qt::darkGray, 1, Qt::SolidLine);
+const QPen magPointPen(Qt::darkGray, globalScale, Qt::SolidLine);
 
 const QBrush magPointCollideBursh(Qt::gray, Qt::SolidPattern);
-const QPen magPointColidePen(Qt::gray, Qt::SolidLine);
+const QPen magPointColidePen(Qt::NoPen);
 
 const QBrush rotPointBrush = QBrush(Qt::red, Qt::SolidPattern);
-const QPen rotPointPen = QPen(Qt::black, 1, Qt::SolidLine);
+const QPen rotPointPen = QPen(Qt::black, globalScale, Qt::SolidLine);
 
 const QBrush selectRectBrush = QBrush(Qt::NoBrush);
-const QPen selectRectPen = QPen(Qt::black, 1, Qt::DashLine);
+const QPen selectRectPen = QPen(Qt::black, globalScale, Qt::DashLine);
 
 const QBrush groupRectBrush = QBrush(Qt::NoBrush);
-const QPen groupRectPen = QPen(Qt::black, 1, Qt::SolidLine);
+const QPen groupRectPen = QPen(Qt::black, globalScale, Qt::SolidLine);
+
+const QBrush defaultBrush = QBrush(Qt::white, Qt::SolidPattern);
+const QPen defaultPen = QPen(Qt::black, globalScale, Qt::SolidLine);
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -77,12 +86,62 @@ enum UserTypes
 	DFConditionItemType = QGraphicsItem::UserType + 209,
 	DFDataItemType = QGraphicsItem::UserType + 210,
 	DFNodeItemType = QGraphicsItem::UserType + 211,
-    DFManualinputItemType = QGraphicsItem::UserType + 212,
+	DFManualInputItemType = QGraphicsItem::UserType + 212,
 	DFInformationItemType = QGraphicsItem::UserType + 213,
+    DFDelayItemType = QGraphicsItem::UserType + 214,
+    DFOrItemType = QGraphicsItem::UserType + 215,
+    DFSummaryconnItemType = QGraphicsItem::UserType + 216,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
 	DPolyLineItemType = QGraphicsItem::UserType + 302
+};
+
+enum ErrorType
+{
+    DFProcessShouldHasMoreThanOneIn = 1,                        // 过程矩形一输入
+    DFProcessShouldHasMoreThanOneOut = 2,                        // 过程矩形一输出
+    DFProcessNoName = 3,
+
+    DFNodeItemNoName = 400,                 // 连接符号无清晰标注
+
+    DFDataItemShouldOnlyInOrOut = 5,        // 数据应该只一个输入或输出
+    DFDataItemNoName,
+
+    DFManualOperateItemShouldHasOneOut = 6, // 手动操作符至少一个输出
+    DFManualOperateItemNoName = 700,        // 手动操作未指定
+
+    DFConditionItemShouldHasOneIn = 8,          // 决策符号需要一个输入
+    DFConditionItemShouldHasMoreThanTwoOut = 9, // 决策符号至少两个输出
+    DFConditionItemNoName = 10,                  // 决策符号未指定
+
+    DFDocumentItemNoName = 110,                 // 文档图形未指定
+
+    // 摘录
+
+    DFPredefineItemShouldHasMoreThanOneIn = 12,          // 预定义至少一个输入
+    DFPredefineItemShouldHasMoreThanOneOut = 13,            // 预定义至少一个输出
+    DFPredefineItemNoName,
+
+    DFEndItemShouldOnlyInOrOut = 14,                        // 终止开始符号只有一个输入或一个输出
+
+    DFPrepareItemNoName = 15,                           // 准备图形未指定
+
+    DFInternalStoreItemNoName = 16,                          // 内部存储未指定
+
+    ChartFlowNoLinedItem = 17,           // 流程图图形独立无连线
+    ChartFlowHasNoTypeArrow = 180,      // 流程图图形存在未指定连线
+
+    NomalItemNoLinedItem = 18,       // 一般图形独立无连线
+
+    RoundLine = 19 ,              // 回环连线
+
+    CollisionItem = 200              // 碰撞图形
+};
+enum ErrorLevel
+{
+    WARNING = 1,
+    ERROR = 0
 };
 
 // 常量
@@ -181,6 +240,8 @@ namespace DConst
     };
 };
 
+class DAbstractBase;
+
 // 工具函数
 namespace DTool
 {
@@ -205,6 +266,9 @@ namespace DTool
 	// 判断是不是 Shape 类型
 	bool isShape(int type);
 
+	// 判断是不是流程图用图形
+	bool isFlowChartShape(int type);
+
 	// 判断是不是 Line 类型
 	bool isLine(int type);
 
@@ -217,6 +281,13 @@ namespace DTool
 	// 将要被拷贝的图形进行一定的平移操作
 	void moveItems(const QList<QGraphicsItem*> &items);
 
-	// 过滤掉所有 parent 存在于列表中的元素
+	// 过滤掉所有 parent 存在于列表中的元素，以及所有不是 DAbstractBase 的元素
 	void filterRootBases(QList<QGraphicsItem*> &items);
+
+    // 获取错误等级
+    int getErrorLevel(int ErrorType);
+	// 过滤掉所有不是 DAbstractBase 的元素
+	void filterBases(QList<QGraphicsItem*> &items);
+
+	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
 };

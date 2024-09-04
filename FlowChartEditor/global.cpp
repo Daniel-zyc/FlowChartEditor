@@ -1,4 +1,5 @@
 #include "global.h"
+#include "dabstractbase.h"
 
 #include <cmath>
 
@@ -24,12 +25,16 @@ QSet<int> registeredTypes = QSet<int>(
 				DFConditionItemType,
 				DFDataItemType,
 				DFNodeItemType,
+				DFInformationItemType,
+				DFManualInputItemType,
+				DFPredefineItemType,
 
 				// text
 				DTextItemType,
 
 				// line
-				DLineItemType
+				DLineItemType,
+				DCurveLineItemType
 			});
 
 int SHOT_STATE = DConst::UNCHANGED;
@@ -88,6 +93,27 @@ void DTool::filterRootBases(QList<QGraphicsItem*>& items)
 	}
 }
 
+void DTool::filterBases(QList<QGraphicsItem*>& items)
+{
+	for (int i = 0; i < items.size(); i++)
+	{
+		if(items[i] == nullptr || !isAbstract(items[i]->type()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+		}
+	}
+}
+
+QList<DAbstractBase*> DTool::itemsToBases(const QList<QGraphicsItem*> &items)
+{
+	QList<DAbstractBase*> bases;
+	for(QGraphicsItem* item : items)
+		if(item && isAbstract(item->type()))
+			bases.push_back(dynamic_cast<DAbstractBase*>(item));
+	return bases;
+}
+
 bool DTool::isShape(int type)
 {
 	return QGraphicsItem::UserType + 100 <= type && type < QGraphicsItem::UserType + 300;
@@ -106,4 +132,13 @@ bool DTool::isText(int type)
 bool DTool::isAbstract(int type)
 {
 	return QGraphicsItem::UserType <= type;
+}
+
+bool DTool::isFlowChartShape(int type)
+{
+	return QGraphicsItem::UserType + 200 <= type && type < QGraphicsItem::UserType + 300;
+}
+
+int DTool::getErrorLevel(int type){
+    return type > 100;
 }

@@ -25,15 +25,65 @@ DScene::DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
 
 void DScene::init()
 {
+	clear();
+}
+
+void DScene::shot()
+{
+	UndoManager::instance().shot();
+}
+
+void DScene::clear()
+{
+	QGraphicsScene::clear();
+
+	QGraphicsLineItem *line_h = new QGraphicsLineItem(-2000, 0, 2000, 0);
+	QGraphicsLineItem *line_v = new QGraphicsLineItem(0, -2000, 0, 2000);
+	addItem(line_h);
+	addItem(line_v);
+	line_h->setVisible(false);
+	line_v->setVisible(false);
 }
 
 QList<DAbstractBase*> DScene::getRootSelectedBases()
 {
 	QList<QGraphicsItem*> items = selectedItems();
 	DTool::filterRootBases(items);
-	QList<DAbstractBase*> bases;
-	for(QGraphicsItem* item : items) bases.push_back(dynamic_cast<DShapeBase*>(item));
-	return bases;
+	return DTool::itemsToBases(items);
+}
+
+QList<DLineBase *> DScene::getSelectedLine()
+{
+	QList<DAbstractBase*> items = DTool::itemsToBases(selectedItems());
+	QList<DLineBase*> lines;
+	for(DAbstractBase *item : items)
+		if(item->isLine())
+			lines.push_back(dynamic_cast<DLineBase*>(item));
+	return lines;
+}
+
+QList<DShapeBase*> DScene::getSelectedShape()
+{
+	QList<DAbstractBase*> items = DTool::itemsToBases(selectedItems());
+	QList<DShapeBase*> shapes;
+	for(DAbstractBase* item : items)
+		if(item->isShape() || item->isText())
+			shapes.push_back(dynamic_cast<DShapeBase*>(item));
+	return shapes;
+}
+
+DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
+{
+	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
+	QList<DAbstractBase*> bases = DTool::itemsToBases(items);
+	for(DAbstractBase *item : bases)
+	{
+		if(item->checkMagPoint(p))
+			return item;
+		if(item->contains(p))
+			return nullptr;
+	}
+	return nullptr;
 }
 
 void DScene::setRotation(qreal angle)
@@ -144,17 +194,17 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 	qDebug() << "prepare insert item";
 	qDebug() << "item type: " << item->type();
 
-	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_SHAPE
-	   || state == DConst::INSERT_LINE)
+	if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT
+	   || insert_state == DConst::INSERT_LINE)
 	{
 		qDebug() << "delete uninserted item";
 		delete modifiedShape;
 		modifiedShape = nullptr;
 	}
 
-	if(item->isShape()) state = DConst::INSERT_SHAPE;
-	if(item->isLine()) state = DConst::INSERT_LINE;
-	if(item->isText()) state = DConst::INSERT_LINE;
+	if(item->isShape()) insert_state = DConst::INSERT_SHAPE;
+	if(item->isLine()) insert_state = DConst::INSERT_LINE;
+	if(item->isText()) insert_state = DConst::INSERT_TEXT;
 	modifiedShape = item;
 }
 
@@ -235,17 +285,91 @@ void DScene::addDFInternalStoreItem()
 	qDebug() << "add DFInternalStoreItem";
 	prepareInsertItem(new DFInternalStoreItem());
 }
-
 void DScene::addDFPrepareItem()
 {
 	qDebug() << "add DFPrepareItem";
 	prepareInsertItem(new DFPrepareItem());
+}
+void DScene::addDFDelayItem()
+{
+    qDebug() << "add DFDelayItem";
+    prepareInsertItem(new DFDelayItem());
+}
+
+void DScene::addDFInformationItem()
+{
+	qDebug() << "add DFInformationItem";
+	prepareInsertItem(new DFInformationItem());
+}
+
+
+void DScene::addDFCardItem()
+{
+    qDebug() << "add 卡片";
+}
+
+void DScene::addDFCompareItem()
+{
+    qDebug() << "add 对照";
+}
+
+void DScene::addDFDirecrAccessItem()
+{
+    qDebug() << "add 直接访问存储器";
+}
+
+void DScene::addDFDiskItem()
+{
+    qDebug() << "add 磁盘";
+}
+
+void DScene::addDFDisplayItem()
+{
+    qDebug() << "add 显示";
+}
+
+void DScene::addDFMergeItem()
+{
+    qDebug() << "add 合并";
+}
+
+void DScene::addDFMultiDocItem()
+{
+    qDebug() << "add 多文档";
+}
+
+void DScene::addDFOffPageItem()
+{
+    qDebug() << "add 离页连接符";
+}
+
+
+void DScene::addDFSequentialAccessItem()
+{
+    qDebug() << "add 顺序访问存储器";
+}
+
+void DScene::addDFStoreDataItem()
+{
+    qDebug() << "add 存储数据";
 }
 
 void DScene::addDFProcessItem()
 {
 	qDebug() << "add DFProcessItem";
 	prepareInsertItem(new DFProcessItem());
+}
+
+void DScene::addDFOrItem()
+{
+    qDebug() << "add DFOrItem";
+    prepareInsertItem(new DFOrItem());
+}
+
+void DScene::addDFSummaryconnItem()
+{
+    qDebug() << "add DFSummaryconnItem";
+    prepareInsertItem(new DFSummaryconnItem());
 }
 
 void DScene::addDFOptionalProcessItem()
@@ -274,8 +398,14 @@ void DScene::addDFNodeItem()
 
 void DScene::addDFPredefineItem()
 {
-	qDebug() << "add DFNodeItem";
+	qDebug() << "add DFPredefineItem";
 	prepareInsertItem(new DFPredefineItem());
+}
+
+void DScene::addManualInputItem()
+{
+	qDebug() << "add DFManualInput";
+	prepareInsertItem(new DFManualInputItem());
 }
 
 //=============================== line item ====================================
@@ -288,8 +418,8 @@ void DScene::addLineItem()
 void DScene::addManualinItem()
 {
     qDebug() << "add ManualinItem";
-    DFManualinputItem *item = new DFManualinputItem();
-    state = DConst::INSERT_SHAPE;
+	DFManualInputItem *item = new DFManualInputItem();
+	insert_state = DConst::INSERT_SHAPE;
     modifiedShape = item;
 }
 
@@ -305,149 +435,175 @@ void DScene::addCurveLineItem()
 	prepareInsertItem(new DCurveLineItem());
 }
 
-
-QList<QGraphicsItem *> DScene::getDelete()
-{
-	QList<QGraphicsItem*> items = selectedItems();
-	QSet<QGraphicsItem*> S;
-	for(QGraphicsItem* item : items) S.insert(item);
-	items.clear();
-	for(QGraphicsItem *item : S) {
-		if(S.contains(item->parentItem())) continue;
-		items.push_back(item);
-    }
-	return items;
-}
-
 void DScene::delSelectedItem()
 {
-	qDebug() << "delete selected";
-	QList<QGraphicsItem*> items = getDelete();
-	qDebug() << items;
-	for(QGraphicsItem *item : items)
+	qDebug() << "delete selected items";
+	QList<DAbstractBase*> items = getRootSelectedBases();
+	qDebug() << "deleteed items: " << items;
+	for(DAbstractBase *item : items)
 	{
-        this->removeItem(item);
 		DShapeBase* shape; DLineBase* line;
-		if((shape = dynamic_cast<DShapeBase*>(item)))
-			shape->unLinkAllLines();
+		if((shape = dynamic_cast<DShapeBase*>(item))) shape->unLinkAllLines();
 		else if((line = dynamic_cast<DLineBase*>(item)))
 		{
 			line->unlinkBegin();
 			line->unlinkEnd();
 		}
-    }
+	}
+	for(DAbstractBase* item : items)
+	{
+		item->setParentItem(nullptr);
+		this->removeItem(item);
+	}
 	for(QGraphicsItem *item : items) delete item;
 }
 
-DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
-{
-	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);
-
-	for(QGraphicsItem *item : items)
-	{
-		DAbstractBase *shape = dynamic_cast<DAbstractBase*>(item);
-		if(!shape) continue;
-		if(shape->checkMagPoint(p))
-			return shape;
-	}
-	return nullptr;
+void DScene::setItemSelected(QGraphicsItem * item){
+    for(QGraphicsItem * selectedItem : selectedItems())
+        selectedItem -> setSelected(false);
+    item->setSelected(true);
 }
 
-DAbstractBase* DScene::getInterItemOnPoint(QPointF p)
-{
-	return nullptr;
+bool DScene::getCollision(QGraphicsItem * item){
+    QList<QGraphicsItem * >items = item->collidingItems();
+    DTool::filterRootBases(items);
+
+    if(!items.empty()) return true;
+    return false;
 }
+
+//==============================================================================
 
 void DScene::changeLineType(Qt::PenStyle linestyle)
 {
-    qDebug() << "change Line Type";
-    QList<DLineBase*> lines = getSelectedLine();
-    QMessageBox msgBox;
-    msgBox.setText("提示");
-
-    for(DLineBase *line : lines) {
-        QPen npen = line->pen();
-        npen.setStyle(linestyle);
-        line->setPen(npen);
-    }
+	qDebug() << "change Line Type";
+	for(DLineBase *line : getSelectedLine()) {
+		QPen npen = line->pen();
+		npen.setStyle(linestyle);
+		line->setPen(npen);
+	}
 }
 
-void DScene::changeEndArrow(int endArrowType)
+void DScene::changeLineWidth(qreal width)
 {
-    qDebug() << "change Line endArrow";
-    QList<DLineBase*> lines = getSelectedLine();
-    QMessageBox msgBox;
-    msgBox.setText("提示");
-
-    for(DLineBase *line : lines) {
-        line->setEndArrowType(endArrowType);
-    }
-
-}
-
-void DScene::changeLineWidth(double width)
-{
-    qDebug() << "change Line Width";
-    QList<DLineBase*> lines = getSelectedLine();
-    QMessageBox msgBox;
-    msgBox.setText("提示");
-
-    // if(lines.count() < 1) {
-    //     msgBox.setInformativeText("请选中线条");
-    //     msgBox.exec();
-    //     return;
-    // }
-
-    for(DLineBase *line : lines) {
-        QPen npen = line->pen();
-        npen.setWidth(width);
-        line->setPen(npen);
-    }
+	qDebug() << "change Line Width";
+	for(DLineBase *line : getSelectedLine()) {
+		QPen npen = line->pen();
+		npen.setWidthF(width);
+		line->setPen(npen);
+	}
 }
 
 void DScene::changeLineColor(QColor color)
 {
-    qDebug() << "change Line Color";
-    QList<DLineBase*> lines = getSelectedLine();
-
-    for(DLineBase *line : lines) {
-        QPen npen = line->pen();
-        npen.setColor(color);
-        line->setPen(npen);
-    }
+	qDebug() << "change Line Color";
+	for(DLineBase *line : getSelectedLine()) {
+		QPen npen = line->pen();
+		npen.setColor(color);
+		line->setPen(npen);
+	}
 }
 
-void DScene::setBg(QString path)
+void DScene::changeBeginArrow(int beginArrowType)
+{
+	qDebug() << "change Line beginArrow";
+	for(DLineBase *line : getSelectedLine())
+		line->setBeginArrowType(beginArrowType);
+}
+
+void DScene::changeEndArrow(int endArrowType)
+{
+	qDebug() << "change Line endArrow";
+	for(DLineBase *line : getSelectedLine())
+		line->setEndArrowType(endArrowType);
+}
+
+void DScene::changeBorderType(Qt::PenStyle linestyle)
+{
+	qDebug() << "change border type";
+	for(DShapeBase* shape : getSelectedShape())
+	{
+		QPen npen = shape->pen();
+		npen.setStyle(linestyle);
+		shape->setPen(npen);
+	}
+}
+
+void DScene::changeBorderWidth(qreal width)
+{
+	qDebug() << "change border width";
+	for(DShapeBase* shape : getSelectedShape())
+	{
+		QPen npen = shape->pen();
+		npen.setWidthF(width);
+		shape->setPen(npen);
+	}
+}
+
+void DScene::changeBorderColor(QColor color)
+{
+	qDebug() << "change border color";
+	for(DShapeBase* shape : getSelectedShape())
+	{
+		QPen npen = shape->pen();
+		npen.setColor(color);
+		shape->setPen(npen);
+	}
+}
+
+void DScene::changeFillType(Qt::BrushStyle brushstyle)
+{
+	qDebug() << "change fill type";
+	for(DShapeBase* shape : getSelectedShape())
+	{
+		QBrush nbrush = shape->brush();
+		nbrush.setStyle(brushstyle);
+		shape->setBrush(nbrush);
+	}
+}
+
+void DScene::changeFillColor(QColor color)
+{
+	qDebug() << "change border width";
+	for(DShapeBase* shape : getSelectedShape())
+	{
+		QBrush nbrush = shape->brush();
+		nbrush.setColor(color);
+		shape->setBrush(nbrush);
+	}
+}
+
+void DScene::setBackground(QString path)
 {
     QPixmap bg(path);
     setBackgroundBrush(bg);
 }
 
+//==============================================================================
+
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() != Qt::LeftButton)
-    {
-        QGraphicsScene::mousePressEvent(event);
-        return;
-    }
+	if(event->button() != Qt::LeftButton)
+	{
+		QGraphicsScene::mousePressEvent(event);
+		return;
+	}
 
 	QPointF p = event->scenePos();
 	qDebug() << "press pos: " << p;
 
-	if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_LINE
-	   || state == DConst::INSERT_TEXT)
+	// ======== inserting item ========
+	if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_LINE
+	   || insert_state == DConst::INSERT_TEXT)
 	{
 		event->accept();
 		modifiedShape->setSelected(true);
 		addItem(modifiedShape);
-		if(state == DConst::INSERT_SHAPE || state == DConst::INSERT_TEXT)
+		if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT)
 		{
 			DShapeBase* shape = dynamic_cast<DShapeBase*>(modifiedShape);
 			shape->setInsertItem();
-			qDebug() << p;
-			qDebug() << p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2);
 			shape->setPos(p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2));
-			qDebug() << shape->pos();
 		}
 		else
 		{
@@ -460,37 +616,34 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			line->setEndPoint(p);
 			line->setInsertItem();
 		}
-		moditype = DConst::SIZE;
-		state = state + 1;
+		inter_state = DConst::SIZE;
+		insert_state = insert_state + 1;
 		return;
 	}
 
+	// ======== check for interaction =======
 	QList<QGraphicsItem *> items = this->items(p);
-
 	if(items.empty())
 	{
 		QGraphicsScene::mousePressEvent(event);
 		return;
 	}
 
-    QGraphicsItem *item = items.first();
-
-    if(!item->isSelected())
-    {
+	QGraphicsItem *item = items.first();
+	if(!item->isSelected())
+	{
 		QGraphicsScene::mousePressEvent(event);
-        return;
-    }
+		return;
+	}
 
 	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
 	{
 		if(modifiedShape->checkInterPoint(p))
-		{
-			moditype = modifiedShape->setInterPoint(p);
-		}
-		else moditype = DConst::NONE;
+			inter_state = modifiedShape->setInterPoint(p);
+		else inter_state = DConst::NONE;
 	}
 
-    QGraphicsScene::mousePressEvent(event);
+	QGraphicsScene::mousePressEvent(event);
 }
 
 
@@ -498,14 +651,15 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	QPointF p = event->scenePos();
 
+	//=========== check for magpoint ===========
 	if(showMagedItem)
-    {
+	{
 		showMagedItem->setShowMagPoint(false);
 		showMagedItem = nullptr;
 	}
 
 	MagPoint *magPoint = nullptr;
-	if(dynamic_cast<DLineBase*>(modifiedShape))
+	if(modifiedShape && modifiedShape->isLine())
 	{
 		DAbstractBase* shape = getMagItemOnPoint(p);
 		if(shape)
@@ -516,17 +670,15 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		}
 	}
 
-	if(moditype != DConst::NONE)
+	if(inter_state != DConst::NONE && modifiedShape)
 	{
 		event->accept();
-		// qDebug() << modifiedShape;
 		modifiedShape->interToPoint(p, magPoint);
-		if(state == DConst::AFTER_INSERT_SHAPE)
+		if(insert_state == DConst::AFTER_INSERT_SHAPE)
 		{
 			DShapeBase *shape = dynamic_cast<DShapeBase*>(modifiedShape);
-			// qDebug() << shape;
 			QRectF rc = shape->sizeRect();
-			rc.setRect(rc.left()/2, rc.top()/2, rc.width()/2, rc.height()/2);
+			rc.setRect(rc.left()*0.75, rc.top()*0.75, rc.width()*0.75, rc.height()*0.75);
 			shape->textItem->sizeToRect(rc);
 		}
 		return;
@@ -537,7 +689,6 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
 	if(event->button() != Qt::LeftButton)
 	{
 		QGraphicsScene::mouseReleaseEvent(event);
@@ -545,15 +696,14 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	}
 
     if((!selectedItems().empty()
-        || state != DConst::NONE)
+		|| insert_state != DConst::NONE)
         && SHOT_STATE == DConst::CHANGED){
         shot();
     }
 
-	state = DConst::NONE;
-	moditype = DConst::NONE;
+	insert_state = DConst::NONE;
+	inter_state = DConst::NONE;
 	modifiedShape = nullptr;
-
 
 	QGraphicsScene::mouseReleaseEvent(event);
 }
@@ -561,37 +711,6 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void DScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
 	menu->popup(event->screenPos());
-}
-
-void DScene::shot(){
-    UndoManager::instance().shot();
-}
-
-void DScene::clear()
-{
-	QGraphicsScene::clear();
-
-	QGraphicsLineItem *line_h = new QGraphicsLineItem(-2000, 0, 2000, 0);
-	QGraphicsLineItem *line_v = new QGraphicsLineItem(0, -2000, 0, 2000);
-	addItem(line_h);
-	addItem(line_v);
-	line_h->setVisible(false);
-	line_v->setVisible(false);
-}
-
-QList<DLineBase *> DScene::getSelectedLine()
-{
-    QList<QGraphicsItem*> items = selectedItems();
-    QList<DLineBase*> lines;
-
-    for(QGraphicsItem *item : items) {
-        DLineBase *line = dynamic_cast<DLineBase*>(item);
-        if(line != nullptr) {
-            lines.push_back(line);
-        }
-    }
-
-    return lines;
 }
 
 void DScene::dDrawItems(QList<QGraphicsItem*> items){

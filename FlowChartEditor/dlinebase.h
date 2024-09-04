@@ -38,17 +38,20 @@ public:
 	virtual void unlinkMag(MagPoint *mp);
 
 	virtual void updatePosition();
+	virtual void updateSizePoint();
 
 	virtual void setBeginArrowType(int type);
 	virtual void setEndArrowType(int type);
-    virtual double getAngle(const QPointF &beginPoint, const QPointF &endPoint);
-    virtual void drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType, qreal arrowSize = 10.0);
+	virtual qreal getAngle(const QPointF &beginPoint, const QPointF &endPoint);
+	virtual void drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType);
 
 	virtual void setBeginPoint(QPointF p);
 	virtual void setEndPoint(QPointF p);
 
     // 获取某个磁吸点的类型
     int magType(MagPoint *mag);
+    // 判断是否有回环
+    bool ifHasRound();
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

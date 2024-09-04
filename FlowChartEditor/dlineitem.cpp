@@ -1,18 +1,18 @@
 #include "dlineitem.h"
 
 DLineItem::DLineItem(QGraphicsItem *parent)
-	: DLineItem({-1, -1}, {1, 1}, parent) {}
+	: DLineItem({-minRectSize, -minRectSize}, {minRectSize, minRectSize}, parent) {}
 
 DLineItem::DLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 	: DLineBase(parent)
 {
 	beginPoint = begin; endPoint = end;
-	updatePosition();
+	updateAll();
 }
 
 QRectF DLineItem::boundingRect() const
 {
-	qreal r = maxPointRadius;
+	qreal r = maxLineRaidus;
 	QSizeF sz(endPoint.x() - beginPoint.x(), endPoint.y() - beginPoint.y());
 	return QRectF(beginPoint, sz).normalized().adjusted(-r, -r, r, r);
 }
@@ -21,33 +21,46 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
-	QBrush qbrush = painter->brush();
-	qbrush.setColor(pen().color());
-	setBrush(qbrush);
-
-	painter->setBrush(brush());
+	painter->setBrush(Qt::NoBrush);
 	painter->setPen(pen());
+	painter->drawLine(QLineF(beginPoint, endPoint));
 
-    painter->drawLine(QLineF(beginPoint, endPoint));
-	// 此处应加入根据不同箭头类型进行绘制的代码
-    double angle = getAngle(beginPoint, endPoint);
-    drawArrow(painter, angle, endPoint, endArrowType);
+	qreal angle = getAngle(beginPoint, endPoint);
+	drawArrow(painter, angle, endPoint, endArrowType);
 }
 
 void DLineItem::modiToPoint(QPointF p, int id)
 {
-	Q_UNUSED(p); Q_UNUSED(id);
+	Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
 QPainterPath DLineItem::shapeNormal() const
 {
-	QGraphicsLineItem item(QLineF(beginPoint, endPoint));
-	return item.shape();
+	return path;
 }
 
 void DLineItem::updateLine()
 {
-	return;
+	updateAll();
+}
+
+void DLineItem::updatePath()
+{
+	path.clear();
+	QLineF vec(QPointF{0, 0}, endPoint - beginPoint);
+	vec.setLength(qMax(pen().widthF(), sizePointRadius));
+	vec = vec.normalVector();
+	QPointF dir = vec.p2();
+	QPolygonF poly;
+	poly << (beginPoint + dir) << (endPoint + dir)
+		 << (endPoint - dir) << (beginPoint + dir);
+	path.addPolygon(poly);
+}
+
+void DLineItem::updateAll()
+{
+	updateSizePoint();
+	updatePath();
 }
 
 //================================
@@ -59,6 +72,7 @@ void DLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 
 bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
-	return DLineBase::deserialize(in, fa);
-	updatePosition();
+	if(!DLineBase::deserialize(in, fa)) return false;
+	updateAll();
+	return true;
 }

@@ -16,18 +16,21 @@ SOURCES += \
     dellitem.cpp \
     dfconditionitem.cpp \
     dfdataitem.cpp \
+    dfdelayitem.cpp \
     dfdocumentitem.cpp \
     dfinddialog.cpp \
     dfinformationitem.cpp \
     dfinternalstoreitem.cpp \
     dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
+    dforitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
     dfoptionalprocessitem.cpp \
     dfprepareitem.cpp \
     dfprocessitem.cpp \
     dfstartenditem.cpp \
+    dfsummaryconnitem.cpp \
     dlinebase.cpp \
     dlineitem.cpp \
     dmultidocitem.cpp \
@@ -60,18 +63,21 @@ HEADERS += \
     dellitem.h \
     dfconditionitem.h \
     dfdataitem.h \
+    dfdelayitem.h \
     dfdocumentitem.h \
     dfinddialog.h \
     dfinformationitem.h \
     dfinternalstoreitem.h \
     dfmanualinputitem.h \
     dfmanualoperateitem.h \
+    dforitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \
     dfoptionalprocessitem.h \
     dfprepareitem.h \
     dfprocessitem.h \
     dfstartenditem.h \
+    dfsummaryconnitem.h \
     dlinebase.h \
     dlineitem.h \
     dmultidocitem.h \
