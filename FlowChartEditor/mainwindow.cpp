@@ -135,7 +135,7 @@ void MainWindow::initrightUi()
     //样式表
     rightTab = new QTabWidget();
     rightTab->setMovable(true);
-    rightTab->setFixedWidth(250);
+    rightTab->setFixedWidth(260);
     // rightTab->setMinimumWidth(230);
     // rightTab->setMaximumWidth(320);
 
@@ -165,6 +165,7 @@ void MainWindow::initrightUi()
     rightShapew->setColumnCount(2);
     rightShapew->setHeaderHidden(true);
     rightShapew->setColumnWidth(0, 120);
+    rightShapew->setSelectionMode(QAbstractItemView::NoSelection);
     borderTop = new QTreeWidgetItem();
     fillTop = new QTreeWidgetItem();
     rotTop = new QTreeWidgetItem();
@@ -333,7 +334,7 @@ void MainWindow::initrightUi()
 
     formright->addRow("线条颜色：", linecolorH);
     formright->addRow("线条类型：", lineType);
-    formright->addRow("箭头类型：", arrowType);
+    formright->addRow("结尾箭头：", arrowType);
     formright->addRow("线条磅数：", linebound);
 
     rightLinew->setLayout(formright);
@@ -653,6 +654,20 @@ void MainWindow::connectRight()
     connect(borderStyle, &QComboBox::currentIndexChanged, this, &MainWindow::changeBorderType);
     connect(borderWidth, &QDoubleSpinBox::valueChanged, this, &MainWindow::changeBorderWidth);
     connect(fillType, &QComboBox::currentIndexChanged, this, &MainWindow::changeFillType);
+    connect(picfile, &QPushButton::clicked, this, [this]() {
+        if(customizePic->isChecked()) {
+            QString filename = QFileDialog::getOpenFileName(this, "打开图片", "", ("Image(*.svg *.png *.jpg *.bmp"));
+            if(!filename.isEmpty()) {
+                QPixmap pixmap(filename);
+                scene->changeFillPic(pixmap);
+            }
+        }
+    });
+    connect(customizePic, &QCheckBox::checkStateChanged, this, [this]() {
+        if(!customizePic->isChecked()) {
+            scene->changeFillColor(Qt::white);
+        }
+    });
 }
 
 void MainWindow::createMenu()
@@ -831,9 +846,9 @@ void MainWindow::bindAction()
         rightTab->setVisible(true);
     });
 
-    connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(selectFillCol()));
-    connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(selectFrameCol()));
-    connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(selectTextCol()));
+    connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(changeFillColor()));
+    connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(changeBorderColor()));
+    connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(changeTextCol()));
     connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(changeTextFont()));
 
     connect(ui->actMoveSelectedZUp,SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
@@ -991,12 +1006,14 @@ void MainWindow::changeFillType()
     case 17: scene->changeFillType(Qt::ConicalGradientPattern); break;
     case 18: scene->changeFillType(Qt::TexturePattern); break;
     }
+    customizePic->setCheckState(Qt::Unchecked);
 }
 
 void MainWindow::changeFillColor()
 {
     QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
     scene->changeFillColor(color);
+    customizePic->setCheckState(Qt::Unchecked);
 }
 
 void MainWindow::changeFillPic()
