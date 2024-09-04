@@ -5,7 +5,6 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QStyleOptionGraphicsItem>
-#include "serializer.h"
 
 DTextBase::DTextBase(QGraphicsItem *parent)
 	: DTextBase("", parent) {}
@@ -172,4 +171,8 @@ bool DTextItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 	updateAll();
 	setRotateable(fa == nullptr);
 	return true;
+}
+
+bool DTextItem::isTextEmpty(){
+    return textBase.toPlainText().isEmpty();
 }
