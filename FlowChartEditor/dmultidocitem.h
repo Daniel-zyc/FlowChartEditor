@@ -25,7 +25,7 @@ public:
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     QPainterPath path;
-
+    //double ratio = 100;
 };
 
 #endif // DMULTIDOCITEM_H
