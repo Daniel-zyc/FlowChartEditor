@@ -2,8 +2,7 @@
 #include "magpoint.h"
 
 DCurveLineItem::DCurveLineItem(QGraphicsItem *parent)
-	: DCurveLineItem({-minRectSize, -minRectSize}, {minRectSize, minRectSize}, parent) {
-}
+	: DCurveLineItem({-minRectSize, -minRectSize}, {minRectSize, minRectSize}, parent) {}
 
 DCurveLineItem::DCurveLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     : DLineBase(parent)
@@ -15,7 +14,7 @@ DCurveLineItem::DCurveLineItem(QPointF begin, QPointF end, QGraphicsItem *parent
 
 QRectF DCurveLineItem::boundingRect() const
 {
-	qreal r = maxBorderRadius;
+	qreal r = maxLineRaidus;
 	QPolygonF poly; poly << beginPoint << endPoint << tip;
 	return poly.boundingRect().adjusted(-r, -r, r, r);
 }

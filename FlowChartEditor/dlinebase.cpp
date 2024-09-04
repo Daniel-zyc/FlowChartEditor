@@ -212,7 +212,7 @@ void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoi
 	QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
 										 sin(angle - DConst::PI / 6) * arrowSize);
 
-	QBrush qbrush = brush(); qbrush.setColor(pen().color()); setBrush(qbrush);
+	painter->setBrush(QBrush(pen().color(), Qt::SolidPattern));
 	painter->setPen(Qt::NoPen);
 	switch (arrowType) {
 		case DConst::NONE: {
@@ -225,6 +225,7 @@ void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoi
 			break;
 		}
 		case DConst::OPEN_ARROW: {
+			painter->setPen(pen());
 			painter->drawLine(endPoint, arrowP1);
 			painter->drawLine(endPoint, arrowP2);
 			break;

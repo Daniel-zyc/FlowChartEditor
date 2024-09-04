@@ -142,7 +142,7 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 	qDebug() << "prepare insert item";
 	qDebug() << "item type: " << item->type();
 
-	if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_SHAPE
+	if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT
 	   || insert_state == DConst::INSERT_LINE)
 	{
 		qDebug() << "delete uninserted item";
@@ -152,7 +152,7 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 
 	if(item->isShape()) insert_state = DConst::INSERT_SHAPE;
 	if(item->isLine()) insert_state = DConst::INSERT_LINE;
-	if(item->isText()) insert_state = DConst::INSERT_LINE;
+	if(item->isText()) insert_state = DConst::INSERT_TEXT;
 	modifiedShape = item;
 }
 
