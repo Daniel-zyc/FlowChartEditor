@@ -132,11 +132,13 @@ enum ErrorType
     ChartFlowNoLinedItem = 17,           // 流程图图形独立无连线
     ChartFlowHasNoTypeArrow = 180,      // 流程图图形存在未指定连线
 
-    NomalItemNoLinedItem = 18,       // 一般图形独立无连线
+    NomalItemNoLinedItem = 190,       // 一般图形独立无连线
 
-    RoundLine = 19 ,              // 回环连线
+    RoundLine = 20 ,              // 回环连线
 
-    CollisionItem = 200              // 碰撞图形
+    CollisionItem = 210,              // 碰撞图形
+
+    EmptyText = 22                      // 空的文本框
 };
 enum ErrorLevel
 {

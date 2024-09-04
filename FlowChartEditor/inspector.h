@@ -24,6 +24,7 @@ public:
     void checkItem(QGraphicsItem * item);
     void checkItems(QList<QGraphicsItem*> item);
 
+    void checkTextItem(QGraphicsItem * item);
     void checkChartFlowItem(QGraphicsItem * item);
     void checkLineItem(QGraphicsItem * item);
     void checkOtherItem(QGraphicsItem * item);
