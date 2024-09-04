@@ -26,6 +26,15 @@ protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     QPainterPath path;
     //double ratio = 100;
+
+public:
+    /**
+     * @brief serialize
+     * @param out
+     * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+     */
+    void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
+    bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };
 
 #endif // DMULTIDOCITEM_H

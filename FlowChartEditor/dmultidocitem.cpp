@@ -103,6 +103,7 @@ void DMultiDocItem::updatePath()
         path.lineTo(curPoint);
         _percent2 += 0.001;
     }
+    //第三条曲线部分
     path.moveTo((prePoint + curPoint2) / 2 + offset2);
     while(_percent3 <= 1) {
         curPoint2 = CubicPath2.pointAtPercent(_percent3) + offset2;
@@ -120,3 +121,22 @@ void DMultiDocItem::updateMagPoint()
     (*mags)[3]->setPos({0, rect.bottom() * 4 / 5});
 }
 
+//==============================================================================
+
+void DMultiDocItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+{
+    DShapeBase::serialize(out, fa);
+
+    out << rect;
+}
+
+bool DMultiDocItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+{
+    if(!DShapeBase::deserialize(in, fa)) return false;
+
+    in >> rect;
+    updateSizePoint();
+    updatePath();
+    updateMagPoint();
+    return true;
+}
