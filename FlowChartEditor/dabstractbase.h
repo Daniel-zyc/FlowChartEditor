@@ -28,6 +28,7 @@ public:
 	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 	// 图形的类型判断
+	virtual bool isAbstract();
 	virtual bool isShape();
 	virtual bool isFLowChartShape();
 	virtual bool isLine();

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "dabstractbase.h"
 
 #include <cmath>
 
@@ -90,6 +91,27 @@ void DTool::filterRootBases(QList<QGraphicsItem*>& items)
 			items.pop_back();
 		}
 	}
+}
+
+void DTool::filterBases(QList<QGraphicsItem*>& items)
+{
+	for (int i = 0; i < items.size(); i++)
+	{
+		if(items[i] == nullptr || !isAbstract(items[i]->type()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+		}
+	}
+}
+
+QList<DAbstractBase*> DTool::itemsToBases(QList<QGraphicsItem*>& items)
+{
+	QList<DAbstractBase*> bases;
+	for(QGraphicsItem* item : items)
+		if(item && isAbstract(item->type()))
+			bases.push_back(dynamic_cast<DAbstractBase*>(item));
+	return bases;
 }
 
 bool DTool::isShape(int type)
