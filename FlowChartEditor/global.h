@@ -92,17 +92,44 @@ enum UserTypes
 
 enum ErrorType
 {
-    DDiaIn = 1,                 // 菱形一个输入
-    DDiaOut =2,                 // 一个输出
-    DDiaNoTypeArrow = 100,      // 存在无类型连线
+    DFProcessShouldHasMoreThanOneIn = 1,                        // 过程矩形一输入
+    DFProcessShouldHasMoreThanOneOut = 2,                        // 过程矩形一输出
+    DFProcessNoName = 3,
 
-    DRectIn = 3,                // 矩形一个输入
-    DRectOut = 4,               // 一个输出
-    DRectNoTypeArrow = 200,     // 存在无类型连线
+    DFNodeItemNoName = 400,                 // 连接符号无清晰标注
 
-    NoLinkedItem = 5,           // 独立无连线图形
+    DFDataItemShouldOnlyInOrOut = 5,        // 数据应该只一个输入或输出
+    DFDataItemNoName,
 
-    RoundLine = 6               // 回环连线
+    DFManualOperateItemShouldHasOneOut = 6, // 手动操作符至少一个输出
+    DFManualOperateItemNoName = 700,        // 手动操作未指定
+
+    DFConditionItemShouldHasOneIn = 8,          // 决策符号需要一个输入
+    DFConditionItemShouldHasMoreThanTwoOut = 9, // 决策符号至少两个输出
+    DFConditionItemNoName = 10,                  // 决策符号未指定
+
+    DFDocumentItemNoName = 110,                 // 文档图形未指定
+
+    // 摘录
+
+    DFPredefineItemShouldHasMoreThanOneIn = 12,          // 预定义至少一个输入
+    DFPredefineItemShouldHasMoreThanOneOut = 13,            // 预定义至少一个输出
+    DFPredefineItemNoName,
+
+    DFEndItemShouldOnlyInOrOut = 14,                        // 终止开始符号只有一个输入或一个输出
+
+    DFPrepareItemNoName = 15,                           // 准备图形未指定
+
+    DFInternalStoreItemNoName = 16,                          // 内部存储未指定
+
+    ChartFlowNoLinedItem = 17,           // 流程图图形独立无连线
+    ChartFlowHasNoTypeArrow = 180,      // 流程图图形存在未指定连线
+
+    NomalItemNoLinedItem = 18,       // 一般图形独立无连线
+
+    RoundLine = 19 ,              // 回环连线
+
+    CollisionItem = 200              // 碰撞图形
 };
 enum ErrorLevel
 {

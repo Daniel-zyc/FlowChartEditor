@@ -10,7 +10,7 @@
 struct errorMessage{
     int errorType;
     QString message;
-    QGraphicsItem * item;
+    DAbstractBase * item;
 };
 
 class Inspector : public QWidget
@@ -24,7 +24,8 @@ public:
     void checkItem(QGraphicsItem * item);
     void checkItems(QList<QGraphicsItem*> item);
 
-    void checkDItem(QGraphicsItem * item);
+    void checkChartFlowItem(QGraphicsItem * item);
+    void checkLineItem(QGraphicsItem * item);
     void checkOtherItem(QGraphicsItem * item);
 
     void restoreView();
@@ -33,26 +34,37 @@ public:
 private:
     DScene *scene;
     DView *view;
+
     QList<errorMessage> errorMessage;
+
     QPointF originalCentrer;
     QTransform originalTransform;
+
     QListWidget *errorListWidget;
 
     void showAllType();
 
     void showErrorsOnly();
 
+    void showFlowChartErrorsOnly();
+
     bool ifShowErrorOnly = false;
+
+    bool ifShowFlowChartErrorsOnly = false;
 
 private slots:
     void onItemClicked(QListWidgetItem *item);
 
-    void clearAllItems();
+    // 清空所有错误
+    void clearAllErrors();
 
-    void onshowErrorActionClicked();
+    // 仅显示错误不显示警告
+    void onShowErrorActionClicked();
 
-    void showDErrorsOnly();
+    // 仅显示流程图错误
+    void onShowFlowChartErrorsClicked();
+
+    void onCloseActionClicked();
 };
-
 
 #endif // INSPECTOR_H

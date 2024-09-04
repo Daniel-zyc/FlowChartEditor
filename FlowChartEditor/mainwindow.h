@@ -44,6 +44,7 @@ private:
 	void bindAction();
     void initUi();
     void initleftUi();
+    void initmiddleUi();
     void initrightUi();
     void connectLeft();
     void connectRight();

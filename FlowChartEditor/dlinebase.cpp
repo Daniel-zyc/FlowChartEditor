@@ -279,6 +279,17 @@ int  DLineBase::magType(MagPoint *mag){
     return DConst::NO_IN_OR_OUT;
 }
 
+bool DLineBase::ifHasRound(){
+    if(endMag == nullptr
+        || beginMag == nullptr
+        || endMag->parent == nullptr
+        || beginMag->parent == nullptr)
+        return false;
+    if(endMag->parent == beginMag->parent) return true;
+    return false;
+}
+
+
 //==============================================================================
 
 void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const

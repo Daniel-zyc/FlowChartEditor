@@ -50,6 +50,8 @@ public:
 
     // 获取某个磁吸点的类型
     int magType(MagPoint *mag);
+    // 判断是否有回环
+    bool ifHasRound();
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

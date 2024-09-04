@@ -355,6 +355,22 @@ void DScene::delSelectedItem()
 	for(QGraphicsItem *item : items) delete item;
 }
 
+void DScene::setItemSelected(QGraphicsItem * item){
+    for(QGraphicsItem * selectedItem : selectedItems())
+        selectedItem -> setSelected(false);
+    item->setSelected(true);
+}
+
+bool DScene::getCollision(QGraphicsItem * item){
+    QList<QGraphicsItem * >items = item->collidingItems();
+    DTool::filterRootBases(items);
+
+
+
+    if(!items.empty()) return true;
+    return false;
+}
+
 DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
 {
 	QList<QGraphicsItem*> items = this->items(p, Qt::IntersectsItemBoundingRect);

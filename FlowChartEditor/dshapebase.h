@@ -88,6 +88,8 @@ private:
 public:
 	// 图形自己的文本框
 	DTextItem *textItem = nullptr;
+    // 文本框是否空白
+    bool isTextEmpty();
 
 protected:
 	// 旋转点大小和其中心距离 sizeRect 的距离

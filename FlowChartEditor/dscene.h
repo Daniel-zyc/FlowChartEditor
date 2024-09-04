@@ -107,6 +107,12 @@ public:
 	QList<QGraphicsItem *> getDelete();
 	void delSelectedItem();
 
+    // 设置的单个图形选中
+    void setItemSelected(QGraphicsItem * item);
+
+    // 检测某图形是否碰撞
+    bool getCollision(QGraphicsItem * item);
+
 	DAbstractBase* getMagItemOnPoint(QPointF p);
 	DAbstractBase* getInterItemOnPoint(QPointF p);
 
