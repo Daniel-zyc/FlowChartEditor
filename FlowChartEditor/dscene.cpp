@@ -353,6 +353,7 @@ void DScene::addDFDisplayItem()
 void DScene::addDFMergeItem()
 {
     qDebug() << "add 合并";
+    prepareInsertItem(new DFMergeItem());
 }
 
 void DScene::addDFMultiDocItem()
@@ -660,6 +661,7 @@ void DScene::changeFillColor(QColor color)
 	for(DShapeBase* shape : getSelectedShapes())
 	{
 		QBrush nbrush = shape->brush();
+        nbrush.setStyle(Qt::SolidPattern);
 		nbrush.setColor(color);
 		shape->setBrush(nbrush);
 	}

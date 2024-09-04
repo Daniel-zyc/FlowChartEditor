@@ -24,6 +24,7 @@ SOURCES += \
     dfinternalstoreitem.cpp \
     dfmanualinputitem.cpp \
     dfmanualoperateitem.cpp \
+    dfmergeitem.cpp \
     dforitem.cpp \
     dfpredefineitem.cpp \
     dfnodeitem.cpp \
@@ -72,6 +73,7 @@ HEADERS += \
     dfinternalstoreitem.h \
     dfmanualinputitem.h \
     dfmanualoperateitem.h \
+    dfmergeitem.h \
     dforitem.h \
     dfpredefineitem.h \
     dfnodeitem.h \
