@@ -102,6 +102,10 @@ enum UserTypes
     DFCompareItemType = QGraphicsItem::UserType + 220,
     DFOffPageItemType = QGraphicsItem::UserType + 221,
     DFStoreDataItemType = QGraphicsItem::UserType + 222,
+    DFDiskItemType = QGraphicsItem::UserType + 223,
+    DFDirectStorageItemType = QGraphicsItem::UserType + 224,
+    DFShowItemType = QGraphicsItem::UserType + 225,
+    DFOrderStorageItemType = QGraphicsItem::UserType + 226,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,

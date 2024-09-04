@@ -343,16 +343,19 @@ void DScene::addDFCompareItem()
 void DScene::addDFDirecrAccessItem()
 {
     qDebug() << "add 直接访问存储器";
+    prepareInsertItem(new DDirectStorageItem());
 }
 
 void DScene::addDFDiskItem()
 {
     qDebug() << "add 磁盘";
+    prepareInsertItem(new DDiskItem());
 }
 
 void DScene::addDFDisplayItem()
 {
     qDebug() << "add 显示";
+    prepareInsertItem(new DShowItem());
 }
 
 void DScene::addDFMergeItem()
@@ -377,6 +380,7 @@ void DScene::addDFOffPageItem()
 void DScene::addDFSequentialAccessItem()
 {
     qDebug() << "add 顺序访问存储器";
+    prepareInsertItem(new DOrderStorageItem());
 }
 
 void DScene::addDFStoreDataItem()
