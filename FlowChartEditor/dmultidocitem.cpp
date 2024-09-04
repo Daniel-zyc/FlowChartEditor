@@ -55,23 +55,19 @@ void DMultiDocItem::updatePath()
     path.lineTo(rect.topRight());
     path.lineTo(rect.bottomRight() - QPointF(0, rect.height() / 5));
 
-    qreal waveLength = rect.width() / 2;
+    // 设置贝塞尔曲线的四个控制点
+    QPointF startPoint(50, 250);     // 起点
+    QPointF controlPoint1(150, 50);  // 第一个控制点
+    QPointF controlPoint2(250, 450); // 第二个控制点
+    QPointF endPoint(350, 250);      // 终点
 
-    QPointF startPoint = rect.bottomRight() - QPointF(0, rect.height() / 5);
-    QPointF controlPoint, endPoint;
+    // 从起点开始路径
+    path.moveTo(startPoint);
 
-    controlPoint = QPointF(startPoint.x() - waveLength / 2, startPoint.y() - 2);
-    endPoint = QPointF(startPoint.x() - waveLength, startPoint.y() + rect.height() / 10);
-    path.quadTo(controlPoint, endPoint);
-    startPoint = endPoint;
+    // 绘制三次贝塞尔曲线
+    path.cubicTo(controlPoint1, controlPoint2, endPoint);
 
-    controlPoint = QPointF(startPoint.x() - waveLength / 2, startPoint.y() + rect.height() / 6 * 1);
-    endPoint = QPointF(startPoint.x() - waveLength, startPoint.y());
-    path.quadTo(controlPoint, endPoint);
-    startPoint = endPoint;
 
-    path.lineTo(rect.bottomLeft() - QPointF(0, rect.height() / 10));
-    path.closeSubpath();
 }
 
 void DMultiDocItem::updateMagPoint()
