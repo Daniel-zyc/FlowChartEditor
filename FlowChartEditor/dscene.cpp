@@ -262,11 +262,13 @@ void DScene::addParagramItem()
 void DScene::addpentagonItem()
 {
     qDebug() << "add 五边形";
+
 }
 
 void DScene::addhexagonItem()
 {
     qDebug() << "add 六边形";
+    prepareInsertItem(new DFPrepareItem());
 }
 
 void DScene::addDiaItem()
