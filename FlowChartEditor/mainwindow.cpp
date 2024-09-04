@@ -878,6 +878,7 @@ void MainWindow::createToolBar()
 
     isInspect = new QCheckBox("开启检查");
     isOpenReference = new QCheckBox("开启参照");
+    isOpenReference->setCheckState(Qt::Checked);
     ui->headToolBar->addWidget(isInspect);
     ui->headToolBar->addWidget(isOpenReference);
 
