@@ -299,7 +299,7 @@ int DPolyLineItem::getPaintDirection() const
 }
 
 //上右下左1234 注意画的时候图形不能太小，要不然会判断错误
-int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
+int DPolyLineItem::getCollideDirection(QRectF item,QPointF point)
 {
     int item_direct = 0;
     double min_dis = 0x3f3f3f3f, temp = 0;
@@ -319,6 +319,7 @@ int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
         temp = abs(mapToScene(item.bottomLeft()).y() - point.y());
         if(temp < min_dis) min_dis = temp,item_direct = 3;
     }
+    min_dis = 0;
     return item_direct;
 }
 //相对位置 1234右上开始顺时针
@@ -361,17 +362,16 @@ void DPolyLineItem::updatePolyLineType()
     //测试方向 1234上右下左
     int begin_item_direct = 0, end_item_direct = 0;
     QRectF st_item, ed_item;
-    QPointF st_center,ed_center;
-
+    //QPointF st_center,ed_center;
     if(beginMag) {
         st_item = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
-        st_center = beginMag->parent->pos();
-        begin_item_direct = getCollideDirection(st_item,st_center,beginPoint);
+        //st_center = beginMag->parent->pos();
+        begin_item_direct = getCollideDirection(st_item,beginPoint);
     }
     if(endMag) {
         ed_item = endMag->parent->mapRectToScene(endMag->parent->sizeRect());
-        ed_center = endMag->parent->pos();
-        end_item_direct = getCollideDirection(ed_item,ed_center,endPoint);
+        //ed_center = endMag->parent->pos();
+        end_item_direct = getCollideDirection(ed_item,endPoint);
     }
     qDebug() << "directions:" << begin_item_direct << "," << end_item_direct;
     updateOffsets(begin_item_direct,end_item_direct);
@@ -640,7 +640,7 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
     qDebug() << "line_type:" << line_type << "midPoint:" << midPoint;
 }
 
-//=============================================
+//===================================================================
 
 void DPolyLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
@@ -661,7 +661,6 @@ bool DPolyLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
     in >> modis_num >> line_type >> record_dist;
     in >> modi_pos;
     updateLine();
-    qDebug() << "modis_num:" << modis_num;
     if(modi_pos.contains(0)) modiToPoint(modi_pos.value(0),0);
     if(modi_pos.contains(1)) modiToPoint(modi_pos.value(1),1);
     if(modi_pos.contains(2)) modiToPoint(modi_pos.value(2),2);
