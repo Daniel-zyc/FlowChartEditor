@@ -191,7 +191,7 @@ public:
 	QPointF getAutoAlignSizePos(DShapeBase* item, QPointF p);
 
 	// 设置是否开启磁吸线
-	void setAutoAlign(bool active);
+    void setAutoAlign(bool active);
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

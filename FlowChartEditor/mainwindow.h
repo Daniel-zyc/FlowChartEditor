@@ -171,6 +171,7 @@ private slots:
     void saveNewFile();
 
 	void copy();
+    void shear();
 	void paste();
 
 	void redo();

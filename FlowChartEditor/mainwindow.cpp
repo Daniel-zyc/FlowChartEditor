@@ -1404,6 +1404,13 @@ void MainWindow::copy(){
     shot();
 }
 
+void MainWindow::shear(){
+    scene->copySelectedItems();
+    scene->delSelectedItem();
+    shot();
+    inspector->checkAll();
+}
+
 void MainWindow::paste(){
 	scene->pasteItems();
     shot();
