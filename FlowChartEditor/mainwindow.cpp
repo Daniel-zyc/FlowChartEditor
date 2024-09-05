@@ -28,40 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 
 	setWindowTitle("Flowchart Editor");
-	// 绑定序列化管理
-	scene = new DScene(this);
-
-	// scene->removeItem(rect);
-	// delete rect; rect = nullptr;
-
-	UndoManager::instance().bindScene(scene);
-	SaveAndLoadManager::instance().bindScene(scene);
-
-	QMenu *m = new QMenu();
-	m->addAction(ui->actDelSelectedItem);
-	// m->addAction(ui->actCombine);
-	// m->addAction(ui->actSeperate);
-	m->addAction(ui->actAddRect);
-	m->addAction(ui->actAddEll);
-	m->addAction(ui->actAddRhom);
-	m->addAction(ui->actAddLine);
-	m->addAction(ui->actAddPargram);
-	m->addAction(ui->actAddDoc);
-	m->addAction(ui->actAddTrap);
-	m->addAction(ui->actAddPrede);
-	m->addAction(ui->actAddEnd);
-	m->addAction(ui->actAddManualinput);
-	m->addAction(ui->actSelectFrameCol);
-	m->addAction(ui->actSelectFillCol);
-	m->addAction(ui->actSelectTextCol);
-	m->addAction(ui->actSelectTextFont);
-	m->addAction(ui->actStyleSheet);
-
-    m->addAction(ui->actMoveSelectedZUp);
-    m->addAction(ui->actMoveSelectedZDown);
-
-	m->addAction(ui->actMoveSelectedMaxZUp);
-	m->addAction(ui->actMoveSelectedMaxZDown);
 
 	QFile qssfile(":/stylesheet.qss");
 	if(qssfile.open(QFile::ReadOnly)) {
@@ -72,22 +38,23 @@ MainWindow::MainWindow(QWidget *parent)
 	}
 
 	findDia = new DFindDialog();
-
 	colorDia = new QColorDialog(Qt::blue, this);
-	// colorDia->setOption(QColorDialog::ShowAlphaChannel);
-	// colorDia->setOption(QColorDialog::DontUseNativeDialog);
-
 	fontDia = new QFontDialog(this);
-	// fontDia->setOption(QFontDialog::DontUseNativeDialog);
 	fontDia->setOption(QFontDialog::ScalableFonts);
 	fontDia->setOption(QFontDialog::ProportionalFonts);
 
-	scene->setMenu(m);
-	scene->clear();
+	// 初始化 view 和 scene
+	createStatusBar();
+	scene = new DScene(this);
+	view = new DView(scene, this);
 
-	view = new DView(scene);
+	scene->setMenu(createSceneMenu());
 	scene->setView(view);
+	view->setViewLabel(labelViewCord);
+	view->setSceneLabel(labelSceneCord);
 
+	UndoManager::instance().bindScene(scene);
+	SaveAndLoadManager::instance().bindScene(scene);
 	inspector = Inspector::instance(this,scene,view);
 	inspector->hide();
 
@@ -99,8 +66,24 @@ MainWindow::MainWindow(QWidget *parent)
 	bindAction();
 	connectLeft();
 	connectRight();
-	// 调试用
-	// scene->addDFNodeItem();
+}
+
+QMenu* MainWindow::createSceneMenu()
+{
+	QMenu *m = new QMenu();
+	m->addAction(ui->actDelSelectedItem);
+	m->addSeparator();
+	m->addAction(ui->actSelectFrameCol);
+	m->addAction(ui->actSelectFillCol);
+	m->addAction(ui->actSelectTextCol);
+	m->addAction(ui->actSelectTextFont);
+	m->addAction(ui->actStyleSheet);
+	m->addSeparator();
+	m->addAction(ui->actMoveSelectedZUp);
+	m->addAction(ui->actMoveSelectedZDown);
+	m->addAction(ui->actMoveSelectedMaxZUp);
+	m->addAction(ui->actMoveSelectedMaxZDown);
+	return m;
 }
 
 MainWindow::~MainWindow()
@@ -118,7 +101,6 @@ void MainWindow::initUi()
 	mainsplitter->addWidget(middlesplitter);
 	mainsplitter->setStretchFactor(1, 1);
 	mainsplitter->addWidget(rightTab);
-
 
 	setCentralWidget(mainsplitter);
 }
@@ -138,8 +120,6 @@ void MainWindow::initrightUi()
 	rightTab = new QTabWidget();
 	rightTab->setMovable(true);
 	rightTab->setFixedWidth(260);
-	// rightTab->setMinimumWidth(230);
-	// rightTab->setMaximumWidth(320);
 
 	//背景样式表
 	rightBgw = new QWidget();
@@ -890,6 +870,25 @@ void MainWindow::createToolBar()
  //    ui->headToolBar->addAction(ui->actAddPargram);
  //    ui->headToolBar->addAction(ui->actAddDoc);
  //    ui->headToolBar->addAction(ui->actAddPolyLine);
+}
+
+void MainWindow::createStatusBar()
+{
+	QLabel *lab1 = new QLabel("视口坐标: ");
+	lab1->setFixedWidth(50);
+	QLabel *lab2 = new QLabel("画布坐标: ");
+	lab2->setFixedWidth(50);
+	QLabel *lab3 = new QLabel("");
+	lab3->setFixedWidth(50);
+
+	labelViewCord = new QLabel();
+	labelSceneCord = new QLabel();
+
+	ui->statusbar->addWidget(lab1);
+	ui->statusbar->addWidget(labelViewCord);
+	ui->statusbar->addWidget(lab3);
+	ui->statusbar->addWidget(lab2);
+	ui->statusbar->addWidget(labelSceneCord);
 }
 
 void MainWindow::bindAction()

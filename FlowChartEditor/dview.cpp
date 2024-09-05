@@ -12,6 +12,15 @@ DView::DView(QGraphicsScene *scene, QWidget *parent)
 	: QGraphicsView(scene, parent)
 { init(); }
 
+void DView::init()
+{
+	setMouseTracking(true);
+	setRenderHint(QPainter::Antialiasing, true);
+	setResizeAnchor(QGraphicsView::AnchorViewCenter);
+	setDragMode(QGraphicsView::RubberBandDrag);
+	setScale(scale);
+}
+
 void DView::setRotation(qreal angle)
 {
 	rotation = angle;
@@ -33,10 +42,13 @@ void DView::updateTransMatrix()
 	update();
 }
 
-void DView::init()
+void DView::mouseMoveEvent(QMouseEvent* event)
 {
-	setRenderHint(QPainter::Antialiasing, true);
-	setResizeAnchor(QGraphicsView::AnchorViewCenter);
-	setDragMode(QGraphicsView::RubberBandDrag);
-	setScale(scale);
+	QPointF p = event->pos();
+	viewLabel->setText(QString::asprintf(
+						   "%.1lf, %.1lf", p.x()/globalScale, p.y()/globalScale));
+	p = mapToScene({(int)p.x(), (int)p.y()});
+	sceneLabel->setText(QString::asprintf(
+							"%.1lf, %.1lf", p.x()/globalScale, p.y()/globalScale));
+	QGraphicsView::mouseMoveEvent(event);
 }
