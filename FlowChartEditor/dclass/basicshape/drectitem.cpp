@@ -67,6 +67,7 @@ void DRectItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 
 bool DRectItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
+	// qDebug() << "called de rect";
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
 	in >> rect;

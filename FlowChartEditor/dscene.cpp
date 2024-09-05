@@ -1293,7 +1293,7 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 	if(event->button() != Qt::LeftButton) goto mouseReleaseEventPass;
 
-    if((insert_state != DConst::NONE)
+	if(insert_state != DConst::NONE || inter_state != DConst::NONE
         || SHOT_STATE == DConst::CHANGED){
         shot();
 		Inspector::instance()->checkAll();

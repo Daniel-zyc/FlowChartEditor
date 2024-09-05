@@ -190,7 +190,7 @@ QVariant DShapeBase::itemChange(GraphicsItemChange change, const QVariant &value
 	{
 		updateAllLinkLines();
 	}
-	return value;
+	return DAbstractBase::itemChange(change, value);
 }
 
 QRectF DShapeBase::getResizeRect(const QPointF &p, int id)
@@ -241,6 +241,7 @@ void DShapeBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 
 bool DShapeBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
+	// qDebug() << "called de shape";
 	if(!DAbstractBase::deserialize(in, fa)) return false;
 
 	quint32 magPointCount; in >> magPointCount;

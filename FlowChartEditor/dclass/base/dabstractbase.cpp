@@ -46,8 +46,6 @@ void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	paintShape(painter, option, widget);
 	if(isSelected()) paintSelected(painter, option, widget);
 	if(showMagPoint) paintMagPoint(painter, option, widget);
-    // painter->setBrush(Qt::red);
-    // painter->drawPath(shape());
 }
 
 bool DAbstractBase::isAbstract()
@@ -267,8 +265,10 @@ QVariant DAbstractBase::itemChange(GraphicsItemChange change, const QVariant &va
     if(change == QGraphicsItem::ItemPositionHasChanged
         || change == QGraphicsItem::ItemRotationHasChanged
         || change == QGraphicsItem::ItemScaleHasChanged)
+	{
         SHOT_STATE = DConst::CHANGED;
-    return value;
+	}
+	return QGraphicsItem::itemChange(change, value);
 }
 
 
@@ -277,10 +277,16 @@ QVariant DAbstractBase::itemChange(GraphicsItemChange change, const QVariant &va
 void DAbstractBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	if(fa != nullptr || parentItem() == nullptr)
+	{
 		out << pos() << rotation() << scale() << zValue();
+		// qDebug() << "C1: " << pos();
+	}
 	else
+	{
+		// qDebug() << "C2: " << scenePos();
 		out << scenePos() << rotation() + parentItem()->rotation()
 			<< scale() * parentItem()->scale() << parentItem()->zValue();
+	}
 
 	out << brush() << pen();
 }
@@ -289,12 +295,18 @@ bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(fa) setParentItem(fa);
 
+	// qDebug() << "called de abstract";
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+
 	QPointF pos; in >> pos; setPos(pos);
-	qreal rot; in >> rot; setRotation(rot);
-	qreal scl; in >> scl; setScale(scl);
+	// qDebug() << pos << " " << this->pos();
+	qreal rot; in >> rot; QGraphicsItem::setRotation(rot);
+	qreal scl; in >> scl; QGraphicsItem::setScale(scl);
     qreal zval; in >> zval; setZValue(zval + TOTAL_MAX_Z_VALUE ++ );
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
+
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
 	return true;
 }
