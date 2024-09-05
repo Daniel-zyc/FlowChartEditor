@@ -1,10 +1,10 @@
-#include "ddiskitem.h"
-#include "magpoint.h"
+#include "dfdiskitem.h"
+#include "../../magpoint.h"
 
-DDiskItem::DDiskItem(QGraphicsItem *parent)
-    : DDiskItem(minRectSize, minRectSize, parent) {}
+DFDiskItem::DFDiskItem(QGraphicsItem *parent)
+	: DFDiskItem(minRectSize, minRectSize, parent) {}
 
-DDiskItem::DDiskItem(qreal w, qreal h, QGraphicsItem *parent)
+DFDiskItem::DFDiskItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase("", parent)
 {
     for(int i = 0; i < 5; i++) mags->push_back(new MagPoint(this));
@@ -12,7 +12,7 @@ DDiskItem::DDiskItem(qreal w, qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void DDiskItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFDiskItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -21,17 +21,17 @@ void DDiskItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->drawPath(path);
 }
 
-QRectF DDiskItem::sizeRect() const
+QRectF DFDiskItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DDiskItem::shapeNormal() const
+QPainterPath DFDiskItem::shapeNormal() const
 {
     return path;
 }
 
-void DDiskItem::updateMagPoint()
+void DFDiskItem::updateMagPoint()
 {
     (*mags)[0]->setPos({rect.left(), 0});
     (*mags)[1]->setPos({rect.right(), 0});
@@ -40,7 +40,7 @@ void DDiskItem::updateMagPoint()
     (*mags)[4]->setPos({0, rect.top() / 3});
 }
 
-void DDiskItem::updatePath()
+void DFDiskItem::updatePath()
 {
     path.clear();
 
@@ -52,17 +52,17 @@ void DDiskItem::updatePath()
     path.arcTo(rect.left(), rect.top(), rect.width(), rect.height() / 3, 180, 180);
 }
 
-void DDiskItem::sizeToRect(QRectF nrect)
+void DFDiskItem::sizeToRect(QRectF nrect)
 {
     rect = nrect; updateAll();
 }
 
-void DDiskItem::modiToPoint(QPointF p, int id)
+void DFDiskItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
-void DDiskItem::updateAll()
+void DFDiskItem::updateAll()
 {
     updateSizePoint();
     updatePath();
@@ -71,14 +71,14 @@ void DDiskItem::updateAll()
 
 //==============================================================================
 
-void DDiskItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DFDiskItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
     DShapeBase::serialize(out, fa);
 
     out << rect;
 }
 
-bool DDiskItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DFDiskItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DShapeBase::deserialize(in, fa)) return false;
 

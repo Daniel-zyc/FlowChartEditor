@@ -38,6 +38,11 @@ QSet<int> registeredTypes = QSet<int>(
 				DFOffPageItemType,
 				DFSortItemType,
 				DFStoreDataItemType,
+				DFShowItemType,
+				DFDirectStorageItemType,
+				DFDiskItemType,
+				DFMultiDocItemType,
+				DFOrderStorageItemType,
 
 				// text
 				DTextItemType,

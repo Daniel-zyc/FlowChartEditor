@@ -1,10 +1,10 @@
-#include "dmultidocitem.h"
-#include "magpoint.h"
+#include "dfmultidocitem.h"
+#include "../../magpoint.h"
 
-DMultiDocItem::DMultiDocItem(QGraphicsItem *parent)
-    : DMultiDocItem(minRectSize, minRectSize, parent) {}
+DFMultiDocItem::DFMultiDocItem(QGraphicsItem *parent)
+	: DFMultiDocItem(minRectSize, minRectSize, parent) {}
 
-DMultiDocItem::DMultiDocItem(qreal w, qreal h, QGraphicsItem *parent)
+DFMultiDocItem::DFMultiDocItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase("", parent)
 {
     for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
@@ -14,7 +14,7 @@ DMultiDocItem::DMultiDocItem(qreal w, qreal h, QGraphicsItem *parent)
     updateMagPoint();
 }
 
-void DMultiDocItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFMultiDocItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -23,31 +23,31 @@ void DMultiDocItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     painter->drawPath(path);
 }
 
-QRectF DMultiDocItem::sizeRect() const
+QRectF DFMultiDocItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DMultiDocItem::shapeNormal() const
+QPainterPath DFMultiDocItem::shapeNormal() const
 {
     return path;
 }
 
-void DMultiDocItem::sizeToRect(QRectF nrect)
+void DFMultiDocItem::sizeToRect(QRectF nrect)
 {
-    rect = nrect;
-    updateSizePoint();
-    updatePath();
-    updateMagPoint();
+	rect = nrect;
+	updateSizePoint();
+	updatePath();
+	updateMagPoint();
 }
 
-void DMultiDocItem::modiToPoint(QPointF p, int id)
+void DFMultiDocItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(p); Q_UNUSED(id);
     return;
 }
 
-void DMultiDocItem::updatePath()
+void DFMultiDocItem::updatePath()
 {
     path.clear();
 
@@ -112,25 +112,25 @@ void DMultiDocItem::updatePath()
     }
 }
 
-void DMultiDocItem::updateMagPoint()
+void DFMultiDocItem::updateMagPoint()
 {
-    (*mags)[0]->setPos({rect.left(), -rect.height() / 10});
-    (*mags)[1]->setPos({rect.right(), -rect.height() / 10});
+	(*mags)[0]->setPos({rect.left(), rect.height() / 10});
+	(*mags)[1]->setPos({rect.right(), -rect.height() * 0.2});
 
-    (*mags)[2]->setPos({0, rect.top()});
-    (*mags)[3]->setPos({0, rect.bottom() * 4 / 5});
+	(*mags)[2]->setPos({rect.right() - rect.width() * 0.4, rect.top()});
+	(*mags)[3]->setPos({rect.left() + rect.width() * 0.4, rect.bottom() - rect.height() * 0.08});
 }
 
 //==============================================================================
 
-void DMultiDocItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DFMultiDocItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
     DShapeBase::serialize(out, fa);
 
     out << rect;
 }
 
-bool DMultiDocItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DFMultiDocItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DShapeBase::deserialize(in, fa)) return false;
 

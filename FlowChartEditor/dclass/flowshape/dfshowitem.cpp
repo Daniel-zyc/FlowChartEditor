@@ -1,10 +1,10 @@
-#include "dshowitem.h"
-#include "magpoint.h"
+#include "dfshowitem.h"
+#include "../../magpoint.h"
 
-DShowItem::DShowItem(QGraphicsItem *parent)
-    : DShowItem(minRectSize, minRectSize, parent) {}
+DFShowItem::DFShowItem(QGraphicsItem *parent)
+	: DFShowItem(minRectSize, minRectSize, parent) {}
 
-DShowItem::DShowItem(qreal w, qreal h, QGraphicsItem *parent)
+DFShowItem::DFShowItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase("", parent)
 {
     for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
@@ -12,7 +12,7 @@ DShowItem::DShowItem(qreal w, qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void DShowItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFShowItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -21,17 +21,17 @@ void DShowItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->drawPath(path);
 }
 
-QRectF DShowItem::sizeRect() const
+QRectF DFShowItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DShowItem::shapeNormal() const
+QPainterPath DFShowItem::shapeNormal() const
 {
     return path;
 }
 
-void DShowItem::updateMagPoint()
+void DFShowItem::updateMagPoint()
 {
     (*mags)[0]->setPos({rect.left(), 0});
     (*mags)[1]->setPos({rect.right(), 0});
@@ -39,7 +39,7 @@ void DShowItem::updateMagPoint()
     (*mags)[3]->setPos({0, rect.bottom()});
 }
 
-void DShowItem::updatePath()
+void DFShowItem::updatePath()
 {
     path.clear();
 
@@ -52,17 +52,17 @@ void DShowItem::updatePath()
     path.closeSubpath();
 }
 
-void DShowItem::sizeToRect(QRectF nrect)
+void DFShowItem::sizeToRect(QRectF nrect)
 {
     rect = nrect; updateAll();
 }
 
-void DShowItem::modiToPoint(QPointF p, int id)
+void DFShowItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
-void DShowItem::updateAll()
+void DFShowItem::updateAll()
 {
     updateSizePoint();
     updatePath();
@@ -71,14 +71,14 @@ void DShowItem::updateAll()
 
 //==============================================================================
 
-void DShowItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DFShowItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
     DShapeBase::serialize(out, fa);
 
     out << rect;
 }
 
-bool DShowItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DFShowItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DShapeBase::deserialize(in, fa)) return false;
 
