@@ -592,6 +592,10 @@ void DScene::delSelectedItem()
 			modifiedShape = nullptr;
 			inter_state = DConst::NONE;
 		}
+		if(item == showMagedItem)
+		{
+			showMagedItem = nullptr;
+		}
 		delete item;
 	}
 	qDebug() << "delete pass";
