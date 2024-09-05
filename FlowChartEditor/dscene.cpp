@@ -785,7 +785,7 @@ QSet<DTextBase *> DScene::getTextBases()
             continue;
         }
         DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
-        if(shape != nullptr) {
+        if(shape != nullptr && shape->textItem != nullptr) {
             texts.insert(&(shape->textItem->textBase));
             continue;
         }
@@ -817,8 +817,16 @@ void DScene::changeTextColor(QColor color)
 void DScene::changeTextFont(QFont font)
 {
     QSet<DTextBase *> texts = getTextBases();
+    QTextCharFormat charformat;
+    charformat.setFont(font);
     for(DTextBase *tbase : texts) {
-        tbase->document()->setDefaultFont(font);
+        QTextCursor cursor(tbase->document());
+        cursor.movePosition(QTextCursor::Start);
+        while(!cursor.isNull() && !cursor.atEnd()) {
+            cursor.select(QTextCursor::BlockUnderCursor);
+            cursor.mergeCharFormat(charformat);
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
     }
 }
 

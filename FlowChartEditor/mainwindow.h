@@ -106,7 +106,7 @@ private slots:
     void changeLineType(Qt::PenStyle linestyle);
     void changeBeginArrow();
     void changeEndArrow();
-    void changeLineColor(QColor color);
+    void changeLineColor();
     void setSceneBg(QString path);
     void setColorIcon(QPushButton *button) {
         button->setStyleSheet("QPushButton {"
@@ -152,14 +152,14 @@ private slots:
 	void viewMoveUp() { view->moveUp(); }
 	void viewMoveDown() { view->moveDown(); }
 
-	void editRotateCW() { scene->rotateCW(); }
-	void editRotateCCW() { scene->rotateCCW(); }
-	void editEnlarge() { scene->enlarge(); }
-	void editShrink() { scene->shrink(); }
-	void editMoveLeft() { scene->moveLeft(); }
-	void editMoveRight() { scene->moveRight(); }
-	void editMoveUp() { scene->moveUp(); }
-	void editMoveDown() { scene->moveDown(); }
+    void editRotateCW() { scene->rotateCW(); shot();}
+    void editRotateCCW() { scene->rotateCCW(); shot();}
+    void editEnlarge() { scene->enlarge(); shot();}
+    void editShrink() { scene->shrink(); shot();}
+    void editMoveLeft() { scene->moveLeft(); shot();}
+    void editMoveRight() { scene->moveRight(); shot();}
+    void editMoveUp() { scene->moveUp(); shot();}
+    void editMoveDown() { scene->moveDown(); shot();}
 
 	void findandReplace();
 
@@ -178,21 +178,21 @@ private slots:
 
 	void showAboutUsWindow();
 
-	void itemTopAlign() {scene->itemTopAlign();}
-	void itemBottomAlign() {scene->itemBottomAlign();}
-	void itemLeftAlign() {scene->itemLeftAlign();}
-	void itemRightAlign() {scene->itemRightAlign();}
-	void itemHorizAlign() {scene->itemHorizAlign();}
-	void itemVertiAlign() {scene->itemVertiAlign();}
+    void itemTopAlign() {scene->itemTopAlign(); shot();}
+    void itemBottomAlign() {scene->itemBottomAlign(); shot();}
+    void itemLeftAlign() {scene->itemLeftAlign(); shot();}
+    void itemRightAlign() {scene->itemRightAlign(); shot();}
+    void itemHorizAlign() {scene->itemHorizAlign(); shot();}
+    void itemVertiAlign() {scene->itemVertiAlign(); shot();}
 
-	void itemHorizEven() {scene->itemHorizEven();}
-	void itemVertiEven() {scene->itemVertiEven();}
+    void itemHorizEven() {scene->itemHorizEven(); shot();}
+    void itemVertiEven() {scene->itemVertiEven(); shot();}
 	void changeAlign();
 
 	void setAutoAlign();
 
 	void myDebug();
-
+    void shot();
 private:
 	Ui::MainWindow *ui;
 
