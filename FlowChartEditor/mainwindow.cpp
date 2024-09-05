@@ -304,6 +304,7 @@ void MainWindow::initrightUi()
 	fillType->addItem("左斜线图案");
 	fillType->addItem("右倾线图案");
 	fillType->addItem("倾斜十字线图案");
+    fillType->setCurrentIndex(1);
 	// fillType->addItem("线性渐变图案");
 	// fillType->addItem("径向渐变图案");
 	// fillType->addItem("圆锥渐变图案");
@@ -947,6 +948,8 @@ void MainWindow::bindAction()
         scene->changeEndArrow(5);
     });
 
+    connect(ui->actSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
+
 	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
 	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
@@ -1058,6 +1061,11 @@ void MainWindow::saveAsSvg()
 	painter.end();
 }
 
+void MainWindow::selectAll()
+{
+    scene->selectAllItems();
+}
+
 void MainWindow::changeLineType(Qt::PenStyle linestyle)
 {
 	scene->changeLineType(linestyle);
@@ -1151,7 +1159,10 @@ void MainWindow::changeFillType()
 void MainWindow::changeFillColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    if(color.isValid()) scene->changeFillColor(color);
+    if(color.isValid()){
+        scene->changeFillColor(color);
+        // changeFillType();
+    }
 	customizePic->setCheckState(Qt::Unchecked);
 }
 

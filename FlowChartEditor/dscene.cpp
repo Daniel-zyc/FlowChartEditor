@@ -559,6 +559,15 @@ void DScene::addCurveLineItem()
 	prepareInsertItem(new DCurveLineItem());
 }
 
+void DScene::selectAllItems()
+{
+    clearSelection();
+    QList<DAbstractBase*> items = DTool::itemsToBases(this->items());
+    for(DAbstractBase *item : items) {
+        item->setSelected(true);
+    }
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected items";
