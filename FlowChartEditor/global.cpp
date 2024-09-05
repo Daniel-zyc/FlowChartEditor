@@ -45,7 +45,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DFDirectStorageItemType,
 				DFDiskItemType,
 				DFMultiDocItemType,
-				DFOrderStorageItemType,
+                DFOrderStorageItemType,
 
 				// text
 				DTextItemType,

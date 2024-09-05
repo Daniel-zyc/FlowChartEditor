@@ -129,7 +129,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DFDirectStorageItemType: shape = new DFDirectStorageItem(); break;
 			case DFDiskItemType: shape = new DFDiskItem(); break;
 			case DFMultiDocItemType: shape = new DFMultiDocItem(); break;
-			case DFOrderStorageItemType: shape = new DFOrderStorageItem(); break;
+            case DFOrderStorageItemType: shape = new DFOrderStorageItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
