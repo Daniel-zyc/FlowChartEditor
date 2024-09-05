@@ -204,8 +204,6 @@ private:
 	// 对画布进行快照
 	void shot();
 
-    void normalizeZValues();
-
 private:
 	// 调整参数
 	static qreal defaultRotateDelta; // 旋转时的角度

@@ -31,6 +31,7 @@ bool SaveAndLoadManager::saveToFile(const QString &path, DScene *scene){
 }
 
 bool SaveAndLoadManager::loadFromFile(const QString &path, DScene *scene){
+    TOTAL_MAX_Z_VALUE = 1;  // 清空画布层数
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)){
         qDebug() << "unable to open file" << file.errorString();
@@ -49,7 +50,6 @@ bool SaveAndLoadManager::loadFromFile(const QString &path, DScene *scene){
     for(QGraphicsItem* item : data){
         if(item->parentItem() == nullptr) scene->addItem(item);
     }
-
     return true;
 }
 

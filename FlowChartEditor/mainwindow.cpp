@@ -693,7 +693,7 @@ void MainWindow::connectRight()
 	});
 	connect(reFileBtn, &QPushButton::clicked, this, [this]() {
 		if(customizeBg->isChecked()) {
-            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg *.bmp *.jpeg"));
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", "JPEG Files(*.jpg *.jpeg);;PNG Files(*.png);;SVG Files(*.svg);;BMP Files(*.bmp)");
 			if(!fileName.isEmpty()) {
 				setSceneBg(fileName);
 			}else {
@@ -719,7 +719,7 @@ void MainWindow::connectRight()
 	});
 	connect(linecolor, &QPushButton::clicked, this, [this](){
 		QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-		scene->changeLineColor(color);
+        if(color.isValid()) scene->changeLineColor(color);
 	});
 	connect(borderColor, &QPushButton::clicked, this, &MainWindow::changeBorderColor);
 	connect(fillColor, &QPushButton::clicked, this, &MainWindow::changeFillColor);
@@ -732,9 +732,9 @@ void MainWindow::connectRight()
     connect(fillType, &QComboBox::activated, this, &MainWindow::changeFillType);
 	connect(picfile, &QPushButton::clicked, this, [this]() {
 		if(customizePic->isChecked()) {
-			QString filename = QFileDialog::getOpenFileName(this, "打开图片", "", ("Image(*.svg *.png *.jpg *.bmp"));
-			if(!filename.isEmpty()) {
-				QPixmap pixmap(filename);
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", "JPEG Files(*.jpg *.jpeg);;PNG Files(*.png);;SVG Files(*.svg);;BMP Files(*.bmp)");
+            if(!fileName.isEmpty()) {
+                QPixmap pixmap(fileName);
 				scene->changeFillPic(pixmap);
 			}
 		}
@@ -978,8 +978,11 @@ void MainWindow::bindAction()
     connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
         if(!isInspect->isChecked()) {
             inspector->hide();
+            inspector->setAutoCheck(false);
             inspector->restoreView();
         }else {
+            inspector->show();
+            inspector->setAutoCheck(true);
             check();
         }
     });
@@ -988,7 +991,7 @@ void MainWindow::bindAction()
 
 void MainWindow::saveAsSvg()
 {
-	QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamge(*.svg"));
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamges(*.svg"));
 	if(filePath == "") return;
 	QSvgGenerator generator;
 	generator.setFileName(filePath);
@@ -1066,7 +1069,7 @@ void MainWindow::changeBorderWidth()
 void MainWindow::changeBorderColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-	scene->changeBorderColor(color);
+    if(color.isValid()) scene->changeBorderColor(color);
 }
 
 void MainWindow::changeFillType()
@@ -1099,7 +1102,7 @@ void MainWindow::changeFillType()
 void MainWindow::changeFillColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-	scene->changeFillColor(color);
+    if(color.isValid()) scene->changeFillColor(color);
 	customizePic->setCheckState(Qt::Unchecked);
 }
 
@@ -1130,7 +1133,7 @@ QSet<DTextBase *> MainWindow::getTextBases()
 void MainWindow::changeTextCol()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-	scene->changeTextColor(color);
+    if(color.isValid()) scene->changeTextColor(color);
 }
 
 void MainWindow::changeTextFont()
@@ -1314,6 +1317,7 @@ void MainWindow::myDebug()
 }
 
 void MainWindow::check(){
+    inspector->setAutoCheck(true);
 	inspector->checkAll();
 	inspector->show();
 }

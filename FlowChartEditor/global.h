@@ -323,6 +323,9 @@ namespace DTool
 
 	// 将 item 转为 shape base, 会进行检查
 	QList<DShapeBase*> itemToShape(const QList<QGraphicsItem*> &items);
+
+    // normalize item的zvalue
+    void normalizeZValues(QList<QGraphicsItem *> &items);
 };
 
 struct FormworkData
