@@ -50,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	scene->setMenu(createSceneMenu());
 	scene->setView(view);
+	scene->labelItemInfo = labelItemInfo;
+	scene->labelState = labelSceneState;
 	view->setViewLabel(labelViewCord);
 	view->setSceneLabel(labelSceneCord);
 
@@ -877,19 +879,39 @@ void MainWindow::createStatusBar()
 {
 	QLabel *lab1 = new QLabel("视口坐标: ");
 	lab1->setFixedWidth(50);
+	QLabel *lab3 = new QLabel("");
+	lab3->setFixedWidth(40);
 	QLabel *lab2 = new QLabel("画布坐标: ");
 	lab2->setFixedWidth(50);
-	QLabel *lab3 = new QLabel("");
-	lab3->setFixedWidth(50);
+	QLabel *lab5 = new QLabel("");
+	lab5->setFixedWidth(40);
+	QLabel *lab4 = new QLabel("图形信息: ");
+	lab4->setFixedWidth(50);
+	QLabel *lab7 = new QLabel("");
+	lab7->setFixedWidth(40);
+	QLabel *lab6 = new QLabel("状态: ");
+	lab6->setFixedWidth(30);
 
 	labelViewCord = new QLabel();
+	labelViewCord->setMinimumWidth(150);
 	labelSceneCord = new QLabel();
+	labelSceneCord->setMinimumWidth(150);
+	labelItemInfo = new QLabel();
+	labelItemInfo->setMinimumWidth(150);
+	labelSceneState = new QLabel();
+	labelSceneState->setMinimumWidth(150);
 
 	ui->statusbar->addWidget(lab1);
 	ui->statusbar->addWidget(labelViewCord);
 	ui->statusbar->addWidget(lab3);
 	ui->statusbar->addWidget(lab2);
 	ui->statusbar->addWidget(labelSceneCord);
+	ui->statusbar->addWidget(lab5);
+	ui->statusbar->addWidget(lab4);
+	ui->statusbar->addWidget(labelItemInfo);
+	ui->statusbar->addWidget(lab7);
+	ui->statusbar->addWidget(lab6);
+	ui->statusbar->addWidget(labelSceneState);
 }
 
 void MainWindow::bindAction()

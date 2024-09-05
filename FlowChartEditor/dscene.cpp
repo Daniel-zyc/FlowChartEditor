@@ -295,9 +295,21 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 		modifiedShape = nullptr;
 	}
 
-	if(item->isShape()) insert_state = DConst::INSERT_SHAPE;
-	if(item->isLine()) insert_state = DConst::INSERT_LINE;
-	if(item->isText()) insert_state = DConst::INSERT_TEXT;
+	if(item->isShape())
+	{
+		insert_state = DConst::INSERT_SHAPE;
+		labelState->setText("插入图形");
+	}
+	if(item->isLine())
+	{
+		insert_state = DConst::INSERT_LINE;
+		labelState->setText("插入线条");
+	}
+	if(item->isText())
+	{
+		insert_state = DConst::INSERT_TEXT;
+		labelState->setText("插入文本");
+	}
 	modifiedShape = item;
 }
 
@@ -1220,6 +1232,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		}
 		inter_state = DConst::SIZE;
 		insert_state = insert_state + 1;
+		labelState->setText("拖拽图形大小中");
 		return;
 	}
 
@@ -1233,10 +1246,27 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
 	{
 		if(modifiedShape->checkInterPoint(p))
+		{
 			inter_state = modifiedShape->setInterPoint(p);
+			switch(inter_state)
+			{
+				case DConst::SIZE:
+					labelState->setText("拖拽图形大小中");
+					break;
+				case DConst::MODI:
+					labelState->setText("调整图形中");
+					break;
+				case DConst::ROT:
+					labelState->setText("旋转图形中");
+					break;
+			}
+			event->accept();
+			return;
+		}
 		else
 		{
 			inter_state = DConst::NONE;
+			labelState->setText("无");
 			modifiedShape = nullptr;
 		}
 	}
@@ -1245,7 +1275,10 @@ mousePressEventPass:
 	QGraphicsScene::mousePressEvent(event);
 
 	if(!this->items(p).empty() && !selectedItems().empty())
+	{
 		drag_state = DConst::DRAGING;
+		labelState->setText("拖拽图形中");
+	}
 	else
 		drag_state = DConst::NONE;
 }
@@ -1284,7 +1317,14 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		if(inter_state == DConst::SIZE && autoAlign && modifiedShape->isShape())
 			np = getAutoAlignSizePos(dynamic_cast<DShapeBase*>(modifiedShape), p);
 		modifiedShape->interToPoint(np, magPoint);
-
+		if(inter_state == DConst::SIZE)
+		{
+			labelItemInfo->setText(modifiedShape->getSizeString());
+		}
+		if(inter_state == DConst::ROT)
+		{
+			labelItemInfo->setText(modifiedShape->getRotString());
+		}
 		if(insert_state == DConst::AFTER_INSERT_SHAPE)
 		{
 			DShapeBase *shape = dynamic_cast<DShapeBase*>(modifiedShape);
@@ -1329,6 +1369,9 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	if(magLineH->scene()) removeItem(magLineH);
 	if(magLineV->scene()) removeItem(magLineV);
 	modifiedShape = nullptr;
+
+	labelState->setText("无");
+	labelItemInfo->setText("");
 
 mouseReleaseEventPass:
 	QGraphicsScene::mouseReleaseEvent(event);

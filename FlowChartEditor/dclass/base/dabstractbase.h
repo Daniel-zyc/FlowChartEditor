@@ -39,6 +39,11 @@ public:
 	virtual void setScale(qreal scl);
 	virtual void setRotation(qreal deg);
 
+	// 获得图形大小信息的字符串
+	virtual QString getSizeString() { return QString(""); }
+	// 获得图形旋转信息的字符串
+	virtual QString getRotString() { return QString(""); }
+
 protected:
 	// 被选中下多出的碰撞范围
 	virtual QPainterPath shapeSelected() const;

@@ -76,6 +76,11 @@ public:
     //获取线段的外框
     QPainterPath getFillPath(QPointF pth_st, QPointF pth_ed) const;
 
+	QString getSizeString() override
+	{
+		return QString::asprintf("长度 %.4f", DTool::dist(beginPoint, endPoint));
+	}
+
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;

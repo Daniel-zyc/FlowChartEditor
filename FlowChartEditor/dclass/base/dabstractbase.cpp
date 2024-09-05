@@ -279,11 +279,9 @@ void DAbstractBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 	if(fa != nullptr || parentItem() == nullptr)
 	{
 		out << pos() << rotation() << scale() << zValue();
-		// qDebug() << "C1: " << pos();
 	}
 	else
 	{
-		// qDebug() << "C2: " << scenePos();
 		out << scenePos() << rotation() + parentItem()->rotation()
 			<< scale() * parentItem()->scale() << parentItem()->zValue();
 	}

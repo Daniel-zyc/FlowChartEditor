@@ -9,6 +9,7 @@
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QMenu>
+#include <QLabel>
 
 class DAbstractBase;
 class MagPoint;
@@ -208,6 +209,10 @@ private:
     QPointF getSelectedItemsCenter() const;
     // 拷贝时的中心点
     QPointF copyPoint;
+
+public:
+	QLabel *labelItemInfo;
+	QLabel *labelState;
 
 private:
 	// 调整参数

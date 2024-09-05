@@ -326,4 +326,6 @@ private:
 
 	QLabel *labelViewCord;
 	QLabel *labelSceneCord;
+	QLabel *labelItemInfo;
+	QLabel *labelSceneState;
 };
