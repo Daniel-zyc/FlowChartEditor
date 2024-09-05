@@ -12,6 +12,7 @@
 class MagPoint;
 
 // 一个抽象的基类，DShapeBase 和 DLineBase 都继承于此
+// 本基类有磁吸点，但是实际上是由 DShapeBase 会使用磁吸点，DLineBase 没有磁吸点
 class DAbstractBase : public QAbstractGraphicsShapeItem
 {
 public:
@@ -27,14 +28,14 @@ public:
 	// 绘制图形项，绘制顺序为 paintShape，paintSelected(被选中), paintMagPoint(显示磁吸点）
 	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-	// 图形的类型判断
+	// 图形的类型判断，含义与 global 中相同
 	virtual bool isAbstract();
 	virtual bool isShape();
 	virtual bool isFLowChartShape();
 	virtual bool isLine();
 	virtual bool isText();
 
-	// 设置大小和旋转
+	// 设置大小和旋转，根据图形是否可以进行大小变换和旋转变换来调整
 	virtual void setScale(qreal scl);
 	virtual void setRotation(qreal deg);
 
@@ -73,18 +74,21 @@ public:
 	virtual MagPoint* getMagPoint(QPointF p);
 
 	//==========================================================================
-	// 检查 scene 坐标系下 p 是否与某个交互点碰撞
+	// 检查 scene 坐标系下 p 是否与某个交互点碰撞，并返回交互类型
 	virtual int checkInterPoint(QPointF p) const = 0;
-	// 根据 scene 坐标系下 p 点设置当前交互状态和交互点
+	// 根据 scene 坐标系下 p 点设置当前交互状态和交互点，并返回交互类型
 	virtual int setInterPoint(QPointF p) = 0;
 	// 依据之前设置的状态，调整交互点的参数和图形的状态，其中 p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
 
-	virtual void setInsertItem() = 0;
+	// 将图形设置为插入状态，即将当前交互点设置为图形的右下，或者线条的结尾端点
+	virtual void setInsertingItem() = 0;
 
 	// 更新所有连接的线条
 	virtual void updateAllLinkLines();
+
+	// 断开所有连接的线条
 	virtual void unLinkAllLines();
 
     // 获取图形连线的类型，in，out，none
@@ -113,8 +117,12 @@ protected:
 	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
 
+	// 设置图形能否进行旋转或大小调整，会调用图形的 update 函数
 	virtual void setRotateable(bool state);
 	virtual void setScaleable(bool state);
+
+	// 检测图形的状态是否发生改变，用于撤销重做
+	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 public:
 	bool isScaleable = true;
@@ -131,14 +139,9 @@ protected:
 	// 是否显示磁吸点
 	bool showMagPoint = false;
 
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-
 public:
-	/**
-	 * @brief serialize
-	 * @param out
-	 * 序列化方法：this地址 -> magPoint列表大小 -> magPoint地址列表
-	 */
+	// 对图形进行序列化，会输出图形的位置/旋转/大小/Z值，笔刷/画笔
+	// 此处不输出磁吸点信息
 	virtual void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const;
 	virtual bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr);
 };

@@ -3,6 +3,7 @@
 #include "../../global.h"
 #include <QGraphicsTextItem>
 
+// 文本对象的内部数据成员，并不是 AbstractBase 继承下来的，只是用来处理文本操作
 class DTextBase : public QGraphicsTextItem
 {
 	Q_OBJECT
@@ -23,12 +24,7 @@ public:
 	void focusToCenter();
 
 public:
-	/**
-	 * @brief serialize
-	 * @param out
-	 * 序列化：curCent
-	 */
+	// 序列化文本内容
 	void serialize(QDataStream &out) const;
-
 	void deserialize(QDataStream &in);
 };

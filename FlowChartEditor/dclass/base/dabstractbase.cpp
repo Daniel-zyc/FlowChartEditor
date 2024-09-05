@@ -4,8 +4,6 @@
 DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 	: QAbstractGraphicsShapeItem(parent)
 {
-	setBrush(defaultBrush);
-	setPen(defaultPen);
 	setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable
 			 | QGraphicsItem::ItemSendsGeometryChanges);
 	mags = new QList<MagPoint*>();
@@ -241,7 +239,6 @@ MagPoint* DAbstractBase::getMagPoint(QPointF p)
 
 void DAbstractBase::updateAllLinkLines()
 {
-	// qDebug() << "update";
 	for(MagPoint* mag : *mags) mag->updateAllLinkLines();
 }
 
@@ -250,7 +247,8 @@ void DAbstractBase::unLinkAllLines()
 	for(MagPoint* mag : *mags) mag->unlinkAllLines();
 }
 
-std::tuple<int,int,int> DAbstractBase::getLinedArrowType(){
+std::tuple<int,int,int> DAbstractBase::getLinedArrowType()
+{
     if(mags == nullptr) return std::make_tuple(0,0,0);
     int in = 0, out = 0, none = 0;
     for(MagPoint * mag : *mags){
