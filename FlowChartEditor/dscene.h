@@ -204,6 +204,10 @@ private:
 	void init();
 	// 对画布进行快照
 	void shot();
+    // 获取选中图形的中心点
+    QPointF getSelectedItemsCenter() const;
+    // 拷贝时的中心点
+    QPointF copyPoint;
 
 private:
 	// 调整参数

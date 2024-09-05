@@ -8,7 +8,6 @@ void SaveAndLoadManager::bindScene(DScene *scene){
 }
 
 bool SaveAndLoadManager::saveToFile(const QString &path){
-    qDebug() << "save";
     if(scene != nullptr) saveToFile(path, scene);
     else return false;
     return true;

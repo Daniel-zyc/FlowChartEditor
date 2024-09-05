@@ -559,6 +559,15 @@ void DScene::addCurveLineItem()
 	prepareInsertItem(new DCurveLineItem());
 }
 
+void DScene::selectAllItems()
+{
+    clearSelection();
+    QList<DAbstractBase*> items = DTool::itemsToBases(this->items());
+    for(DAbstractBase *item : items) {
+        item->setSelected(true);
+    }
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected items";
@@ -1321,16 +1330,32 @@ void DScene::dDrawItems(QList<QGraphicsItem*> items){
 }
 
 void DScene::copySelectedItems(){
-    PASTE_NUM = 1;
     copyData.clear();
+    copyPoint = getSelectedItemsCenter();
     QDataStream out(&copyData,QIODevice::WriteOnly);
 	Serializer::instance().serializeItems(out,this->selectedItems());
 }
 
+QPointF DScene::getSelectedItemsCenter() const {
+    QList<QGraphicsItem *> selected = selectedItems();
+    if (selected.isEmpty()) {
+        return QPointF();
+    }
+    QRectF boundingRect;
+    for (QGraphicsItem *item : selected) {
+        boundingRect = boundingRect.united(item->sceneBoundingRect());
+    }
+    QPointF center = boundingRect.center();
+    return center;
+}
+
 void DScene::pasteItems(){
-    if(copyData.isEmpty()) return;
+    if(copyData.isEmpty() || copyPoint == QPointF()) return;
+    QPoint globalPos = QCursor::pos();
+    QPoint viewPos = view->mapFromGlobal(globalPos);
+    QPointF scenePos = view->mapToScene(viewPos);
     QDataStream in(&copyData,QIODevice::ReadOnly);
 	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
-    DTool::moveItems(items);
+    DTool::moveItems(items,copyPoint,scenePos);
     dDrawItems(items);
 }

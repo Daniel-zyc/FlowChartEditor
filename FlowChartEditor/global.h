@@ -308,7 +308,7 @@ namespace DTool
 	bool inCircle(const QPointF& o, qreal r, const QPointF& p);
 
 	// 将要被拷贝的图形进行一定的平移操作
-	void moveItems(const QList<QGraphicsItem*> &items);
+    void moveItems(const QList<QGraphicsItem*> &items,const QPointF copyCenterPos, const QPointF cursorPos);
 
 	// 过滤掉所有 parent 存在于列表中的元素，以及所有不是 DAbstractBase 的元素
 	void filterRootBases(QList<QGraphicsItem*> &items);

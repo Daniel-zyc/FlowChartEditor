@@ -60,8 +60,6 @@ int TOTAL_MAX_Z_VALUE = 1;
 
 int SHOT_STATE = DConst::UNCHANGED;
 
-int PASTE_NUM = 1;
-
 qreal DTool::degToRad(qreal deg) { return deg / 180 * DConst::PI; }
 
 qreal DTool::radToDeg(qreal rad) { return rad / DConst::PI * 180; }
@@ -85,17 +83,16 @@ bool DTool::inCircle(const QPointF& o, qreal r, const QPointF& p)
 	return DTool::dist(o, p) <= r;
 }
 
-void DTool::moveItems(const QList<QGraphicsItem *> &items)
+void DTool::moveItems(const QList<QGraphicsItem *> &items,const QPointF copyCenterPos, const QPointF cursorPos)
 {
-    int currentCopytNum = PASTE_NUM ++ ;
+    QPointF delta = cursorPos - copyCenterPos;
 	QSet<QGraphicsItem*> S;
 	for (QGraphicsItem* item : items) S.insert(item);
 	for (QGraphicsItem* item : items)
 	{
 		if (item == nullptr || S.contains(item->parentItem())) continue;
-		QPointF curPos = item->pos();
-        item->setPos(curPos.x() + DConst::SHIFT_X * currentCopytNum,
-                     curPos.y() - DConst::SHIFT_Y * currentCopytNum);
+        QPointF curPos = item->pos();
+        item->setPos(curPos + delta);
 	}
 }
 
