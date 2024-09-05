@@ -156,13 +156,18 @@ void DScene::moveSelectedZUp(){
     QGraphicsItem * minColItem = nullptr;
     QList<QGraphicsItem*> colItems;
     QSet<QGraphicsItem *> S;
-    for(QGraphicsItem *item : selectedItems()){     // 找到选择的最小的z
+    QList<QGraphicsItem * > selectedItem = selectedItems();
+    DTool::filterRootBases(selectedItem);
+
+    for(QGraphicsItem *item : selectedItem){     // 找到选择的最小的z
         if(item->parentItem() != nullptr) continue;
         S.insert(item);
         colItems.append(item->collidingItems());
         if(minSelected > item->zValue()) minSelected = item->zValue();
         if(maxSelected < item->zValue()) maxSelected = item->zValue();
     }
+
+    DTool::filterRootBases(colItems);
     for(QGraphicsItem *item : colItems){            // 找到最小的碰撞z
         if(item->parentItem() != nullptr || S.contains(item)) continue;
         if(minColZ > item->zValue() && item->zValue() > maxSelected){
@@ -172,13 +177,16 @@ void DScene::moveSelectedZUp(){
     }
     if(minColItem == nullptr) minColZ = TOTAL_MAX_Z_VALUE + 1;
     int dis = minColZ - minSelected + 1;            // 将选择的所有插入到最小的选择z上面
-    for(QGraphicsItem * item : selectedItems()){
+    for(QGraphicsItem * item : selectedItem){
         if(item->parentItem() != nullptr) continue;
         qreal temdis = item->zValue() + dis;
         item->setZValue(temdis);
     }
 
-    for(QGraphicsItem * item : this->items()){
+    QList<QGraphicsItem * > allItems = this->items();
+    DTool::filterRootBases(allItems);
+
+    for(QGraphicsItem * item : allItems){
         if(item->parentItem() != nullptr || S.contains(item)) continue;
         if(item->zValue() > minColZ){
             qreal temdis = item->zValue() + dis + 2;
@@ -186,7 +194,8 @@ void DScene::moveSelectedZUp(){
             if(temdis > TOTAL_MAX_Z_VALUE) TOTAL_MAX_Z_VALUE = temdis + 1;
         }
     }
-    normalizeZValues();
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
 }
 void DScene::moveSelectedZDown(){
     int maxSelected = std::numeric_limits<qreal>::lowest();
@@ -196,7 +205,10 @@ void DScene::moveSelectedZDown(){
     QList<QGraphicsItem *> col;
     QGraphicsItem * maxColItem = nullptr;
 
-    for(QGraphicsItem *item : selectedItems()){     // 找到选择的最大值和最小值
+    QList<QGraphicsItem * > selectedItem = selectedItems();
+    DTool::filterRootBases(selectedItem);
+
+    for(QGraphicsItem *item : selectedItem){     // 找到选择的最大值和最小值
         if(item->parentItem() != nullptr) continue;
         col.append(item->collidingItems());
         S.insert(item);
@@ -204,6 +216,7 @@ void DScene::moveSelectedZDown(){
         if(minSelected > item->zValue()) minSelected = item->zValue();
     }
 
+    DTool::filterRootBases(col);
     for(QGraphicsItem * item : col){                // 找到碰撞的在选择的之下的最大值
         if(item->parentItem() != nullptr || S.contains(item)) continue;
         if(item->zValue() > maxCol && item->zValue() < minSelected){
@@ -220,7 +233,10 @@ void DScene::moveSelectedZDown(){
         maxCol = -1;
         dis = maxSelected - maxCol + 1;
     }
-    for(QGraphicsItem * item : this->items()){      // 将所有大于最大z的全部上移
+
+    QList<QGraphicsItem * > allItems = this->items();
+    DTool::filterRootBases(allItems);
+    for(QGraphicsItem * item : allItems){      // 将所有大于最大z的全部上移
         if(item->parentItem() != nullptr || S.contains(item) || item == maxColItem) continue;
         if(item->zValue() > maxSelected){
             qreal temdis = item->zValue() + dis + 2;
@@ -228,15 +244,19 @@ void DScene::moveSelectedZDown(){
             if(temdis > TOTAL_MAX_Z_VALUE) TOTAL_MAX_Z_VALUE = temdis + 1;
         }
     }
-    normalizeZValues();
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
 }
 
 void DScene::moveSelectedZMaxDown(){
     QList<QGraphicsItem *>items = this->items();
+    DTool::filterRootBases(items);
+    QList<QGraphicsItem *> selectedItem = this->selectedItems();
+    DTool::filterRootBases(selectedItem);
     QSet<QGraphicsItem *>S;
     qreal maxSelected = std::numeric_limits<qreal>::lowest();
 
-    for(QGraphicsItem * item : selectedItems()){
+    for(QGraphicsItem * item : selectedItem){
         if(item->parentItem() != nullptr) continue;
         S.insert(item);
         if(item->zValue() > maxSelected) maxSelected = item->zValue();
@@ -248,33 +268,19 @@ void DScene::moveSelectedZMaxDown(){
         if(temZ > TOTAL_MAX_Z_VALUE) TOTAL_MAX_Z_VALUE = temZ +1;
         item->setZValue(temZ);
     }
-    normalizeZValues();
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
 }
 
 void DScene::moveSelectedZMaxUp(){
     QList<QGraphicsItem*> items = selectedItems();
+    DTool::filterRootBases(items);
     for(QGraphicsItem * item : items){
         if(item->parentItem() != nullptr) continue;
         item->setZValue(TOTAL_MAX_Z_VALUE++);
     }
-    normalizeZValues();
-}
-
-void DScene::normalizeZValues() {
-    QList<QGraphicsItem *> itemsList = this->items();
-    DTool::filterRootBases(itemsList);
-
-    std::sort(itemsList.begin(), itemsList.end(), [](QGraphicsItem *a, QGraphicsItem *b) {
-        return a->zValue() < b->zValue();
-    });
-
-    qreal newZValue = 0;
-    for (QGraphicsItem *item : itemsList) {
-        item->setZValue(newZValue);
-        qDebug() << item->zValue();
-        ++newZValue;
-    }
-    TOTAL_MAX_Z_VALUE = newZValue;
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
 }
 
 
@@ -340,7 +346,7 @@ void DScene::addParagramItem()
 void DScene::addpentagonItem()
 {
     qDebug() << "add 五边形";
-    prepareInsertItem(new pentagonItem());
+    prepareInsertItem(new DPentagonItem());
 }
 
 void DScene::addhexagonItem()

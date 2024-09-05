@@ -292,8 +292,7 @@ bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	QPointF pos; in >> pos; setPos(pos);
 	qreal rot; in >> rot; setRotation(rot);
 	qreal scl; in >> scl; setScale(scl);
-	qreal zval; in >> zval; setZValue(zval);
-	
+    qreal zval; in >> zval; setZValue(zval + TOTAL_MAX_Z_VALUE ++ );
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
 

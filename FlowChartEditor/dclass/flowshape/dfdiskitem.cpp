@@ -43,13 +43,13 @@ void DFDiskItem::updateMagPoint()
 void DFDiskItem::updatePath()
 {
     path.clear();
-
-    path.moveTo(rect.left(), rect.top() * 2 / 3);
-    path.arcTo(rect.left(), rect.top(), rect.width(), rect.height() / 3, 180, -180);
+    path.moveTo(rect.right(), rect.top() * 2 / 3);
     path.lineTo(rect.right(), rect.bottom() * 2 / 3);
     path.arcTo(rect.left(), rect.bottom() / 3, rect.width(), rect.height() / 3, 0, -180);
     path.lineTo(rect.left(), rect.top() * 2 / 3);
     path.arcTo(rect.left(), rect.top(), rect.width(), rect.height() / 3, 180, 180);
+    path.arcTo(rect.left(), rect.top(), rect.width(), rect.height() / 3, 0, -180);
+    path.arcTo(rect.left(), rect.top(), rect.width(), rect.height() / 3, 180, -180);
 }
 
 void DFDiskItem::sizeToRect(QRectF nrect)

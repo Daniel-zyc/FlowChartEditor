@@ -165,8 +165,9 @@ private slots:
 
 	void delSelectedItem();
 
-	void saveFile();
-	void loadFile();
+    void saveFile();
+    void loadFile();
+    void newFile();
 
 	void copy();
 	void paste();
@@ -318,8 +319,6 @@ private:
 	QFormLayout *rightFontf;
 	QPushButton *textColor;
 	QPushButton *textFont;
-
-	QString filePath = nullptr;
 
 	QLabel *labelViewCord;
 	QLabel *labelSceneCord;

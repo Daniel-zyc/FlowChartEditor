@@ -632,29 +632,6 @@ void MainWindow::connectLeft()
 
 void MainWindow::connectRight()
 {
-	connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::SolidLine);
-	});
-	connect(ui->actDashLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashLine);
-	});
-	connect(ui->actDotLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DotLine);
-	});
-	connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashDotLine);
-	});
-	connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashDotDotLine);
-	});
-
-	connect(ui->actNoArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actOpenArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actDovetailArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actDiaArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actRoundArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-
 	connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
 		if(checked) setSceneBg(":/icon/blankBg.png");
 	});
@@ -673,7 +650,7 @@ void MainWindow::connectRight()
 	});
 	connect(reFileBtn, &QPushButton::clicked, this, [this]() {
 		if(customizeBg->isChecked()) {
-			QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg *.bmp"));
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", "JPEG Files(*.jpg *.jpeg);;PNG Files(*.png);;SVG Files(*.svg);;BMP Files(*.bmp)");
 			if(!fileName.isEmpty()) {
 				setSceneBg(fileName);
 			}else {
@@ -699,7 +676,7 @@ void MainWindow::connectRight()
 	});
 	connect(linecolor, &QPushButton::clicked, this, [this](){
 		QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-		scene->changeLineColor(color);
+        if(color.isValid()) scene->changeLineColor(color);
 	});
 	connect(borderColor, &QPushButton::clicked, this, &MainWindow::changeBorderColor);
 	connect(fillColor, &QPushButton::clicked, this, &MainWindow::changeFillColor);
@@ -712,9 +689,9 @@ void MainWindow::connectRight()
     connect(fillType, &QComboBox::activated, this, &MainWindow::changeFillType);
 	connect(picfile, &QPushButton::clicked, this, [this]() {
 		if(customizePic->isChecked()) {
-			QString filename = QFileDialog::getOpenFileName(this, "打开图片", "", ("Image(*.svg *.png *.jpg *.bmp"));
-			if(!filename.isEmpty()) {
-				QPixmap pixmap(filename);
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", "JPEG Files(*.jpg *.jpeg);;PNG Files(*.png);;SVG Files(*.svg);;BMP Files(*.bmp)");
+            if(!fileName.isEmpty()) {
+                QPixmap pixmap(fileName);
 				scene->changeFillPic(pixmap);
 			}
 		}
@@ -732,21 +709,37 @@ void MainWindow::createMenu()
 {
 	QMenu *lineType = new QMenu("线条");
 
-	QMenu *arrowTypeM = new QMenu("箭头类型");
-	arrowTypeM->addAction(ui->actNoArrow);
-	arrowTypeM->addAction(ui->actArrow);
-	arrowTypeM->addAction(ui->actOpenArrow);
-	arrowTypeM->addAction(ui->actDovetailArrow);
-	arrowTypeM->addAction(ui->actDiaArrow);
-	arrowTypeM->addAction(ui->actRoundArrow);
-	QActionGroup *arrowGroup = new QActionGroup(lineType);
-	arrowGroup->setExclusive(true);
-	arrowGroup->addAction(ui->actNoArrow);
-	arrowGroup->addAction(ui->actArrow);
-	arrowGroup->addAction(ui->actOpenArrow);
-	arrowGroup->addAction(ui->actDovetailArrow);
-	arrowGroup->addAction(ui->actDiaArrow);
-	arrowGroup->addAction(ui->actRoundArrow);
+    QMenu *arrowTypeEM = new QMenu("结尾箭头");
+    arrowTypeEM->addAction(ui->actNoArrowE);
+    arrowTypeEM->addAction(ui->actArrowE);
+    arrowTypeEM->addAction(ui->actOpenArrowE);
+    arrowTypeEM->addAction(ui->actDovetailArrowE);
+    arrowTypeEM->addAction(ui->actDiaArrowE);
+    arrowTypeEM->addAction(ui->actRoundArrowE);
+    QActionGroup *arrowEGroup = new QActionGroup(lineType);
+    arrowEGroup->setExclusive(true);
+    arrowEGroup->addAction(ui->actNoArrowE);
+    arrowEGroup->addAction(ui->actArrowE);
+    arrowEGroup->addAction(ui->actOpenArrowE);
+    arrowEGroup->addAction(ui->actDovetailArrowE);
+    arrowEGroup->addAction(ui->actDiaArrowE);
+    arrowEGroup->addAction(ui->actRoundArrowE);
+
+    QMenu *arrowTypeBM = new QMenu("起始箭头");
+    arrowTypeBM->addAction(ui->actNoArrowB);
+    arrowTypeBM->addAction(ui->actArrowB);
+    arrowTypeBM->addAction(ui->actOpenArrowB);
+    arrowTypeBM->addAction(ui->actDovetailArrowB);
+    arrowTypeBM->addAction(ui->actDiaArrowB);
+    arrowTypeBM->addAction(ui->actRoundArrowB);
+    QActionGroup *arrowBGroup = new QActionGroup(lineType);
+    arrowBGroup->setExclusive(true);
+    arrowBGroup->addAction(ui->actNoArrowB);
+    arrowBGroup->addAction(ui->actArrowB);
+    arrowBGroup->addAction(ui->actOpenArrowB);
+    arrowBGroup->addAction(ui->actDovetailArrowB);
+    arrowBGroup->addAction(ui->actDiaArrowB);
+    arrowBGroup->addAction(ui->actRoundArrowB);
 
 	QMenu *lineTypeM = new QMenu("线条类型");
 	lineTypeM->addAction(ui->actSolidLine);
@@ -762,8 +755,9 @@ void MainWindow::createMenu()
 	lineGroup->addAction(ui->actDashDotLine);
 	lineGroup->addAction(ui->actDashDDLine);
 
-	lineType->addMenu(arrowTypeM);
-	lineType->addMenu(lineTypeM);
+    lineType->addMenu(lineTypeM);
+    lineType->addMenu(arrowTypeBM);
+    lineType->addMenu(arrowTypeEM);
 	// ui->styleMenu->addMenu(lineType);
 	scene->getMenu()->addMenu(lineType);
 
@@ -898,12 +892,67 @@ void MainWindow::createStatusBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::SolidLine);
+    });
+    connect(ui->actDashLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashLine);
+    });
+    connect(ui->actDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DotLine);
+    });
+    connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotLine);
+    });
+    connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotDotLine);
+    });
+
+    connect(ui->actNoArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(0);
+    });
+    connect(ui->actArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(1);
+    });
+    connect(ui->actOpenArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(2);
+    });
+    connect(ui->actDovetailArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(3);
+    });
+    connect(ui->actDiaArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(4);
+    });
+    connect(ui->actRoundArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(5);
+    });
+
+    connect(ui->actNoArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(0);
+    });
+    connect(ui->actArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(1);
+    });
+    connect(ui->actOpenArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(2);
+    });
+    connect(ui->actDovetailArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(3);
+    });
+    connect(ui->actDiaArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(4);
+    });
+    connect(ui->actRoundArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(5);
+    });
+
 	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
 	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
 	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
+    connect(ui->actNewFile,SIGNAL(triggered(bool)),this,SLOT(newFile()));
 	connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
 	connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
 	connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
@@ -977,8 +1026,11 @@ void MainWindow::bindAction()
     connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
         if(!isInspect->isChecked()) {
             inspector->hide();
+            inspector->setAutoCheck(false);
             inspector->restoreView();
         }else {
+            inspector->show();
+            inspector->setAutoCheck(true);
             check();
         }
     });
@@ -987,7 +1039,7 @@ void MainWindow::bindAction()
 
 void MainWindow::saveAsSvg()
 {
-	QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamge(*.svg"));
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamges(*.svg"));
 	if(filePath == "") return;
 	QSvgGenerator generator;
 	generator.setFileName(filePath);
@@ -1065,7 +1117,7 @@ void MainWindow::changeBorderWidth()
 void MainWindow::changeBorderColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-	scene->changeBorderColor(color);
+    if(color.isValid()) scene->changeBorderColor(color);
 }
 
 void MainWindow::changeFillType()
@@ -1098,7 +1150,7 @@ void MainWindow::changeFillType()
 void MainWindow::changeFillColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-	scene->changeFillColor(color);
+    if(color.isValid()) scene->changeFillColor(color);
 	customizePic->setCheckState(Qt::Unchecked);
 }
 
@@ -1129,7 +1181,7 @@ QSet<DTextBase *> MainWindow::getTextBases()
 void MainWindow::changeTextCol()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-	scene->changeTextColor(color);
+    if(color.isValid()) scene->changeTextColor(color);
 }
 
 void MainWindow::changeTextFont()
@@ -1248,21 +1300,43 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-	if(filePath == nullptr || filePath == "")
-		filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
-	if(filePath == "") return;
-	QList<QGraphicsItem *> items = scene->selectedItems();
-	for(QGraphicsItem *item : items) {
-		item->setSelected(false);
-	}
-	SaveAndLoadManager::instance().saveToFile(filePath);
+    if(FILE_PATH == nullptr || FILE_PATH == "")
+        FILE_PATH = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    if(FILE_PATH == "") return;
+    SaveAndLoadManager::instance().saveToFile(FILE_PATH);
 }
 
 void MainWindow::loadFile(){
+    if(FILE_PATH == ""){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            saveFile();
+        }
+    }else{
+        saveFile();
+    }
 	QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
 	if(filePath == "") return;
-
+    FILE_PATH = filePath;
 	SaveAndLoadManager::instance().loadFromFile(filePath);
+}
+
+void MainWindow::newFile(){
+    qDebug() << " new file";
+    if(FILE_PATH == ""){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            saveFile();
+        }
+    }else{
+        saveFile();
+    }
+    FILE_PATH = "";
+    scene->clear();
 }
 
 void MainWindow::copy(){
@@ -1313,6 +1387,7 @@ void MainWindow::myDebug()
 }
 
 void MainWindow::check(){
+    inspector->setAutoCheck(true);
 	inspector->checkAll();
 	inspector->show();
 }

@@ -14,6 +14,8 @@ extern int PASTE_NUM;
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 
+extern QString FILE_PATH;
+
 // 将画面上的所有物品大小放大的倍数，同时视角缩小相应的倍数
 constexpr qreal globalScale = 4;
 constexpr qreal qrealMax = std::numeric_limits<qreal>::max();
@@ -80,6 +82,7 @@ enum UserTypes
 	DParagramItemType = QGraphicsItem::UserType + 104,
 	DTrapItemType = QGraphicsItem::UserType + 105,
 	DDiaItemType = QGraphicsItem::UserType + 106,
+    DPentagonItemType = QGraphicsItem::UserType + 107,
 
 	DFStartEndItemType = QGraphicsItem::UserType + 200,
 	DFPredefineItemType = QGraphicsItem::UserType + 201,
@@ -322,6 +325,9 @@ namespace DTool
 
 	// 将 item 转为 shape base, 会进行检查
 	QList<DShapeBase*> itemToShape(const QList<QGraphicsItem*> &items);
+
+    // normalize item的zvalue
+    void normalizeZValues(QList<QGraphicsItem *> &items);
 };
 
 struct FormworkData
