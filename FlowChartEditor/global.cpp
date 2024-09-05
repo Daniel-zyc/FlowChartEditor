@@ -1,6 +1,6 @@
 #include "global.h"
-#include "dabstractbase.h"
-#include "dshapebase.h"
+#include "dclass/base/dabstractbase.h"
+#include "dclass/base/dshapebase.h"
 
 #include <cmath>
 
@@ -14,6 +14,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DDiaItemType,
 				DParagramItemType,
 				DTrapItemType,
+                DPentagonItemType,
 
 				// shape for flowchart
 				DFDocumentItemType,
@@ -32,14 +33,28 @@ QSet<int> registeredTypes = QSet<int>(
 				DFDelayItemType,
 				DFOrItemType,
 				DFSummaryconnItemType,
+				DFCardItemType,
+				DFCompareItemType,
+				DFMergeItemType,
+				DFOffPageItemType,
+				DFSortItemType,
+				DFStoreDataItemType,
+				DFShowItemType,
+				DFDirectStorageItemType,
+				DFDiskItemType,
+				DFMultiDocItemType,
+				DFOrderStorageItemType,
 
 				// text
 				DTextItemType,
 
 				// line
 				DLineItemType,
-				DCurveLineItemType
+				DCurveLineItemType,
+				DPolyLineItemType
 			});
+
+int TOTAL_MAX_Z_VALUE = 1;
 
 int SHOT_STATE = DConst::UNCHANGED;
 
@@ -89,13 +104,16 @@ void DTool::filterRootBases(QList<QGraphicsItem*>& items)
         S.insert(item);
     }
 
-    for (int i = items.size() - 1; i >= 0; i--) {
-        if (items[i] == nullptr || !isAbstract(items[i]->type())
-            || S.contains(items[i]->parentItem()))
-        {
-            items.removeAt(i);
-        }
-    }
+	for (int i = 0; i < items.size(); i++)
+	{
+		if (items[i] == nullptr || !isAbstract(items[i]->type())
+			|| S.contains(items[i]->parentItem()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+			i--;
+		}
+	}
 }
 
 void DTool::filterBases(QList<QGraphicsItem*>& items)
@@ -106,6 +124,7 @@ void DTool::filterBases(QList<QGraphicsItem*>& items)
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
+			i--;
 		}
 	}
 }
@@ -137,7 +156,23 @@ void DTool::filterNoparent(QList<DShapeBase*>& items)
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
+			i--;
 		}
+}
+
+void DTool::normalizeZValues(QList<QGraphicsItem *> &items) {
+    DTool::filterRootBases(items);
+
+    std::sort(items.begin(), items.end(), [](QGraphicsItem *a, QGraphicsItem *b) {
+        return a->zValue() < b->zValue();
+    });
+
+    qreal newZValue = 1;
+    for (QGraphicsItem *item : items) {
+        item->setZValue(newZValue);
+        ++newZValue;
+    }
+    TOTAL_MAX_Z_VALUE = newZValue;
 }
 
 bool DTool::isShape(int type)

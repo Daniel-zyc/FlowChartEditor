@@ -94,7 +94,9 @@ DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
 	{
 		if(item->checkMagPoint(p))
 			return item;
-		if((item->isShape() || item->isText()) && item->contains(p))
+		if(item->isShape() && item->contains(p))
+			return nullptr;
+		if(item->isText() && item->parentItem() == nullptr && item->contains(p))
 			return nullptr;
 	}
 	return nullptr;
@@ -143,74 +145,154 @@ void DScene::moveSelectedZ(qreal value){
     for(QGraphicsItem *item : selectedItems()){
         if(item->parentItem() != nullptr) continue;
         qreal z = item->zValue();
-        qDebug() << "设置为" << z + value;
         item->setZValue(z + value);
     }
 }
 
-void DScene::moveSelectedZMaxUp(){
-    QSet<QGraphicsItem*> S;
+void DScene::moveSelectedZUp(){
+    int minColZ = std::numeric_limits<qreal>::max();
+    int minSelected = std::numeric_limits<qreal>::max();
+    int maxSelected = std::numeric_limits<qreal>::lowest();
+    QGraphicsItem * minColItem = nullptr;
     QList<QGraphicsItem*> colItems;
-    qreal selectedMin = std::numeric_limits<qreal>::max();
-    qreal colMax = std::numeric_limits<qreal>::lowest();
-    for(QGraphicsItem * item : selectedItems()){
-        if(item->parentItem() == nullptr && item->zValue() < selectedMin) selectedMin = item->zValue();
+    QSet<QGraphicsItem *> S;
+    QList<QGraphicsItem * > selectedItem = selectedItems();
+    DTool::filterRootBases(selectedItem);
+
+    for(QGraphicsItem *item : selectedItem){     // 找到选择的最小的z
+        if(item->parentItem() != nullptr) continue;
         S.insert(item);
         colItems.append(item->collidingItems());
+        if(minSelected > item->zValue()) minSelected = item->zValue();
+        if(maxSelected < item->zValue()) maxSelected = item->zValue();
     }
-    for(QGraphicsItem * item : colItems)
-        if(!S.contains(item)
-            && item->zValue() > colMax
-            && item->parentItem() == nullptr
-            && dynamic_cast<DAbstractBase*>(item) != nullptr)
-            colMax = item->zValue();
-    if(selectedMin > colMax) return;
-    qreal dis = colMax - selectedMin + 1;
-    for(QGraphicsItem * item : selectedItems())
-        if(item->parentItem() == nullptr){
-            qreal temdis = item->zValue();
-            qDebug() << "将z值设置为" << temdis + dis;
-            item->setZValue(temdis + dis);
+
+    DTool::filterRootBases(colItems);
+    for(QGraphicsItem *item : colItems){            // 找到最小的碰撞z
+        if(item->parentItem() != nullptr || S.contains(item)) continue;
+        if(minColZ > item->zValue() && item->zValue() > maxSelected){
+            minColItem = item;
+            minColZ = item->zValue();
         }
+    }
+    if(minColItem == nullptr) minColZ = TOTAL_MAX_Z_VALUE + 1;
+    int dis = minColZ - minSelected + 1;            // 将选择的所有插入到最小的选择z上面
+    for(QGraphicsItem * item : selectedItem){
+        if(item->parentItem() != nullptr) continue;
+        qreal temdis = item->zValue() + dis;
+        item->setZValue(temdis);
+    }
+
+    QList<QGraphicsItem * > allItems = this->items();
+    DTool::filterRootBases(allItems);
+
+    for(QGraphicsItem * item : allItems){
+        if(item->parentItem() != nullptr || S.contains(item)) continue;
+        if(item->zValue() > minColZ){
+            qreal temdis = item->zValue() + dis + 2;
+            item->setZValue(temdis);
+            if(temdis > TOTAL_MAX_Z_VALUE) TOTAL_MAX_Z_VALUE = temdis + 1;
+        }
+    }
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
+}
+void DScene::moveSelectedZDown(){
+    int maxSelected = std::numeric_limits<qreal>::lowest();
+    int minSelected = std::numeric_limits<qreal>::max();
+    int maxCol = std::numeric_limits<qreal>::lowest();
+    QSet<QGraphicsItem *> S;
+    QList<QGraphicsItem *> col;
+    QGraphicsItem * maxColItem = nullptr;
+
+    QList<QGraphicsItem * > selectedItem = selectedItems();
+    DTool::filterRootBases(selectedItem);
+
+    for(QGraphicsItem *item : selectedItem){     // 找到选择的最大值和最小值
+        if(item->parentItem() != nullptr) continue;
+        col.append(item->collidingItems());
+        S.insert(item);
+        if(maxSelected < item->zValue()) maxSelected = item->zValue();
+        if(minSelected > item->zValue()) minSelected = item->zValue();
+    }
+
+    DTool::filterRootBases(col);
+    for(QGraphicsItem * item : col){                // 找到碰撞的在选择的之下的最大值
+        if(item->parentItem() != nullptr || S.contains(item)) continue;
+        if(item->zValue() > maxCol && item->zValue() < minSelected){
+            maxColItem = item;
+            maxCol = item->zValue();
+        }
+    }
+    int dis = maxSelected - maxCol + 1;
+    if(maxColItem != nullptr){                      // 上移动最大碰撞item
+        qDebug() << dis+maxColItem->zValue();
+        qreal tem = dis + maxColItem->zValue();
+        maxColItem->setZValue(tem);
+    }else{
+        maxCol = -1;
+        dis = maxSelected - maxCol + 1;
+    }
+
+    QList<QGraphicsItem * > allItems = this->items();
+    DTool::filterRootBases(allItems);
+    for(QGraphicsItem * item : allItems){      // 将所有大于最大z的全部上移
+        if(item->parentItem() != nullptr || S.contains(item) || item == maxColItem) continue;
+        if(item->zValue() > maxSelected){
+            qreal temdis = item->zValue() + dis + 2;
+            item->setZValue(temdis);
+            if(temdis > TOTAL_MAX_Z_VALUE) TOTAL_MAX_Z_VALUE = temdis + 1;
+        }
+    }
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
 }
 
 void DScene::moveSelectedZMaxDown(){
-    QSet<QGraphicsItem*> S;
-    QList<QGraphicsItem*> colItems;
-    qreal selectedMax = std::numeric_limits<qreal>::lowest();
-    qreal colMin = std::numeric_limits<qreal>::max();
-    for(QGraphicsItem * item : selectedItems()){
-        if(item->parentItem() == nullptr && item->zValue() > selectedMax) selectedMax = item->zValue();
+    QList<QGraphicsItem *>items = this->items();
+    DTool::filterRootBases(items);
+    QList<QGraphicsItem *> selectedItem = this->selectedItems();
+    DTool::filterRootBases(selectedItem);
+    QSet<QGraphicsItem *>S;
+    qreal maxSelected = std::numeric_limits<qreal>::lowest();
+
+    for(QGraphicsItem * item : selectedItem){
+        if(item->parentItem() != nullptr) continue;
         S.insert(item);
-        colItems.append(item->collidingItems());
+        if(item->zValue() > maxSelected) maxSelected = item->zValue();
     }
-    for(QGraphicsItem * item : colItems)
-        if(!S.contains(item)
-            && item->zValue() < colMin
-            && item->parentItem() == nullptr
-            && dynamic_cast<DAbstractBase*>(item) != nullptr){
-            colMin = item->zValue();
-        }
-    if(selectedMax < colMin) return;
-    qreal dis = selectedMax - colMin + 1;
-    for(QGraphicsItem * item : selectedItems())
-        if(item->parentItem() == nullptr){
-            qreal temdis = item->zValue();
-            qDebug() << "将z值设置为"  << temdis - dis;
-            item->setZValue(temdis - dis);
-        }
+
+    for(QGraphicsItem *item : items){
+        if(item->parentItem() != nullptr || S.contains(item)) continue;
+        qreal temZ = item->zValue() + maxSelected + 1;
+        if(temZ > TOTAL_MAX_Z_VALUE) TOTAL_MAX_Z_VALUE = temZ +1;
+        item->setZValue(temZ);
+    }
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
+}
+
+void DScene::moveSelectedZMaxUp(){
+    QList<QGraphicsItem*> items = selectedItems();
+    DTool::filterRootBases(items);
+    for(QGraphicsItem * item : items){
+        if(item->parentItem() != nullptr) continue;
+        item->setZValue(TOTAL_MAX_Z_VALUE++);
+    }
+    QList<QGraphicsItem *> sceneItems = this->items();
+    DTool::normalizeZValues(sceneItems);
 }
 
 
 void DScene::prepareInsertItem(DAbstractBase* item)
 {
-	qDebug() << "prepare insert item";
-	qDebug() << "item type: " << item->type();
+    // qDebug() << "prepare insert item";
+    // qDebug() << "item type: " << item->type();
 
 	if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT
 	   || insert_state == DConst::INSERT_LINE)
 	{
-		qDebug() << "delete uninserted item";
+        // qDebug() << "delete uninserted item";
 		delete modifiedShape;
 		modifiedShape = nullptr;
 	}
@@ -264,7 +346,7 @@ void DScene::addParagramItem()
 void DScene::addpentagonItem()
 {
     qDebug() << "add 五边形";
-    prepareInsertItem(new pentagonItem());
+    prepareInsertItem(new DPentagonItem());
 }
 
 void DScene::addhexagonItem()
@@ -310,11 +392,13 @@ void DScene::addDFInternalStoreItem()
 	qDebug() << "add DFInternalStoreItem";
 	prepareInsertItem(new DFInternalStoreItem());
 }
+
 void DScene::addDFPrepareItem()
 {
 	qDebug() << "add DFPrepareItem";
 	prepareInsertItem(new DFPrepareItem());
 }
+
 void DScene::addDFDelayItem()
 {
     qDebug() << "add DFDelayItem";
@@ -326,7 +410,6 @@ void DScene::addDFInformationItem()
 	qDebug() << "add DFInformationItem";
 	prepareInsertItem(new DFInformationItem());
 }
-
 
 void DScene::addDFCardItem()
 {
@@ -343,16 +426,19 @@ void DScene::addDFCompareItem()
 void DScene::addDFDirecrAccessItem()
 {
     qDebug() << "add 直接访问存储器";
+    prepareInsertItem(new DFDirectStorageItem());
 }
 
 void DScene::addDFDiskItem()
 {
     qDebug() << "add 磁盘";
+    prepareInsertItem(new DFDiskItem());
 }
 
 void DScene::addDFDisplayItem()
 {
     qDebug() << "add 显示";
+    prepareInsertItem(new DFShowItem());
 }
 
 void DScene::addDFMergeItem()
@@ -364,7 +450,7 @@ void DScene::addDFMergeItem()
 void DScene::addDFMultiDocItem()
 {
     qDebug() << "add 多文档";
-    prepareInsertItem(new DMultiDocItem());
+    prepareInsertItem(new DFMultiDocItem());
 }
 
 void DScene::addDFOffPageItem()
@@ -377,6 +463,7 @@ void DScene::addDFOffPageItem()
 void DScene::addDFSequentialAccessItem()
 {
     qDebug() << "add 顺序访问存储器";
+    prepareInsertItem(new DFOrderStorageItem());
 }
 
 void DScene::addDFStoreDataItem()
@@ -483,16 +570,16 @@ void DScene::delSelectedItem()
 		if((shape = dynamic_cast<DShapeBase*>(item))) shape->unLinkAllLines();
 		else if((line = dynamic_cast<DLineBase*>(item)))
 		{
-			line->unlinkBegin();
-			line->unlinkEnd();
+			line->unlinkBeginUpdate();
+			line->unlinkEndUpdate();
 		}
+		item->setParentItem(nullptr);
 	}
 	for(DAbstractBase* item : items)
 	{
-		item->setParentItem(nullptr);
-		this->removeItem(item);
+		removeItem(item);
+		delete item;
 	}
-	for(QGraphicsItem *item : items) delete item;
 }
 
 void DScene::setItemSelected(QGraphicsItem * item){
@@ -942,7 +1029,8 @@ QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
 	QList<DShapeBase*> shapes = DTool::itemToShape(items);
 	DTool::filterNoparent(shapes);
 
-	removeItem(magLineH); removeItem(magLineV);
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
 
 	QPointF pos = item->pos();
 	QRectF rc = item->mapRectToScene(item->sizeRect());
@@ -1025,6 +1113,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	{
 		event->accept();
 		modifiedShape->setSelected(true);
+        modifiedShape->setZValue(TOTAL_MAX_Z_VALUE++);          // 累加z值
 		addItem(modifiedShape);
 		if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT)
 		{
@@ -1137,11 +1226,17 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 		Inspector::instance()->checkAll();
 	}
 
+	if(drag_state != DConst::NONE)
+	{
+		for(DLineBase* line : getSelectedLines())
+			line->checkAutoUnlinkLine();
+	}
+
 	insert_state = DConst::NONE;
 	inter_state = DConst::NONE;
 	drag_state = DConst::NONE;
-	removeItem(magLineH);
-	removeItem(magLineV);
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
 	modifiedShape = nullptr;
 
 mouseReleaseEventPass:

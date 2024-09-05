@@ -100,6 +100,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DTriItemType: shape = new DTriItem(); break;
 			case DParagramItemType: shape = new DParagramItem(); break;
 			case DTrapItemType: shape = new DTrapItem(); break;
+            case DPentagonItemType: shape = new DPentagonItem(); break;
 
 			case DDiaItemType: shape = new DDiaItem(); break;
 			case DFDocumentItemType: shape = new DFDocumentItem(); break;
@@ -118,6 +119,17 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DFDelayItemType: shape = new DFDelayItem(); break;
 			case DFOrItemType: shape = new DFOrItem(); break;
 			case DFSummaryconnItemType: shape = new DFSummaryconnItem(); break;
+			case DFCardItemType: shape = new DFCardItem(); break;
+			case DFCompareItemType: shape = new DFCompareItem(); break;
+			case DFMergeItemType: shape = new DFMergeItem(); break;
+			case DFOffPageItemType: shape = new DFOffPageItem(); break;
+			case DFSortItemType: shape = new DFSortItem(); break;
+			case DFStoreDataItemType: shape = new DFStoreDataItem(); break;
+			case DFShowItemType: shape = new DFShowItem(); break;
+			case DFDirectStorageItemType: shape = new DFDirectStorageItem(); break;
+			case DFDiskItemType: shape = new DFDiskItem(); break;
+			case DFMultiDocItemType: shape = new DFMultiDocItem(); break;
+			case DFOrderStorageItemType: shape = new DFOrderStorageItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
@@ -156,6 +168,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		switch(type) {
 			case DLineItemType: line = new DLineItem(); break;
 			case DCurveLineItemType: line = new DCurveLineItem(); break;
+			case DPolyLineItemType: line = new DPolyLineItem(); break;
 		}
 		if(!line || !line->deserialize(in))
 		{

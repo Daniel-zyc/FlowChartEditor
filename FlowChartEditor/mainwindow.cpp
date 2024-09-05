@@ -3,8 +3,8 @@
 #include <QSvgGenerator>
 #include <QPainter>
 #include <QFileDialog>
-#include "dlineitem.h"
-#include "dshapebase.h"
+#include "dclass/line/dlineitem.h"
+#include "dclass/base/dshapebase.h"
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
@@ -56,8 +56,10 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actSelectTextCol);
 	m->addAction(ui->actSelectTextFont);
 	m->addAction(ui->actStyleSheet);
-	// m->addAction(ui->actMoveSelectedZUp);
-	// m->addAction(ui->actMoveSelectedZDown);
+
+    m->addAction(ui->actMoveSelectedZUp);
+    m->addAction(ui->actMoveSelectedZDown);
+
 	m->addAction(ui->actMoveSelectedMaxZUp);
 	m->addAction(ui->actMoveSelectedMaxZDown);
 
@@ -976,8 +978,11 @@ void MainWindow::bindAction()
     connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
         if(!isInspect->isChecked()) {
             inspector->hide();
+            inspector->setAutoCheck(false);
             inspector->restoreView();
         }else {
+            inspector->show();
+            inspector->setAutoCheck(true);
             check();
         }
     });
@@ -1188,12 +1193,12 @@ void MainWindow::moveDown()
 
 void MainWindow::moveSelectedZUp(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZUp(1);
+    else scene->moveSelectedZUp();
 }
 
 void MainWindow::moveSelectedZDown(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZDown(-1);
+    else scene->moveSelectedZDown();
 }
 
 void MainWindow::moveSelectedMaxZUp(){
@@ -1312,6 +1317,7 @@ void MainWindow::myDebug()
 }
 
 void MainWindow::check(){
+    inspector->setAutoCheck(true);
 	inspector->checkAll();
 	inspector->show();
 }
