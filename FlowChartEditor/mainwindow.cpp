@@ -905,6 +905,7 @@ void MainWindow::bindAction()
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
 	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
+    connect(ui->actNewFile,SIGNAL(triggered(bool)),this,SLOT(newFile()));
 	connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
 	connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
 	connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
@@ -1252,21 +1253,43 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-	if(filePath == nullptr || filePath == "")
-		filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
-	if(filePath == "") return;
-	QList<QGraphicsItem *> items = scene->selectedItems();
-	for(QGraphicsItem *item : items) {
-		item->setSelected(false);
-	}
-	SaveAndLoadManager::instance().saveToFile(filePath);
+    if(FILE_PATH == nullptr || FILE_PATH == "")
+        FILE_PATH = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    if(FILE_PATH == "") return;
+    SaveAndLoadManager::instance().saveToFile(FILE_PATH);
 }
 
 void MainWindow::loadFile(){
+    if(FILE_PATH == ""){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            saveFile();
+        }
+    }else{
+        saveFile();
+    }
 	QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
 	if(filePath == "") return;
-
+    FILE_PATH = filePath;
 	SaveAndLoadManager::instance().loadFromFile(filePath);
+}
+
+void MainWindow::newFile(){
+    qDebug() << " new file";
+    if(FILE_PATH == ""){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            saveFile();
+        }
+    }else{
+        saveFile();
+    }
+    FILE_PATH = "";
+    scene->clear();
 }
 
 void MainWindow::copy(){

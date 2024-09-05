@@ -167,6 +167,7 @@ private slots:
 
     void saveFile();
     void loadFile();
+    void newFile();
 
     void copy();
     void paste();
@@ -319,6 +320,4 @@ private:
     QFormLayout *rightFontf;
     QPushButton *textColor;
     QPushButton *textFont;
-
-    QString filePath = nullptr;
 };
