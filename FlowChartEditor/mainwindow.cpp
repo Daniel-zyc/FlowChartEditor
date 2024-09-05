@@ -3,8 +3,8 @@
 #include <QSvgGenerator>
 #include <QPainter>
 #include <QFileDialog>
-#include "dlineitem.h"
-#include "dshapebase.h"
+#include "dclass/line/dlineitem.h"
+#include "dclass/base/dshapebase.h"
 
 #include "saveandloadmanager.h"
 #include "undomanager.h"
@@ -56,8 +56,10 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actSelectTextCol);
 	m->addAction(ui->actSelectTextFont);
 	m->addAction(ui->actStyleSheet);
-	// m->addAction(ui->actMoveSelectedZUp);
-	// m->addAction(ui->actMoveSelectedZDown);
+
+    m->addAction(ui->actMoveSelectedZUp);
+    m->addAction(ui->actMoveSelectedZDown);
+
 	m->addAction(ui->actMoveSelectedMaxZUp);
 	m->addAction(ui->actMoveSelectedMaxZDown);
 
@@ -981,13 +983,7 @@ void MainWindow::bindAction()
             check();
         }
     });
-    // connect(isOpenReference, &QCheckBox::checkStateChanged, this, [this]() {
-    //     if(!isOpenReference->isChecked()) {
-    //         scene->changeFillColor(Qt::white);
-    //     }else {
-
-    //     }
-    // });
+    connect(isOpenReference, &QCheckBox::checkStateChanged, this, &MainWindow::setAutoAlign);
 }
 
 void MainWindow::saveAsSvg()
@@ -1194,12 +1190,12 @@ void MainWindow::moveDown()
 
 void MainWindow::moveSelectedZUp(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZUp(1);
+    else scene->moveSelectedZUp();
 }
 
 void MainWindow::moveSelectedZDown(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZDown(-1);
+    else scene->moveSelectedZDown();
 }
 
 void MainWindow::moveSelectedMaxZUp(){
@@ -1303,6 +1299,12 @@ void MainWindow::changeAlign()
     case 6 : itemHorizEven(); break;
     case 7 : itemVertiEven(); break;
     }
+}
+
+void MainWindow::setAutoAlign()
+{
+    if(isOpenReference->isChecked()) scene->setAutoAlign(true);
+    else scene->setAutoAlign(false);
 }
 
 void MainWindow::myDebug()

@@ -3,7 +3,7 @@
 #include "dscene.h"
 #include "dview.h"
 #include "dfinddialog.h"
-#include "dtextitem.h"
+#include "dclass/text/dtextitem.h"
 #include "inspector.h"
 
 #include <QSet>
@@ -186,6 +186,8 @@ private slots:
     void itemHorizEven() {scene->itemHorizEven();}
     void itemVertiEven() {scene->itemVertiEven();}
     void changeAlign();
+
+    void setAutoAlign();
 
 	void myDebug();
 
