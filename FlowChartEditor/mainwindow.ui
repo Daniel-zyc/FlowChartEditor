@@ -33,11 +33,6 @@
      <string>编辑</string>
     </property>
    </widget>
-   <widget class="QMenu" name="addMenu">
-    <property name="title">
-     <string>插入</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="styleMenu">
     <property name="title">
      <string>样式</string>
@@ -53,11 +48,16 @@
      <string>帮助</string>
     </property>
    </widget>
+   <widget class="QMenu" name="itemMenu">
+    <property name="title">
+     <string>图形</string>
+    </property>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
-   <addaction name="addMenu"/>
-   <addaction name="styleMenu"/>
    <addaction name="viewMenu"/>
+   <addaction name="itemMenu"/>
+   <addaction name="styleMenu"/>
    <addaction name="helpMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -122,51 +122,6 @@
     <string>退出</string>
    </property>
   </action>
-  <action name="actAddLine">
-   <property name="text">
-    <string>直线</string>
-   </property>
-  </action>
-  <action name="actAddEll">
-   <property name="text">
-    <string>椭圆</string>
-   </property>
-  </action>
-  <action name="actAddRect">
-   <property name="text">
-    <string>矩形</string>
-   </property>
-  </action>
-  <action name="actAddRoundRect">
-   <property name="text">
-    <string>圆角矩形</string>
-   </property>
-  </action>
-  <action name="actAddRhom">
-   <property name="text">
-    <string>菱形</string>
-   </property>
-  </action>
-  <action name="actAddPargram">
-   <property name="text">
-    <string>平行四边形</string>
-   </property>
-  </action>
-  <action name="actAddTrap">
-   <property name="text">
-    <string>梯形</string>
-   </property>
-  </action>
-  <action name="actAddTri">
-   <property name="text">
-    <string>三角形</string>
-   </property>
-  </action>
-  <action name="actSetTextFont">
-   <property name="text">
-    <string>文本字体</string>
-   </property>
-  </action>
   <action name="actEnlarge">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::ZoomIn"/>
@@ -225,46 +180,6 @@
     <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actLayerUp">
-   <property name="text">
-    <string>上移一层</string>
-   </property>
-  </action>
-  <action name="actLayerDown">
-   <property name="text">
-    <string>下移一层</string>
-   </property>
-  </action>
-  <action name="actLayerTop">
-   <property name="text">
-    <string>置为顶层</string>
-   </property>
-  </action>
-  <action name="actLayerBottom">
-   <property name="text">
-    <string>置为底层</string>
-   </property>
-  </action>
-  <action name="actAddText">
-   <property name="text">
-    <string>文本</string>
-   </property>
-  </action>
-  <action name="actSetTextColor">
-   <property name="text">
-    <string>文本颜色</string>
-   </property>
-  </action>
-  <action name="actSetBorderColor">
-   <property name="text">
-    <string>边框颜色</string>
-   </property>
-  </action>
-  <action name="actSetFillColor">
-   <property name="text">
-    <string>填充颜色</string>
-   </property>
-  </action>
   <action name="actCopy">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::EditCopy"/>
@@ -299,6 +214,10 @@
    </property>
   </action>
   <action name="actMoveLeft">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/left.svg</normaloff>:/icon/left.svg</iconset>
+   </property>
    <property name="text">
     <string>左移</string>
    </property>
@@ -307,6 +226,10 @@
    </property>
   </action>
   <action name="actMoveRight">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/right.svg</normaloff>:/icon/right.svg</iconset>
+   </property>
    <property name="text">
     <string>右移</string>
    </property>
@@ -315,6 +238,10 @@
    </property>
   </action>
   <action name="actMoveUp">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/up.svg</normaloff>:/icon/up.svg</iconset>
+   </property>
    <property name="text">
     <string>上移</string>
    </property>
@@ -323,6 +250,10 @@
    </property>
   </action>
   <action name="actMoveDown">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/down.svg</normaloff>:/icon/down.svg</iconset>
+   </property>
    <property name="text">
     <string>下移</string>
    </property>
@@ -331,6 +262,9 @@
    </property>
   </action>
   <action name="actFindandReplace">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditFind"/>
+   </property>
    <property name="text">
     <string>查找和替换</string>
    </property>
@@ -369,6 +303,9 @@
    </property>
   </action>
   <action name="actSelectAll">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditSelectAll"/>
+   </property>
    <property name="text">
     <string>全选</string>
    </property>
@@ -377,101 +314,181 @@
    </property>
   </action>
   <action name="actViewRotateCCW">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRestore"/>
+   </property>
    <property name="text">
-    <string>向左旋转</string>
+    <string>视角向左旋转</string>
    </property>
   </action>
   <action name="actViewRotateCW">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+   </property>
    <property name="text">
-    <string>向右旋转</string>
+    <string>视角向右旋转</string>
    </property>
   </action>
   <action name="actViewEnlarge">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ZoomIn"/>
+   </property>
    <property name="text">
-    <string>放大</string>
+    <string>视角放大</string>
+   </property>
+   <property name="toolTip">
+    <string>视角放大</string>
    </property>
   </action>
   <action name="actViewShrink">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ZoomOut"/>
+   </property>
    <property name="text">
-    <string>缩小</string>
+    <string>视角缩小</string>
    </property>
    <property name="toolTip">
-    <string>缩小</string>
+    <string>视角缩小</string>
    </property>
   </action>
   <action name="actEditShrink">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ZoomOut"/>
+   </property>
    <property name="text">
-    <string>缩小</string>
+    <string>图形缩小</string>
    </property>
    <property name="toolTip">
-    <string>缩小</string>
+    <string>图形缩小</string>
    </property>
   </action>
   <action name="actEditEnlarge">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ZoomIn"/>
+   </property>
    <property name="text">
-    <string>放大</string>
+    <string>图形放大</string>
+   </property>
+   <property name="toolTip">
+    <string>图形放大</string>
    </property>
   </action>
   <action name="actEditRotateCCW">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRestore"/>
+   </property>
    <property name="text">
-    <string>向左旋转</string>
+    <string>图形向左旋转</string>
    </property>
   </action>
   <action name="actEditRotateCW">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+   </property>
    <property name="text">
-    <string>向右旋转</string>
+    <string>图形向右旋转</string>
    </property>
   </action>
   <action name="actViewMoveLeft">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/left.svg</normaloff>:/icon/left.svg</iconset>
+   </property>
    <property name="text">
-    <string>左移</string>
+    <string>视角左移</string>
+   </property>
+   <property name="toolTip">
+    <string>视角左移</string>
    </property>
   </action>
   <action name="actViewMoveRight">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/right.svg</normaloff>:/icon/right.svg</iconset>
+   </property>
    <property name="text">
-    <string>右移</string>
+    <string>视角右移</string>
+   </property>
+   <property name="toolTip">
+    <string>视角右移</string>
    </property>
   </action>
   <action name="actViewMoveUp">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/up.svg</normaloff>:/icon/up.svg</iconset>
+   </property>
    <property name="text">
-    <string>上移</string>
+    <string>视角上移</string>
+   </property>
+   <property name="toolTip">
+    <string>视角上移</string>
    </property>
   </action>
   <action name="actViewMoveDown">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/down.svg</normaloff>:/icon/down.svg</iconset>
+   </property>
    <property name="text">
-    <string>下移</string>
+    <string>视角下移</string>
+   </property>
+   <property name="toolTip">
+    <string>视角下移</string>
    </property>
   </action>
   <action name="actEditMoveLeft">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/left.svg</normaloff>:/icon/left.svg</iconset>
+   </property>
    <property name="text">
-    <string>左移</string>
+    <string>图形左移</string>
+   </property>
+   <property name="toolTip">
+    <string>图形左移</string>
    </property>
   </action>
   <action name="actEditMoveRight">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/right.svg</normaloff>:/icon/right.svg</iconset>
+   </property>
    <property name="text">
-    <string>右移</string>
+    <string>图形右移</string>
    </property>
    <property name="toolTip">
-    <string>右移</string>
+    <string>图形右移</string>
    </property>
   </action>
   <action name="actEditMoveUp">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/up.svg</normaloff>:/icon/up.svg</iconset>
+   </property>
    <property name="text">
-    <string>上移</string>
+    <string>图形上移</string>
    </property>
    <property name="toolTip">
-    <string>上移</string>
+    <string>图形上移</string>
    </property>
   </action>
   <action name="actEditMoveDown">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/down.svg</normaloff>:/icon/down.svg</iconset>
+   </property>
    <property name="text">
-    <string>下移</string>
+    <string>图形下移</string>
    </property>
    <property name="toolTip">
-    <string>下移</string>
+    <string>图形下移</string>
    </property>
   </action>
   <action name="actDelSelectedItem">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+   </property>
    <property name="text">
     <string>删除选中元素</string>
    </property>
@@ -517,17 +534,6 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actAddDoc">
-   <property name="text">
-    <string>文档图形</string>
-   </property>
-   <property name="toolTip">
-    <string>文档图形</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::TextHeuristicRole</enum>
-   </property>
-  </action>
   <action name="actNoArrowE">
    <property name="text">
     <string>无箭头</string>
@@ -537,6 +543,10 @@
    </property>
   </action>
   <action name="actArrowE">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/arrow.png</normaloff>:/icon/arrow.png</iconset>
+   </property>
    <property name="text">
     <string>箭头</string>
    </property>
@@ -545,6 +555,10 @@
    </property>
   </action>
   <action name="actOpenArrowE">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/openArrow.png</normaloff>:/icon/openArrow.png</iconset>
+   </property>
    <property name="text">
     <string>开放型箭头</string>
    </property>
@@ -553,6 +567,10 @@
    </property>
   </action>
   <action name="actDovetailArrowE">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/dovetailArrow.png</normaloff>:/icon/dovetailArrow.png</iconset>
+   </property>
    <property name="text">
     <string>燕尾箭头</string>
    </property>
@@ -561,6 +579,10 @@
    </property>
   </action>
   <action name="actDiaArrowE">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/diaArrow.png</normaloff>:/icon/diaArrow.png</iconset>
+   </property>
    <property name="text">
     <string>菱形箭头</string>
    </property>
@@ -569,6 +591,10 @@
    </property>
   </action>
   <action name="actRoundArrowE">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/roundArrow.png</normaloff>:/icon/roundArrow.png</iconset>
+   </property>
    <property name="text">
     <string>圆型箭头</string>
    </property>
@@ -577,6 +603,10 @@
    </property>
   </action>
   <action name="actSolidLine">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/solidLine.png</normaloff>:/icon/solidLine.png</iconset>
+   </property>
    <property name="text">
     <string>实线</string>
    </property>
@@ -585,6 +615,10 @@
    </property>
   </action>
   <action name="actDashLine">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/dashLine.png</normaloff>:/icon/dashLine.png</iconset>
+   </property>
    <property name="text">
     <string>短划线</string>
    </property>
@@ -593,6 +627,10 @@
    </property>
   </action>
   <action name="actDotLine">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/dotLine.png</normaloff>:/icon/dotLine.png</iconset>
+   </property>
    <property name="text">
     <string>点线</string>
    </property>
@@ -601,6 +639,10 @@
    </property>
   </action>
   <action name="actDashDotLine">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/dashDotLine.png</normaloff>:/icon/dashDotLine.png</iconset>
+   </property>
    <property name="text">
     <string>点划线</string>
    </property>
@@ -609,6 +651,10 @@
    </property>
   </action>
   <action name="actDashDDLine">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/dashDDLine.png</normaloff>:/icon/dashDDLine.png</iconset>
+   </property>
    <property name="text">
     <string>短划线-点-点线</string>
    </property>
@@ -621,40 +667,10 @@
     <string>打开样式表</string>
    </property>
   </action>
-  <action name="actAddPolyLine">
-   <property name="text">
-    <string>折线</string>
-   </property>
-   <property name="toolTip">
-    <string>折线</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="actAddPrede">
-   <property name="text">
-    <string>预定义过程图形</string>
-   </property>
-   <property name="toolTip">
-    <string>预定义过程图形</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::TextHeuristicRole</enum>
-   </property>
-  </action>
-  <action name="actAddEnd">
-   <property name="text">
-    <string>终止图形</string>
-   </property>
-   <property name="toolTip">
-    <string>终止图形</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::TextHeuristicRole</enum>
-   </property>
-  </action>
   <action name="actMoveSelectedZUp">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::GoUp"/>
+   </property>
    <property name="text">
     <string>图层上移</string>
    </property>
@@ -663,6 +679,9 @@
    </property>
   </action>
   <action name="actMoveSelectedZDown">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::GoDown"/>
+   </property>
    <property name="text">
     <string>图层下移</string>
    </property>
@@ -674,6 +693,10 @@
    </property>
   </action>
   <action name="actMoveSelectedMaxZUp">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/toTop.svg</normaloff>:/icon/toTop.svg</iconset>
+   </property>
    <property name="text">
     <string>置于顶层</string>
    </property>
@@ -682,6 +705,10 @@
    </property>
   </action>
   <action name="actMoveSelectedMaxZDown">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/toBottom.svg</normaloff>:/icon/toBottom.svg</iconset>
+   </property>
    <property name="text">
     <string>置于底层</string>
    </property>
@@ -698,33 +725,11 @@
    </property>
   </action>
   <action name="actCheck">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::SystemSearch"/>
+   </property>
    <property name="text">
     <string>检查</string>
-   </property>
-  </action>
-  <action name="actAddManualinput">
-   <property name="text">
-    <string>手动输入图形</string>
-   </property>
-   <property name="toolTip">
-    <string>手动输入图形</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::TextHeuristicRole</enum>
-   </property>
-  </action>
-  <action name="actDebug">
-   <property name="text">
-    <string>Debug用Action</string>
-   </property>
-   <property name="toolTip">
-    <string>Debug用Action</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+D</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actNoArrowB">
@@ -736,6 +741,10 @@
    </property>
   </action>
   <action name="actArrowB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/arrow.png</normaloff>:/icon/arrow.png</iconset>
+   </property>
    <property name="text">
     <string>箭头</string>
    </property>
@@ -744,6 +753,10 @@
    </property>
   </action>
   <action name="actOpenArrowB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/openArrow.png</normaloff>:/icon/openArrow.png</iconset>
+   </property>
    <property name="text">
     <string>开放型箭头</string>
    </property>
@@ -752,6 +765,10 @@
    </property>
   </action>
   <action name="actDovetailArrowB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/dovetailArrow.png</normaloff>:/icon/dovetailArrow.png</iconset>
+   </property>
    <property name="text">
     <string>燕尾箭头</string>
    </property>
@@ -760,6 +777,10 @@
    </property>
   </action>
   <action name="actDiaArrowB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/diaArrow.png</normaloff>:/icon/diaArrow.png</iconset>
+   </property>
    <property name="text">
     <string>菱形箭头</string>
    </property>
@@ -768,6 +789,10 @@
    </property>
   </action>
   <action name="actRoundArrowB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/icon/roundArrow.png</normaloff>:/icon/roundArrow.png</iconset>
+   </property>
    <property name="text">
     <string>圆型箭头</string>
    </property>
@@ -776,6 +801,9 @@
    </property>
   </action>
   <action name="actSaveNewFile">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
+   </property>
    <property name="text">
     <string>另存为</string>
    </property>

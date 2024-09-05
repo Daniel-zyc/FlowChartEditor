@@ -51,8 +51,7 @@ private:
     void initmiddleUi();
     void initrightUi();
     void connectLeft();
-    void connectRight();
-	QMenu* createSceneMenu();
+	void connectRight();
 
 private slots:
     void check();
@@ -328,4 +327,6 @@ private:
 	QLabel *labelSceneCord;
 	QLabel *labelItemInfo;
 	QLabel *labelSceneState;
+
+	QMenu *sceneMenu;
 };
