@@ -150,9 +150,9 @@ void DScene::moveSelectedZ(qreal value){
 }
 
 void DScene::moveSelectedZUp(){
-    int minColZ = std::numeric_limits<qreal>::max();
-    int minSelected = std::numeric_limits<qreal>::max();
-    int maxSelected = std::numeric_limits<qreal>::lowest();
+    int minColZ = std::numeric_limits<int>::max();
+    int minSelected = std::numeric_limits<int>::max();
+    int maxSelected = std::numeric_limits<int>::min();
     QGraphicsItem * minColItem = nullptr;
     QList<QGraphicsItem*> colItems;
     QSet<QGraphicsItem *> S;
@@ -198,9 +198,9 @@ void DScene::moveSelectedZUp(){
     DTool::normalizeZValues(sceneItems);
 }
 void DScene::moveSelectedZDown(){
-    int maxSelected = std::numeric_limits<qreal>::lowest();
-    int minSelected = std::numeric_limits<qreal>::max();
-    int maxCol = std::numeric_limits<qreal>::lowest();
+    int maxSelected = std::numeric_limits<int>::min();
+    int minSelected = std::numeric_limits<int>::max();
+    int maxCol = std::numeric_limits<int>::min();
     QSet<QGraphicsItem *> S;
     QList<QGraphicsItem *> col;
     QGraphicsItem * maxColItem = nullptr;

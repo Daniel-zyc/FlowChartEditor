@@ -649,5 +649,14 @@ bool DPolyLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
     in << modis_num << line_type << record_dist;
     in << modi_pos;
     updateLine();
+    if(!modi_pos.value(0).isNull()) {
+        modiToPoint(modi_pos.value(0),0);
+    }
+    if(!modi_pos.value(1).isNull()) {
+        modiToPoint(modi_pos.value(1),1);
+    }
+    if(!modi_pos.value(2).isNull()) {
+        modiToPoint(modi_pos.value(2),2);
+    }
     return true;
 }
