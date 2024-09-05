@@ -12,7 +12,6 @@ FormworkWidget::FormworkWidget(QWidget *parent)
     : QWidget(parent), gridLayout(new QGridLayout(this)) {
     setLayout(gridLayout);
 
-    // 假设 formworkDataList 是你定义的数据列表
     for(FormworkData data : FormworkDataList){
         addItem(data);
     }
@@ -82,7 +81,12 @@ void FormworkWidget::handleItemClick() {
                     SaveAndLoadManager::instance().saveToFile(FILE_PATH);
                 }
             }else{
-                SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
+                                              QMessageBox::Yes | QMessageBox::No);
+                if(reply == QMessageBox::Yes){
+                    SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+                }
             }
             SaveAndLoadManager::instance().loadFromFile(filePath);
             FILE_PATH = "";

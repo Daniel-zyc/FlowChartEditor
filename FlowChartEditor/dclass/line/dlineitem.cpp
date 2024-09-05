@@ -26,7 +26,8 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->drawLine(QLineF(beginPoint, endPoint));
 
 	qreal angle = getAngle(beginPoint, endPoint);
-	drawArrow(painter, angle, endPoint, endArrowType);
+    drawEndArrow(painter, angle, endPoint, endArrowType);
+    drawBeginArrow(painter, angle, beginPoint, beginArrowType);
 }
 
 void DLineItem::modiToPoint(QPointF p, int id)
@@ -53,7 +54,7 @@ void DLineItem::updatePath()
 	QPointF dir = vec.p2();
 	QPolygonF poly;
 	poly << (beginPoint + dir) << (endPoint + dir)
-		 << (endPoint - dir) << (beginPoint + dir);
+         << (endPoint - dir) << (beginPoint - dir);
 	path.addPolygon(poly);
 }
 

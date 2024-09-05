@@ -80,7 +80,8 @@ void DCurveLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsIte
 	   || (endPoint.y() < beginPoint.y() && tip.y() < endPoint.y()))
 		arrowAngle *= -1;
 
-	drawArrow(painter, arrowAngle, endPoint, endArrowType);
+    drawEndArrow(painter, arrowAngle, endPoint, endArrowType);
+    drawBeginArrow(painter, arrowAngle, beginPoint, beginArrowType);
 }
 
 void DCurveLineItem::updateModiPoint()

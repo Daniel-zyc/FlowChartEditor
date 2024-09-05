@@ -223,7 +223,7 @@ qreal DLineBase::getAngle(const QPointF &beginPoint, const QPointF &endPoint)
     return angle;
 }
 
-void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType)
+void DLineBase::drawEndArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType)
 {
 	qreal arrowSize = pen().widthF() * 10;
 	QPointF arrowP1 = endPoint - QPointF(cos(angle + DConst::PI / 6) * arrowSize,
@@ -279,6 +279,10 @@ void DLineBase::drawArrow(QPainter *painter, double angle, const QPointF &endPoi
 		}
 		default: break;
 	}
+}
+
+void DLineBase::drawBeginArrow(QPainter *painter, double angle, const QPointF &beginPoint, int arrowType){
+    drawEndArrow(painter, angle - DConst::PI, beginPoint, beginArrowType);
 }
 
 void DLineBase::setBeginPoint(QPointF p)

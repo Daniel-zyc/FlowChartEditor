@@ -10,8 +10,6 @@
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.1;
 int DScene::defaultMoveDist = 5;
-qreal DScene::defaultMoveZUp = 20;
-qreal DScene::defaultMoveZDown = -20;
 
 DScene::DScene() { init(); }
 
