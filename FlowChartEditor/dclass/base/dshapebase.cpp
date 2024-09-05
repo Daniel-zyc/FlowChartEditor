@@ -177,8 +177,11 @@ void DShapeBase::updateSizePoint()
 QPainterPath DShapeBase::shapeSelected() const
 {
 	QPainterPath pth = DAbstractBase::shapeSelected();
-	qreal r = rotPointRadius; pth.addEllipse(rotPoint, r, r);
-	pth.addRect(sizeRect());
+	if(isRotateable)
+	{
+		qreal r = rotPointRadius; pth.addEllipse(rotPoint, r, r);
+		pth.addRect(sizeRect());
+	}
 	return pth;
 }
 
