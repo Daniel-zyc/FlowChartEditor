@@ -95,8 +95,10 @@ void DTool::moveItems(const QList<QGraphicsItem *> &items,const QPointF copyCent
     filterRootBases(itemList);
     for (QGraphicsItem* item : itemList)
     {
+        item->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
         QPointF curPos = item->pos();
         item->setPos(curPos + delta);
+        item->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     }
 }
 
