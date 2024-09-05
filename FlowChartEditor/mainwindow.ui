@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>20</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -547,7 +547,7 @@
     <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
-  <action name="actNoArrow">
+  <action name="actNoArrowE">
    <property name="text">
     <string>无箭头</string>
    </property>
@@ -555,7 +555,7 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actArrow">
+  <action name="actArrowE">
    <property name="text">
     <string>箭头</string>
    </property>
@@ -563,7 +563,7 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actOpenArrow">
+  <action name="actOpenArrowE">
    <property name="text">
     <string>开放型箭头</string>
    </property>
@@ -571,7 +571,7 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actDovetailArrow">
+  <action name="actDovetailArrowE">
    <property name="text">
     <string>燕尾箭头</string>
    </property>
@@ -579,7 +579,7 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actDiaArrow">
+  <action name="actDiaArrowE">
    <property name="text">
     <string>菱形箭头</string>
    </property>
@@ -587,7 +587,7 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="actRoundArrow">
+  <action name="actRoundArrowE">
    <property name="text">
     <string>圆型箭头</string>
    </property>
@@ -741,6 +741,54 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+D</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actNoArrowB">
+   <property name="text">
+    <string>无箭头</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actArrowB">
+   <property name="text">
+    <string>箭头</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actOpenArrowB">
+   <property name="text">
+    <string>开放型箭头</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actDovetailArrowB">
+   <property name="text">
+    <string>燕尾箭头</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actDiaArrowB">
+   <property name="text">
+    <string>菱形箭头</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actRoundArrowB">
+   <property name="text">
+    <string>圆型箭头</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>

@@ -652,29 +652,6 @@ void MainWindow::connectLeft()
 
 void MainWindow::connectRight()
 {
-	connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::SolidLine);
-	});
-	connect(ui->actDashLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashLine);
-	});
-	connect(ui->actDotLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DotLine);
-	});
-	connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashDotLine);
-	});
-	connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashDotDotLine);
-	});
-
-	connect(ui->actNoArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actOpenArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actDovetailArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actDiaArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actRoundArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-
 	connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
 		if(checked) setSceneBg(":/icon/blankBg.png");
 	});
@@ -752,21 +729,37 @@ void MainWindow::createMenu()
 {
 	QMenu *lineType = new QMenu("线条");
 
-	QMenu *arrowTypeM = new QMenu("箭头类型");
-	arrowTypeM->addAction(ui->actNoArrow);
-	arrowTypeM->addAction(ui->actArrow);
-	arrowTypeM->addAction(ui->actOpenArrow);
-	arrowTypeM->addAction(ui->actDovetailArrow);
-	arrowTypeM->addAction(ui->actDiaArrow);
-	arrowTypeM->addAction(ui->actRoundArrow);
-	QActionGroup *arrowGroup = new QActionGroup(lineType);
-	arrowGroup->setExclusive(true);
-	arrowGroup->addAction(ui->actNoArrow);
-	arrowGroup->addAction(ui->actArrow);
-	arrowGroup->addAction(ui->actOpenArrow);
-	arrowGroup->addAction(ui->actDovetailArrow);
-	arrowGroup->addAction(ui->actDiaArrow);
-	arrowGroup->addAction(ui->actRoundArrow);
+    QMenu *arrowTypeEM = new QMenu("结尾箭头");
+    arrowTypeEM->addAction(ui->actNoArrowE);
+    arrowTypeEM->addAction(ui->actArrowE);
+    arrowTypeEM->addAction(ui->actOpenArrowE);
+    arrowTypeEM->addAction(ui->actDovetailArrowE);
+    arrowTypeEM->addAction(ui->actDiaArrowE);
+    arrowTypeEM->addAction(ui->actRoundArrowE);
+    QActionGroup *arrowEGroup = new QActionGroup(lineType);
+    arrowEGroup->setExclusive(true);
+    arrowEGroup->addAction(ui->actNoArrowE);
+    arrowEGroup->addAction(ui->actArrowE);
+    arrowEGroup->addAction(ui->actOpenArrowE);
+    arrowEGroup->addAction(ui->actDovetailArrowE);
+    arrowEGroup->addAction(ui->actDiaArrowE);
+    arrowEGroup->addAction(ui->actRoundArrowE);
+
+    QMenu *arrowTypeBM = new QMenu("起始箭头");
+    arrowTypeBM->addAction(ui->actNoArrowB);
+    arrowTypeBM->addAction(ui->actArrowB);
+    arrowTypeBM->addAction(ui->actOpenArrowB);
+    arrowTypeBM->addAction(ui->actDovetailArrowB);
+    arrowTypeBM->addAction(ui->actDiaArrowB);
+    arrowTypeBM->addAction(ui->actRoundArrowB);
+    QActionGroup *arrowBGroup = new QActionGroup(lineType);
+    arrowBGroup->setExclusive(true);
+    arrowBGroup->addAction(ui->actNoArrowB);
+    arrowBGroup->addAction(ui->actArrowB);
+    arrowBGroup->addAction(ui->actOpenArrowB);
+    arrowBGroup->addAction(ui->actDovetailArrowB);
+    arrowBGroup->addAction(ui->actDiaArrowB);
+    arrowBGroup->addAction(ui->actRoundArrowB);
 
 	QMenu *lineTypeM = new QMenu("线条类型");
 	lineTypeM->addAction(ui->actSolidLine);
@@ -782,8 +775,9 @@ void MainWindow::createMenu()
 	lineGroup->addAction(ui->actDashDotLine);
 	lineGroup->addAction(ui->actDashDDLine);
 
-	lineType->addMenu(arrowTypeM);
-	lineType->addMenu(lineTypeM);
+    lineType->addMenu(lineTypeM);
+    lineType->addMenu(arrowTypeBM);
+    lineType->addMenu(arrowTypeEM);
 	// ui->styleMenu->addMenu(lineType);
 	scene->getMenu()->addMenu(lineType);
 
@@ -899,6 +893,60 @@ void MainWindow::createToolBar()
 
 void MainWindow::bindAction()
 {
+    connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::SolidLine);
+    });
+    connect(ui->actDashLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashLine);
+    });
+    connect(ui->actDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DotLine);
+    });
+    connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotLine);
+    });
+    connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotDotLine);
+    });
+
+    connect(ui->actNoArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(0);
+    });
+    connect(ui->actArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(1);
+    });
+    connect(ui->actOpenArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(2);
+    });
+    connect(ui->actDovetailArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(3);
+    });
+    connect(ui->actDiaArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(4);
+    });
+    connect(ui->actRoundArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(5);
+    });
+
+    connect(ui->actNoArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(0);
+    });
+    connect(ui->actArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(1);
+    });
+    connect(ui->actOpenArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(2);
+    });
+    connect(ui->actDovetailArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(3);
+    });
+    connect(ui->actDiaArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(4);
+    });
+    connect(ui->actRoundArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(5);
+    });
+
 	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
 	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
