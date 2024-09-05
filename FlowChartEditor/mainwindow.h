@@ -168,6 +168,7 @@ private slots:
     void saveFile();
     void loadFile();
     void newFile();
+    void saveNewFile();
 
 	void copy();
 	void paste();

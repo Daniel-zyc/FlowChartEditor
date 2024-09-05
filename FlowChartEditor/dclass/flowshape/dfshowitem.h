@@ -22,10 +22,12 @@ public:
     void updateAll();
     void updatePath();
     void updateMagPoint();
+	void updateModiPoint();
 
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
     QPainterPath path;
+	qreal ratio1 = 1.0 / 6, ratio2 = 1.0 / 6;
 
 public:
     /**
