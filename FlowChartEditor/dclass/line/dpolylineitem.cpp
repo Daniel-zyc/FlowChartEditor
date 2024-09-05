@@ -111,6 +111,8 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         painter->drawRect(begin_rect);
     }
 */
+    //painter->setBrush(Qt::red);
+    //painter->drawPath(shapeNormal());
 }
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
@@ -204,7 +206,6 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
 
 }
 
-
 QPainterPath DPolyLineItem::shapeNormal() const
 {
     int direct = getPaintDirection();
@@ -221,11 +222,12 @@ QPainterPath DPolyLineItem::shapeNormal() const
         QPointF(endPoint.x(), endPoint.y())
     };
     QPainterPath path;
-    path.moveTo(points[0]);  // 起始点
+    //path.moveTo(points[0]);  // 起始点
     // 获取数组大小
     int numPoints = sizeof(points) / sizeof(points[0]);
     for (int i = 1; i < numPoints; ++i) {
-        path.lineTo(points[i]);  // 连接每个点
+        //path.lineTo(points[i]);  // 连接每个点
+        path.addPath(getFillPath(points[i-1],points[i]));
     }
     return path;
 }
