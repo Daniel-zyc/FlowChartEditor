@@ -16,7 +16,8 @@ QSet<int> registeredTypes = QSet<int>(
 				DDiaItemType,
 				DParagramItemType,
 				DTrapItemType,
-                DPentagonItemType,
+				DPentagonItemType,
+				DHexgonItemType,
 
 				// shape for flowchart
 				DFDocumentItemType,
@@ -59,6 +60,10 @@ QSet<int> registeredTypes = QSet<int>(
 int TOTAL_MAX_Z_VALUE = 1;
 
 int SHOT_STATE = DConst::UNCHANGED;
+
+QBrush globalShapeBrush = defaultBrush;
+QPen globalShapePen = defaultPen;
+QPen globalLinePen = defaultPen;
 
 qreal DTool::degToRad(qreal deg) { return deg / 180 * DConst::PI; }
 

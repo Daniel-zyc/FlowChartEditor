@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 
 #include "magpoint.h"
+#include "global.h"
 
 /**
  * @brief The Serializer class

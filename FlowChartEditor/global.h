@@ -63,6 +63,11 @@ const QPen magLinePen = QPen(Qt::black, globalScale, Qt::DotLine);
 const QBrush defaultBrush = QBrush(Qt::white, Qt::SolidPattern);
 const QPen defaultPen = QPen(Qt::black, globalScale, Qt::SolidLine);
 
+// 全局的绘制时默认笔刷和画笔
+extern QBrush globalShapeBrush;
+extern QPen globalShapePen;
+
+extern QPen globalLinePen;
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -83,6 +88,7 @@ enum UserTypes
 	DTrapItemType = QGraphicsItem::UserType + 105,
 	DDiaItemType = QGraphicsItem::UserType + 106,
     DPentagonItemType = QGraphicsItem::UserType + 107,
+	DHexgonItemType = QGraphicsItem::UserType + 108,
 
 	DFStartEndItemType = QGraphicsItem::UserType + 200,
 	DFPredefineItemType = QGraphicsItem::UserType + 201,

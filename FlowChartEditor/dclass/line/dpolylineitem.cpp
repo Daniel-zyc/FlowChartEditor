@@ -82,6 +82,7 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
+
 /*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
@@ -95,7 +96,9 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
         angle = getAngle(points[4],points[5]);
     else angle = getAngle(points[3],points[5]);
-    drawArrow(painter, angle, endPoint, endArrowType);
+    drawEndArrow(painter, angle, endPoint, endArrowType);
+    drawBeginArrow(painter, angle, beginPoint, beginArrowType);
+    // drawArrow(painter, angle, beginPoint, beginArrowType);
     //绘制sizerect
 /*
     if(beginMag) {

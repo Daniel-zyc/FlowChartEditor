@@ -10,8 +10,6 @@
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.1;
 int DScene::defaultMoveDist = 5;
-qreal DScene::defaultMoveZUp = 20;
-qreal DScene::defaultMoveZDown = -20;
 
 DScene::DScene() { init(); }
 
@@ -352,7 +350,7 @@ void DScene::addpentagonItem()
 void DScene::addhexagonItem()
 {
     qDebug() << "add 六边形";
-    prepareInsertItem(new DFPrepareItem());
+	prepareInsertItem(new DHexgonItem());
 }
 
 void DScene::addDiaItem()
@@ -1188,7 +1186,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT)
 		{
 			DShapeBase* shape = dynamic_cast<DShapeBase*>(modifiedShape);
-			shape->setInsertItem();
+			shape->setInsertingItem();
 			shape->setPos(p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2));
 		}
 		else
@@ -1200,7 +1198,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			else
 				line->setBeginPoint(p);
 			line->setEndPoint(p);
-			line->setInsertItem();
+			line->setInsertingItem();
 		}
 		inter_state = DConst::SIZE;
 		insert_state = insert_state + 1;

@@ -68,7 +68,6 @@ private slots:
     void clearAllErrors();
     void onShowErrorActionClicked();
     void onShowFlowChartErrorsClicked();
-    void onCloseActionClicked();
 };
 
 #endif // INSPECTOR_H

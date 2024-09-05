@@ -76,6 +76,7 @@ private slots:
 
 	void addDFDocItem() { scene->addDFDocItem(); }
 	void addDFManualOperateItem() { scene->addDFManualOperateItem(); }
+    void addDFInformationItem() { scene->addDFInformationItem(); }
 	void addDFInternalStoreItem() { scene->addDFInternalStoreItem(); }
 	void addDFPrepareItem() { scene->addDFPrepareItem(); }
 	void addDFProcessItem() { scene->addDFProcessItem(); }
@@ -138,7 +139,6 @@ private slots:
 
     void moveSelectedZUp();
     void moveSelectedZDown();
-
     void moveSelectedMaxZUp();
     void moveSelectedMaxZDown();
     void changeLayer();

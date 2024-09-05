@@ -613,7 +613,7 @@ void MainWindow::connectLeft()
 	connect(aggreconnectBtn,  &QPushButton::clicked, this, &MainWindow::addDFSummaryconnItem);
 	connect(cardBtn,  &QPushButton::clicked, this, &MainWindow::addDFCardItem);
 	connect(compareBtn,  &QPushButton::clicked, this, &MainWindow::addDFCompareItem);
-	//connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
+    connect(dataBtn,  &QPushButton::clicked, this, &MainWindow::addDFInformationItem);
 	connect(directaccessBtn,  &QPushButton::clicked, this, &MainWindow::addDFDirecrAccessItem);
 	connect(diskBtn,  &QPushButton::clicked, this, &MainWindow::addDFDiskItem);
 	connect(displayBtn,  &QPushButton::clicked, this, &MainWindow::addDFDisplayItem);
@@ -828,7 +828,7 @@ void MainWindow::createMenu()
 	ui->viewMenu->addAction(ui->actViewMoveUp);
 
 	ui->helpMenu->addAction(ui->actAboutUs);
-	ui->helpMenu->addAction(ui->actCheck);
+    // ui->helpMenu->addAction(ui->actCheck);
 	ui->helpMenu->addAction(ui->actDebug);
 }
 
@@ -892,7 +892,7 @@ void MainWindow::createStatusBar()
 }
 
 void MainWindow::bindAction()
-{
+{    
     connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
         changeLineType(Qt::SolidLine);
     });
@@ -950,7 +950,7 @@ void MainWindow::bindAction()
     connect(ui->actSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
 
 	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
-	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
+    // connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
 	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
@@ -987,11 +987,10 @@ void MainWindow::bindAction()
 	connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(changeTextCol()));
 	connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(changeTextFont()));
 
-	connect(ui->actMoveSelectedZUp,SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
-	connect(ui->actMoveSelectedZDown,SIGNAL(triggered(bool)),this, SLOT(moveSelectedZDown()));
-
-	connect(ui->actMoveSelectedMaxZUp,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZUp()));
-	connect(ui->actMoveSelectedMaxZDown,SIGNAL(triggered(bool)),this,SLOT(moveSelectedMaxZDown()));
+    connect(ui->actMoveSelectedMaxZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
+    connect(ui->actMoveSelectedMaxZDown, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZDown()));
+    connect(ui->actMoveSelectedMaxZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedMaxZUp()));
+    connect(ui->actMoveSelectedMaxZDown, SIGNAL(triggered(bool)),this, SLOT(moveSelectedMaxZDown()));
 
 	connect(ui->actViewRotateCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCW()));
 	connect(ui->actViewRotateCCW, SIGNAL(triggered(bool)), this, SLOT(viewRotateCCW()));
@@ -1274,9 +1273,9 @@ void MainWindow::changeLayer()
 {
     int layer = layerBox->currentIndex();
     switch(layer) {
-    // case 0 : itemLeftAlign(); break;
+    case 0 : moveSelectedZUp(); break;
     case 1 : moveSelectedMaxZUp(); break;
-    // case 2 : itemRightAlign(); break;
+    case 2 : moveSelectedZDown(); break;
     case 3 : moveSelectedMaxZDown(); break;
     }
 }
@@ -1326,7 +1325,12 @@ void MainWindow::loadFile(){
             saveFile();
         }
     }else{
-        saveFile();
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+        }
     }
 	QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
 	if(filePath == "") return;
@@ -1344,7 +1348,12 @@ void MainWindow::newFile(){
             saveFile();
         }
     }else{
-        saveFile();
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+             SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+        }
     }
     FILE_PATH = "";
     scene->clear();
