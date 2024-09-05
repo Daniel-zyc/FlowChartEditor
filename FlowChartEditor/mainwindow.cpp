@@ -1405,6 +1405,7 @@ void MainWindow::copy(){
 void MainWindow::paste(){
 	scene->pasteItems();
     shot();
+    inspector->checkAll();
 }
 
 void MainWindow::redo(){
