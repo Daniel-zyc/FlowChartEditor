@@ -72,11 +72,13 @@ void DLineItem::updateAll()
 void DLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DLineBase::serialize(out, fa);
+	qDebug() << "debug: " << beginPoint - endPoint;
 }
 
 bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DLineBase::deserialize(in, fa)) return false;
+	// qDebug() << "debug: " << beginPoint - endPoint;
 	updateAll();
 	return true;
 }
