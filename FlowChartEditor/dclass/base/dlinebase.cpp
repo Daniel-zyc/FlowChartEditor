@@ -73,7 +73,7 @@ void DLineBase::interToPoint(QPointF p, MagPoint *mp)
     update();
 }
 
-void DLineBase::setInsertItem()
+void DLineBase::setInsertingItem()
 {
     interactType = DConst::SIZE;
     sizePointId = DConst::ED - 1;

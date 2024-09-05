@@ -135,6 +135,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    formwork.qrc \
     icon.qrc \
     qss.qrc
