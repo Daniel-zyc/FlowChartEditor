@@ -72,6 +72,7 @@ void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
 		out << (qint32)line->type();
 		line->serialize(out);
 	}
+    qDebug() << "序列化结束";
 }
 
 QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)

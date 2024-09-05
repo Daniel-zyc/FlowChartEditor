@@ -91,14 +91,15 @@ bool DTool::inCircle(const QPointF& o, qreal r, const QPointF& p)
 void DTool::moveItems(const QList<QGraphicsItem *> &items,const QPointF copyCenterPos, const QPointF cursorPos)
 {
     QPointF delta = cursorPos - copyCenterPos;
-	QSet<QGraphicsItem*> S;
-	for (QGraphicsItem* item : items) S.insert(item);
-	for (QGraphicsItem* item : items)
-	{
-		if (item == nullptr || S.contains(item->parentItem())) continue;
+    QList<QGraphicsItem *> itemList = items;
+    filterRootBases(itemList);
+    for (QGraphicsItem* item : itemList)
+    {
+        item->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
         QPointF curPos = item->pos();
         item->setPos(curPos + delta);
-	}
+        item->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    }
 }
 
 void DTool::filterRootBases(QList<QGraphicsItem*>& items)

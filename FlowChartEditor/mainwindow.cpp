@@ -1055,7 +1055,7 @@ void MainWindow::bindAction()
 
 void MainWindow::saveAsSvg()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("SVG Files(*.svg"));
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", "SVG Files(*.svg)`");
 	if(filePath == "") return;
 	QSvgGenerator generator;
 	generator.setFileName(filePath);
@@ -1069,7 +1069,7 @@ void MainWindow::saveAsSvg()
 
 	QPainter painter;
 	painter.begin(&generator);
-	view->render(&painter);
+    scene->render(&painter);
 	painter.end();
 }
 
@@ -1395,11 +1395,16 @@ void MainWindow::newFile(){
     scene->clear();
 }
 
-
-
 void MainWindow::copy(){
 	scene->copySelectedItems();
     shot();
+}
+
+void MainWindow::shear(){
+    scene->copySelectedItems();
+    scene->delSelectedItem();
+    shot();
+    inspector->checkAll();
 }
 
 void MainWindow::paste(){

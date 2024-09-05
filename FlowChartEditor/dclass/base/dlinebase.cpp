@@ -395,6 +395,6 @@ bool DLineBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 
     in >> beginArrowType >> endArrowType;
     updateSizePoint();
-
+    // updatePosition();
     return true;
 }
