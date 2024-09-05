@@ -16,6 +16,7 @@ void Serializer::filterSerializableItem(QList<QGraphicsItem*>& items)
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
+			i--;
 		}
 	}
 }
@@ -35,24 +36,24 @@ void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
 
 	for (QGraphicsItem *item : items)
 	{
-		if(dynamic_cast<DTextItem*>(item))
+		if(DTool::isText(item->type()))
 		{
 			texts.push_back(dynamic_cast<DTextItem*>(item));
 			continue;
 		}
-		if(dynamic_cast<DShapeBase*>(item))
+		if(DTool::isShape(item->type()))
 		{
 			shapes.push_back(dynamic_cast<DShapeBase*>(item));
 			continue;
 		}
-		if(dynamic_cast<DLineBase*>(item))
+		if(DTool::isLine(item->type()))
 		{
 			lines.push_back(dynamic_cast<DLineBase*>(item));
 			continue;
 		}
 	}
 
-    // qDebug() << "序列化中 shape 的数量: " << shapes.size();
+	qDebug() << "序列化中 shape 的数量: " << shapes.size();
 	out << (qint32)shapes.size();
 	for (DShapeBase *shape : shapes)
 	{
@@ -84,7 +85,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 	int tmpcnt; Q_UNUSED(tmpcnt);
 
 	in >> shapeSize;
-	// qDebug() << "读取到的 shape 数量: " << shapeSize;
+	qDebug() << "读取到的 shape 数量: " << shapeSize;
 	for(tmpcnt = 0; shapeSize; shapeSize--)
 	{
 		qint32 type; in >> type;
@@ -100,7 +101,8 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DTriItemType: shape = new DTriItem(); break;
 			case DParagramItemType: shape = new DParagramItem(); break;
 			case DTrapItemType: shape = new DTrapItem(); break;
-            case DPentagonItemType: shape = new DPentagonItem(); break;
+			case DPentagonItemType: shape = new DPentagonItem(); break;
+			case DHexgonItemType: shape = new DHexgonItem(); break;
 
 			case DDiaItemType: shape = new DDiaItem(); break;
 			case DFDocumentItemType: shape = new DFDocumentItem(); break;
@@ -139,7 +141,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		data.push_back(shape);
 		tmpcnt++;
 	}
-	// qDebug() << "成功序列化 shape 数量: " << tmpcnt;
+	qDebug() << "成功序列化 shape 数量: " << tmpcnt;
 
 	in >> textSize;
 	// qDebug() << "读取到的 text 数量: " << textSize;

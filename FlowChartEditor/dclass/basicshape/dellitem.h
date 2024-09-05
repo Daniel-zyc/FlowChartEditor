@@ -2,8 +2,7 @@
 
 #include "../base/dshapebase.h"
 
-class DShapeBase;
-
+// 椭圆
 class DEllItem : public DShapeBase
 {
 public:
