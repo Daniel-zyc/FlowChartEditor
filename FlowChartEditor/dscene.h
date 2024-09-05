@@ -60,8 +60,8 @@ public:
 	void moveDown(int dist = DScene::defaultMoveDist) { moveSelected(0, dist); }
 
 	// 调整对象 Z 值
-	void moveSelectedZUp(qreal value = DScene::defaultMoveZUp) { moveSelectedZ(value); }
-	void moveSelectedZDown(qreal value = DScene::defaultMoveZDown) { moveSelectedZ(-value); }
+    void moveSelectedZUp();
+    void moveSelectedZDown();
 	void moveSelectedZ(qreal value = 0.0);
 	void moveSelectedZMaxUp();
 	void moveSelectedZMaxDown();
@@ -203,6 +203,8 @@ private:
 	void init();
 	// 对画布进行快照
 	void shot();
+
+    void normalizeZValues();
 
 private:
 	// 调整参数

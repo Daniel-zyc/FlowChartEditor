@@ -5,6 +5,7 @@
 #include <QBrush>
 #include <QPen>
 
+extern int TOTAL_MAX_Z_VALUE;
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
 // 全局变量，记录同一个图形拷贝次数，用于计算错开距离

@@ -53,6 +53,8 @@ QSet<int> registeredTypes = QSet<int>(
 				DPolyLineItemType
 			});
 
+int TOTAL_MAX_Z_VALUE = 0;
+
 int SHOT_STATE = DConst::UNCHANGED;
 
 int PASTE_NUM = 1;
