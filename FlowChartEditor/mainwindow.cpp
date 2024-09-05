@@ -56,8 +56,10 @@ MainWindow::MainWindow(QWidget *parent)
 	m->addAction(ui->actSelectTextCol);
 	m->addAction(ui->actSelectTextFont);
 	m->addAction(ui->actStyleSheet);
-	// m->addAction(ui->actMoveSelectedZUp);
-	// m->addAction(ui->actMoveSelectedZDown);
+
+    m->addAction(ui->actMoveSelectedZUp);
+    m->addAction(ui->actMoveSelectedZDown);
+
 	m->addAction(ui->actMoveSelectedMaxZUp);
 	m->addAction(ui->actMoveSelectedMaxZDown);
 
@@ -1110,12 +1112,12 @@ void MainWindow::moveDown()
 
 void MainWindow::moveSelectedZUp(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZUp(1);
+    else scene->moveSelectedZUp();
 }
 
 void MainWindow::moveSelectedZDown(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZDown(-1);
+    else scene->moveSelectedZDown();
 }
 
 void MainWindow::moveSelectedMaxZUp(){
