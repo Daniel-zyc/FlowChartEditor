@@ -567,6 +567,8 @@ void DScene::delSelectedItem()
 			line->unlinkBeginUpdate();
 			line->unlinkEndUpdate();
 		}
+		if(item->isText() && item->parentItem())
+			dynamic_cast<DShapeBase*>(item->parentItem())->textItem = nullptr;
 		item->setParentItem(nullptr);
 	}
 	for(DAbstractBase* item : items)

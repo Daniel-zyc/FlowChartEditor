@@ -4,6 +4,8 @@
 
 #include <QGraphicsView>
 #include <QScrollBar>
+#include <QLabel>
+#include <QMouseEvent>
 
 class DView : public QGraphicsView
 {
@@ -22,9 +24,7 @@ public:
 	void resetScale() { setScale(1.0/globalScale); }
 	void setScale(qreal scale = 1.0/globalScale);
 	void enlarge(qreal ratio = DView::defaultScaleRatio)
-	{
-		setScale(scale * ratio);
-	}
+	{ setScale(scale * ratio); }
 	void shrink(qreal ratio = 1.0 / DView::defaultScaleRatio)
 	{ setScale(scale * ratio); }
 
@@ -41,8 +41,13 @@ public:
 
 	void updateTransMatrix();
 
+	void setViewLabel(QLabel *lab) { viewLabel = lab; }
+	void setSceneLabel(QLabel *lab) { sceneLabel = lab; }
+
 protected:
 	void init();
+
+	void mouseMoveEvent(QMouseEvent *event) override;
 
 protected:
 	qreal scale = 1.0/globalScale, rotation = 0.0;
@@ -50,5 +55,8 @@ protected:
 	static qreal defaultRotateDelta;
 	static qreal defaultScaleRatio;
 	static qreal defaultMoveDist;
+
+	QLabel *viewLabel;
+	QLabel *sceneLabel;
 };
 
