@@ -82,7 +82,6 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
-
 /*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
