@@ -1,6 +1,8 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QDebug>
+#include <QMessageBox>
+#include <QFileDialog>
 
 #include "formworkwidget.h"
 #include "saveandloadmanager.h"
@@ -69,7 +71,21 @@ void FormworkWidget::handleItemClick() {
         int index = items.indexOf(button);
         if (index != -1 && index < FormworkDataListSize) {
             QString filePath = FormworkDataList[index].FilePath;
+            if(FILE_PATH == ""){
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                              QMessageBox::Yes | QMessageBox::No);
+                if(reply == QMessageBox::Yes){
+                    if(FILE_PATH == nullptr || FILE_PATH == "")
+                        FILE_PATH = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+                    if(FILE_PATH == "") return;
+                    SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+                }
+            }else{
+                SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+            }
             SaveAndLoadManager::instance().loadFromFile(filePath);
+            FILE_PATH = "";
         }
     }
 }

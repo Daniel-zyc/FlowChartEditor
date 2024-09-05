@@ -28,40 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 
 	setWindowTitle("Flowchart Editor");
-	// 绑定序列化管理
-	scene = new DScene(this);
-
-	// scene->removeItem(rect);
-	// delete rect; rect = nullptr;
-
-	UndoManager::instance().bindScene(scene);
-	SaveAndLoadManager::instance().bindScene(scene);
-
-	QMenu *m = new QMenu();
-	m->addAction(ui->actDelSelectedItem);
-	// m->addAction(ui->actCombine);
-	// m->addAction(ui->actSeperate);
-	m->addAction(ui->actAddRect);
-	m->addAction(ui->actAddEll);
-	m->addAction(ui->actAddRhom);
-	m->addAction(ui->actAddLine);
-	m->addAction(ui->actAddPargram);
-	m->addAction(ui->actAddDoc);
-	m->addAction(ui->actAddTrap);
-	m->addAction(ui->actAddPrede);
-	m->addAction(ui->actAddEnd);
-	m->addAction(ui->actAddManualinput);
-	m->addAction(ui->actSelectFrameCol);
-	m->addAction(ui->actSelectFillCol);
-	m->addAction(ui->actSelectTextCol);
-	m->addAction(ui->actSelectTextFont);
-	m->addAction(ui->actStyleSheet);
-
-    m->addAction(ui->actMoveSelectedZUp);
-    m->addAction(ui->actMoveSelectedZDown);
-
-	m->addAction(ui->actMoveSelectedMaxZUp);
-	m->addAction(ui->actMoveSelectedMaxZDown);
 
 	QFile qssfile(":/stylesheet.qss");
 	if(qssfile.open(QFile::ReadOnly)) {
@@ -72,22 +38,23 @@ MainWindow::MainWindow(QWidget *parent)
 	}
 
 	findDia = new DFindDialog();
-
 	colorDia = new QColorDialog(Qt::blue, this);
-	// colorDia->setOption(QColorDialog::ShowAlphaChannel);
-	// colorDia->setOption(QColorDialog::DontUseNativeDialog);
-
 	fontDia = new QFontDialog(this);
-	// fontDia->setOption(QFontDialog::DontUseNativeDialog);
 	fontDia->setOption(QFontDialog::ScalableFonts);
 	fontDia->setOption(QFontDialog::ProportionalFonts);
 
-	scene->setMenu(m);
-	scene->clear();
+	// 初始化 view 和 scene
+	createStatusBar();
+	scene = new DScene(this);
+	view = new DView(scene, this);
 
-	view = new DView(scene);
+	scene->setMenu(createSceneMenu());
 	scene->setView(view);
+	view->setViewLabel(labelViewCord);
+	view->setSceneLabel(labelSceneCord);
 
+	UndoManager::instance().bindScene(scene);
+	SaveAndLoadManager::instance().bindScene(scene);
 	inspector = Inspector::instance(this,scene,view);
 	inspector->hide();
 
@@ -99,8 +66,24 @@ MainWindow::MainWindow(QWidget *parent)
 	bindAction();
 	connectLeft();
 	connectRight();
-	// 调试用
-	// scene->addDFNodeItem();
+}
+
+QMenu* MainWindow::createSceneMenu()
+{
+	QMenu *m = new QMenu();
+	m->addAction(ui->actDelSelectedItem);
+	m->addSeparator();
+	m->addAction(ui->actSelectFrameCol);
+	m->addAction(ui->actSelectFillCol);
+	m->addAction(ui->actSelectTextCol);
+	m->addAction(ui->actSelectTextFont);
+	m->addAction(ui->actStyleSheet);
+	m->addSeparator();
+	m->addAction(ui->actMoveSelectedZUp);
+	m->addAction(ui->actMoveSelectedZDown);
+	m->addAction(ui->actMoveSelectedMaxZUp);
+	m->addAction(ui->actMoveSelectedMaxZDown);
+	return m;
 }
 
 MainWindow::~MainWindow()
@@ -118,7 +101,6 @@ void MainWindow::initUi()
 	mainsplitter->addWidget(middlesplitter);
 	mainsplitter->setStretchFactor(1, 1);
 	mainsplitter->addWidget(rightTab);
-
 
 	setCentralWidget(mainsplitter);
 }
@@ -138,8 +120,6 @@ void MainWindow::initrightUi()
 	rightTab = new QTabWidget();
 	rightTab->setMovable(true);
 	rightTab->setFixedWidth(260);
-	// rightTab->setMinimumWidth(230);
-	// rightTab->setMaximumWidth(320);
 
 	//背景样式表
 	rightBgw = new QWidget();
@@ -304,6 +284,7 @@ void MainWindow::initrightUi()
 	fillType->addItem("左斜线图案");
 	fillType->addItem("右倾线图案");
 	fillType->addItem("倾斜十字线图案");
+    fillType->setCurrentIndex(1);
 	// fillType->addItem("线性渐变图案");
 	// fillType->addItem("径向渐变图案");
 	// fillType->addItem("圆锥渐变图案");
@@ -652,29 +633,6 @@ void MainWindow::connectLeft()
 
 void MainWindow::connectRight()
 {
-	connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::SolidLine);
-	});
-	connect(ui->actDashLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashLine);
-	});
-	connect(ui->actDotLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DotLine);
-	});
-	connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashDotLine);
-	});
-	connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
-		changeLineType(Qt::DashDotDotLine);
-	});
-
-	connect(ui->actNoArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actOpenArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actDovetailArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actDiaArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-	connect(ui->actRoundArrow, &QAction::triggered, this, &MainWindow::changeEndArrow);
-
 	connect(blankBg, &QRadioButton::toggled, this, [this](bool checked) {
 		if(checked) setSceneBg(":/icon/blankBg.png");
 	});
@@ -752,21 +710,37 @@ void MainWindow::createMenu()
 {
 	QMenu *lineType = new QMenu("线条");
 
-	QMenu *arrowTypeM = new QMenu("箭头类型");
-	arrowTypeM->addAction(ui->actNoArrow);
-	arrowTypeM->addAction(ui->actArrow);
-	arrowTypeM->addAction(ui->actOpenArrow);
-	arrowTypeM->addAction(ui->actDovetailArrow);
-	arrowTypeM->addAction(ui->actDiaArrow);
-	arrowTypeM->addAction(ui->actRoundArrow);
-	QActionGroup *arrowGroup = new QActionGroup(lineType);
-	arrowGroup->setExclusive(true);
-	arrowGroup->addAction(ui->actNoArrow);
-	arrowGroup->addAction(ui->actArrow);
-	arrowGroup->addAction(ui->actOpenArrow);
-	arrowGroup->addAction(ui->actDovetailArrow);
-	arrowGroup->addAction(ui->actDiaArrow);
-	arrowGroup->addAction(ui->actRoundArrow);
+    QMenu *arrowTypeEM = new QMenu("结尾箭头");
+    arrowTypeEM->addAction(ui->actNoArrowE);
+    arrowTypeEM->addAction(ui->actArrowE);
+    arrowTypeEM->addAction(ui->actOpenArrowE);
+    arrowTypeEM->addAction(ui->actDovetailArrowE);
+    arrowTypeEM->addAction(ui->actDiaArrowE);
+    arrowTypeEM->addAction(ui->actRoundArrowE);
+    QActionGroup *arrowEGroup = new QActionGroup(lineType);
+    arrowEGroup->setExclusive(true);
+    arrowEGroup->addAction(ui->actNoArrowE);
+    arrowEGroup->addAction(ui->actArrowE);
+    arrowEGroup->addAction(ui->actOpenArrowE);
+    arrowEGroup->addAction(ui->actDovetailArrowE);
+    arrowEGroup->addAction(ui->actDiaArrowE);
+    arrowEGroup->addAction(ui->actRoundArrowE);
+
+    QMenu *arrowTypeBM = new QMenu("起始箭头");
+    arrowTypeBM->addAction(ui->actNoArrowB);
+    arrowTypeBM->addAction(ui->actArrowB);
+    arrowTypeBM->addAction(ui->actOpenArrowB);
+    arrowTypeBM->addAction(ui->actDovetailArrowB);
+    arrowTypeBM->addAction(ui->actDiaArrowB);
+    arrowTypeBM->addAction(ui->actRoundArrowB);
+    QActionGroup *arrowBGroup = new QActionGroup(lineType);
+    arrowBGroup->setExclusive(true);
+    arrowBGroup->addAction(ui->actNoArrowB);
+    arrowBGroup->addAction(ui->actArrowB);
+    arrowBGroup->addAction(ui->actOpenArrowB);
+    arrowBGroup->addAction(ui->actDovetailArrowB);
+    arrowBGroup->addAction(ui->actDiaArrowB);
+    arrowBGroup->addAction(ui->actRoundArrowB);
 
 	QMenu *lineTypeM = new QMenu("线条类型");
 	lineTypeM->addAction(ui->actSolidLine);
@@ -782,8 +756,9 @@ void MainWindow::createMenu()
 	lineGroup->addAction(ui->actDashDotLine);
 	lineGroup->addAction(ui->actDashDDLine);
 
-	lineType->addMenu(arrowTypeM);
-	lineType->addMenu(lineTypeM);
+    lineType->addMenu(lineTypeM);
+    lineType->addMenu(arrowTypeBM);
+    lineType->addMenu(arrowTypeEM);
 	// ui->styleMenu->addMenu(lineType);
 	scene->getMenu()->addMenu(lineType);
 
@@ -897,14 +872,90 @@ void MainWindow::createToolBar()
  //    ui->headToolBar->addAction(ui->actAddPolyLine);
 }
 
+void MainWindow::createStatusBar()
+{
+	QLabel *lab1 = new QLabel("视口坐标: ");
+	lab1->setFixedWidth(50);
+	QLabel *lab2 = new QLabel("画布坐标: ");
+	lab2->setFixedWidth(50);
+	QLabel *lab3 = new QLabel("");
+	lab3->setFixedWidth(50);
+
+	labelViewCord = new QLabel();
+	labelSceneCord = new QLabel();
+
+	ui->statusbar->addWidget(lab1);
+	ui->statusbar->addWidget(labelViewCord);
+	ui->statusbar->addWidget(lab3);
+	ui->statusbar->addWidget(lab2);
+	ui->statusbar->addWidget(labelSceneCord);
+}
+
 void MainWindow::bindAction()
 {
+    connect(ui->actSolidLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::SolidLine);
+    });
+    connect(ui->actDashLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashLine);
+    });
+    connect(ui->actDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DotLine);
+    });
+    connect(ui->actDashDotLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotLine);
+    });
+    connect(ui->actDashDDLine, &QAction::triggered, this, [this]() {
+        changeLineType(Qt::DashDotDotLine);
+    });
+
+    connect(ui->actNoArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(0);
+    });
+    connect(ui->actArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(1);
+    });
+    connect(ui->actOpenArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(2);
+    });
+    connect(ui->actDovetailArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(3);
+    });
+    connect(ui->actDiaArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(4);
+    });
+    connect(ui->actRoundArrowB, &QAction::triggered, this, [this]() {
+        scene->changeBeginArrow(5);
+    });
+
+    connect(ui->actNoArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(0);
+    });
+    connect(ui->actArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(1);
+    });
+    connect(ui->actOpenArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(2);
+    });
+    connect(ui->actDovetailArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(3);
+    });
+    connect(ui->actDiaArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(4);
+    });
+    connect(ui->actRoundArrowE, &QAction::triggered, this, [this]() {
+        scene->changeEndArrow(5);
+    });
+
+    connect(ui->actSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
+
 	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
 	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
 	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
+    connect(ui->actNewFile,SIGNAL(triggered(bool)),this,SLOT(newFile()));
 	connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
 	connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
 	connect(ui->actSvgFile, SIGNAL(triggered(bool)), this, SLOT(saveAsSvg()));
@@ -1009,6 +1060,11 @@ void MainWindow::saveAsSvg()
 	painter.end();
 }
 
+void MainWindow::selectAll()
+{
+    scene->selectAllItems();
+}
+
 void MainWindow::changeLineType(Qt::PenStyle linestyle)
 {
 	scene->changeLineType(linestyle);
@@ -1102,7 +1158,10 @@ void MainWindow::changeFillType()
 void MainWindow::changeFillColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    if(color.isValid()) scene->changeFillColor(color);
+    if(color.isValid()){
+        scene->changeFillColor(color);
+        // changeFillType();
+    }
 	customizePic->setCheckState(Qt::Unchecked);
 }
 
@@ -1252,21 +1311,43 @@ void MainWindow::delSelectedItem()
 // }
 
 void MainWindow::saveFile(){
-	if(filePath == nullptr || filePath == "")
-		filePath = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
-	if(filePath == "") return;
-	QList<QGraphicsItem *> items = scene->selectedItems();
-	for(QGraphicsItem *item : items) {
-		item->setSelected(false);
-	}
-	SaveAndLoadManager::instance().saveToFile(filePath);
+    if(FILE_PATH == nullptr || FILE_PATH == "")
+        FILE_PATH = QFileDialog::getSaveFileName(this, tr("保存.bit文件"),"./",tr("(*.bit)"));
+    if(FILE_PATH == "") return;
+    SaveAndLoadManager::instance().saveToFile(FILE_PATH);
 }
 
 void MainWindow::loadFile(){
+    if(FILE_PATH == ""){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            saveFile();
+        }
+    }else{
+        saveFile();
+    }
 	QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
 	if(filePath == "") return;
-
+    FILE_PATH = filePath;
 	SaveAndLoadManager::instance().loadFromFile(filePath);
+}
+
+void MainWindow::newFile(){
+    qDebug() << " new file";
+    if(FILE_PATH == ""){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            saveFile();
+        }
+    }else{
+        saveFile();
+    }
+    FILE_PATH = "";
+    scene->clear();
 }
 
 void MainWindow::copy(){

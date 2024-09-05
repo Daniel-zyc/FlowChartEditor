@@ -559,6 +559,15 @@ void DScene::addCurveLineItem()
 	prepareInsertItem(new DCurveLineItem());
 }
 
+void DScene::selectAllItems()
+{
+    clearSelection();
+    QList<DAbstractBase*> items = DTool::itemsToBases(this->items());
+    for(DAbstractBase *item : items) {
+        item->setSelected(true);
+    }
+}
+
 void DScene::delSelectedItem()
 {
 	qDebug() << "delete selected items";
@@ -573,6 +582,8 @@ void DScene::delSelectedItem()
 			line->unlinkBeginUpdate();
 			line->unlinkEndUpdate();
 		}
+		if(item->isText() && item->parentItem())
+			dynamic_cast<DShapeBase*>(item->parentItem())->textItem = nullptr;
 		item->setParentItem(nullptr);
 	}
 	for(DAbstractBase* item : items)

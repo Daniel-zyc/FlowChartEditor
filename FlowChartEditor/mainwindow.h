@@ -44,6 +44,7 @@ public:
 private:
 	void createMenu();
 	void createToolBar();
+	void createStatusBar();
 	void bindAction();
     void initUi();
     void initleftUi();
@@ -51,11 +52,12 @@ private:
     void initrightUi();
     void connectLeft();
     void connectRight();
+	QMenu* createSceneMenu();
 
 private slots:
     void check();
     void saveAsSvg();
-
+    void selectAll();
     void addLine() { scene->addLineItem(); }
 	void addPolyLine() { scene->addPolyLineItem(); }
 	void addCurveLine() { scene->addCurveLineItem(); }
@@ -159,98 +161,96 @@ private slots:
 	void editMoveUp() { scene->moveUp(); }
 	void editMoveDown() { scene->moveDown(); }
 
-    void findandReplace();
+	void findandReplace();
 
 	void delSelectedItem();
-	// void combineSelected();
-	// void seperateSelected();
 
     void saveFile();
     void loadFile();
+    void newFile();
 
-    void copy();
-    void paste();
+	void copy();
+	void paste();
 
-    void redo();
-    void undo();
+	void redo();
+	void undo();
 
-    void showAboutUsWindow();
+	void showAboutUsWindow();
 
-    void itemTopAlign() {scene->itemTopAlign();}
-    void itemBottomAlign() {scene->itemBottomAlign();}
-    void itemLeftAlign() {scene->itemLeftAlign();}
-    void itemRightAlign() {scene->itemRightAlign();}
-    void itemHorizAlign() {scene->itemHorizAlign();}
-    void itemVertiAlign() {scene->itemVertiAlign();}
+	void itemTopAlign() {scene->itemTopAlign();}
+	void itemBottomAlign() {scene->itemBottomAlign();}
+	void itemLeftAlign() {scene->itemLeftAlign();}
+	void itemRightAlign() {scene->itemRightAlign();}
+	void itemHorizAlign() {scene->itemHorizAlign();}
+	void itemVertiAlign() {scene->itemVertiAlign();}
 
-    void itemHorizEven() {scene->itemHorizEven();}
-    void itemVertiEven() {scene->itemVertiEven();}
-    void changeAlign();
+	void itemHorizEven() {scene->itemHorizEven();}
+	void itemVertiEven() {scene->itemVertiEven();}
+	void changeAlign();
 
-    void setAutoAlign();
+	void setAutoAlign();
 
 	void myDebug();
 
 private:
 	Ui::MainWindow *ui;
 
-    Inspector *inspector;
+	Inspector *inspector;
 	DScene *scene;
 	DView *view;
-    DFindDialog *findDia;
-    QColorDialog *colorDia;
-    QFontDialog *fontDia;
+	DFindDialog *findDia;
+	QColorDialog *colorDia;
+	QFontDialog *fontDia;
 
-    QSplitter *middlesplitter;
-    QSplitter *mainsplitter;
+	QSplitter *middlesplitter;
+	QSplitter *mainsplitter;
 
-    QCheckBox *isInspect;
-    QCheckBox *isOpenReference;
+	QCheckBox *isInspect;
+	QCheckBox *isOpenReference;
 
-    QWidget *leftw;
-    QGridLayout *flowGrid;
-    QGridLayout *primaryGrid;
-    QGridLayout *lineGrid;
-    QGridLayout *textGrid;
-    QVBoxLayout *leftUpV;
+	QWidget *leftw;
+	QGridLayout *flowGrid;
+	QGridLayout *primaryGrid;
+	QGridLayout *lineGrid;
+	QGridLayout *textGrid;
+	QVBoxLayout *leftUpV;
 
-    QGroupBox *primaryGroup;
-    QGroupBox *flowcGroup;
-    QGroupBox *lineGroup;
-    QGroupBox *textGroup;
-    QPushButton *rectBtn;
-    QPushButton *roundRectBtn;
-    QPushButton *ellipseBtn;
-    QPushButton *lineBtn;
-    QPushButton *parellgramBtn;
-    QPushButton *trapBtn;
-    QPushButton *rhomBtn;
-    QPushButton *fileBtn;
-    QPushButton *triBtn;
-    QPushButton *textBtn;
-    QPushButton *endBtn;
-    QPushButton *preBtn;
- //   QPushButton *manualinBtn;
-    QPushButton *prepareBtn;
-    QPushButton *storeBtn;
-    QPushButton *polyLineBtn;
-    QPushButton *aggreconnectBtn;
-    QPushButton *cardBtn;
-    QPushButton *compareBtn;
-    QPushButton *dataBtn;
-    QPushButton *directaccessBtn;
-    QPushButton *diskBtn;
-    QPushButton *displayBtn;
-    QPushButton *manulinputBtn;
-    QPushButton *mergeBtn;
-    QPushButton *multidocBtn;
-    QPushButton *offpageBtn;
-    QPushButton *orBtn;
-    QPushButton *postponeBtn;
-    QPushButton *sequentialaccessBtn;
-    QPushButton *storedataBtn;
-    QPushButton *curveBtn;
-    QPushButton *sortBtn;
+	QGroupBox *primaryGroup;
+	QGroupBox *flowcGroup;
+	QGroupBox *lineGroup;
+	QGroupBox *textGroup;
+	QPushButton *rectBtn;
+	QPushButton *roundRectBtn;
+	QPushButton *ellipseBtn;
+	QPushButton *lineBtn;
+	QPushButton *parellgramBtn;
+	QPushButton *trapBtn;
+	QPushButton *rhomBtn;
+	QPushButton *fileBtn;
+	QPushButton *triBtn;
+	QPushButton *textBtn;
+	QPushButton *endBtn;
+	QPushButton *preBtn;
+	QPushButton *prepareBtn;
+	QPushButton *storeBtn;
+	QPushButton *polyLineBtn;
+	QPushButton *aggreconnectBtn;
+	QPushButton *cardBtn;
+	QPushButton *compareBtn;
+	QPushButton *dataBtn;
+	QPushButton *directaccessBtn;
+	QPushButton *diskBtn;
+	QPushButton *displayBtn;
+	QPushButton *manulinputBtn;
+	QPushButton *mergeBtn;
+	QPushButton *multidocBtn;
+	QPushButton *offpageBtn;
+	QPushButton *orBtn;
+	QPushButton *postponeBtn;
+	QPushButton *sequentialaccessBtn;
+	QPushButton *storedataBtn;
+	QPushButton *curveBtn;
+	QPushButton *sortBtn;
 
 	QPushButton *addRectBtn;
 	QPushButton *addEllBtn;
@@ -258,67 +258,68 @@ private:
 	QPushButton *addDiaBtn;
 	QPushButton *addTrapBtn;
 	QPushButton *addTriBtn;
-    QPushButton *addPenBtn;//五边形
-    QPushButton *addHexBtn;//六边形
+	QPushButton *addPenBtn; //五边形
+	QPushButton *addHexBtn; //六边形
 
-    FormworkWidget *formworkWidget;
-    QTabWidget *rightTab;
-    QComboBox *lineType;
-    QComboBox *endarrowType;
-    QComboBox *beginarrowType;
-    QDoubleSpinBox *linebound;
-    QPushButton *linecolor;
+	FormworkWidget *formworkWidget;
+	QTabWidget *rightTab;
+	QComboBox *lineType;
+	QComboBox *endarrowType;
+	QComboBox *beginarrowType;
+	QDoubleSpinBox *linebound;
+	QPushButton *linecolor;
 
-    QToolButton *saveSvgTln;
+	QToolButton *saveSvgTln;
 
-    QGroupBox *bgGroup;
-    QRadioButton *colorBg;
-    QRadioButton *blankBg;
-    QRadioButton *gridBg;
-    QRadioButton *dotBg;
-    QRadioButton *customizeBg;
+	QGroupBox *bgGroup;
+	QRadioButton *colorBg;
+	QRadioButton *blankBg;
+	QRadioButton *gridBg;
+	QRadioButton *dotBg;
+	QRadioButton *customizeBg;
 
-    QWidget *rightBgw;
-    QFormLayout *rightBgf;
-    QPushButton *reColorBtn;
-    QPushButton *reFileBtn;
+	QWidget *rightBgw;
+	QFormLayout *rightBgf;
+	QPushButton *reColorBtn;
+	QPushButton *reFileBtn;
 
-    QWidget *rightStylew;
-    QFormLayout *rightStylef;
-    QComboBox *alignBox;
-    QComboBox *layerBox;
+	QWidget *rightStylew;
+	QFormLayout *rightStylef;
+	QComboBox *alignBox;
+	QComboBox *layerBox;
 
-    QTreeWidget *rightShapew;
-    QTreeWidgetItem *borderTop;
-    QTreeWidgetItem *borderChildColor;
-    QTreeWidgetItem *borderChildType;
-    QTreeWidgetItem *borderChildWidth;
-    QTreeWidgetItem *fillTop;
-    QTreeWidgetItem *fillChildColor;
-    QTreeWidgetItem *fillChildType;
-    QTreeWidgetItem *fillChildPic;
-    QTreeWidgetItem *rotTop;
-    QTreeWidgetItem *scaleTop;
-    QTreeWidgetItem *lineTop;
-    QTreeWidgetItem *lineChildColor;
-    QTreeWidgetItem *lineChildType;
-    QTreeWidgetItem *lineChildEndArrow;
-    QTreeWidgetItem *lineChildBeginArrow;
-    QTreeWidgetItem *lineChildWidth;
-    QPushButton *borderColor;
-    QComboBox *borderStyle;
-    QDoubleSpinBox *borderWidth;
-    QPushButton *fillColor;
-    QComboBox *fillType;
-    QSpinBox *rotationBox;
-    QSpinBox *scaleBox;
-    QCheckBox *customizePic;
-    QPushButton *picfile;
+	QTreeWidget *rightShapew;
+	QTreeWidgetItem *borderTop;
+	QTreeWidgetItem *borderChildColor;
+	QTreeWidgetItem *borderChildType;
+	QTreeWidgetItem *borderChildWidth;
+	QTreeWidgetItem *fillTop;
+	QTreeWidgetItem *fillChildColor;
+	QTreeWidgetItem *fillChildType;
+	QTreeWidgetItem *fillChildPic;
+	QTreeWidgetItem *rotTop;
+	QTreeWidgetItem *scaleTop;
+	QTreeWidgetItem *lineTop;
+	QTreeWidgetItem *lineChildColor;
+	QTreeWidgetItem *lineChildType;
+	QTreeWidgetItem *lineChildEndArrow;
+	QTreeWidgetItem *lineChildBeginArrow;
+	QTreeWidgetItem *lineChildWidth;
+	QPushButton *borderColor;
+	QComboBox *borderStyle;
+	QDoubleSpinBox *borderWidth;
+	QPushButton *fillColor;
+	QComboBox *fillType;
+	QSpinBox *rotationBox;
+	QSpinBox *scaleBox;
+	QCheckBox *customizePic;
+	QPushButton *picfile;
 
-    QWidget *rightFontw;
-    QFormLayout *rightFontf;
-    QPushButton *textColor;
-    QPushButton *textFont;
+	QWidget *rightFontw;
+	QFormLayout *rightFontf;
+	QPushButton *textColor;
+	QPushButton *textFont;
 
-    QString filePath = nullptr;
+	QLabel *labelViewCord;
+	QLabel *labelSceneCord;
 };
