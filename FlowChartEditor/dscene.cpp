@@ -587,8 +587,18 @@ void DScene::delSelectedItem()
 	for(DAbstractBase* item : items)
 	{
 		removeItem(item);
+		if(item == modifiedShape)
+		{
+			modifiedShape = nullptr;
+			inter_state = DConst::NONE;
+		}
+		if(item == showMagedItem)
+		{
+			showMagedItem = nullptr;
+		}
 		delete item;
 	}
+	qDebug() << "delete pass";
 }
 
 void DScene::setItemSelected(QGraphicsItem * item){
