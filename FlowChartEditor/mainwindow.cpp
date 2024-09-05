@@ -654,9 +654,9 @@ void MainWindow::connectRight()
             QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", "JPEG Files(*.jpg *.jpeg);;PNG Files(*.png);;SVG Files(*.svg);;BMP Files(*.bmp)");
 			if(!fileName.isEmpty()) {
 				setSceneBg(fileName);
-			}else {
-				blankBg->setChecked(true);
-			}
+            }else {
+                blankBg->setChecked(true);
+            }
 		}
 	});
     connect(lineType, &QComboBox::activated, this, [this]() {
@@ -674,11 +674,9 @@ void MainWindow::connectRight()
     connect(beginarrowType, &QComboBox::activated, this, &MainWindow::changeBeginArrow);
 	connect(linebound, &QDoubleSpinBox::valueChanged, this, [this]() {
 		scene->changeLineWidth(linebound->value() * globalScale);
+        shot();
 	});
-	connect(linecolor, &QPushButton::clicked, this, [this](){
-		QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-        if(color.isValid()) scene->changeLineColor(color);
-	});
+    connect(linecolor, &QPushButton::clicked, this, &MainWindow::changeLineColor);
 	connect(borderColor, &QPushButton::clicked, this, &MainWindow::changeBorderColor);
 	connect(fillColor, &QPushButton::clicked, this, &MainWindow::changeFillColor);
 	connect(textColor, &QPushButton::clicked, this, &MainWindow::changeTextCol);
@@ -694,14 +692,15 @@ void MainWindow::connectRight()
             if(!fileName.isEmpty()) {
                 QPixmap pixmap(fileName);
 				scene->changeFillPic(pixmap);
+                shot();
 			}
 		}
 	});
-	connect(customizePic, &QCheckBox::checkStateChanged, this, [this]() {
-		if(!customizePic->isChecked()) {
-			scene->changeFillColor(Qt::white);
-		}
-	});
+    // connect(customizePic, &QCheckBox::checkStateChanged, this, [this]() {
+    // 	if(!customizePic->isChecked()) {
+    // 		scene->changeFillColor(Qt::white);
+    // 	}
+    // });
     connect(alignBox, &QComboBox::activated, this, &MainWindow::changeAlign);
     connect(layerBox, &QComboBox::activated, this, &MainWindow::changeLayer);
 }
@@ -911,40 +910,52 @@ void MainWindow::bindAction()
 
     connect(ui->actNoArrowB, &QAction::triggered, this, [this]() {
         scene->changeBeginArrow(0);
+        shot();
     });
     connect(ui->actArrowB, &QAction::triggered, this, [this]() {
         scene->changeBeginArrow(1);
+        shot();
     });
     connect(ui->actOpenArrowB, &QAction::triggered, this, [this]() {
         scene->changeBeginArrow(2);
+        shot();
     });
     connect(ui->actDovetailArrowB, &QAction::triggered, this, [this]() {
         scene->changeBeginArrow(3);
+        shot();
     });
     connect(ui->actDiaArrowB, &QAction::triggered, this, [this]() {
         scene->changeBeginArrow(4);
+        shot();
     });
     connect(ui->actRoundArrowB, &QAction::triggered, this, [this]() {
         scene->changeBeginArrow(5);
+        shot();
     });
 
     connect(ui->actNoArrowE, &QAction::triggered, this, [this]() {
         scene->changeEndArrow(0);
+        shot();
     });
     connect(ui->actArrowE, &QAction::triggered, this, [this]() {
         scene->changeEndArrow(1);
+        shot();
     });
     connect(ui->actOpenArrowE, &QAction::triggered, this, [this]() {
         scene->changeEndArrow(2);
+        shot();
     });
     connect(ui->actDovetailArrowE, &QAction::triggered, this, [this]() {
         scene->changeEndArrow(3);
+        shot();
     });
     connect(ui->actDiaArrowE, &QAction::triggered, this, [this]() {
         scene->changeEndArrow(4);
+        shot();
     });
     connect(ui->actRoundArrowE, &QAction::triggered, this, [this]() {
         scene->changeEndArrow(5);
+        shot();
     });
 
     connect(ui->actSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
@@ -1067,23 +1078,27 @@ void MainWindow::selectAll()
 void MainWindow::changeLineType(Qt::PenStyle linestyle)
 {
 	scene->changeLineType(linestyle);
+    shot();
 }
 
 void MainWindow::changeBeginArrow()
 {
     int beginArrowType = beginarrowType->currentIndex();
 	scene->changeBeginArrow(beginArrowType);
+    shot();
 }
 
 void MainWindow::changeEndArrow()
 {
     int arrowstyle = endarrowType->currentIndex();
 	scene->changeEndArrow(arrowstyle);
+    shot();
 }
 
-void MainWindow::changeLineColor(QColor color)
+void MainWindow::changeLineColor()
 {
-	scene->changeLineColor(color);
+    QColor color = QColorDialog::getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
+    if(color.isValid()) {scene->changeLineColor(color); shot();}
 }
 
 void MainWindow::setSceneBg(QString path)
@@ -1094,12 +1109,13 @@ void MainWindow::setSceneBg(QString path)
 void MainWindow::changeItemRot()
 {
 	scene->changeItemRot(rotationBox->value());
+    shot();
 }
-
 
 void MainWindow::changeItemScale()
 {
 	scene->changeItemScale(scaleBox->value() / 100.0);
+    shot();
 }
 
 void MainWindow::changeBorderType()
@@ -1113,18 +1129,20 @@ void MainWindow::changeBorderType()
 	case 3: scene->changeBorderType(Qt::DashDotLine); break;
 	case 4: scene->changeBorderType(Qt::DashDotDotLine); break;
 	}
+    shot();
 }
 
 void MainWindow::changeBorderWidth()
 {
 	qreal width = borderWidth->value() * globalScale;
 	scene->changeBorderWidth(width);
+    shot();
 }
 
 void MainWindow::changeBorderColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    if(color.isValid()) scene->changeBorderColor(color);
+    if(color.isValid()) {scene->changeBorderColor(color); shot();}
 }
 
 void MainWindow::changeFillType()
@@ -1146,12 +1164,13 @@ void MainWindow::changeFillType()
 	case 12: scene->changeFillType(Qt::BDiagPattern); break;
 	case 13: scene->changeFillType(Qt::FDiagPattern); break;
 	case 14: scene->changeFillType(Qt::DiagCrossPattern); break;
-	case 15: scene->changeFillType(Qt::LinearGradientPattern); break;
-	case 16: scene->changeFillType(Qt::RadialGradientPattern); break;
-	case 17: scene->changeFillType(Qt::ConicalGradientPattern); break;
-	case 18: scene->changeFillType(Qt::TexturePattern); break;
+    // case 15: scene->changeFillType(Qt::LinearGradientPattern); break;
+    // case 16: scene->changeFillType(Qt::RadialGradientPattern); break;
+    // case 17: scene->changeFillType(Qt::ConicalGradientPattern); break;
+    // case 18: scene->changeFillType(Qt::TexturePattern); break;
 	}
 	customizePic->setCheckState(Qt::Unchecked);
+    shot();
 }
 
 void MainWindow::changeFillColor()
@@ -1160,6 +1179,7 @@ void MainWindow::changeFillColor()
     if(color.isValid()){
         customizePic->setCheckState(Qt::Unchecked);
         scene->changeFillColor(color);
+        shot();
         // changeFillType();
     }
 }
@@ -1191,82 +1211,92 @@ QSet<DTextBase *> MainWindow::getTextBases()
 void MainWindow::changeTextCol()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
-    if(color.isValid()) scene->changeTextColor(color);
+    if(color.isValid()){
+        scene->changeTextColor(color);
+        shot();
+    }
 }
 
 void MainWindow::changeTextFont()
 {
 	bool flag = true;
 	QFont font = fontDia->getFont(&flag, this);
-	if(flag) scene->changeTextFont(font);
+    if(flag) {
+        scene->changeTextFont(font);
+        shot();
+    }
 }
 
 void MainWindow::rotateCW()
 {
 	if(scene->selectedItems().isEmpty()) view->rotateCW();
-	else scene->rotateCW();
+    else {scene->rotateCW(); shot();}
 }
 
 void MainWindow::rotateCCW()
 {
 	if(scene->selectedItems().isEmpty()) view->rotateCCW();
-	else scene->rotateCCW();
+    else {scene->rotateCCW(); shot();}
 }
 
 void MainWindow::enlarge()
 {
 	if(scene->selectedItems().isEmpty()) view->enlarge();
-	else scene->enlarge();
+    else {scene->enlarge(); shot();}
 }
 
 void MainWindow::shrink()
 {
 	if(scene->selectedItems().isEmpty()) view->shrink();
-	else scene->shrink();
+    else {scene->shrink(); shot();}
 }
 
 void MainWindow::moveLeft()
 {
 	if(scene->selectedItems().isEmpty()) view->moveLeft();
-	else scene->moveLeft();
+    else {scene->moveLeft(); shot();}
 }
 
 void MainWindow::moveRight()
 {
 	if(scene->selectedItems().isEmpty()) view->moveRight();
-	else scene->moveRight();
+    else {scene->moveRight(); shot();}
 }
 
 void MainWindow::moveUp()
 {
 	if(scene->selectedItems().isEmpty()) view->moveUp();
-	else scene->moveUp();
+    else {scene->moveUp(); shot();}
 }
 
 void MainWindow::moveDown()
 {
 	if(scene->selectedItems().isEmpty()) view->moveDown();
-	else scene->moveDown();
+    else {scene->moveDown(); shot();}
 }
 
 void MainWindow::moveSelectedZUp(){
 	if(scene->selectedItems().isEmpty()) return;
-    else scene->moveSelectedZUp();
+    scene->moveSelectedZUp();
+    shot();
 }
 
 void MainWindow::moveSelectedZDown(){
 	if(scene->selectedItems().isEmpty()) return;
-    else scene->moveSelectedZDown();
+    scene->moveSelectedZDown();
+    shot();
 }
 
 void MainWindow::moveSelectedMaxZUp(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZMaxUp();
+    scene->moveSelectedZMaxUp();
+    shot();
 }
 
 void MainWindow::moveSelectedMaxZDown(){
 	if(scene->selectedItems().isEmpty()) return;
-	else scene->moveSelectedZMaxDown();
+    scene->moveSelectedZMaxDown();
+    shot();
 }
 
 void MainWindow::changeLayer()
@@ -1297,6 +1327,7 @@ void MainWindow::findandReplace()
 void MainWindow::delSelectedItem()
 {
 	scene->delSelectedItem();
+    shot();
 }
 
 // void MainWindow::combineSelected()
@@ -1361,10 +1392,12 @@ void MainWindow::newFile(){
 
 void MainWindow::copy(){
 	scene->copySelectedItems();
+    shot();
 }
 
 void MainWindow::paste(){
 	scene->pasteItems();
+    shot();
 }
 
 void MainWindow::redo(){
@@ -1398,12 +1431,18 @@ void MainWindow::setAutoAlign()
 {
     if(isOpenReference->isChecked()) scene->setAutoAlign(true);
     else scene->setAutoAlign(false);
+    shot();
 }
 
 void MainWindow::myDebug()
 {
 	qDebug() << "debug triggered";
 	scene->itemVertiEven();
+}
+
+void MainWindow::shot()
+{
+    UndoManager::instance().shot();
 }
 
 void MainWindow::check(){
