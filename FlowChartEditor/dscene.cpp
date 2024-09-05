@@ -1415,6 +1415,11 @@ void DScene::pasteItems(){
     QPointF scenePos = view->mapToScene(viewPos);
     QDataStream in(&copyData,QIODevice::ReadOnly);
 	QList<QGraphicsItem*> items = Serializer::instance().deserializeItems(in);
+
+    for(QGraphicsItem * item : items){
+        if(item->parentItem() != nullptr) continue;
+        TOTAL_MAX_Z_VALUE = TOTAL_MAX_Z_VALUE <= item->zValue() ? item->zValue() + 1 : TOTAL_MAX_Z_VALUE;
+    }
     DTool::moveItems(items,copyPoint,scenePos);
     dDrawItems(items);
 }

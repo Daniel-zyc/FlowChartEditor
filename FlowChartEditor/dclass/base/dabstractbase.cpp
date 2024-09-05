@@ -300,10 +300,9 @@ bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 	// qDebug() << pos << " " << this->pos();
 	qreal rot; in >> rot; QGraphicsItem::setRotation(rot);
 	qreal scl; in >> scl; QGraphicsItem::setScale(scl);
-    qreal zval; in >> zval; setZValue(zval + TOTAL_MAX_Z_VALUE ++ );
+    qreal zval; in >> zval; setZValue(zval + TOTAL_MAX_Z_VALUE );
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
-
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
 	return true;

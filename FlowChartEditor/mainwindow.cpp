@@ -1023,8 +1023,8 @@ void MainWindow::bindAction()
 	connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(changeTextCol()));
 	connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(changeTextFont()));
 
-    connect(ui->actMoveSelectedMaxZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
-    connect(ui->actMoveSelectedMaxZDown, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZDown()));
+    connect(ui->actMoveSelectedZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
+    connect(ui->actMoveSelectedZDown, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZDown()));
     connect(ui->actMoveSelectedMaxZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedMaxZUp()));
     connect(ui->actMoveSelectedMaxZDown, SIGNAL(triggered(bool)),this, SLOT(moveSelectedMaxZDown()));
 
