@@ -798,8 +798,6 @@ void MainWindow::createMenu()
 	ui->editMenu->addAction(ui->actMoveDown);
 
 	ui->addMenu->addAction(ui->actAddLine);
-	ui->addMenu->addAction(ui->actAddArrowLine);
-	ui->addMenu->addAction(ui->actAddDoubleArrowLine);
 	ui->addMenu->addAction(ui->actAddEll);
 	ui->addMenu->addAction(ui->actAddRect);
 	ui->addMenu->addAction(ui->actAddRoundRect);
@@ -1057,7 +1055,7 @@ void MainWindow::bindAction()
 
 void MainWindow::saveAsSvg()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("SVG Files(*.svg"));
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", "SVG Files(*.svg)`");
 	if(filePath == "") return;
 	QSvgGenerator generator;
 	generator.setFileName(filePath);
@@ -1071,7 +1069,7 @@ void MainWindow::saveAsSvg()
 
 	QPainter painter;
 	painter.begin(&generator);
-	view->render(&painter);
+    scene->render(&painter);
 	painter.end();
 }
 
@@ -1396,8 +1394,6 @@ void MainWindow::newFile(){
     FILE_PATH = "";
     scene->clear();
 }
-
-
 
 void MainWindow::copy(){
 	scene->copySelectedItems();

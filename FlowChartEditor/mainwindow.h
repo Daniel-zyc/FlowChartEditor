@@ -194,9 +194,11 @@ private slots:
 
 	void myDebug();
     void shot();
-private:
+
+public:
 	Ui::MainWindow *ui;
 
+private:
 	Inspector *inspector;
 	DScene *scene;
 	DView *view;

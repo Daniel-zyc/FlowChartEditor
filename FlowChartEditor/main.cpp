@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include <QApplication>
 #include <QStyleFactory>
@@ -29,6 +30,9 @@ int main(int argc, char *argv[])
 	a.setPalette(lightPalette);
 
 	MainWindow w;
+	MainWindow::connect(w.ui->actExit, &QAction::triggered, &a, [&](){
+		a.exit(0);
+	});
 	w.show();
 	return a.exec();
 }

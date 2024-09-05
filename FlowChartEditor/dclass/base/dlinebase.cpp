@@ -6,6 +6,7 @@
 DLineBase::DLineBase(QGraphicsItem *parent)
     : DAbstractBase(parent)
 {
+	setPen(globalLinePen);
     sizes.resize(2);
     isScaleable = false;
     isRotateable = false;
