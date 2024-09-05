@@ -264,7 +264,7 @@ void DScene::addParagramItem()
 void DScene::addpentagonItem()
 {
     qDebug() << "add 五边形";
-    prepareInsertItem(new pentagonItem());
+    prepareInsertItem(new DPentagonItem());
 }
 
 void DScene::addhexagonItem()

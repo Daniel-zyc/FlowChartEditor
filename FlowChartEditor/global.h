@@ -79,6 +79,7 @@ enum UserTypes
 	DParagramItemType = QGraphicsItem::UserType + 104,
 	DTrapItemType = QGraphicsItem::UserType + 105,
 	DDiaItemType = QGraphicsItem::UserType + 106,
+    DPentagonItemType = QGraphicsItem::UserType + 107,
 
 	DFStartEndItemType = QGraphicsItem::UserType + 200,
 	DFPredefineItemType = QGraphicsItem::UserType + 201,

@@ -6,12 +6,12 @@
 #include <QPolygonF>
 #include <QRectF>
 
-class pentagonItem : public DPolygonBase
+class DPentagonItem : public DPolygonBase
 {
 public:
-    enum { Type = DDiaItemType };
-    pentagonItem(QGraphicsItem *parent = nullptr);
-    pentagonItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+    enum { Type = DPentagonItemType };
+    DPentagonItem(QGraphicsItem *parent = nullptr);
+    DPentagonItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
