@@ -46,8 +46,6 @@ void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	paintShape(painter, option, widget);
 	if(isSelected()) paintSelected(painter, option, widget);
 	if(showMagPoint) paintMagPoint(painter, option, widget);
-    painter->setBrush(Qt::red);
-    painter->drawPath(shape());
 }
 
 bool DAbstractBase::isAbstract()
