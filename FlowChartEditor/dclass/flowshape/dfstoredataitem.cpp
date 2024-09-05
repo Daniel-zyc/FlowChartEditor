@@ -56,13 +56,13 @@ void DFStoreDataItem::updatePath()
 
     qreal rectWidth = rect.width() / 2;
     qreal rectHeight = rect.height();
-	path.moveTo(rect.left()+ratio*rect.width(),rect.top());
+    path.moveTo(rect.left()+ratio*rect.width(),rect.bottom());
     // 绘制左半部分椭圆
-	path.arcTo(rect.left(),rect.top(),ratio*2*rect.width(),rect.height(),90,180);
-    path.lineTo(rect.right(), rect.bottom());
+    path.arcTo(rect.left(),rect.top(),ratio*2*rect.width(),rect.height(),270,-180);
+    path.lineTo(rect.right(), rect.top());
     // 绘制右半部分椭圆
-    path.arcTo(rect.right()-ratio*rect.width(),rect.top(),ratio*2*rect.width(),rect.height(),270,-180);
-    path.lineTo(rect.left()+ratio*rect.width(),rect.top());
+    path.arcTo(rect.right()-ratio*rect.width(),rect.top(),ratio*2*rect.width(),rect.height(),90,180);
+    path.lineTo(rect.left()+ratio*rect.width(),rect.bottom());
 }
 
 void DFStoreDataItem::sizeToRect(QRectF nrect)

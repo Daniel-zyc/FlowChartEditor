@@ -10,7 +10,7 @@ DFMergeItem::DFMergeItem(qreal w, qreal h, QGraphicsItem *parent)
     modis.resize(1);
     for(int i = 0; i < 3; i++) mags->push_back(new MagPoint(this));
 
-    polygon << QPointF(0, h/2) << QPointF(w/2, -h/2) << QPointF(-w/2, -h/2);
+    polygon << QPointF(0, h/2) << QPointF(-w/2, -h/2) << QPointF(w/2, -h/2);
     updateAll();
 }
 

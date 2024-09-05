@@ -72,6 +72,9 @@ public:
 	// 用来在线条位置发生移动之后，判断是否还应该保持磁吸关系
 	void checkAutoUnlinkLine();
 
+    //获取线段的外框
+    QPainterPath getFillPath(QPointF pth_st, QPointF pth_ed) const;
+
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 	virtual QPainterPath shapeSelected() const override;

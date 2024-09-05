@@ -48,6 +48,7 @@ void DLineItem::updateLine()
 void DLineItem::updatePath()
 {
 	path.clear();
+    /*
 	QLineF vec(QPointF{0, 0}, endPoint - beginPoint);
 	vec.setLength(qMax(pen().widthF(), sizePointRadius));
 	vec = vec.normalVector();
@@ -56,6 +57,8 @@ void DLineItem::updatePath()
 	poly << (beginPoint + dir) << (endPoint + dir)
          << (endPoint - dir) << (beginPoint - dir);
 	path.addPolygon(poly);
+    */
+    path.addPath(getFillPath(beginPoint,endPoint));
 }
 
 void DLineItem::updateAll()
