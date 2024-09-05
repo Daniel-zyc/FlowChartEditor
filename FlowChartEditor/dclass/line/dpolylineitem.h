@@ -75,6 +75,7 @@ private:
 
     QMap<int,QPointF> modi_pos;
 
+
 public:
     /**
      * @brief serialize

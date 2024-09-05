@@ -9,7 +9,7 @@ DPolyLineItem::DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     beginPoint = begin;
     endPoint = end;
     //重置调整点数量
-    updatePolyLineType(); // 实时更新？
+    updatePolyLineType();
     updateBeginMidPoint();
     updateEndMidPoint();
     modis.resize(modis_num);
@@ -134,9 +134,23 @@ int DPolyLineItem::checkModi(int type,QPointF p)
 
 void DPolyLineItem::modiToPoint(QPointF p, int id)
 {
+    int direct = getPaintDirection();
+    QPointF points[6] = {
+        QPointF(beginPoint.x(), beginPoint.y()),
+        QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),
+        //begin_midPoint,
+        QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
+                begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),
+        QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
+                begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),
+        //end_midPoint,
+        QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),
+        QPointF(endPoint.x(), endPoint.y())
+    };
     switch(id)
     {
     case 0:
+        qDebug() << "MODIFYING NODE 0:";
         if(begin_midPoint.x() == end_midPoint.x()) {
             if(!checkModi(0,p)) return;
             begin_midPoint = QPointF(p.x(),begin_midPoint.y());
@@ -148,6 +162,13 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
         }
         modi_pos.insert(0,p);
         updateModiPoint();
+        /*
+        qDebug() << QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
+                            begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct);
+        qDebug() << QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
+                        begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1));
+        */
+        qDebug() << "FINISHED MODIFYING NODE 0";
         break;
     case 1:
         if(begin_midPoint.x() == end_midPoint.x()) {
@@ -209,12 +230,12 @@ QPainterPath DPolyLineItem::shapeNormal() const
 
 void DPolyLineItem::updateLine()
 {
-    //qDebug() << "update" << clock();
     updatePolyLineType();
     updateBeginMidPoint();
     updateEndMidPoint();
     updateMidPoint(line_type);
     updateModiPoint();
+    if(modi_pos.contains(0)) modiToPoint(modi_pos.value(0),0);
     return;
 }
 //中心定位点
@@ -265,6 +286,7 @@ void DPolyLineItem::updateModiPoint()
                                            (endPoint.y() + ed_y_offset + end_midPoint.y()) / 2);
         }
     }
+    //qDebug() << "modi_num:" << modis_num;
     return;
 }
 //折线中间线的方向横1/竖0
@@ -290,7 +312,6 @@ int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
 {
     int item_direct = 0;
     double min_dis = 0x3f3f3f3f, temp = 0;
-
     if(abs(mapToScene(item.topLeft()).x() - point.x()) < item.width() / 2) {
         temp = abs(mapToScene(item.topLeft()).x() - point.x());
         if(temp < min_dis) min_dis = temp,item_direct = 4;
@@ -643,20 +664,16 @@ void DPolyLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 bool DPolyLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DLineBase::deserialize(in, fa)) return false;
-    in << st_x_offset << st_y_offset << ed_x_offset << ed_y_offset;
-    in << mid_x_shift << mid_y_shift;
-    in << begin_midPoint << end_midPoint << midPoint;
-    in << modis_num << line_type << record_dist;
-    in << modi_pos;
+    in >> st_x_offset >> st_y_offset >> ed_x_offset >> ed_y_offset;
+    in >> mid_x_shift >> mid_y_shift;
+    in >> begin_midPoint >> end_midPoint >> midPoint;
+    in >> modis_num >> line_type >> record_dist;
+    in >> modi_pos;
     updateLine();
-    if(!modi_pos.value(0).isNull()) {
-        modiToPoint(modi_pos.value(0),0);
-    }
-    if(!modi_pos.value(1).isNull()) {
-        modiToPoint(modi_pos.value(1),1);
-    }
-    if(!modi_pos.value(2).isNull()) {
-        modiToPoint(modi_pos.value(2),2);
-    }
+    qDebug() << "modis_num:" << modis_num;
+    if(modi_pos.contains(0)) modiToPoint(modi_pos.value(0),0);
+    if(modi_pos.contains(1)) modiToPoint(modi_pos.value(1),1);
+    if(modi_pos.contains(2)) modiToPoint(modi_pos.value(2),2);
+
     return true;
 }
