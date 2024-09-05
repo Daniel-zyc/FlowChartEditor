@@ -14,6 +14,8 @@ extern int PASTE_NUM;
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
 
+extern QString FILE_PATH;
+
 // 将画面上的所有物品大小放大的倍数，同时视角缩小相应的倍数
 constexpr qreal globalScale = 4;
 constexpr qreal qrealMax = std::numeric_limits<qreal>::max();

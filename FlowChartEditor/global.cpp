@@ -4,6 +4,8 @@
 
 #include <cmath>
 
+QString FILE_PATH = "";
+
 QSet<int> registeredTypes = QSet<int>(
 			{
 				// shape
