@@ -36,8 +36,8 @@ void DFInformationItem::updateMagPoint()
     (*mags)[0]->pos = {rect.left(), 0};
     (*mags)[1]->pos = {rect.right(), 0};
 
-    (*mags)[2]->pos = {0, rect.top()};
-    (*mags)[3]->pos = {0, rect.bottom() * 9 / 10};
+	(*mags)[2]->pos = {0, rect.top() * 4 / 5};
+	(*mags)[3]->pos = {0, rect.bottom() * 4 / 5};
 }
 
 void DFInformationItem::updatePath()
