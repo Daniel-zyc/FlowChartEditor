@@ -798,8 +798,6 @@ void MainWindow::createMenu()
 	ui->editMenu->addAction(ui->actMoveDown);
 
 	ui->addMenu->addAction(ui->actAddLine);
-	ui->addMenu->addAction(ui->actAddArrowLine);
-	ui->addMenu->addAction(ui->actAddDoubleArrowLine);
 	ui->addMenu->addAction(ui->actAddEll);
 	ui->addMenu->addAction(ui->actAddRect);
 	ui->addMenu->addAction(ui->actAddRoundRect);
