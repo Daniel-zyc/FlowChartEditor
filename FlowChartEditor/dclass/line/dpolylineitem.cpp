@@ -111,6 +111,8 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         painter->drawRect(begin_rect);
     }
 */
+    //painter->setBrush(Qt::red);
+    //painter->drawPath(shapeNormal());
 }
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
@@ -137,23 +139,9 @@ int DPolyLineItem::checkModi(int type,QPointF p)
 
 void DPolyLineItem::modiToPoint(QPointF p, int id)
 {
-    int direct = getPaintDirection();
-    QPointF points[6] = {
-        QPointF(beginPoint.x(), beginPoint.y()),
-        QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),
-        //begin_midPoint,
-        QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
-                begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),
-        QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
-                begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),
-        //end_midPoint,
-        QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),
-        QPointF(endPoint.x(), endPoint.y())
-    };
     switch(id)
     {
     case 0:
-        qDebug() << "MODIFYING NODE 0:";
         if(begin_midPoint.x() == end_midPoint.x()) {
             if(!checkModi(0,p)) return;
             begin_midPoint = QPointF(p.x(),begin_midPoint.y());
@@ -166,12 +154,13 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
         modi_pos.insert(0,p);
         updateModiPoint();
         /*
+        qDebug() << "MODIFYING NODE 0:";
         qDebug() << QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
                             begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct);
         qDebug() << QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
                         begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1));
-        */
         qDebug() << "FINISHED MODIFYING NODE 0";
+        */
         break;
     case 1:
         if(begin_midPoint.x() == end_midPoint.x()) {
@@ -204,7 +193,6 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
 
 }
 
-
 QPainterPath DPolyLineItem::shapeNormal() const
 {
     int direct = getPaintDirection();
@@ -221,11 +209,12 @@ QPainterPath DPolyLineItem::shapeNormal() const
         QPointF(endPoint.x(), endPoint.y())
     };
     QPainterPath path;
-    path.moveTo(points[0]);  // 起始点
+    //path.moveTo(points[0]);  // 起始点
     // 获取数组大小
     int numPoints = sizeof(points) / sizeof(points[0]);
     for (int i = 1; i < numPoints; ++i) {
-        path.lineTo(points[i]);  // 连接每个点
+        //path.lineTo(points[i]);  // 连接每个点
+        path.addPath(getFillPath(points[i-1],points[i]));
     }
     return path;
 }

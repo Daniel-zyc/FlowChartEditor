@@ -351,6 +351,27 @@ void DLineBase::checkAutoUnlinkLine()
     }
 }
 
+QPainterPath DLineBase::getFillPath(QPointF pth_st, QPointF pth_ed) const
+{
+    QPainterPath pth;
+    QLineF vec(pth_st, pth_ed);
+    //获取法向量
+    QLineF normalVec = vec.normalVector();
+    normalVec.setLength(qMax(pen().widthF(), sizePointRadius));
+    QPointF offset(normalVec.dx(), normalVec.dy());
+    QPointF p1 = pth_st + offset;
+    QPointF p2 = pth_st - offset;
+    QPointF p3 = pth_ed + offset;
+    QPointF p4 = pth_ed - offset;
+    pth.moveTo(p1);
+    pth.lineTo(p3);
+    pth.lineTo(p4);
+    pth.lineTo(p2);
+    pth.closeSubpath();
+    pth.setFillRule(Qt::WindingFill);
+    return pth;
+}
+
 //==============================================================================
 
 void DLineBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
