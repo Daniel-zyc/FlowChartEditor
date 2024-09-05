@@ -92,12 +92,15 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     painter->drawEllipse(QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),5,5);
 */
 //绘制箭头
-    qreal angle;
+    qreal begin_angle,end_angle;
+    if(abs(st_x_offset) > 1e-6 || abs(st_y_offset) > 1e-6)
+        begin_angle = getAngle(points[1],points[0]);
+    else begin_angle = getAngle(points[2],points[0]);
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
-        angle = getAngle(points[4],points[5]);
-    else angle = getAngle(points[3],points[5]);
-    drawEndArrow(painter, angle, endPoint, endArrowType);
-    drawBeginArrow(painter, angle, beginPoint, beginArrowType);
+        end_angle = getAngle(points[4],points[5]);
+    else end_angle = getAngle(points[3],points[5]);
+    drawEndArrow(painter, end_angle, endPoint, endArrowType);
+    drawBeginArrow(painter, begin_angle + DConst::PI, beginPoint, beginArrowType);
     // drawArrow(painter, angle, beginPoint, beginArrowType);
     //绘制sizerect
 /*
@@ -319,7 +322,6 @@ int DPolyLineItem::getCollideDirection(QRectF item,QPointF point)
         temp = abs(mapToScene(item.bottomLeft()).y() - point.y());
         if(temp < min_dis) min_dis = temp,item_direct = 3;
     }
-    min_dis = 0;
     return item_direct;
 }
 //相对位置 1234右上开始顺时针
