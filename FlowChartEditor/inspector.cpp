@@ -14,7 +14,7 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
     QToolBar *toolBar = new QToolBar(this);
     QAction *clearAllAction = new QAction("清空所有项", this);
     showErrorAction = new QAction("屏蔽警告", this);
-    showFlowChartErrorsAction = new QAction("仅显示流程图图形错误", this);  // 新的按钮
+    showFlowChartErrorsAction = new QAction("屏蔽普通图形错误", this);  // 新的按钮
     QAction *refreshAction = new QAction("刷新", this);
     // QAction *closeAction = new QAction("关闭", this);
 
@@ -45,9 +45,13 @@ Inspector::~Inspector() {
     m_instance = nullptr;
 }
 
+void Inspector::setAutoCheck(bool b){
+    autoCheck = b;
+}
+
 void Inspector::checkAll(){
+    if(!autoCheck || scene == nullptr || view == nullptr) return;
     clearAllErrors();
-    if(scene == nullptr || view == nullptr) return;
     originalCentrer = view->mapToScene(view->viewport()->rect().center());
     originalTransform = view->transform();
     QList<QGraphicsItem * > items = scene->items();
@@ -308,6 +312,7 @@ void Inspector::onShowFlowChartErrorsClicked(){
 }
 
 void Inspector::onCloseActionClicked(){
+    setAutoCheck(false);
     this->hide();
     restoreView();
 }

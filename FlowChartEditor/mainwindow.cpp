@@ -978,8 +978,11 @@ void MainWindow::bindAction()
     connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
         if(!isInspect->isChecked()) {
             inspector->hide();
+            inspector->setAutoCheck(false);
             inspector->restoreView();
         }else {
+            inspector->show();
+            inspector->setAutoCheck(true);
             check();
         }
     });
@@ -1314,6 +1317,7 @@ void MainWindow::myDebug()
 }
 
 void MainWindow::check(){
+    inspector->setAutoCheck(true);
 	inspector->checkAll();
 	inspector->show();
 }

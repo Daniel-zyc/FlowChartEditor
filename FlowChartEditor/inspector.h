@@ -33,6 +33,8 @@ public:
     void restoreView();
     void updateErrorList();
 
+    void setAutoCheck(bool b);
+
 private:
     explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
 
@@ -58,6 +60,8 @@ private:
     QAction* showErrorAction;
 
     QAction* showFlowChartErrorsAction;
+
+    bool autoCheck;
 
 private slots:
     void onItemClicked(QListWidgetItem *item);
