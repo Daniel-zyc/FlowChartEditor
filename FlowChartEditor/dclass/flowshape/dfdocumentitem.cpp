@@ -47,17 +47,16 @@ void DFDocumentItem::updatePath()
     qreal w = rect.width();
     qreal h = rect.height();
 
-    path.moveTo(rect.bottomLeft() - QPointF(0 , h / 10));
-    path.lineTo(rect.topLeft());
+    path.moveTo(rect.bottomRight() - QPointF(0, h / 4));
     path.lineTo(rect.topRight());
-    path.lineTo(rect.bottomRight() - QPointF(0, h / 4));
+    path.lineTo(rect.topLeft());
+    path.lineTo(rect.bottomLeft() - QPointF(0 , h / 10));
 
     // 设置贝塞尔曲线的四个控制点
     QPointF startPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - h / 10);
     QPointF controlPoint1(rect.bottomLeft().x() + w / 3 , rect.bottomLeft().y() + h / 7);
     QPointF controlPoint2(rect.bottomLeft().x() + w / 4 * 3, rect.bottomLeft().y() - h / 3);
     QPointF endPoint(rect.bottomRight().x(), rect.bottomRight().y() - h / 4);
-    path.moveTo(startPoint);
     // 绘制三次贝塞尔曲线
     path.cubicTo(controlPoint1, controlPoint2, endPoint);
 }
