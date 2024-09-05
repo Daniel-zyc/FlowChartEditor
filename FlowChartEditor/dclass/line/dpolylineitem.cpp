@@ -139,23 +139,9 @@ int DPolyLineItem::checkModi(int type,QPointF p)
 
 void DPolyLineItem::modiToPoint(QPointF p, int id)
 {
-    int direct = getPaintDirection();
-    QPointF points[6] = {
-        QPointF(beginPoint.x(), beginPoint.y()),
-        QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset),
-        //begin_midPoint,
-        QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
-                begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct),
-        QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
-                begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1)),
-        //end_midPoint,
-        QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset),
-        QPointF(endPoint.x(), endPoint.y())
-    };
     switch(id)
     {
     case 0:
-        qDebug() << "MODIFYING NODE 0:";
         if(begin_midPoint.x() == end_midPoint.x()) {
             if(!checkModi(0,p)) return;
             begin_midPoint = QPointF(p.x(),begin_midPoint.y());
@@ -168,12 +154,13 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
         modi_pos.insert(0,p);
         updateModiPoint();
         /*
+        qDebug() << "MODIFYING NODE 0:";
         qDebug() << QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
                             begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct);
         qDebug() << QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
                         begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1));
-        */
         qDebug() << "FINISHED MODIFYING NODE 0";
+        */
         break;
     case 1:
         if(begin_midPoint.x() == end_midPoint.x()) {
