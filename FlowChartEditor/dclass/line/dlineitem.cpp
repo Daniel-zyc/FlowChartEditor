@@ -25,6 +25,9 @@ void DLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->setPen(pen());
 	painter->drawLine(QLineF(beginPoint, endPoint));
 
+    // painter->setBrush(Qt::red);
+    // painter->drawPath(shape());
+
 	qreal angle = getAngle(beginPoint, endPoint);
     drawEndArrow(painter, angle, endPoint, endArrowType);
     drawBeginArrow(painter, angle, beginPoint, beginArrowType);
@@ -72,11 +75,16 @@ void DLineItem::updateAll()
 void DLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DLineBase::serialize(out, fa);
+	qDebug() << "debug: " << beginPoint - endPoint;
 }
 
 bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(!DLineBase::deserialize(in, fa)) return false;
+	// qDebug() << "debug: " << beginPoint - endPoint;
 	updateAll();
+    // updatePosition();
+    qDebug() << "endMag" << endMag;
+    qDebug() << "beginMag" << beginMag;
 	return true;
 }

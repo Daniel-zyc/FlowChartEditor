@@ -124,6 +124,17 @@ void DShapeBase::updateTextItemWidth()
 	textItem->sizeToRect(rc);
 }
 
+QString DShapeBase::getSizeString()
+{
+	return QString::asprintf("大小 %.1f × %.1f",
+							 sizeRect().width(), sizeRect().height());
+}
+
+QString DShapeBase::getRotString()
+{
+	return QString::asprintf("角度 %.2f", rotation());
+}
+
 bool DShapeBase::checkRotPoint(QPointF p) const
 {
 	qreal r = rotPointRadius; QPointF rp = rotPoint;

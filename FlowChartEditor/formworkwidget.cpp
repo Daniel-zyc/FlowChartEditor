@@ -264,6 +264,7 @@ NewFormworkDialog::NewFormworkDialog(QWidget *parent)
     : QDialog(parent), titleEdit(new QLineEdit(this)), detailEdit(new QTextEdit(this)) {
 
     titleEdit->setPlaceholderText("请输入标题");
+    detailEdit->setPlaceholderText("添加标注");
 
     okButton = new QPushButton("确定", this);
     cancelButton = new QPushButton("取消", this);

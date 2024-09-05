@@ -52,6 +52,7 @@ public:
 	virtual void setBeginArrowType(int type);
 	virtual void setEndArrowType(int type);
 	virtual qreal getAngle(const QPointF &beginPoint, const QPointF &endPoint);
+
     virtual void drawEndArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType);
     virtual void drawBeginArrow(QPainter *painter, double angle, const QPointF &beginPoint, int arrowType);
 
@@ -74,6 +75,11 @@ public:
 
     //获取线段的外框
     QPainterPath getFillPath(QPointF pth_st, QPointF pth_ed) const;
+
+	QString getSizeString() override
+	{
+		return QString::asprintf("长度 %.4f", DTool::dist(beginPoint, endPoint));
+	}
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

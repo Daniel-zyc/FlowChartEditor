@@ -171,6 +171,7 @@ private slots:
     void saveNewFile();
 
 	void copy();
+    void shear();
 	void paste();
 
 	void redo();
@@ -325,4 +326,6 @@ private:
 
 	QLabel *labelViewCord;
 	QLabel *labelSceneCord;
+	QLabel *labelItemInfo;
+	QLabel *labelSceneState;
 };

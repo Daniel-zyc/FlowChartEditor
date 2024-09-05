@@ -49,6 +49,10 @@ public:
 	// 更新图形中文本的宽度，如果太宽会压缩到比图形宽度小一点
 	virtual void updateTextItemWidth();
 
+	QString getSizeString() override;
+
+	QString getRotString() override;
+
 public:
 	//==========================================================================
 	// 图形的大小框
