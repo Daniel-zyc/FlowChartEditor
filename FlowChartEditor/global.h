@@ -335,18 +335,3 @@ namespace DTool
     // normalize item的zvalue
     void normalizeZValues(QList<QGraphicsItem *> &items);
 };
-
-struct FormworkData
-{
-    QString imgPath;
-    QString FilePath;
-    QString Title;
-    QString Detail;
-};
-
-const FormworkData FormworkDataList[] = {
-    { ":/OneRect/formwork/formwork1/OneRect.svg", "../../formwork/formwork1/OneRect.bit", "一个矩形", "仅仅是一个矩形" },
-    { ":/OneEllipse/formwork/formwork2/OneEllipse.svg", "../../formwork/formwork2/OneEllipse.bit", "一个椭圆", "仅仅是一个椭圆" }
-};
-
-const int FormworkDataListSize = sizeof(FormworkDataList) / sizeof(FormworkDataList[0]);

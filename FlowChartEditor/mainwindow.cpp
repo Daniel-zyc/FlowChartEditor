@@ -237,7 +237,7 @@ void MainWindow::initrightUi()
     beginarrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
     beginarrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
 
-    linebound->setRange(0, 30);
+    linebound->setRange(0.01, 30);
     linebound->setSingleStep(0.25);
     linebound->setValue(1);
     linebound->setSuffix("磅");
@@ -295,7 +295,7 @@ void MainWindow::initrightUi()
 	rotationBox->setSuffix("°");
 	rotationBox->setValue(0);
 	rotationBox->setWrapping(true);
-	scaleBox->setRange(100, 100000);
+    scaleBox->setRange(1, 100000);
 	scaleBox->setSingleStep(1);
 	scaleBox->setValue(100);
 	scaleBox->setSuffix("%");
@@ -378,7 +378,7 @@ void MainWindow::initrightUi()
 	rightTab->addTab(rightFontw, "文本");
 
 	// rightw->setVisible(false);
-	formworkWidget = new FormworkWidget();
+    formworkWidget = new FormworkWidget(this,scene,view);
 	rightTab->addTab(formworkWidget,"模板");
 }
 
@@ -765,6 +765,7 @@ void MainWindow::createMenu()
 	ui->fileMenu->addAction(ui->actNewFile);
 	ui->fileMenu->addAction(ui->actOpenFile);
 	ui->fileMenu->addAction(ui->actSaveFile);
+    ui->fileMenu->addAction(ui->actSaveNewFile);
 	ui->fileMenu->addAction(ui->actSvgFile);
 	ui->fileMenu->addAction(ui->actExit);
 
@@ -842,6 +843,7 @@ void MainWindow::createToolBar()
 	ui->headToolBar->addAction(ui->actNewFile);
 	ui->headToolBar->addAction(ui->actOpenFile);
 	ui->headToolBar->addAction(ui->actSaveFile);
+    // ui->headToolBar->addAction(ui->actSaveNewFile);
 	ui->headToolBar->addWidget(saveSvgTln);
 	ui->headToolBar->addSeparator();
 
@@ -955,6 +957,7 @@ void MainWindow::bindAction()
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
 	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
 
+    connect(ui->actSaveNewFile,SIGNAL(triggered(bool)),this,SLOT(saveNewFile()));
     connect(ui->actNewFile,SIGNAL(triggered(bool)),this,SLOT(newFile()));
 	connect(ui->actSaveFile,SIGNAL(triggered(bool)), this, SLOT(saveFile()));
 	connect(ui->actOpenFile,SIGNAL(triggered(bool)), this, SLOT(loadFile()));
@@ -1041,7 +1044,7 @@ void MainWindow::bindAction()
 
 void MainWindow::saveAsSvg()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamges(*.svg"));
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("SVG Files(*.svg"));
 	if(filePath == "") return;
 	QSvgGenerator generator;
 	generator.setFileName(filePath);
@@ -1158,10 +1161,10 @@ void MainWindow::changeFillColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
     if(color.isValid()){
+        customizePic->setCheckState(Qt::Unchecked);
         scene->changeFillColor(color);
         // changeFillType();
     }
-	customizePic->setCheckState(Qt::Unchecked);
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()
@@ -1319,15 +1322,17 @@ void MainWindow::saveFile(){
 void MainWindow::loadFile(){
     if(FILE_PATH == ""){
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
-                                      QMessageBox::Yes | QMessageBox::No);
+        reply = QMessageBox::question(
+            this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
+            QMessageBox::Yes | QMessageBox::No);
         if(reply == QMessageBox::Yes){
             saveFile();
         }
     }else{
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
-                                      QMessageBox::Yes | QMessageBox::No);
+        reply = QMessageBox::question(
+            this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
+            QMessageBox::Yes | QMessageBox::No);
         if(reply == QMessageBox::Yes){
             SaveAndLoadManager::instance().saveToFile(FILE_PATH);
         }
@@ -1342,8 +1347,8 @@ void MainWindow::newFile(){
     qDebug() << " new file";
     if(FILE_PATH == ""){
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),
-                                      QMessageBox::Yes | QMessageBox::No);
+        reply = QMessageBox::question(
+            this,tr("保存当前文件"),tr("当前文件未保存，是否保存"),QMessageBox::Yes | QMessageBox::No);
         if(reply == QMessageBox::Yes){
             saveFile();
         }
@@ -1358,6 +1363,8 @@ void MainWindow::newFile(){
     FILE_PATH = "";
     scene->clear();
 }
+
+
 
 void MainWindow::copy(){
 	scene->copySelectedItems();
@@ -1402,12 +1409,19 @@ void MainWindow::setAutoAlign()
 
 void MainWindow::myDebug()
 {
-	qDebug() << "debug triggered";
-	scene->itemVertiEven();
+    // qDebug() << "debug triggered";
+    // scene->itemVertiEven();
+    // formworkWidget->loadFormwork();
 }
 
 void MainWindow::check(){
     inspector->setAutoCheck(true);
 	inspector->checkAll();
 	inspector->show();
+}
+
+void MainWindow::saveNewFile(){
+    FILE_PATH = QFileDialog::getSaveFileName(this, tr("另存为.bit文件"),"./",tr("(*.bit)"));
+    if(FILE_PATH == "") return;
+    SaveAndLoadManager::instance().saveToFile(FILE_PATH);
 }

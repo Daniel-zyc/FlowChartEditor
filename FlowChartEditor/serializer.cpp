@@ -28,7 +28,7 @@ void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
 
 	filterSerializableItem(items);
 
-    // qDebug() << "过滤不参与序列化以及父对象也会被序列化的元素后数量: " << items.size();
+	qDebug() << "过滤不参与序列化以及父对象也会被序列化的元素后数量: " << items.size();
 
 	QList<DShapeBase*> shapes;
 	QList<DTextItem*> texts;
@@ -61,11 +61,11 @@ void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
 		shape->serialize(out);
 	}
 
-    // qDebug() << "序列化中 text 的数量: " << texts.size();
+	qDebug() << "序列化中 text 的数量: " << texts.size();
 	out << (qint32)texts.size();
 	for (DTextItem *text : texts) text->serialize(out);
 
-    // qDebug() << "序列化中 line 的数量: " << lines.size();
+	qDebug() << "序列化中 line 的数量: " << lines.size();
 	out << (qint32)lines.size();
 	for (DLineBase *line : lines)
 	{
@@ -76,7 +76,7 @@ void Serializer::serializeItems(QDataStream &out, QList<QGraphicsItem *> items)
 
 QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 {
-	// qDebug() << "反序列化开始";
+	qDebug() << "反序列化开始";
 
 	clearMap();
 
@@ -144,7 +144,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 	qDebug() << "成功序列化 shape 数量: " << tmpcnt;
 
 	in >> textSize;
-	// qDebug() << "读取到的 text 数量: " << textSize;
+	qDebug() << "读取到的 text 数量: " << textSize;
 	for(tmpcnt = 0; textSize; textSize--)
 	{
 		DTextItem *text = new DTextItem();
@@ -156,10 +156,10 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		data.push_back(text);
 		tmpcnt++;
 	}
-	// qDebug() << "成功序列化 text 数量: " << tmpcnt;
+	qDebug() << "成功序列化 text 数量: " << tmpcnt;
 
 	in >> lineSize;
-	// qDebug() << "读取到的 line 数量: " << lineSize;
+	qDebug() << "读取到的 line 数量: " << lineSize;
 	for(tmpcnt = 0; lineSize; lineSize--)
 	{
 		qint32 type; in >> type;
@@ -180,7 +180,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		data.push_back(line);
 		tmpcnt++;
 	}
-	// qDebug() << "成功序列化 line 数量: " << tmpcnt;
+	qDebug() << "成功序列化 line 数量: " << tmpcnt;
 
 	return data;
 }
