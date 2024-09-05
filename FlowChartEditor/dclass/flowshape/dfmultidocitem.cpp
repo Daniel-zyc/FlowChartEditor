@@ -67,19 +67,18 @@ void DFMultiDocItem::updatePath()
     qreal w = first_rect.width();
     qreal h = first_rect.height();
 
-    path.moveTo(first_rect.bottomRight() - QPointF(0, h / 4));
-    path.lineTo(first_rect.topRight());
+    path.moveTo(first_rect.bottomLeft().x(), first_rect.bottomLeft().y() - h / 10);
     path.lineTo(first_rect.topLeft());
-    path.lineTo(first_rect.bottomLeft().x(), first_rect.bottomLeft().y() - h / 10);
+    path.lineTo(first_rect.topRight());
+    path.lineTo(first_rect.bottomRight() - QPointF(0, h / 4));
+
     // 设置贝塞尔曲线的四个控制点
-    QPointF startPoint(first_rect.bottomLeft().x(), first_rect.bottomLeft().y() - h / 10);
-    QPointF controlPoint1(first_rect.bottomLeft().x() + w / 3 , first_rect.bottomLeft().y() + h / 7);
-    QPointF controlPoint2(first_rect.bottomLeft().x() + w / 4 * 3, first_rect.bottomLeft().y() - h / 3);
-    QPointF endPoint(first_rect.bottomRight().x(), first_rect.bottomRight().y() - h / 4);
+    QPointF endPoint(first_rect.bottomLeft().x(), first_rect.bottomLeft().y() - h / 10);
+    QPointF controlPoint1(first_rect.bottomLeft().x() + w / 4 * 3, first_rect.bottomLeft().y() - h / 3);
+    QPointF controlPoint2(first_rect.bottomLeft().x() + w / 3 , first_rect.bottomLeft().y() + h / 9);
+    QPointF startPoint(first_rect.bottomRight().x(), first_rect.bottomRight().y() - h / 4);
     // 绘制三次贝塞尔曲线
     path.cubicTo(controlPoint1, controlPoint2, endPoint);
-
-
 }
 
 void DFMultiDocItem::updateMagPoint()
