@@ -28,19 +28,24 @@ SOURCES += \
     dclass/flowshape/dfconditionitem.cpp \
     dclass/flowshape/dfdataitem.cpp \
     dclass/flowshape/dfdelayitem.cpp \
+    dclass/flowshape/dfdirectstorageitem.cpp \
+    dclass/flowshape/dfdiskitem.cpp \
     dclass/flowshape/dfdocumentitem.cpp \
     dclass/flowshape/dfinformationitem.cpp \
     dclass/flowshape/dfinternalstoreitem.cpp \
     dclass/flowshape/dfmanualinputitem.cpp \
     dclass/flowshape/dfmanualoperateitem.cpp \
     dclass/flowshape/dfmergeitem.cpp \
+    dclass/flowshape/dfmultidocitem.cpp \
     dclass/flowshape/dfnodeitem.cpp \
     dclass/flowshape/dfoffpageitem.cpp \
     dclass/flowshape/dfoptionalprocessitem.cpp \
+    dclass/flowshape/dforderstorageitem.cpp \
     dclass/flowshape/dforitem.cpp \
     dclass/flowshape/dfpredefineitem.cpp \
     dclass/flowshape/dfprepareitem.cpp \
     dclass/flowshape/dfprocessitem.cpp \
+    dclass/flowshape/dfshowitem.cpp \
     dclass/flowshape/dfsortitem.cpp \
     dclass/flowshape/dfstartenditem.cpp \
     dclass/flowshape/dfstoredataitem.cpp \
@@ -49,13 +54,8 @@ SOURCES += \
     dclass/line/dlineitem.cpp \
     dclass/line/dpolylineitem.cpp \
     dclass/text/dtextitem.cpp \
-    ddirectstorageitem.cpp \
-    ddiskitem.cpp \
     dfinddialog.cpp \
-    dmultidocitem.cpp \
-    dorderstorageitem.cpp \
     dscene.cpp \
-    dshowitem.cpp \
     dview.cpp \
     formworkwidget.cpp \
     global.cpp \
@@ -88,19 +88,24 @@ HEADERS += \
     dclass/flowshape/dfconditionitem.h \
     dclass/flowshape/dfdataitem.h \
     dclass/flowshape/dfdelayitem.h \
+    dclass/flowshape/dfdirectstorageitem.h \
+    dclass/flowshape/dfdiskitem.h \
     dclass/flowshape/dfdocumentitem.h \
     dclass/flowshape/dfinformationitem.h \
     dclass/flowshape/dfinternalstoreitem.h \
     dclass/flowshape/dfmanualinputitem.h \
     dclass/flowshape/dfmanualoperateitem.h \
     dclass/flowshape/dfmergeitem.h \
+    dclass/flowshape/dfmultidocitem.h \
     dclass/flowshape/dfnodeitem.h \
     dclass/flowshape/dfoffpageitem.h \
     dclass/flowshape/dfoptionalprocessitem.h \
+    dclass/flowshape/dforderstorageitem.h \
     dclass/flowshape/dforitem.h \
     dclass/flowshape/dfpredefineitem.h \
     dclass/flowshape/dfprepareitem.h \
     dclass/flowshape/dfprocessitem.h \
+    dclass/flowshape/dfshowitem.h \
     dclass/flowshape/dfsortitem.h \
     dclass/flowshape/dfstartenditem.h \
     dclass/flowshape/dfstoredataitem.h \
@@ -109,13 +114,8 @@ HEADERS += \
     dclass/line/dlineitem.h \
     dclass/line/dpolylineitem.h \
     dclass/text/dtextitem.h \
-    ddirectstorageitem.h \
-    ddiskitem.h \
     dfinddialog.h \
-    dmultidocitem.h \
-    dorderstorageitem.h \
     dscene.h \
-    dshowitem.h \
     dview.h \
     formworkwidget.h \
     global.h \

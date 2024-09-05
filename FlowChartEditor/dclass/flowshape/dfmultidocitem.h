@@ -1,14 +1,14 @@
-#ifndef DMULTIDOCITEM_H
-#define DMULTIDOCITEM_H
+#ifndef DFMULTIDOCITEM_H
+#define DFMULTIDOCITEM_H
 
-#include "dclass/base/dshapebase.h"
+#include "../base/dshapebase.h"
 
-class DMultiDocItem : public DShapeBase
+class DFMultiDocItem : public DShapeBase
 {
 public:
-    enum { Type = DFDocumentItemType };
-    DMultiDocItem(QGraphicsItem *parent = nullptr);
-    DMultiDocItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+	enum { Type = DFMultiDocItemType };
+	DFMultiDocItem(QGraphicsItem *parent = nullptr);
+	DFMultiDocItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
@@ -24,8 +24,7 @@ public:
 
 protected:
     QRectF rect = QRectF(0, 0, 0, 0);
-    QPainterPath path;
-    //double ratio = 100;
+	QPainterPath path;
 
 public:
     /**
@@ -37,4 +36,4 @@ public:
     bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };
 
-#endif // DMULTIDOCITEM_H
+#endif // DFMULTIDOCITEM_H

@@ -1,10 +1,10 @@
-#include "dorderstorageitem.h"
-#include "magpoint.h"
+#include "dforderstorageitem.h"
+#include "../../magpoint.h"
 
-DOrderStorageItem::DOrderStorageItem(QGraphicsItem *parent)
-    : DOrderStorageItem(minRectSize, minRectSize, parent) {}
+DFOrderStorageItem::DFOrderStorageItem(QGraphicsItem *parent)
+	: DFOrderStorageItem(minRectSize, minRectSize, parent) {}
 
-DOrderStorageItem::DOrderStorageItem(qreal w, qreal h, QGraphicsItem *parent)
+DFOrderStorageItem::DFOrderStorageItem(qreal w, qreal h, QGraphicsItem *parent)
     : DShapeBase("", parent)
 {
     for(int i = 0; i < 4; i++) mags->push_back(new MagPoint(this));
@@ -12,7 +12,7 @@ DOrderStorageItem::DOrderStorageItem(qreal w, qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void DOrderStorageItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DFOrderStorageItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option); Q_UNUSED(widget);
 
@@ -21,17 +21,17 @@ void DOrderStorageItem::paintShape(QPainter *painter, const QStyleOptionGraphics
     painter->drawPath(path);
 }
 
-QRectF DOrderStorageItem::sizeRect() const
+QRectF DFOrderStorageItem::sizeRect() const
 {
     return rect;
 }
 
-QPainterPath DOrderStorageItem::shapeNormal() const
+QPainterPath DFOrderStorageItem::shapeNormal() const
 {
     return path;
 }
 
-void DOrderStorageItem::updateMagPoint()
+void DFOrderStorageItem::updateMagPoint()
 {
     (*mags)[0]->setPos({rect.left(), 0});
     (*mags)[1]->setPos({rect.right(), 0});
@@ -39,7 +39,7 @@ void DOrderStorageItem::updateMagPoint()
     (*mags)[3]->setPos({0, rect.bottom()});
 }
 
-void DOrderStorageItem::updatePath()
+void DFOrderStorageItem::updatePath()
 {
     path.clear();
 
@@ -52,18 +52,18 @@ void DOrderStorageItem::updatePath()
     path.closeSubpath();
 }
 
-void DOrderStorageItem::sizeToRect(QRectF nrect)
+void DFOrderStorageItem::sizeToRect(QRectF nrect)
 {
     rect = nrect; updateAll();
 }
 
-void DOrderStorageItem::modiToPoint(QPointF p, int id)
+void DFOrderStorageItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
 
-void DOrderStorageItem::updateAll()
+void DFOrderStorageItem::updateAll()
 {
     updateSizePoint();
     updatePath();
@@ -72,14 +72,14 @@ void DOrderStorageItem::updateAll()
 
 //==============================================================================
 
-void DOrderStorageItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DFOrderStorageItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
     DShapeBase::serialize(out, fa);
 
     out << rect;
 }
 
-bool DOrderStorageItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DFOrderStorageItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DShapeBase::deserialize(in, fa)) return false;
 

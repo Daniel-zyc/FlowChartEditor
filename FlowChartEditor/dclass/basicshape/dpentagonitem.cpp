@@ -1,10 +1,10 @@
 #include "dpentagonitem.h"
 #include "../../magpoint.h"
 
-pentagonItem::pentagonItem(QGraphicsItem *parent)
-    : pentagonItem(minRectSize, minRectSize, parent) {}
+DPentagonItem::DPentagonItem(QGraphicsItem *parent)
+    : DPentagonItem(minRectSize, minRectSize, parent) {}
 
-pentagonItem::pentagonItem(qreal w, qreal h, QGraphicsItem *parent)
+DPentagonItem::DPentagonItem(qreal w, qreal h, QGraphicsItem *parent)
     : DPolygonBase("", parent)
 {
     for(int i = 0; i < 5; i++) mags->push_back(new MagPoint(this));
@@ -12,12 +12,12 @@ pentagonItem::pentagonItem(qreal w, qreal h, QGraphicsItem *parent)
     updateAll();
 }
 
-void pentagonItem::modiToPoint(QPointF p, int id)
+void DPentagonItem::modiToPoint(QPointF p, int id)
 {
     Q_UNUSED(p); Q_UNUSED(id); return;
 }
 
-void pentagonItem::updateMagPoint()
+void DPentagonItem::updateMagPoint()
 {
 
     (*mags)[0]->setPos(polygon[0]);
@@ -27,19 +27,19 @@ void pentagonItem::updateMagPoint()
     (*mags)[4]->setPos(polygon[4]);
 }
 
-void pentagonItem::updateModiPoint()
+void DPentagonItem::updateModiPoint()
 {
     return;
 }
 
 //==============================================================================
 
-void pentagonItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
+void DPentagonItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
     DPolygonBase::serialize(out, fa);
 }
 
-bool pentagonItem::deserialize(QDataStream &in, QGraphicsItem* fa)
+bool DPentagonItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DPolygonBase::deserialize(in, fa)) return false;
     updateAll();

@@ -1,16 +1,13 @@
 #pragma once
 
-#include "dclass/base/dshapebase.h"
-#include <QRectF>
+#include "../base/dshapebase.h"
 
-class DShapeBase;
-
-class DDiskItem : public DShapeBase
+class DFOrderStorageItem : public DShapeBase
 {
 public:
-    enum { Type = DFDiskItemType };
-    DDiskItem(QGraphicsItem *parent = nullptr);
-    DDiskItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
+    enum { Type = DFOrderStorageItemType };
+	DFOrderStorageItem(QGraphicsItem *parent = nullptr);
+	DFOrderStorageItem(qreal w, qreal h, QGraphicsItem *parent = nullptr);
 
 public:
     int type() const override { return Type; }
@@ -33,7 +30,7 @@ public:
     /**
      * @brief serialize
      * @param out
-     * 序列化：DShapeBase -> rect -> radiusx -> radiusy
+     * 序列化：DShapeBase -> rect
      */
     void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
     bool deserialize(QDataStream &in, QGraphicsItem* fa) override;

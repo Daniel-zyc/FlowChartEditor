@@ -80,6 +80,7 @@ enum UserTypes
 	DParagramItemType = QGraphicsItem::UserType + 104,
 	DTrapItemType = QGraphicsItem::UserType + 105,
 	DDiaItemType = QGraphicsItem::UserType + 106,
+    DPentagonItemType = QGraphicsItem::UserType + 107,
 
 	DFStartEndItemType = QGraphicsItem::UserType + 200,
 	DFPredefineItemType = QGraphicsItem::UserType + 201,
@@ -107,6 +108,7 @@ enum UserTypes
     DFDirectStorageItemType = QGraphicsItem::UserType + 224,
     DFShowItemType = QGraphicsItem::UserType + 225,
     DFOrderStorageItemType = QGraphicsItem::UserType + 226,
+	DFMultiDocItemType = QGraphicsItem::UserType + 227,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
