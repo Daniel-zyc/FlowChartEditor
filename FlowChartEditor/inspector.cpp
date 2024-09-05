@@ -16,14 +16,14 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
     showErrorAction = new QAction("屏蔽警告", this);
     showFlowChartErrorsAction = new QAction("仅显示流程图图形错误", this);  // 新的按钮
     QAction *refreshAction = new QAction("刷新", this);
-    QAction *closeAction = new QAction("关闭", this);
+    // QAction *closeAction = new QAction("关闭", this);
 
     toolBar->addAction(clearAllAction);
     toolBar->addAction(showErrorAction);
     toolBar->addAction(showFlowChartErrorsAction);
     toolBar->addSeparator();
     toolBar->addAction(refreshAction);
-    toolBar->addAction(closeAction);
+    // toolBar->addAction(closeAction);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(toolBar);
@@ -36,7 +36,7 @@ Inspector::Inspector(QWidget *parent, DScene* scene, DView *view)
     connect(showErrorAction, &QAction::triggered, this, &Inspector::onShowErrorActionClicked);
     connect(showFlowChartErrorsAction, &QAction::triggered, this, &Inspector::onShowFlowChartErrorsClicked);
     connect(refreshAction, &QAction::triggered, this, &Inspector::checkAll);
-    connect(closeAction, &QAction::triggered, this, &Inspector::onCloseActionClicked);
+    // connect(closeAction, &QAction::triggered, this, &Inspector::onCloseActionClicked);
 
     updateErrorList();
 }

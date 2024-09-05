@@ -1,5 +1,6 @@
 #include "global.h"
-#include "dabstractbase.h"
+#include "dclass/base/dabstractbase.h"
+#include "dclass/base/dshapebase.h"
 
 #include <cmath>
 
@@ -31,13 +32,20 @@ QSet<int> registeredTypes = QSet<int>(
 				DFDelayItemType,
 				DFOrItemType,
 				DFSummaryconnItemType,
+				DFCardItemType,
+				DFCompareItemType,
+				DFMergeItemType,
+				DFOffPageItemType,
+				DFSortItemType,
+				DFStoreDataItemType,
 
 				// text
 				DTextItemType,
 
 				// line
 				DLineItemType,
-				DCurveLineItemType
+				DCurveLineItemType,
+				DPolyLineItemType
 			});
 
 int TOTAL_MAX_Z_VALUE = 0;
@@ -90,13 +98,16 @@ void DTool::filterRootBases(QList<QGraphicsItem*>& items)
         S.insert(item);
     }
 
-    for (int i = items.size() - 1; i >= 0; i--) {
-        if (items[i] == nullptr || !isAbstract(items[i]->type())
-            || S.contains(items[i]->parentItem()))
-        {
-            items.removeAt(i);
-        }
-    }
+	for (int i = 0; i < items.size(); i++)
+	{
+		if (items[i] == nullptr || !isAbstract(items[i]->type())
+			|| S.contains(items[i]->parentItem()))
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+			i--;
+		}
+	}
 }
 
 void DTool::filterBases(QList<QGraphicsItem*>& items)
@@ -107,6 +118,7 @@ void DTool::filterBases(QList<QGraphicsItem*>& items)
 		{
 			qSwap(items[i], items.back());
 			items.pop_back();
+			i--;
 		}
 	}
 }
@@ -118,6 +130,28 @@ QList<DAbstractBase*> DTool::itemsToBases(const QList<QGraphicsItem*> &items)
 		if(item && isAbstract(item->type()))
 			bases.push_back(dynamic_cast<DAbstractBase*>(item));
 	return bases;
+}
+
+
+QList<DShapeBase*> DTool::itemToShape(const QList<QGraphicsItem*>& items)
+{
+	QList<DShapeBase*> bases;
+	for(QGraphicsItem* item : items)
+		if(item && isShape(item->type()))
+			bases.push_back(dynamic_cast<DShapeBase*>(item));
+	return bases;
+}
+
+
+void DTool::filterNoparent(QList<DShapeBase*>& items)
+{
+	for (int i = 0; i < items.size(); i++)
+		if(!items[i] || items[i]->parentItem())
+		{
+			qSwap(items[i], items.back());
+			items.pop_back();
+			i--;
+		}
 }
 
 bool DTool::isShape(int type)

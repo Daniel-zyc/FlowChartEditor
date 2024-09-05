@@ -16,6 +16,7 @@ extern QSet<int> registeredTypes;
 
 // 将画面上的所有物品大小放大的倍数，同时视角缩小相应的倍数
 constexpr qreal globalScale = 4;
+constexpr qreal qrealMax = std::numeric_limits<qreal>::max();
 
 // 大小、磁吸、磁吸碰撞、调整、旋转点半径
 constexpr qreal sizePointRadius = 5 * globalScale;
@@ -31,6 +32,7 @@ constexpr qreal maxPointRadius =
 constexpr qreal maxBorderRadius = qMax(maxPointRadius, maxPenWidth / 2);
 constexpr qreal maxLineRaidus = qMax(maxBorderRadius, maxPenWidth * 5);
 constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
+constexpr qreal maxMagLineDist = 5 * globalScale;
 
 // 各个图形以及边框的画笔和画刷
 const QBrush modiPointBrush(Qt::yellow, Qt::SolidPattern);
@@ -54,8 +56,11 @@ const QPen selectRectPen = QPen(Qt::black, globalScale, Qt::DashLine);
 const QBrush groupRectBrush = QBrush(Qt::NoBrush);
 const QPen groupRectPen = QPen(Qt::black, globalScale, Qt::SolidLine);
 
+const QPen magLinePen = QPen(Qt::black, globalScale, Qt::DotLine);
+
 const QBrush defaultBrush = QBrush(Qt::white, Qt::SolidPattern);
 const QPen defaultPen = QPen(Qt::black, globalScale, Qt::SolidLine);
+
 
 // 各个不同图形的注册标识
 enum UserTypes
@@ -96,6 +101,12 @@ enum UserTypes
     DFMergeItemType = QGraphicsItem::UserType + 218,
     DFSortItemType = QGraphicsItem::UserType + 219,
     DFCompareItemType = QGraphicsItem::UserType + 220,
+    DFOffPageItemType = QGraphicsItem::UserType + 221,
+    DFStoreDataItemType = QGraphicsItem::UserType + 222,
+    DFDiskItemType = QGraphicsItem::UserType + 223,
+    DFDirectStorageItemType = QGraphicsItem::UserType + 224,
+    DFShowItemType = QGraphicsItem::UserType + 225,
+    DFOrderStorageItemType = QGraphicsItem::UserType + 226,
 
 	DLineItemType = QGraphicsItem::UserType + 300,
 	DCurveLineItemType = QGraphicsItem::UserType + 301,
@@ -145,6 +156,7 @@ enum ErrorType
 
     EmptyText = 22                      // 空的文本框
 };
+
 enum ErrorLevel
 {
     WARNING = 1,
@@ -244,10 +256,16 @@ namespace DConst
         IN = 1,
         OUT = 2,
         NO_IN_OR_OUT = 3
-    };
+	};
+
+	enum DragState
+	{
+		DRAGING = 1
+	};
 };
 
 class DAbstractBase;
+class DShapeBase;
 
 // 工具函数
 namespace DTool
@@ -296,8 +314,13 @@ namespace DTool
 	// 过滤掉所有不是 DAbstractBase 的元素
 	void filterBases(QList<QGraphicsItem*> &items);
 
+	void filterNoparent(QList<DShapeBase*> &items);
+
 	// 将 item 转为 abstract base，会进行检查
 	QList<DAbstractBase*> itemsToBases(const QList<QGraphicsItem*> &items);
+
+	// 将 item 转为 shape base, 会进行检查
+	QList<DShapeBase*> itemToShape(const QList<QGraphicsItem*> &items);
 };
 
 struct FormworkData

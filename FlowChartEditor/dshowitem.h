@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dshapebase.h"
+#include "dclass/base/dshapebase.h"
 #include <QRectF>
 
 class DShapeBase;

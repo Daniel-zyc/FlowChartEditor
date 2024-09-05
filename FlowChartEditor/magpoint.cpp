@@ -1,8 +1,8 @@
 #include "magpoint.h"
-#include "dlinebase.h"
-#include "dabstractbase.h"
+#include "dclass/base/dlinebase.h"
+#include "dclass/base/dabstractbase.h"
 #include "serializer.h"
-#include "dshapebase.h"
+#include "dclass/base/dshapebase.h"
 
 MagPoint::MagPoint(DShapeBase* parent)
 	: MagPoint({0, 0}, parent) {}
@@ -52,7 +52,7 @@ void MagPoint::setPos(const QPointF& p)
 
 void MagPoint::unlinkAllLines()
 {
-	for(DLineBase* line : *lines) line->unlinkMag(this);
+	for(DLineBase* line : *lines) line->unlinkMagUpdate(this);
 	lines->clear();
 }
 

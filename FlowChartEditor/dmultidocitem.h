@@ -1,7 +1,7 @@
 #ifndef DMULTIDOCITEM_H
 #define DMULTIDOCITEM_H
 
-#include "dshapebase.h"
+#include "dclass/base/dshapebase.h"
 
 class DMultiDocItem : public DShapeBase
 {

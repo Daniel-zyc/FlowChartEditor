@@ -27,6 +27,8 @@ DScene::DScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
 void DScene::init()
 {
 	clear();
+	magLineH->setPen(magLinePen);
+	magLineV->setPen(magLinePen);
 }
 
 void DScene::shot()
@@ -92,7 +94,9 @@ DAbstractBase* DScene::getMagItemOnPoint(QPointF p)
 	{
 		if(item->checkMagPoint(p))
 			return item;
-		if((item->isShape() || item->isText()) && item->contains(p))
+		if(item->isShape() && item->contains(p))
+			return nullptr;
+		if(item->isText() && item->parentItem() == nullptr && item->contains(p))
 			return nullptr;
 	}
 	return nullptr;
@@ -336,11 +340,13 @@ void DScene::addParagramItem()
 void DScene::addpentagonItem()
 {
     qDebug() << "add 五边形";
+    prepareInsertItem(new pentagonItem());
 }
 
 void DScene::addhexagonItem()
 {
     qDebug() << "add 六边形";
+    prepareInsertItem(new DFPrepareItem());
 }
 
 void DScene::addDiaItem()
@@ -380,11 +386,13 @@ void DScene::addDFInternalStoreItem()
 	qDebug() << "add DFInternalStoreItem";
 	prepareInsertItem(new DFInternalStoreItem());
 }
+
 void DScene::addDFPrepareItem()
 {
 	qDebug() << "add DFPrepareItem";
 	prepareInsertItem(new DFPrepareItem());
 }
+
 void DScene::addDFDelayItem()
 {
     qDebug() << "add DFDelayItem";
@@ -396,7 +404,6 @@ void DScene::addDFInformationItem()
 	qDebug() << "add DFInformationItem";
 	prepareInsertItem(new DFInformationItem());
 }
-
 
 void DScene::addDFCardItem()
 {
@@ -413,16 +420,19 @@ void DScene::addDFCompareItem()
 void DScene::addDFDirecrAccessItem()
 {
     qDebug() << "add 直接访问存储器";
+    prepareInsertItem(new DDirectStorageItem());
 }
 
 void DScene::addDFDiskItem()
 {
     qDebug() << "add 磁盘";
+    prepareInsertItem(new DDiskItem());
 }
 
 void DScene::addDFDisplayItem()
 {
     qDebug() << "add 显示";
+    prepareInsertItem(new DShowItem());
 }
 
 void DScene::addDFMergeItem()
@@ -440,17 +450,20 @@ void DScene::addDFMultiDocItem()
 void DScene::addDFOffPageItem()
 {
     qDebug() << "add 离页连接符";
+    prepareInsertItem(new DFOffPageItem());
 }
 
 
 void DScene::addDFSequentialAccessItem()
 {
     qDebug() << "add 顺序访问存储器";
+    prepareInsertItem(new DOrderStorageItem());
 }
 
 void DScene::addDFStoreDataItem()
 {
     qDebug() << "add 存储数据";
+    prepareInsertItem(new DFStoreDataItem());
 }
 
 void DScene::addDFProcessItem()
@@ -551,16 +564,16 @@ void DScene::delSelectedItem()
 		if((shape = dynamic_cast<DShapeBase*>(item))) shape->unLinkAllLines();
 		else if((line = dynamic_cast<DLineBase*>(item)))
 		{
-			line->unlinkBegin();
-			line->unlinkEnd();
+			line->unlinkBeginUpdate();
+			line->unlinkEndUpdate();
 		}
+		item->setParentItem(nullptr);
 	}
 	for(DAbstractBase* item : items)
 	{
-		item->setParentItem(nullptr);
-		this->removeItem(item);
+		removeItem(item);
+		delete item;
 	}
-	for(QGraphicsItem *item : items) delete item;
 }
 
 void DScene::setItemSelected(QGraphicsItem * item){
@@ -1004,17 +1017,88 @@ void DScene::itemVertiEven()
 	}
 }
 
+QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
+{
+	QList<QGraphicsItem*> items = this->items(view->mapToScene(view->rect()));
+	QList<DShapeBase*> shapes = DTool::itemToShape(items);
+	DTool::filterNoparent(shapes);
+
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
+
+	QPointF pos = item->pos();
+	QRectF rc = item->mapRectToScene(item->sizeRect());
+
+	int flag = 0;
+	for(DShapeBase* shape : shapes)
+		if(shape != item) flag = 1;
+	if(!flag) return pos;
+
+	qreal mindistx = qrealMax, posx, linex;
+	qreal mindisty = qrealMax, posy, liney;
+	QRectF vrc = view->mapToScene(view->rect()).boundingRect();
+
+	auto updateValueX = [&](qreal val, qreal base) {
+		qreal dist = abs(val - base);
+		if(dist > mindistx) return;
+		mindistx = dist; posx = pos.x() + val - base; linex = val;
+	};
+	auto updateValueY = [&](qreal val, qreal base) {
+		qreal dist = abs(val - base);
+		if(dist > mindisty) return;
+		mindisty = dist; posy = pos.y() + val - base; liney = val;
+	};
+
+	for(DShapeBase* shape : shapes)
+	{
+		if(shape == item) continue;
+		QRectF nrc = shape->mapRectToScene(shape->sizeRect());
+		updateValueY(nrc.center().y(), rc.center().y());
+		updateValueY(nrc.top(), rc.top());
+		updateValueY(nrc.bottom(), rc.bottom());
+		updateValueY(nrc.top(), rc.bottom());
+		updateValueY(nrc.bottom(), rc.top());
+		updateValueX(nrc.center().x(), rc.center().x());
+		updateValueX(nrc.left(), rc.left());
+		updateValueX(nrc.right(), rc.right());
+		updateValueX(nrc.left(), rc.right());
+		updateValueX(nrc.right(), rc.left());
+	}
+
+	if(mindistx <= maxMagLineDist)
+	{
+		pos.setX(posx);
+		magLineV->setLine(QLineF({linex, vrc.top()},
+								 {linex, vrc.bottom()}));
+		addItem(magLineV);
+	}
+	if(mindisty <= maxMagLineDist)
+	{
+		pos.setY(posy);
+		magLineH->setLine(QLineF({vrc.left(), liney},
+								 {vrc.right(), liney}));
+		addItem(magLineH);
+	}
+
+	return pos;
+}
+
+void DScene::setAutoAlign(bool active)
+{
+	autoAlign = active;
+}
+
 //==============================================================================
 
 void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	if(event->button() != Qt::LeftButton)
-	{
-		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
+	QPointF p;
+	QList<QGraphicsItem *> items;
+	QGraphicsItem* item;
 
-	QPointF p = event->scenePos();
+	if(event->button() != Qt::LeftButton) goto mousePressEventPass;
+
+	p = event->scenePos();
 	qDebug() << "press pos: " << p;
 
 	// ======== inserting item ========
@@ -1048,19 +1132,11 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	}
 
 	// ======== check for interaction =======
-	QList<QGraphicsItem *> items = this->items(p);
-	if(items.empty())
-	{
-		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
+	items = this->items(p);
+	if(items.empty()) goto mousePressEventPass;
 
-	QGraphicsItem *item = items.first();
-	if(!item->isSelected())
-	{
-		QGraphicsScene::mousePressEvent(event);
-		return;
-	}
+	item = items.first();
+	if(!item->isSelected()) goto mousePressEventPass;
 
 	if((modifiedShape = dynamic_cast<DAbstractBase*>(item)) != nullptr)
 	{
@@ -1073,7 +1149,13 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		}
 	}
 
+mousePressEventPass:
 	QGraphicsScene::mousePressEvent(event);
+
+	if(!this->items(p).empty() && !selectedItems().empty())
+		drag_state = DConst::DRAGING;
+	else
+		drag_state = DConst::NONE;
 }
 
 
@@ -1101,6 +1183,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		}
 	}
 
+	//============== modify interacting shape =============
 	if(inter_state != DConst::NONE && modifiedShape)
 	{
 		event->accept();
@@ -1116,26 +1199,41 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	}
 
 	QGraphicsScene::mouseMoveEvent(event);
+
+	//============= auto align =============
+	if(!autoAlign) return;
+	if(drag_state == DConst::NONE || selectedItems().size() > 1)
+		return;
+	QList<DShapeBase*> shapes = getSelectedShapes();
+	if(shapes.empty()) return;
+
+	shapes[0]->setPos(getAutoAlignItemPos(shapes[0]));
 }
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	if(event->button() != Qt::LeftButton)
-	{
-		QGraphicsScene::mouseReleaseEvent(event);
-		return;
-	}
+	if(event->button() != Qt::LeftButton) goto mouseReleaseEventPass;
 
     if((insert_state != DConst::NONE)
         || SHOT_STATE == DConst::CHANGED){
         shot();
 		Inspector::instance()->checkAll();
-    }
+	}
+
+	if(drag_state != DConst::NONE)
+	{
+		for(DLineBase* line : getSelectedLines())
+			line->checkAutoUnlinkLine();
+	}
 
 	insert_state = DConst::NONE;
 	inter_state = DConst::NONE;
+	drag_state = DConst::NONE;
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
 	modifiedShape = nullptr;
 
+mouseReleaseEventPass:
 	QGraphicsScene::mouseReleaseEvent(event);
 }
 

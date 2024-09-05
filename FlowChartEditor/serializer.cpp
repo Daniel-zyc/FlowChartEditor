@@ -118,6 +118,12 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 			case DFDelayItemType: shape = new DFDelayItem(); break;
 			case DFOrItemType: shape = new DFOrItem(); break;
 			case DFSummaryconnItemType: shape = new DFSummaryconnItem(); break;
+			case DFCardItemType: shape = new DFCardItem(); break;
+			case DFCompareItemType: shape = new DFCompareItem(); break;
+			case DFMergeItemType: shape = new DFMergeItem(); break;
+			case DFOffPageItemType: shape = new DFOffPageItem(); break;
+			case DFSortItemType: shape = new DFSortItem(); break;
+			case DFStoreDataItemType: shape = new DFStoreDataItem(); break;
 		}
 		if(!shape || !shape->deserialize(in))
 		{
@@ -156,6 +162,7 @@ QList<QGraphicsItem *> Serializer::deserializeItems(QDataStream &in)
 		switch(type) {
 			case DLineItemType: line = new DLineItem(); break;
 			case DCurveLineItemType: line = new DCurveLineItem(); break;
+			case DPolyLineItemType: line = new DPolyLineItem(); break;
 		}
 		if(!line || !line->deserialize(in))
 		{
