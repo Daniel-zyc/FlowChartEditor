@@ -9,7 +9,7 @@ DPolyLineItem::DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     beginPoint = begin;
     endPoint = end;
     //重置调整点数量
-    updatePolyLineType(); // 实时更新？
+    updatePolyLineType();
     updateBeginMidPoint();
     updateEndMidPoint();
     modis.resize(modis_num);
@@ -82,6 +82,7 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
+
 /*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
@@ -95,7 +96,9 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
         angle = getAngle(points[4],points[5]);
     else angle = getAngle(points[3],points[5]);
-    drawArrow(painter, angle, endPoint, endArrowType);
+    drawEndArrow(painter, angle, endPoint, endArrowType);
+    drawBeginArrow(painter, angle, beginPoint, beginArrowType);
+    // drawArrow(painter, angle, beginPoint, beginArrowType);
     //绘制sizerect
 /*
     if(beginMag) {
@@ -108,6 +111,8 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         painter->drawRect(begin_rect);
     }
 */
+    //painter->setBrush(Qt::red);
+    //painter->drawPath(shapeNormal());
 }
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
@@ -148,6 +153,14 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
         }
         modi_pos.insert(0,p);
         updateModiPoint();
+        /*
+        qDebug() << "MODIFYING NODE 0:";
+        qDebug() << QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
+                            begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct);
+        qDebug() << QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
+                        begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1));
+        qDebug() << "FINISHED MODIFYING NODE 0";
+        */
         break;
     case 1:
         if(begin_midPoint.x() == end_midPoint.x()) {
@@ -180,7 +193,6 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
 
 }
 
-
 QPainterPath DPolyLineItem::shapeNormal() const
 {
     int direct = getPaintDirection();
@@ -197,24 +209,24 @@ QPainterPath DPolyLineItem::shapeNormal() const
         QPointF(endPoint.x(), endPoint.y())
     };
     QPainterPath path;
-    path.moveTo(points[0]);  // 起始点
+    //path.moveTo(points[0]);  // 起始点
     // 获取数组大小
     int numPoints = sizeof(points) / sizeof(points[0]);
     for (int i = 1; i < numPoints; ++i) {
-        path.lineTo(points[i]);  // 连接每个点
+        //path.lineTo(points[i]);  // 连接每个点
+        path.addPath(getFillPath(points[i-1],points[i]));
     }
-    // 返回路径
     return path;
 }
 
 void DPolyLineItem::updateLine()
 {
-    //qDebug() << "update" << clock();
     updatePolyLineType();
     updateBeginMidPoint();
     updateEndMidPoint();
     updateMidPoint(line_type);
     updateModiPoint();
+    if(modi_pos.contains(0)) modiToPoint(modi_pos.value(0),0);
     return;
 }
 //中心定位点
@@ -265,6 +277,7 @@ void DPolyLineItem::updateModiPoint()
                                            (endPoint.y() + ed_y_offset + end_midPoint.y()) / 2);
         }
     }
+    //qDebug() << "modi_num:" << modis_num;
     return;
 }
 //折线中间线的方向横1/竖0
@@ -286,11 +299,10 @@ int DPolyLineItem::getPaintDirection() const
 }
 
 //上右下左1234 注意画的时候图形不能太小，要不然会判断错误
-int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
+int DPolyLineItem::getCollideDirection(QRectF item,QPointF point)
 {
     int item_direct = 0;
     double min_dis = 0x3f3f3f3f, temp = 0;
-
     if(abs(mapToScene(item.topLeft()).x() - point.x()) < item.width() / 2) {
         temp = abs(mapToScene(item.topLeft()).x() - point.x());
         if(temp < min_dis) min_dis = temp,item_direct = 4;
@@ -307,6 +319,7 @@ int DPolyLineItem::getCollideDirection(QRectF item,QPointF center,QPointF point)
         temp = abs(mapToScene(item.bottomLeft()).y() - point.y());
         if(temp < min_dis) min_dis = temp,item_direct = 3;
     }
+    min_dis = 0;
     return item_direct;
 }
 //相对位置 1234右上开始顺时针
@@ -349,17 +362,16 @@ void DPolyLineItem::updatePolyLineType()
     //测试方向 1234上右下左
     int begin_item_direct = 0, end_item_direct = 0;
     QRectF st_item, ed_item;
-    QPointF st_center,ed_center;
-
+    //QPointF st_center,ed_center;
     if(beginMag) {
         st_item = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
-        st_center = beginMag->parent->pos();
-        begin_item_direct = getCollideDirection(st_item,st_center,beginPoint);
+        //st_center = beginMag->parent->pos();
+        begin_item_direct = getCollideDirection(st_item,beginPoint);
     }
     if(endMag) {
         ed_item = endMag->parent->mapRectToScene(endMag->parent->sizeRect());
-        ed_center = endMag->parent->pos();
-        end_item_direct = getCollideDirection(ed_item,ed_center,endPoint);
+        //ed_center = endMag->parent->pos();
+        end_item_direct = getCollideDirection(ed_item,endPoint);
     }
     qDebug() << "directions:" << begin_item_direct << "," << end_item_direct;
     updateOffsets(begin_item_direct,end_item_direct);
@@ -628,7 +640,7 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
     qDebug() << "line_type:" << line_type << "midPoint:" << midPoint;
 }
 
-//=============================================
+//===================================================================
 
 void DPolyLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
@@ -643,20 +655,15 @@ void DPolyLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 bool DPolyLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
     if(!DLineBase::deserialize(in, fa)) return false;
-    in << st_x_offset << st_y_offset << ed_x_offset << ed_y_offset;
-    in << mid_x_shift << mid_y_shift;
-    in << begin_midPoint << end_midPoint << midPoint;
-    in << modis_num << line_type << record_dist;
-    in << modi_pos;
+    in >> st_x_offset >> st_y_offset >> ed_x_offset >> ed_y_offset;
+    in >> mid_x_shift >> mid_y_shift;
+    in >> begin_midPoint >> end_midPoint >> midPoint;
+    in >> modis_num >> line_type >> record_dist;
+    in >> modi_pos;
     updateLine();
-    if(!modi_pos.value(0).isNull()) {
-        modiToPoint(modi_pos.value(0),0);
-    }
-    if(!modi_pos.value(1).isNull()) {
-        modiToPoint(modi_pos.value(1),1);
-    }
-    if(!modi_pos.value(2).isNull()) {
-        modiToPoint(modi_pos.value(2),2);
-    }
+    if(modi_pos.contains(0)) modiToPoint(modi_pos.value(0),0);
+    if(modi_pos.contains(1)) modiToPoint(modi_pos.value(1),1);
+    if(modi_pos.contains(2)) modiToPoint(modi_pos.value(2),2);
+
     return true;
 }

@@ -49,18 +49,15 @@ public:
 	// 刷新大小点的位置
 	virtual void updateSizePoint();
 
+	virtual void setBeginArrowType(int type);
+	virtual void setEndArrowType(int type);
+	virtual qreal getAngle(const QPointF &beginPoint, const QPointF &endPoint);
+    virtual void drawEndArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType);
+    virtual void drawBeginArrow(QPainter *painter, double angle, const QPointF &beginPoint, int arrowType);
+
 	// 设置起始/终止点的位置，会调用 SizeToPoint函数来进行线条的刷新
 	virtual void setBeginPoint(QPointF p);
 	virtual void setEndPoint(QPointF p);
-
-	// 设置线头的类型
-	virtual void setBeginArrowType(int type);
-	virtual void setEndArrowType(int type);
-
-	// 绘制箭头时，辅助计算角度
-	virtual qreal getAngle(const QPointF &beginPoint, const QPointF &endPoint);
-	// 辅助绘制箭头函数
-	virtual void drawArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType);
 
     // 获取某个磁吸点的类型
     int magType(MagPoint *mag);
@@ -74,6 +71,9 @@ public:
 	// 检查头尾两个磁吸点是否断开，如果断开则进行断开操作
 	// 用来在线条位置发生移动之后，判断是否还应该保持磁吸关系
 	void checkAutoUnlinkLine();
+
+    //获取线段的外框
+    QPainterPath getFillPath(QPointF pth_st, QPointF pth_ed) const;
 
 protected:
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

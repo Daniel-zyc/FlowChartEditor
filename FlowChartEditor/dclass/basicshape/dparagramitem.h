@@ -2,6 +2,7 @@
 
 #include "../base/dpolygonbase.h"
 
+// 平行四边形
 class DParagramItem : public DPolygonBase
 {
 public:

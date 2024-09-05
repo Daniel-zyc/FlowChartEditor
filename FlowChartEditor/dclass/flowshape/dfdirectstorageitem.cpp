@@ -44,13 +44,13 @@ void DFDirectStorageItem::updatePath()
 {
     path.clear();
 
-    path.moveTo(rect.right() * 2 / 3, rect.top());
-    path.lineTo(rect.left() * 2 / 3, rect.top());
-    path.arcTo(rect.left(), rect.top(), rect.width() / 3, rect.height(), 90, 180);
-    path.lineTo(rect.right() * 2 / 3, rect.bottom());
-    path.arcTo(rect.right() / 3, rect.top(), rect.width() / 3, rect.height(), 270, -180);
+    path.moveTo(rect.right() * 2 / 3, rect.bottom());
+    path.lineTo(rect.left() * 2 / 3, rect.bottom());
+    path.arcTo(rect.left(), rect.top(), rect.width() / 3, rect.height(), 270, -180);
+    path.lineTo(rect.right() * 2 / 3, rect.top());
     path.arcTo(rect.right() / 3, rect.top(), rect.width() / 3, rect.height(), 90, 180);
-    path.arcTo(rect.right() / 3, rect.top(), rect.width() / 3, rect.height(), 270, 180);
+    path.arcTo(rect.right() / 3, rect.top(), rect.width() / 3, rect.height(), 270, -180);
+    path.arcTo(rect.right() / 3, rect.top(), rect.width() / 3, rect.height(), 90, -180);
 }
 
 void DFDirectStorageItem::sizeToRect(QRectF nrect)

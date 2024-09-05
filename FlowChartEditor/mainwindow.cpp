@@ -828,7 +828,7 @@ void MainWindow::createMenu()
 	ui->viewMenu->addAction(ui->actViewMoveUp);
 
 	ui->helpMenu->addAction(ui->actAboutUs);
-	ui->helpMenu->addAction(ui->actCheck);
+    // ui->helpMenu->addAction(ui->actCheck);
 	ui->helpMenu->addAction(ui->actDebug);
 }
 
@@ -950,7 +950,7 @@ void MainWindow::bindAction()
     connect(ui->actSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
 
 	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
-	connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
+    // connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
 	connect(ui->actUndo,SIGNAL(triggered(bool)),this, SLOT(undo()));
@@ -1325,7 +1325,12 @@ void MainWindow::loadFile(){
             saveFile();
         }
     }else{
-        saveFile();
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+        }
     }
 	QString filePath = QFileDialog::getOpenFileName(this, tr("打开.bit文件"),"./",tr("(*.bit)"));
 	if(filePath == "") return;
@@ -1343,7 +1348,12 @@ void MainWindow::newFile(){
             saveFile();
         }
     }else{
-        saveFile();
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,tr("保存当前文件"),tr("当前文件未保存，是否保存到%1").arg(FILE_PATH),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+             SaveAndLoadManager::instance().saveToFile(FILE_PATH);
+        }
     }
     FILE_PATH = "";
     scene->clear();

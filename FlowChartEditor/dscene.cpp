@@ -10,8 +10,6 @@
 qreal DScene::defaultRotateDelta = 10;
 qreal DScene::defaultScaleRatio = 1.1;
 int DScene::defaultMoveDist = 5;
-qreal DScene::defaultMoveZUp = 20;
-qreal DScene::defaultMoveZDown = -20;
 
 DScene::DScene() { init(); }
 
@@ -352,7 +350,7 @@ void DScene::addpentagonItem()
 void DScene::addhexagonItem()
 {
     qDebug() << "add 六边形";
-    prepareInsertItem(new DFPrepareItem());
+	prepareInsertItem(new DHexgonItem());
 }
 
 void DScene::addDiaItem()

@@ -19,7 +19,6 @@ void DPentagonItem::modiToPoint(QPointF p, int id)
 
 void DPentagonItem::updateMagPoint()
 {
-
     (*mags)[0]->setPos(polygon[0]);
     (*mags)[1]->setPos(polygon[1]);
     (*mags)[2]->setPos(polygon[2]);

@@ -6,6 +6,7 @@
 #include <QPolygonF>
 #include <QRectF>
 
+// 五边形
 class DPentagonItem : public DPolygonBase
 {
 public:
