@@ -2,10 +2,7 @@
 
 #include "../base/dpolygonbase.h"
 
-#include <QPainter>
-#include <QPolygonF>
-#include <QRectF>
-
+// 菱形
 class DDiaItem : public DPolygonBase
 {
 public:

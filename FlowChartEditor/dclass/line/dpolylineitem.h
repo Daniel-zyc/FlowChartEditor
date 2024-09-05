@@ -43,7 +43,7 @@ protected:
     //获取实际绘制方向
     int getPaintDirection() const;
     //获取碰撞方向
-    int getCollideDirection(QRectF item,QPointF center,QPointF point);
+    int getCollideDirection(QRectF item,QPointF point);
     //获取另一点与这个点的相对位置
     int getRelativePosition(QPointF cur,QPointF another);
     //更新两中点坐标
@@ -74,6 +74,7 @@ private:
     double record_dist = 120;
 
     QMap<int,QPointF> modi_pos;
+
 
 public:
     /**

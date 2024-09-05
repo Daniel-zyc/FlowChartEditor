@@ -2,13 +2,13 @@
 
 #include "../base/dpolygonbase.h"
 
-// 梯形
-class DTrapItem : public DPolygonBase
+// 六边形
+class DHexgonItem : public DPolygonBase
 {
 public:
-	enum { Type = DTrapItemType };
-	DTrapItem(QGraphicsItem *parent = nullptr);
-	DTrapItem(qreal w, qreal h, QGraphicsItem* parent = nullptr);
+	enum { Type = DHexgonItemType };
+	DHexgonItem(QGraphicsItem *parent = nullptr);
+	DHexgonItem(qreal w, qreal h, QGraphicsItem* parent = nullptr);
 
 public:
 	int type() const override { return Type; }

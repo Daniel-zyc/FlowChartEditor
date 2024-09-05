@@ -17,6 +17,7 @@ SOURCES += \
     dclass/base/dtextbase.cpp \
     dclass/basicshape/ddiaitem.cpp \
     dclass/basicshape/dellitem.cpp \
+    dclass/basicshape/dhexgonitem.cpp \
     dclass/basicshape/dparagramitem.cpp \
     dclass/basicshape/dpentagonitem.cpp \
     dclass/basicshape/drectitem.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     dclass/base/dtextbase.h \
     dclass/basicshape/ddiaitem.h \
     dclass/basicshape/dellitem.h \
+    dclass/basicshape/dhexgonitem.h \
     dclass/basicshape/dparagramitem.h \
     dclass/basicshape/dpentagonitem.h \
     dclass/basicshape/drectitem.h \

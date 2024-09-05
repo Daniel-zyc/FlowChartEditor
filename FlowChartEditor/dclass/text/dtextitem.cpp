@@ -100,7 +100,7 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 			if(p != pos()) setPos(p);
 		}
 	}
-	return QGraphicsItem::itemChange(change, value);
+	return DShapeBase::itemChange(change, value);
 }
 
 void DTextItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
@@ -112,12 +112,14 @@ void DTextItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 
 bool DTextItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
+	// qDebug() << "called de text";
 	if(!DShapeBase::deserialize(in, fa)) return false;
 
 	textBase.deserialize(in);
 	in >> rect;
-	updateAll();
 	setRotateable(fa == nullptr);
+	setScaleable(fa == nullptr);
+	updateAll();
 	return true;
 }
 

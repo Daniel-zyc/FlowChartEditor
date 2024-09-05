@@ -237,7 +237,7 @@ void MainWindow::initrightUi()
     beginarrowType->addItem(QIcon(":/icon/diaArrow.png"), "菱形箭头");
     beginarrowType->addItem(QIcon(":/icon/roundArrow.png"), "圆型箭头");
 
-    linebound->setRange(0, 30);
+    linebound->setRange(0.01, 30);
     linebound->setSingleStep(0.25);
     linebound->setValue(1);
     linebound->setSuffix("磅");
@@ -295,7 +295,7 @@ void MainWindow::initrightUi()
 	rotationBox->setSuffix("°");
 	rotationBox->setValue(0);
 	rotationBox->setWrapping(true);
-	scaleBox->setRange(100, 100000);
+    scaleBox->setRange(1, 100000);
 	scaleBox->setSingleStep(1);
 	scaleBox->setValue(100);
 	scaleBox->setSuffix("%");
@@ -1044,7 +1044,7 @@ void MainWindow::bindAction()
 
 void MainWindow::saveAsSvg()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("Iamges(*.svg"));
+    QString filePath = QFileDialog::getSaveFileName(this, "save as svg file", "", ("SVG Files(*.svg"));
 	if(filePath == "") return;
 	QSvgGenerator generator;
 	generator.setFileName(filePath);
@@ -1161,10 +1161,10 @@ void MainWindow::changeFillColor()
 {
 	QColor color = colorDia->getColor(Qt::white, this, "颜色选择器", QColorDialog::ShowAlphaChannel);
     if(color.isValid()){
+        customizePic->setCheckState(Qt::Unchecked);
         scene->changeFillColor(color);
         // changeFillType();
     }
-	customizePic->setCheckState(Qt::Unchecked);
 }
 
 QSet<DTextBase *> MainWindow::getTextBases()
