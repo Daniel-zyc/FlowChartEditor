@@ -221,9 +221,8 @@ void Inspector::updateErrorList() {
 
     for (const auto &error : errorMessage) {
         QListWidgetItem *item = new QListWidgetItem();
-        QString errorText = QString(":%1  位置:(%2,%3)")
-                                .arg(error.message)
-                                .arg(error.item->pos().x()).arg(error.item->pos().y());
+        QString errorText = QString(" %1  错误代码:%2")
+                                .arg(error.message).arg(error.errorType);
         item->setText(errorText);
         if (DTool::getErrorLevel(error.errorType) == ERROR) {
             item->setIcon(QIcon(":/icon/error.png").pixmap(16, 16)); // 调整图标大小
