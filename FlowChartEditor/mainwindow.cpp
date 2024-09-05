@@ -508,6 +508,8 @@ void MainWindow::initleftUi()
 	addTrapBtn->setToolTip("梯形");
 	addDiaBtn->setToolTip("菱形");
 	addTriBtn->setToolTip("三角形");
+    addPenBtn->setToolTip("五边形");
+    addHexBtn->setToolTip("六边形");
 
 	addRectBtn->setIcon(QPixmap(":/icon/primary/rect.png"));
 	addEllBtn->setIcon(QPixmap(":/icon/primary/ellipse.png"));
