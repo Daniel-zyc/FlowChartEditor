@@ -214,8 +214,6 @@ private:
 	static qreal defaultRotateDelta; // 旋转时的角度
 	static qreal defaultScaleRatio;  // 缩放时的比例
 	static int defaultMoveDist;      // 默认移动距离
-	static qreal defaultMoveZUp;     // 上移时默认 Z 值
-	static qreal defaultMoveZDown;   // 下移时默认 Z 值
 
 	// 绑定的 view 窗口，在本使用情形下，有且仅会有一个窗口
 	// 并且不应该为空指针
