@@ -32,7 +32,7 @@ constexpr qreal maxPointRadius =
 	qMax(qMax(sizePointRadius, magPointRadius),
 		 qMax(magPointCollideRadius, modiPointRadius));
 constexpr qreal maxBorderRadius = qMax(maxPointRadius, maxPenWidth / 2);
-constexpr qreal maxLineRaidus = qMax(maxBorderRadius, maxPenWidth * 5);
+constexpr qreal maxLineRaidus = qMax(maxBorderRadius, maxPenWidth * 6);
 constexpr qreal minRectSize = sizePointRadius * 2 + magPointCollideRadius * 2;
 constexpr qreal maxMagLineDist = 5 * globalScale;
 

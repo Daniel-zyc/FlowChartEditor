@@ -18,7 +18,7 @@ DPolyLineItem::DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
 
 QRectF DPolyLineItem::boundingRect() const
 {
-    qreal r = maxBorderRadius;
+	qreal r = maxLineRaidus;
     int direct = getPaintDirection();
     //所有影响框线的点
     QVector<QPointF> points = {
