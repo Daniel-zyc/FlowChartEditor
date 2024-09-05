@@ -785,7 +785,7 @@ QSet<DTextBase *> DScene::getTextBases()
             continue;
         }
         DShapeBase *shape = dynamic_cast<DShapeBase *>(item);
-        if(shape != nullptr) {
+		if(shape != nullptr && shape->textItem != nullptr) {
             texts.insert(&(shape->textItem->textBase));
             continue;
         }
