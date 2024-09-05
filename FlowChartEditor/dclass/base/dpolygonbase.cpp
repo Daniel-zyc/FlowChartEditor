@@ -23,8 +23,8 @@ QRectF DPolygonBase::sizeRect() const
 void DPolygonBase::sizeToRect(QRectF nrect)
 {
 	QPolygonF poly; QRectF rect = sizeRect();
-	double ratiox = nrect.width() / rect.width();
-	double ratioy = nrect.height() / rect.height();
+	qreal ratiox = nrect.width() / rect.width();
+	qreal ratioy = nrect.height() / rect.height();
 	for(int i = 0; i < polygon.size(); i++)
 		poly << QPointF(polygon[i].x() * ratiox, polygon[i].y() * ratioy);
 	polygon = poly; updateAll();

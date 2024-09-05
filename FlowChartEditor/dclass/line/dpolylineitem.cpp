@@ -9,7 +9,7 @@ DPolyLineItem::DPolyLineItem(QPointF begin, QPointF end, QGraphicsItem *parent)
     beginPoint = begin;
     endPoint = end;
     //重置调整点数量
-    updatePolyLineType(); // 实时更新？
+    updatePolyLineType();
     updateBeginMidPoint();
     updateEndMidPoint();
     modis.resize(modis_num);
@@ -82,6 +82,7 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         QPointF(endPoint.x(), endPoint.y())
     };
     painter->drawPolyline(points,6);
+
 /*
     painter->setBrush(Qt::red);
     painter->drawEllipse(begin_midPoint,5,5);
@@ -95,7 +96,9 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
         angle = getAngle(points[4],points[5]);
     else angle = getAngle(points[3],points[5]);
-    drawArrow(painter, angle, endPoint, endArrowType);
+    drawEndArrow(painter, angle, endPoint, endArrowType);
+    drawBeginArrow(painter, angle, beginPoint, beginArrowType);
+    // drawArrow(painter, angle, beginPoint, beginArrowType);
     //绘制sizerect
 /*
     if(beginMag) {
@@ -649,5 +652,14 @@ bool DPolyLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
     in << modis_num << line_type << record_dist;
     in << modi_pos;
     updateLine();
+    if(!modi_pos.value(0).isNull()) {
+        modiToPoint(modi_pos.value(0),0);
+    }
+    if(!modi_pos.value(1).isNull()) {
+        modiToPoint(modi_pos.value(1),1);
+    }
+    if(!modi_pos.value(2).isNull()) {
+        modiToPoint(modi_pos.value(2),2);
+    }
     return true;
 }

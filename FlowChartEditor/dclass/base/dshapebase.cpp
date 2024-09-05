@@ -4,13 +4,21 @@
 #include "../../magpoint.h"
 
 DShapeBase::DShapeBase(QGraphicsItem *parent)
-	: DAbstractBase(parent) {}
+	: DAbstractBase(parent)
+{ init(); }
 
 DShapeBase::DShapeBase(const QString &text, QGraphicsItem *parent)
 	: DShapeBase(parent)
 {
+	init();
 	textItem = new DTextItem(text, this);
 	textItem->deleteMagPoint();
+}
+
+void DShapeBase::init()
+{
+	setPen(globalShapePen);
+	setBrush(globalShapeBrush);
 }
 
 DShapeBase::~DShapeBase()
@@ -99,7 +107,7 @@ void DShapeBase::interToPoint(QPointF p, MagPoint *mp)
 	update();
 }
 
-void DShapeBase::setInsertItem()
+void DShapeBase::setInsertingItem()
 {
 	interactType = DConst::SIZE;
 	sizePointId = DConst::BR - 1;
