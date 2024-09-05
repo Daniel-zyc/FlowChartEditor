@@ -48,7 +48,7 @@ QSet<int> registeredTypes = QSet<int>(
 				DPolyLineItemType
 			});
 
-int TOTAL_MAX_Z_VALUE = 0;
+int TOTAL_MAX_Z_VALUE = 1;
 
 int SHOT_STATE = DConst::UNCHANGED;
 
@@ -152,6 +152,21 @@ void DTool::filterNoparent(QList<DShapeBase*>& items)
 			items.pop_back();
 			i--;
 		}
+}
+
+void DTool::normalizeZValues(QList<QGraphicsItem *> &items) {
+    DTool::filterRootBases(items);
+
+    std::sort(items.begin(), items.end(), [](QGraphicsItem *a, QGraphicsItem *b) {
+        return a->zValue() < b->zValue();
+    });
+
+    qreal newZValue = 1;
+    for (QGraphicsItem *item : items) {
+        item->setZValue(newZValue);
+        ++newZValue;
+    }
+    TOTAL_MAX_Z_VALUE = newZValue;
 }
 
 bool DTool::isShape(int type)
