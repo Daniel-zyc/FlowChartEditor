@@ -227,7 +227,6 @@ QPainterPath DPolyLineItem::shapeNormal() const
     for (int i = 1; i < numPoints; ++i) {
         path.lineTo(points[i]);  // 连接每个点
     }
-    // 返回路径
     return path;
 }
 
