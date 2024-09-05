@@ -44,8 +44,9 @@ public:
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) override;
 
 	// 设置为正在插入这个腿型
-	virtual void setInsertItem() override;
+	virtual void setInsertingItem() override;
 
+	// 更新图形中文本的宽度，如果太宽会压缩到比图形宽度小一点
 	virtual void updateTextItemWidth();
 
 public:
@@ -87,6 +88,8 @@ private:
 	// 辅助根据计算图形的新矩形框
 	QRectF getResizeRect(const QPointF &p, int id);
 
+	void init();
+
 public:
 	// 图形自己的文本框
 	DTextItem *textItem = nullptr;
@@ -102,11 +105,7 @@ private:
 	int interactType = DConst::NONE;
 
 public:
-	/**
-	 * @brief serialize
-	 * @param out
-	 * 序列化：DAbstractBase -> textPtr
-	 */
+	// 序列化图形，会序列化其磁吸点，以及文本对象
 	virtual void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const override;
 	virtual bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr) override;
 };

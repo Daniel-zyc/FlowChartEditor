@@ -6,6 +6,7 @@
 DLineBase::DLineBase(QGraphicsItem *parent)
 	: DAbstractBase(parent)
 {
+	setPen(globalLinePen);
 	sizes.resize(2);
 	isScaleable = false;
 	isRotateable = false;
@@ -73,7 +74,7 @@ void DLineBase::interToPoint(QPointF p, MagPoint *mp)
 	update();
 }
 
-void DLineBase::setInsertItem()
+void DLineBase::setInsertingItem()
 {
 	interactType = DConst::SIZE;
 	sizePointId = DConst::ED - 1;
@@ -109,23 +110,21 @@ void DLineBase::linkEnd(MagPoint *mp)
 
 void DLineBase::unlinkBeginUpdate()
 {
-	if(beginMag)
-	{
-		beginPoint = beginMag->mapToItem(this);
-		beginMag->deleteLine(this);
-		beginMag = nullptr;
-	}
+	if(!beginMag) return;
+
+	beginPoint = beginMag->mapToItem(this);
+	beginMag->deleteLine(this);
+	beginMag = nullptr;
 	updatePosition();
 }
 
 void DLineBase::unlinkEndUpdate()
 {
-	if(endMag)
-	{
-		endPoint = endMag->mapToItem(this);
-		endMag->deleteLine(this);
-		endMag = nullptr;
-	}
+	if(!endMag) return;
+
+	endPoint = endMag->mapToItem(this);
+	endMag->deleteLine(this);
+	endMag = nullptr;
 	updatePosition();
 }
 
@@ -135,31 +134,28 @@ void DLineBase::unlinkMagUpdate(MagPoint* mp)
 	{
 		beginPoint = beginMag->mapToItem(this);
 		beginMag = nullptr;
+		updatePosition();
 	}
 	if(endMag == mp)
 	{
 		endPoint = endMag->mapToItem(this);
 		endMag = nullptr;
+		updatePosition();
 	}
-	updatePosition();
 }
 
 void DLineBase::unlinkBegin()
 {
-	if(beginMag)
-	{
-		beginMag->deleteLine(this);
-		beginMag = nullptr;
-	}
+	if(!beginMag) return;
+	beginMag->deleteLine(this);
+	beginMag = nullptr;
 }
 
 void DLineBase::unlinkEnd()
 {
-	if(endMag)
-	{
-		endMag->deleteLine(this);
-		endMag = nullptr;
-	}
+	if(!endMag) return;
+	endMag->deleteLine(this);
+	endMag = nullptr;
 }
 
 void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
@@ -170,22 +166,21 @@ void DLineBase::sizeToPoint(QPointF p, int id, MagPoint *mp)
 			if(mp && mp != endMag) linkBeginUpdate(mp);
 			else
 			{
-				// qDebug() << "unlinkBegin";
-				unlinkBeginUpdate();
+				unlinkBegin();
 				beginPoint = p;
+				updatePosition();
 			}
 			break;
 		case DConst::ED - 1 :
 			if(mp && mp != beginMag) linkEndUpdate(mp);
 			else
 			{
-				// qDebug() << "unlinkEnd";
-				unlinkEndUpdate();
+				unlinkEnd();
 				endPoint = p;
+				updatePosition();
 			}
 			break;
 	}
-	updatePosition();
 }
 
 void DLineBase::updatePosition()
@@ -219,7 +214,7 @@ void DLineBase::setEndArrowType(int type)
 qreal DLineBase::getAngle(const QPointF &beginPoint, const QPointF &endPoint)
 {
     QLineF line(beginPoint, endPoint);
-    double angle = atan2(line.dy(), line.dx());
+	qreal angle = atan2(line.dy(), line.dx());
     return angle;
 }
 
@@ -231,6 +226,7 @@ void DLineBase::drawEndArrow(QPainter *painter, double angle, const QPointF &end
 	QPointF arrowP2 = endPoint - QPointF(cos(angle - DConst::PI / 6) * arrowSize,
 										 sin(angle - DConst::PI / 6) * arrowSize);
 
+	// 箭头的填充颜色为线条的颜色
 	painter->setBrush(QBrush(pen().color(), Qt::SolidPattern));
 	painter->setPen(Qt::NoPen);
 	switch (arrowType) {

@@ -60,6 +60,10 @@ int TOTAL_MAX_Z_VALUE = 1;
 
 int SHOT_STATE = DConst::UNCHANGED;
 
+QBrush globalShapeBrush = defaultBrush;
+QPen globalShapePen = defaultPen;
+QPen globalLinePen = defaultPen;
+
 qreal DTool::degToRad(qreal deg) { return deg / 180 * DConst::PI; }
 
 qreal DTool::radToDeg(qreal rad) { return rad / DConst::PI * 180; }

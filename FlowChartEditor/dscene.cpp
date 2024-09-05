@@ -1186,7 +1186,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		if(insert_state == DConst::INSERT_SHAPE || insert_state == DConst::INSERT_TEXT)
 		{
 			DShapeBase* shape = dynamic_cast<DShapeBase*>(modifiedShape);
-			shape->setInsertItem();
+			shape->setInsertingItem();
 			shape->setPos(p + QPointF(shape->sizeRect().width()/2, shape->sizeRect().height()/2));
 		}
 		else
@@ -1198,7 +1198,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			else
 				line->setBeginPoint(p);
 			line->setEndPoint(p);
-			line->setInsertItem();
+			line->setInsertingItem();
 		}
 		inter_state = DConst::SIZE;
 		insert_state = insert_state + 1;
