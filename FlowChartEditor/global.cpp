@@ -16,7 +16,8 @@ QSet<int> registeredTypes = QSet<int>(
 				DDiaItemType,
 				DParagramItemType,
 				DTrapItemType,
-                DPentagonItemType,
+				DPentagonItemType,
+				DHexgonItemType,
 
 				// shape for flowchart
 				DFDocumentItemType,

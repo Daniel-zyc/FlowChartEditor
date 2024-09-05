@@ -352,7 +352,7 @@ void DScene::addpentagonItem()
 void DScene::addhexagonItem()
 {
     qDebug() << "add 六边形";
-    prepareInsertItem(new DFPrepareItem());
+	prepareInsertItem(new DHexgonItem());
 }
 
 void DScene::addDiaItem()

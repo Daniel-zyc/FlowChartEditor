@@ -28,11 +28,7 @@ protected:
 	qreal ratiox = 0.2, ratioy = 0.2;
 
 public:
-	/**
-	 * @brief serialize
-	 * @param out
-	 * 序列化：DShapeBase -> rect -> radiusx -> radiusy
-	 */
+	// 序列化
 	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
 	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };

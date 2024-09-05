@@ -18,11 +18,7 @@ public:
 	void updateModiPoint() override;
 
 public:
-    /**
-     * @brief serialize
-     * @param out
-     * 序列化：DPolygonBase
-     */
+	// 序列化
 	void serialize(QDataStream &out, const QGraphicsItem* fa) const override;
 	bool deserialize(QDataStream &in, QGraphicsItem* fa) override;
 };
