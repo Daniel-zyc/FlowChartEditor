@@ -693,7 +693,7 @@ void MainWindow::connectRight()
 	});
 	connect(reFileBtn, &QPushButton::clicked, this, [this]() {
 		if(customizeBg->isChecked()) {
-			QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg *.bmp"));
+            QString fileName = QFileDialog::getOpenFileName(this, "Open Image", "", ("Images(*.jpg *.png *.svg *.bmp *.jpeg"));
 			if(!fileName.isEmpty()) {
 				setSceneBg(fileName);
 			}else {
