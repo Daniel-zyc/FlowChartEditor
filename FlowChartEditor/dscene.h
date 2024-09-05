@@ -188,6 +188,7 @@ public:
 
 	// 自动磁吸参考线
 	QPointF getAutoAlignItemPos(DShapeBase* item);
+	QPointF getAutoAlignSizePos(DShapeBase* item, QPointF p);
 
 	// 设置是否开启磁吸线
 	void setAutoAlign(bool active);

@@ -1091,6 +1091,65 @@ QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
 	return pos;
 }
 
+QPointF DScene::getAutoAlignSizePos(DShapeBase* item, QPointF p)
+{
+	QList<QGraphicsItem*> items = this->items(view->mapToScene(view->rect()));
+	QList<DShapeBase*> shapes = DTool::itemToShape(items);
+	DTool::filterNoparent(shapes);
+
+	if(magLineH->scene()) removeItem(magLineH);
+	if(magLineV->scene()) removeItem(magLineV);
+
+	int flag = 0;
+	for(DShapeBase* shape : shapes)
+		if(shape != item) flag = 1;
+	if(!flag) return p;
+
+	qreal mindistx = qrealMax, posx, linex;
+	qreal mindisty = qrealMax, posy, liney;
+	QRectF vrc = view->mapToScene(view->rect()).boundingRect();
+
+	auto updateValueX = [&](qreal val, qreal base) {
+		qreal dist = abs(val - base);
+		if(dist > mindistx) return;
+		mindistx = dist; posx = p.x() + val - base; linex = val;
+	};
+	auto updateValueY = [&](qreal val, qreal base) {
+		qreal dist = abs(val - base);
+		if(dist > mindisty) return;
+		mindisty = dist; posy = p.y() + val - base; liney = val;
+	};
+
+	for(DShapeBase* shape : shapes)
+	{
+		if(shape == item) continue;
+		QRectF nrc = shape->mapRectToScene(shape->sizeRect());
+		updateValueY(nrc.center().y(), p.y());
+		updateValueY(nrc.top(), p.y());
+		updateValueY(nrc.bottom(), p.y());
+		updateValueX(nrc.center().x(), p.x());
+		updateValueX(nrc.left(), p.x());
+		updateValueX(nrc.right(), p.x());
+	}
+
+	if(mindistx <= maxMagLineDist)
+	{
+		p.setX(posx);
+		magLineV->setLine(QLineF({linex, vrc.top()},
+								 {linex, vrc.bottom()}));
+		addItem(magLineV);
+	}
+	if(mindisty <= maxMagLineDist)
+	{
+		p.setY(posy);
+		magLineH->setLine(QLineF({vrc.left(), liney},
+								 {vrc.right(), liney}));
+		addItem(magLineH);
+	}
+
+	return p;
+}
+
 void DScene::setAutoAlign(bool active)
 {
 	autoAlign = active;
@@ -1195,13 +1254,18 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 	if(inter_state != DConst::NONE && modifiedShape)
 	{
 		event->accept();
-		modifiedShape->interToPoint(p, magPoint);
+
+		QPointF np = p;
+		if(inter_state == DConst::SIZE && autoAlign && modifiedShape->isShape())
+			np = getAutoAlignSizePos(dynamic_cast<DShapeBase*>(modifiedShape), p);
+		modifiedShape->interToPoint(np, magPoint);
+
 		if(insert_state == DConst::AFTER_INSERT_SHAPE)
 		{
 			DShapeBase *shape = dynamic_cast<DShapeBase*>(modifiedShape);
 			QRectF rc = shape->sizeRect();
 			rc.setRect(rc.left()*0.75, rc.top()*0.75, rc.width()*0.75, rc.height()*0.75);
-			shape->textItem->sizeToRect(rc);
+			if(shape->textItem) shape->textItem->sizeToRect(rc);
 		}
 		return;
 	}

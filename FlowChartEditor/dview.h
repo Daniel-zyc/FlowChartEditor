@@ -46,7 +46,6 @@ public:
 
 protected:
 	void init();
-
 	void mouseMoveEvent(QMouseEvent *event) override;
 
 protected:
