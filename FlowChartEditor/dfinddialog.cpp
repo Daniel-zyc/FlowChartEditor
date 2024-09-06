@@ -46,6 +46,8 @@ DFindDialog::DFindDialog(QWidget *parent)
 void DFindDialog::cancelHihglight()
 {
     for(QTextCursor cursor : curs) {
+        QTextCharFormat charformat = cursor.charFormat();
+        charformat.setBackground(Qt::white);
         cursor.setCharFormat(QTextCharFormat());
     }
     index = 0;
@@ -64,12 +66,11 @@ void DFindDialog::findFirst()
     num = 0;
     curs.clear();
     searchstr = searchEdit->text();
-
-    QTextCharFormat highlight;
-    highlight.setBackground(Qt::yellow);
     for(QTextDocument *doc : docs) {
         QTextCursor cursor = doc->find(searchstr);
         while(!cursor.isNull()) {
+            QTextCharFormat highlight = cursor.charFormat();
+            highlight.setBackground(Qt::yellow);
             cursor.setCharFormat(highlight);
             curs.push_back(cursor);
             cursor = doc->find(searchstr, cursor);
@@ -82,6 +83,7 @@ void DFindDialog::findFirst()
         return;
     }
 	// qDebug() << "num:" << num;
+    QTextCharFormat highlight = curs[0].charFormat();
     highlight.setBackground(Qt::cyan);
     curs[0].setCharFormat(highlight);
     // index++;
@@ -95,13 +97,14 @@ void DFindDialog::findUp()
         msgBox.exec();
         return;
     }
-    QTextCharFormat highlight;
+    QTextCharFormat highlight =  curs[index].charFormat();
     highlight.setBackground(Qt::yellow);
     curs[index].setCharFormat(highlight);
 
     QTextCursor cursor = curs[--index];
+    highlight = cursor.charFormat();
     highlight.setBackground(Qt::cyan);
-    curs[index].setCharFormat(highlight);
+    cursor.setCharFormat(highlight);
 }
 
 void DFindDialog::findDown()
@@ -112,19 +115,22 @@ void DFindDialog::findDown()
         msgBox.exec();
         return;
     }
-    QTextCharFormat highlight;
+    QTextCharFormat highlight = curs[index].charFormat();
     highlight.setBackground(Qt::yellow);
     curs[index].setCharFormat(highlight);
 
     QTextCursor cursor = curs[++index];
+    highlight = cursor.charFormat();
     highlight.setBackground(Qt::cyan);
-    curs[index].setCharFormat(highlight);
+    cursor.setCharFormat(highlight);
 }
 
 void DFindDialog::replace()
 {
     if(searchstr != searchEdit->text()) DFindDialog::findFirst();
-    curs[index].setCharFormat(QTextCharFormat());
+    QTextCharFormat charformat = curs[index].charFormat();
+    charformat.setBackground(Qt::white);
+    curs[index].setCharFormat(charformat);
     curs[index].insertText(replaceEdit->text());
     curs.removeAt(index);
 	UndoManager::instance().shot();
@@ -140,7 +146,7 @@ void DFindDialog::replace()
     }
     if(index >= num - 1 || index < 0) {
         index = 0;
-        QTextCharFormat highlight;
+        QTextCharFormat highlight = curs[0].charFormat();
         highlight.setBackground(Qt::cyan);
         curs[0].setCharFormat(highlight);
     }
@@ -161,7 +167,9 @@ void DFindDialog::repalceAll()
     DFindDialog::findFirst();
     QString replaceStr = replaceEdit->text();
     for(QTextCursor cursor : curs) {
-        cursor.setCharFormat(QTextCharFormat());
+        QTextCharFormat charformat = cursor.charFormat();
+        charformat.setBackground(Qt::white);
+        cursor.setCharFormat(charformat);
         cursor.insertText(replaceStr);
     }
 	UndoManager::instance().shot();
@@ -200,7 +208,9 @@ void DFindDialog::closeEvent(QCloseEvent *event)
     if(replaceEdit->text() != "") replaceEdit->clear();
     for(QTextCursor cursor : curs)
     {
-        cursor.setCharFormat(QTextCharFormat());
+        QTextCharFormat charformat = cursor.charFormat();
+        charformat.setBackground(Qt::white);
+        cursor.setCharFormat(charformat);
     }
     index = 0;
     num = 0;

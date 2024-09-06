@@ -825,13 +825,13 @@ QSet<DTextBase *> DScene::getTextBases()
 void DScene::changeTextColor(QColor color)
 {
     QSet<DTextBase *> texts = getTextBases();
-    QTextCharFormat charformat;
-    charformat.setForeground(color);
     for(DTextBase *tbase : texts) {
         QTextCursor cursor(tbase->document());
         cursor.movePosition(QTextCursor::Start);
         while(!cursor.isNull() && !cursor.atEnd()) {
             cursor.select(QTextCursor::BlockUnderCursor);
+            QTextCharFormat charformat = cursor.charFormat();
+            charformat.setForeground(color);
             cursor.mergeCharFormat(charformat);
             cursor.movePosition(QTextCursor::NextBlock);
         }
@@ -841,13 +841,13 @@ void DScene::changeTextColor(QColor color)
 void DScene::changeTextFont(QFont font)
 {
     QSet<DTextBase *> texts = getTextBases();
-    QTextCharFormat charformat;
-    charformat.setFont(font);
     for(DTextBase *tbase : texts) {
         QTextCursor cursor(tbase->document());
         cursor.movePosition(QTextCursor::Start);
         while(!cursor.isNull() && !cursor.atEnd()) {
             cursor.select(QTextCursor::BlockUnderCursor);
+            QTextCharFormat charformat = cursor.charFormat();
+            charformat.setFont(font);
             cursor.mergeCharFormat(charformat);
             cursor.movePosition(QTextCursor::NextBlock);
         }
