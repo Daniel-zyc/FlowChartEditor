@@ -57,7 +57,7 @@ void Inspector::checkAll(){
 }
 
 void Inspector::checkItems(QList<QGraphicsItem *> items){
-    qDebug() << "check item";
+    // qDebug() << "check item";
     DTool::filterRootBases(items);      // 线+一般图形+流程图图形+文本框
     for(QGraphicsItem * item : items)
         checkItem(item);
@@ -109,7 +109,7 @@ void Inspector::checkChartFlowItem(QGraphicsItem *item){
             .append({ChartFlowNoLinedItem,tr("无连接的孤立流程图图形图形"),shapeBase});
     if(none)
         errorMessage
-            .append({ChartFlowHasNoTypeArrow,tr("流程图图形未指定连线类型"),shapeBase});
+            .append({ChartFlowHasNoTypeArrow,tr("流程图图形连接了非输入输出的线条"),shapeBase});
     if(scene->ifCollision(shapeBase))
         errorMessage.append({CollisionItem,tr("流程图图形发生碰撞"),shapeBase});
     qDebug() << "here";

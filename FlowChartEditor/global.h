@@ -5,15 +5,14 @@
 #include <QBrush>
 #include <QPen>
 
+// 全局变量，记录最大图层
 extern int TOTAL_MAX_Z_VALUE;
 // 全局变量，记录图形是否发生了修改
 extern int SHOT_STATE;
-// 全局变量，记录同一个图形拷贝次数，用于计算错开距离
-extern int PASTE_NUM;
 
 // 序列化时用来判断某图形是否参与序列化
 extern QSet<int> registeredTypes;
-
+// 全局变量，记录当前打开文档路径
 extern QString FILE_PATH;
 
 // 将画面上的所有物品大小放大的倍数，同时视角缩小相应的倍数

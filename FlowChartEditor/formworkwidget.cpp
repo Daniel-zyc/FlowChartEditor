@@ -14,19 +14,22 @@ FormworkWidget::FormworkWidget(QWidget *parent,DScene *scene,DView *view)
     : QWidget(parent), scene(scene),view(view),gridLayout(new QGridLayout(this)) {
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
     QToolBar *toolBar = new QToolBar(this);
-    QAction *newFormwork = new QAction("保存当前为模板", this);
+    QAction *newFormwork = new QAction("保存为模板", this);
     QAction *deleteFormwork = new QAction("删除模板",this);
 
     toolBar->addAction(newFormwork);
     toolBar->addAction(deleteFormwork);
+
     mainLayout->addWidget(toolBar, 0);
     mainLayout->addLayout(gridLayout, 1);
 
     connect(newFormwork,&QAction::triggered,this,&FormworkWidget::handleNewFormwork);
     connect(deleteFormwork,&QAction::triggered,this,&FormworkWidget::handleDeleteFormwork);
 
-    setLayout(gridLayout);
+    this->setLayout(mainLayout);
+
     loadFormwork();
     updateForm();
 }
@@ -46,15 +49,15 @@ void FormworkWidget::addItem(const FormworkData &data) {
     vLayout->setAlignment(Qt::AlignCenter);
 
     QLabel *imageLabel = new QLabel(itemWidget);
-    if (data.imgPath.endsWith(".svg", Qt::CaseInsensitive)) {
-        QSvgRenderer *renderer = new QSvgRenderer(data.imgPath, this);
+    if (data.ImgPath.endsWith(".svg", Qt::CaseInsensitive)) {
+        QSvgRenderer *renderer = new QSvgRenderer(data.ImgPath, this);
         QPixmap pixmap(100, 100);
         pixmap.fill(Qt::transparent);
         QPainter painter(&pixmap);
         renderer->render(&painter);
         imageLabel->setPixmap(pixmap);
     } else {
-        QPixmap pixmap(data.imgPath);
+        QPixmap pixmap(data.ImgPath);
         imageLabel->setPixmap(pixmap);
     }
     imageLabel->setAlignment(Qt::AlignCenter);
@@ -146,7 +149,7 @@ void FormworkWidget::handleNewFormwork(){
         FormworkData newData;
         newData.FilePath = bitFilePath;
         newData.Title = title;
-        newData.imgPath = svgFilePath;
+        newData.ImgPath = svgFilePath;
         newData.Detail = detail;
 
         fromworkData.append(newData);
@@ -237,7 +240,7 @@ void FormworkWidget::loadFormwork() {
         }
         QStringList svgFiles = subDir.entryList(QStringList() << "*.svg", QDir::Files);
         if (!svgFiles.isEmpty()) {
-            data.imgPath = subDir.filePath(svgFiles.first());
+            data.ImgPath = subDir.filePath(svgFiles.first());
         }
         QStringList txtFiles = subDir.entryList(QStringList() << "*.txt", QDir::Files);
         if (!txtFiles.isEmpty()) {
