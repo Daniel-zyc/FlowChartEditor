@@ -94,12 +94,8 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
 */
 //绘制箭头
     qreal begin_angle,end_angle;
-    if(abs(st_x_offset) > 1e-6 || abs(st_y_offset) > 1e-6)
-        begin_angle = getAngle(points[1],points[0]);
-    else begin_angle = getAngle(points[2],points[0]);
-    if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
-        end_angle = getAngle(points[4],points[5]);
-    else end_angle = getAngle(points[3],points[5]);
+    begin_angle = getAngle(points[getBeginArrowDirect()],points[0]);
+    end_angle = getAngle(points[getEndArrowDirect()],points[5]);
     drawEndArrow(painter, end_angle, endPoint, endArrowType);
     drawBeginArrow(painter, begin_angle + DConst::PI, beginPoint, beginArrowType);
     //绘制sizerect
@@ -115,6 +111,24 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     }
 */
 }
+//调整箭头方向
+int DPolyLineItem::getBeginArrowDirect() {
+    if(abs(st_x_offset) > 1e-6 || abs(st_y_offset) > 1e-6)
+        return 1;
+    else {
+
+    }
+    return 2;
+}
+int DPolyLineItem::getEndArrowDirect() {
+    if(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
+        return 4;
+    else {
+
+    }
+    return 3;
+}
+
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
 {
