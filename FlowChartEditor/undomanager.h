@@ -20,17 +20,17 @@ public:
     void shot();
     void shot(QGraphicsScene *scene);
 
-    void trimStack();
-
     void undo();
     void redo();
-
-    void clearStack();
 
 private:
     UndoManager();
     UndoManager(const UndoManager&) = delete;
     UndoManager& operator=(const UndoManager&) = delete;
+
+    void trimStack();
+
+    void clearStack();
 
     QStack<QByteArray> undoStack;
     QStack<QByteArray> redoStack;

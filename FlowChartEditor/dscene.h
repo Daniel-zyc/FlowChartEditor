@@ -175,6 +175,7 @@ public:
 	void changeItemScale(qreal scl = 1.0) { setScale(scl); }
 
 	void setBackground(QString path);
+	void setDefaultColor();
 
 	// 对齐
 	void itemTopAlign();

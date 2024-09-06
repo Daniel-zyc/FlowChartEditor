@@ -31,14 +31,15 @@ public:
     void checkOtherItem(QGraphicsItem *item);
 
     void restoreView();
-    void updateErrorList();
 
-    void setAutoCheck(bool b);
+    void setAutoCheck(bool activate);
 
 private:
     explicit Inspector(QWidget *parent = nullptr, DScene *scene = nullptr, DView *view = nullptr);
 
     static Inspector* m_instance;
+
+    void updateErrorList();
 
     DScene *scene;
     DView *view;

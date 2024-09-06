@@ -20,7 +20,7 @@
 
 struct FormworkData
 {
-    QString imgPath;
+    QString ImgPath;
     QString FilePath;
     QString Title;
     QString Detail;

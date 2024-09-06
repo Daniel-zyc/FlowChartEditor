@@ -858,6 +858,24 @@ void DScene::setBackground(QString path)
     setBackgroundBrush(bg);
 }
 
+void DScene::setDefaultColor()
+{
+	QList<DShapeBase*> items = getSelectedShapes();
+	for(DShapeBase *item : items)
+	{
+		if(item->isText()) continue;
+		globalShapeBrush = item->brush();
+		globalShapePen = item->pen();
+		break;
+	}
+	QList<DLineBase*> lines = getSelectedLines();
+	for(DLineBase* item : lines)
+	{
+		globalLinePen = item->pen();
+		break;
+	}
+}
+
 //==============================================================================
 
 void DScene::itemTopAlign()

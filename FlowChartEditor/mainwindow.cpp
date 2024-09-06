@@ -43,12 +43,11 @@ MainWindow::MainWindow(QWidget *parent)
 	fontDia->setOption(QFontDialog::ScalableFonts);
 	fontDia->setOption(QFontDialog::ProportionalFonts);
 
-	// 初始化 view 和 scene
 	createStatusBar();
+
+	// 初始化 view 和 scene
 	scene = new DScene(this);
 	view = new DView(scene, this);
-
-	scene->setMenu(createSceneMenu());
 	scene->setView(view);
 	scene->labelItemInfo = labelItemInfo;
 	scene->labelState = labelSceneState;
@@ -68,24 +67,8 @@ MainWindow::MainWindow(QWidget *parent)
 	bindAction();
 	connectLeft();
 	connectRight();
-}
 
-QMenu* MainWindow::createSceneMenu()
-{
-	QMenu *m = new QMenu();
-	m->addAction(ui->actDelSelectedItem);
-	m->addSeparator();
-	m->addAction(ui->actSelectFrameCol);
-	m->addAction(ui->actSelectFillCol);
-	m->addAction(ui->actSelectTextCol);
-	m->addAction(ui->actSelectTextFont);
-	m->addAction(ui->actStyleSheet);
-	m->addSeparator();
-	m->addAction(ui->actMoveSelectedZUp);
-	m->addAction(ui->actMoveSelectedZDown);
-	m->addAction(ui->actMoveSelectedMaxZUp);
-	m->addAction(ui->actMoveSelectedMaxZDown);
-	return m;
+	scene->setMenu(sceneMenu);
 }
 
 MainWindow::~MainWindow()
@@ -472,6 +455,7 @@ void MainWindow::initleftUi()
 	storedataBtn->setIcon(QPixmap(":/icon/flowchart/storedata.png"));
 	sortBtn->setIcon(QPixmap(":/icon/flowchart/sort.png"));
 
+	curveBtn->setToolTip("曲线");
 	rectBtn->setToolTip("过程");
 	roundRectBtn->setToolTip("可选过程");
 	ellipseBtn->setToolTip("接点");
@@ -763,7 +747,33 @@ void MainWindow::createMenu()
     lineType->addMenu(arrowTypeBM);
     lineType->addMenu(arrowTypeEM);
 	// ui->styleMenu->addMenu(lineType);
-	scene->getMenu()->addMenu(lineType);
+
+	sceneMenu = new QMenu();
+	sceneMenu->addAction(ui->actDelSelectedItem);
+	sceneMenu->addSeparator();
+	sceneMenu->addAction(ui->actRedo);
+	sceneMenu->addAction(ui->actUndo);
+	sceneMenu->addSeparator();
+	sceneMenu->addAction(ui->actSelectAll);
+	sceneMenu->addAction(ui->actCopy);
+	sceneMenu->addAction(ui->actCut);
+	sceneMenu->addAction(ui->actPaste);
+	sceneMenu->addSeparator();
+	sceneMenu->addAction(ui->actSelectFrameCol);
+	sceneMenu->addAction(ui->actSelectFrameCol);
+	sceneMenu->addAction(ui->actSelectFillCol);
+	sceneMenu->addAction(ui->actSelectTextCol);
+	sceneMenu->addAction(ui->actSelectTextFont);
+	sceneMenu->addAction(ui->actSetDefaultColor);
+	// sceneMenu->addAction(ui->actStyleSheet);
+	sceneMenu->addSeparator();
+	sceneMenu->addMenu(lineType);
+
+	sceneMenu->addSeparator();
+	sceneMenu->addAction(ui->actMoveSelectedZUp);
+	sceneMenu->addAction(ui->actMoveSelectedZDown);
+	sceneMenu->addAction(ui->actMoveSelectedMaxZUp);
+	sceneMenu->addAction(ui->actMoveSelectedMaxZDown);
 
 	ui->fileMenu->addAction(ui->actNewFile);
 	ui->fileMenu->addAction(ui->actOpenFile);
@@ -772,6 +782,8 @@ void MainWindow::createMenu()
 	ui->fileMenu->addAction(ui->actSvgFile);
 	ui->fileMenu->addAction(ui->actExit);
 
+	ui->editMenu->addAction(ui->actDelSelectedItem);
+	ui->editMenu->addSeparator();
 	ui->editMenu->addAction(ui->actUndo);
 	ui->editMenu->addAction(ui->actRedo);
 	ui->editMenu->addAction(ui->actSelectAll);
@@ -779,16 +791,7 @@ void MainWindow::createMenu()
 	ui->editMenu->addAction(ui->actCut);
 	ui->editMenu->addAction(ui->actPaste);
 	ui->editMenu->addAction(ui->actFindandReplace);
-	// ui->editMenu->addAction(ui->actReplace);
-
-	// ui->editMenu->addAction(ui->actEditEnlarge);
-	// ui->editMenu->addAction(ui->actEditShrink);
-	// ui->editMenu->addAction(ui->actEditRotateCW);
-	// ui->editMenu->addAction(ui->actEditRotateCCW);
-	// ui->editMenu->addAction(ui->actEditMoveLeft);
-	// ui->editMenu->addAction(ui->actEditMoveRight);
-	// ui->editMenu->addAction(ui->actEditMoveUp);
-	// ui->editMenu->addAction(ui->actEditMoveDown);
+	ui->editMenu->addSeparator();
 
 	ui->editMenu->addAction(ui->actEnlarge);
 	ui->editMenu->addAction(ui->actShrink);
@@ -799,26 +802,14 @@ void MainWindow::createMenu()
 	ui->editMenu->addAction(ui->actMoveUp);
 	ui->editMenu->addAction(ui->actMoveDown);
 
-	ui->addMenu->addAction(ui->actAddLine);
-	ui->addMenu->addAction(ui->actAddEll);
-	ui->addMenu->addAction(ui->actAddRect);
-	ui->addMenu->addAction(ui->actAddRoundRect);
-	ui->addMenu->addAction(ui->actAddPargram);
-	ui->addMenu->addAction(ui->actAddDoc);
-	ui->addMenu->addAction(ui->actAddRhom);
-	ui->addMenu->addAction(ui->actAddTrap);
-	ui->addMenu->addAction(ui->actAddTri);
-	ui->addMenu->addAction(ui->actAddEnd);
-	ui->addMenu->addAction(ui->actAddPrede);
-	ui->addMenu->addAction(ui->actAddText);
-	ui->addMenu->addAction(ui->actAddPrede);
-	ui->addMenu->addAction(ui->actAddEnd);
-	ui->addMenu->addAction(ui->actAddPolyLine);
-
-	ui->addMenu->addAction(ui->actSetTextFont);
-	ui->addMenu->addAction(ui->actSetTextColor);
-	ui->addMenu->addAction(ui->actSetBorderColor);
-	ui->addMenu->addAction(ui->actSetFillColor);
+	ui->styleMenu->addAction(ui->actSelectFrameCol);
+	ui->styleMenu->addAction(ui->actSelectFillCol);
+	ui->styleMenu->addAction(ui->actSelectTextCol);
+	ui->styleMenu->addAction(ui->actSelectTextFont);
+	ui->styleMenu->addAction(ui->actSetDefaultColor);
+	// ui->styleMenu->addAction(ui->actStyleSheet);
+	ui->styleMenu->addSeparator();
+	ui->styleMenu->addMenu(lineType);
 
 	ui->viewMenu->addAction(ui->actViewEnlarge);
 	ui->viewMenu->addAction(ui->actViewShrink);
@@ -829,9 +820,18 @@ void MainWindow::createMenu()
 	ui->viewMenu->addAction(ui->actViewMoveDown);
 	ui->viewMenu->addAction(ui->actViewMoveUp);
 
+	ui->itemMenu->addAction(ui->actEditEnlarge);
+	ui->itemMenu->addAction(ui->actEditShrink);
+	ui->itemMenu->addAction(ui->actEditRotateCW);
+	ui->itemMenu->addAction(ui->actEditRotateCCW);
+	ui->itemMenu->addAction(ui->actEditMoveLeft);
+	ui->itemMenu->addAction(ui->actEditMoveRight);
+	ui->itemMenu->addAction(ui->actEditMoveDown);
+	ui->itemMenu->addAction(ui->actEditMoveUp);
+
 	ui->helpMenu->addAction(ui->actAboutUs);
-    // ui->helpMenu->addAction(ui->actCheck);
-	ui->helpMenu->addAction(ui->actDebug);
+	// ui->helpMenu->addAction(ui->actCheck);
+	// ui->helpMenu->addAction(ui->actDebug);
 }
 
 void MainWindow::createToolBar()
@@ -841,20 +841,33 @@ void MainWindow::createToolBar()
 	saveSvgTln->setIcon(QIcon(":/icon/savesvg.png"));
 	saveSvgTln->setToolTip("导出Svg格式");
 
+	ui->headToolBar->setFloatable(false);
 	ui->headToolBar->addAction(ui->actNewFile);
 	ui->headToolBar->addAction(ui->actOpenFile);
 	ui->headToolBar->addAction(ui->actSaveFile);
-    // ui->headToolBar->addAction(ui->actSaveNewFile);
+	ui->headToolBar->addAction(ui->actSaveNewFile);
 	ui->headToolBar->addWidget(saveSvgTln);
 	ui->headToolBar->addSeparator();
 
 	ui->headToolBar->addAction(ui->actEnlarge);
 	ui->headToolBar->addAction(ui->actShrink);
+	ui->headToolBar->addAction(ui->actRotateCCW);
+	ui->headToolBar->addAction(ui->actRotateCW);
 	ui->headToolBar->addSeparator();
 
+	ui->headToolBar->addAction(ui->actDelSelectedItem);
+	ui->headToolBar->addSeparator();
 	ui->headToolBar->addAction(ui->actUndo);
 	ui->headToolBar->addAction(ui->actRedo);
     ui->headToolBar->addSeparator();
+
+	ui->headToolBar->addAction(ui->actSelectAll);
+	ui->headToolBar->addAction(ui->actCopy);
+	ui->headToolBar->addAction(ui->actCut);
+	ui->headToolBar->addAction(ui->actPaste);
+	ui->headToolBar->addSeparator();
+	ui->headToolBar->addAction(ui->actFindandReplace);
+	ui->headToolBar->addSeparator();
 
     isInspect = new QCheckBox("开启检查");
     isOpenReference = new QCheckBox("开启参照");
@@ -984,7 +997,7 @@ void MainWindow::bindAction()
 
     connect(ui->actSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
 
-	connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
+	// connect(ui->actDebug, SIGNAL(triggered(bool)), this, SLOT(myDebug()));
     // connect(ui->actCheck,SIGNAL(triggered(bool)),this,SLOT(check()));
 	connect(ui->actAboutUs,SIGNAL(triggered(bool)),this,SLOT(showAboutUsWindow()));
 	connect(ui->actRedo,SIGNAL(triggered(bool)), this, SLOT(redo()));
@@ -998,30 +1011,17 @@ void MainWindow::bindAction()
 
 	connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
 	connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
+    connect(ui->actCut,SIGNAL(triggered(bool)),this,SLOT(cut()));
 
-	connect(ui->actAddLine, SIGNAL(triggered(bool)), this, SLOT(addLine()));
-	connect(ui->actAddRect, SIGNAL(triggered(bool)), this, SLOT(addRect()));
-	connect(ui->actAddRoundRect, SIGNAL(triggered(bool)), this, SLOT(addRoundRect()));
-	connect(ui->actAddEll, SIGNAL(triggered(bool)), this, SLOT(addEll()));
-	connect(ui->actAddText, SIGNAL(triggered(bool)), this, SLOT(addText()));
-	connect(ui->actAddTri, SIGNAL(triggered(bool)), this, SLOT(addTri()));
-	connect(ui->actAddRhom, SIGNAL(triggered(bool)), this, SLOT(addDia()));
-	connect(ui->actAddTrap, SIGNAL(triggered(bool)), this, SLOT(addTrap()));
-	connect(ui->actAddEnd, SIGNAL(triggered(bool)), this, SLOT(addDFStartEndItem()));
-	connect(ui->actAddPrede, SIGNAL(triggered(bool)), this, SLOT(addDFPredefineItem()));
-	connect(ui->actAddPargram, SIGNAL(triggered(bool)), this, SLOT(addParagram()));
-	connect(ui->actAddManualinput, SIGNAL(triggered(bool)), this, SLOT(addDFManualInputItem()));
-	connect(ui->actAddDoc, SIGNAL(triggered(bool)), this, SLOT(addDFDocItem()));
-	connect(ui->actAddPolyLine, SIGNAL(triggered(bool)), this, SLOT(addPolyLine()));
-
-	connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
-		rightTab->setVisible(true);
-	});
+	// connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
+	// 	rightTab->setVisible(true);
+	// });
 
 	connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(changeFillColor()));
 	connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(changeBorderColor()));
 	connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(changeTextCol()));
 	connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(changeTextFont()));
+	connect(ui->actSetDefaultColor, SIGNAL(triggered(bool)), this, SLOT(setDefaultColor()));
 
     connect(ui->actMoveSelectedZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
     connect(ui->actMoveSelectedZDown, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZDown()));
@@ -1057,8 +1057,8 @@ void MainWindow::bindAction()
 	connect(ui->actMoveDown, SIGNAL(triggered(bool)), this, SLOT(moveDown()));
 
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
-	QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
-	connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
+	// QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
+	// connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
 
 	connect(saveSvgTln, &QToolButton::clicked, this, &MainWindow::saveAsSvg);
     connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
@@ -1252,6 +1252,11 @@ void MainWindow::changeTextFont()
     }
 }
 
+void MainWindow::setDefaultColor()
+{
+	scene->setDefaultColor();
+}
+
 void MainWindow::rotateCW()
 {
 	if(scene->selectedItems().isEmpty()) view->rotateCW();
@@ -1419,10 +1424,10 @@ void MainWindow::newFile(){
 
 void MainWindow::copy(){
 	scene->copySelectedItems();
-    shot();
 }
 
-void MainWindow::shear(){
+void MainWindow::cut(){
+    qDebug() << "cut";
     scene->copySelectedItems();
     scene->delSelectedItem();
     shot();

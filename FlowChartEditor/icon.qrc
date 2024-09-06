@@ -75,5 +75,11 @@
         <file>icon/curve.png</file>
         <file>icon/primary/hex.png</file>
         <file>icon/primary/pen.png</file>
+        <file>icon/down.svg</file>
+        <file>icon/left.svg</file>
+        <file>icon/right.svg</file>
+        <file>icon/toBottom.svg</file>
+        <file>icon/toTop.svg</file>
+        <file>icon/up.svg</file>
     </qresource>
 </RCC>
