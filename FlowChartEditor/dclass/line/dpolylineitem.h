@@ -57,6 +57,10 @@ protected:
     QPointF getBoundingPoint(int point,int type);
     void updateOffsets(int st_dir,int ed_dir);
 
+    //调整箭头方向
+    int getBeginArrowDirect();
+    int getEndArrowDirect();
+
 
 private:
     //起终点位置偏移量
