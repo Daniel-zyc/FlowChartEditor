@@ -75,7 +75,7 @@ void DLineItem::updateAll()
 void DLineItem::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	DLineBase::serialize(out, fa);
-	qDebug() << "debug: " << beginPoint - endPoint;
+	// qDebug() << "debug: " << beginPoint - endPoint;
 }
 
 bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
@@ -84,7 +84,7 @@ bool DLineItem::deserialize(QDataStream &in, QGraphicsItem* fa)
 	// qDebug() << "debug: " << beginPoint - endPoint;
 	updateAll();
     // updatePosition();
-    qDebug() << "endMag" << endMag;
-    qDebug() << "beginMag" << beginMag;
+	// qDebug() << "endMag" << endMag;
+	// qDebug() << "beginMag" << beginMag;
 	return true;
 }

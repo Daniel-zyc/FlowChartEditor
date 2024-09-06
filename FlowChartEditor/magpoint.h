@@ -50,7 +50,7 @@ public:
     // 获取连线数量
     int getLinkedLineNum(){if(lines == nullptr) return 0; else return lines->size();}
     // 获取连线的箭头类型数量,int,out,none
-    std::tuple<int,int,int> getLinkedLienArrowType();
+	std::tuple<int,int,int> getLinkedLineArrowType();
 private:
 	// lines 存储与其相连的 DLineBase 的指针
 	QSet<DLineBase*> *lines = nullptr;

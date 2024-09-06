@@ -16,6 +16,7 @@ void UndoManager::shot(QGraphicsScene *scene){
     if(undoStack.empty() || data != undoStack.top()) undoStack.push(data);
     trimStack();
     SHOT_STATE = DConst::UNCHANGED;
+	qDebug() << "shot finish";
 }
 
 void UndoManager::shot(){

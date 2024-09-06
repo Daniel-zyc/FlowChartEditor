@@ -50,9 +50,10 @@ void DTextItem::updateMagPoint()
 
 void DTextItem::sizeToRect(QRectF nrect)
 {
-	if(parentItem())
+	DShapeBase* p = dynamic_cast<DShapeBase*>(parentItem());
+	if(p)
 	{
-		qreal maxWidth = dynamic_cast<DShapeBase*>(parentItem())->sizeRect().width() - sizePointRadius*2;
+		qreal maxWidth = p->sizeRect().width() - sizePointRadius*2;
 		if(nrect.width() > maxWidth)
 		{
 			nrect.setWidth(maxWidth);

@@ -1431,6 +1431,7 @@ void MainWindow::cut(){
     scene->copySelectedItems();
     scene->delSelectedItem();
     shot();
+	// qDebug() << "ret cut";
     inspector->checkAll();
 }
 

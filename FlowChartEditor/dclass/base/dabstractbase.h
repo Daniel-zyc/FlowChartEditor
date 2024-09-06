@@ -130,6 +130,7 @@ protected:
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 public:
+	// 记录图形是否支持缩放或旋转
 	bool isScaleable = true;
 	bool isRotateable = true;
 

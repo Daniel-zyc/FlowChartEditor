@@ -93,7 +93,7 @@ void DTool::moveItems(const QList<QGraphicsItem *> &items,const QPointF copyCent
     QPointF delta = cursorPos - copyCenterPos;
     QList<QGraphicsItem *> itemList = items;
     filterRootBases(itemList);
-    for (QGraphicsItem* item : itemList)
+	for (QGraphicsItem* item : itemList) if(item)
     {
         item->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
         QPointF curPos = item->pos();
@@ -192,7 +192,7 @@ bool DTool::isLine(int type)
 
 bool DTool::isText(int type)
 {
-	return QGraphicsItem::UserType + 40 <= type && type < QGraphicsItem::UserType + 100;
+	return type == DTextItemType;
 }
 
 bool DTool::isAbstract(int type)

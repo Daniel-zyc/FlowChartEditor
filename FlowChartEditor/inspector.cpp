@@ -48,12 +48,14 @@ void Inspector::setAutoCheck(bool b){
 
 void Inspector::checkAll(){
     if(!autoCheck || scene == nullptr || view == nullptr) return;
+	qDebug() << "check All start";
     clearAllErrors();
     originalCentrer = view->mapToScene(view->viewport()->rect().center());
     originalTransform = view->transform();
     QList<QGraphicsItem * > items = scene->items();
     checkItems(items);
     updateErrorList();
+	qDebug() << "check All finish";
 }
 
 void Inspector::checkItems(QList<QGraphicsItem *> items){

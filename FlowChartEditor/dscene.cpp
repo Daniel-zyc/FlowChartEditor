@@ -585,10 +585,20 @@ void DScene::delSelectedItem()
 	qDebug() << "delete selected items";
 	QList<DAbstractBase*> items = getRootSelectedBases();
 	qDebug() << "deleteed items: " << items;
-	for(DAbstractBase *item : items)
+	for(DAbstractBase *item : items) if(item)
 	{
 		DShapeBase* shape; DLineBase* line;
-		if((shape = dynamic_cast<DShapeBase*>(item))) shape->unLinkAllLines();
+		if((shape = dynamic_cast<DShapeBase*>(item)))
+		{
+			shape->unLinkAllLines();
+			if(shape->textItem)
+			{
+				if(shape->textItem == modifiedShape)
+					modifiedShape = nullptr, inter_state = DConst::NONE;
+				if(shape->textItem == showMagedItem)
+					showMagedItem = nullptr;
+			}
+		}
 		else if((line = dynamic_cast<DLineBase*>(item)))
 		{
 			line->unlinkBeginUpdate();
@@ -597,10 +607,7 @@ void DScene::delSelectedItem()
 		if(item->isText() && item->parentItem())
 			dynamic_cast<DShapeBase*>(item->parentItem())->textItem = nullptr;
 		item->setParentItem(nullptr);
-	}
-	for(DAbstractBase* item : items)
-	{
-		removeItem(item);
+
 		if(item == modifiedShape)
 		{
 			modifiedShape = nullptr;
@@ -610,6 +617,10 @@ void DScene::delSelectedItem()
 		{
 			showMagedItem = nullptr;
 		}
+	}
+	for(DAbstractBase* item : items) if(item)
+	{
+		removeItem(item);
 		delete item;
 	}
 	qDebug() << "delete pass";
@@ -1084,6 +1095,7 @@ void DScene::itemVertiEven()
 
 QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
 {
+	// qDebug() << "auto";
 	QList<QGraphicsItem*> items = this->items(view->mapToScene(view->rect()));
 	QList<DShapeBase*> shapes = DTool::itemToShape(items);
 	DTool::filterNoparent(shapes);
@@ -1145,6 +1157,7 @@ QPointF DScene::getAutoAlignItemPos(DShapeBase* item)
 		addItem(magLineH);
 	}
 
+	// qDebug() << "auto finish";
 	return pos;
 }
 
@@ -1308,6 +1321,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	QPointF p = event->scenePos();
 
+	// qDebug() << "move";
 	//=========== check for magpoint ===========
 	if(showMagedItem)
 	{
@@ -1327,6 +1341,8 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 			showMagedItem = shape;
 		}
 	}
+
+	// qDebug() << "move pass1";
 
 	//============== modify interacting shape =============
 	if(inter_state != DConst::NONE && modifiedShape)
@@ -1348,6 +1364,7 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		if(insert_state == DConst::AFTER_INSERT_SHAPE)
 		{
 			DShapeBase *shape = dynamic_cast<DShapeBase*>(modifiedShape);
+			if(!shape) return;
 			QRectF rc = shape->sizeRect();
 			rc.setRect(rc.left()*0.75, rc.top()*0.75, rc.width()*0.75, rc.height()*0.75);
 			if(shape->textItem) shape->textItem->sizeToRect(rc);
@@ -1355,16 +1372,34 @@ void DScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		return;
 	}
 
+	// qDebug() << "move pass2";
+
 	QGraphicsScene::mouseMoveEvent(event);
 
+	// qDebug() << "after move";
 	//============= auto align =============
-	if(!autoAlign) return;
-	if(drag_state == DConst::NONE || selectedItems().size() > 1)
+	if(!autoAlign)
+	{
+		// qDebug() << "ret 1";
 		return;
+	}
+	// qDebug() << "no ret 1";
+	if(drag_state == DConst::NONE || selectedItems().size() > 1)
+	{
+		// qDebug() << "ret 3";
+		return;
+	}
+	// qDebug() << "no ret 3";
 	QList<DShapeBase*> shapes = getSelectedShapes();
-	if(shapes.empty()) return;
-
+	if(shapes.empty() || !shapes[0])
+	{
+		// qDebug() << "ret 4";
+		return;
+	}
+	// qDebug() << "no ret 4";
 	shapes[0]->setPos(getAutoAlignItemPos(shapes[0]));
+
+	// qDebug() << "move pass3";
 }
 
 void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

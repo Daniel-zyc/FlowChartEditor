@@ -36,6 +36,7 @@ void MagPoint::updateScenePos()
 
 void MagPoint::addLine(DLineBase *line)
 {
+	if(!line) return;
 	lines->insert(line);
 }
 
@@ -58,6 +59,7 @@ void MagPoint::unlinkAllLines()
 
 QPointF MagPoint::mapToItem(QGraphicsItem *item)
 {
+	if(!item) return pos;
 	return parent->mapToItem(item, pos);
 }
 
@@ -66,7 +68,7 @@ QPointF MagPoint::mapToScene()
 	return parent->mapToScene(pos);
 }
 
-std::tuple<int,int,int> MagPoint::getLinkedLienArrowType(){
+std::tuple<int,int,int> MagPoint::getLinkedLineArrowType(){
     if(lines == nullptr){
         return std::make_tuple(0,0,0);
     }

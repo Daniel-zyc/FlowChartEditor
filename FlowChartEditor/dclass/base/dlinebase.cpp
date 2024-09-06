@@ -132,12 +132,12 @@ void DLineBase::unlinkEndUpdate()
 
 void DLineBase::unlinkMagUpdate(MagPoint* mp)
 {
-    if(beginMag == mp)
+	if(mp && beginMag == mp)
     {
         beginPoint = beginMag->mapToItem(this);
         beginMag = nullptr;
     }
-    if(endMag == mp)
+	if(mp && endMag == mp)
     {
         endPoint = endMag->mapToItem(this);
         endMag = nullptr;
@@ -300,6 +300,7 @@ void DLineBase::setEndPoint(QPointF p)
 }
 
 int  DLineBase::magType(MagPoint *mag){
+	if(!mag) return DConst::NO_IN_OR_OUT;
     if(endArrowType == DConst::NONE && beginArrowType != DConst::NONE)
         return mag == endMag ? DConst::OUT : DConst::IN;
     if(endArrowType != DConst::NONE && beginArrowType == DConst::NONE)
@@ -318,6 +319,8 @@ bool DLineBase::ifHasRound(){
 }
 
 bool DLineBase::ifLinkedWith(DAbstractBase *item){
+	if(!item) return false;
+
     if(endMag != nullptr
         && endMag->parent != nullptr
         && endMag->parent == item)return true;
@@ -329,6 +332,7 @@ bool DLineBase::ifLinkedWith(DAbstractBase *item){
 }
 
 bool DLineBase::ifLinedSameMag(DLineBase *line){
+	if(!line) return false;
     if(line->endMag != nullptr && this->endMag != nullptr && line->endMag == this->endMag) return true;
     if(line->endMag != nullptr && this->beginMag != nullptr && line->endMag == this->beginMag) return true;
     if(line->beginMag != nullptr && this->endMag != nullptr && line->beginMag == this->endMag) return true;
