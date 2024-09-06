@@ -27,6 +27,8 @@ void DScene::init()
 	clear();
 	magLineH->setPen(magLinePen);
 	magLineV->setPen(magLinePen);
+    magLineH->setZValue(std::numeric_limits<qreal>::max());
+    magLineV->setZValue(std::numeric_limits<qreal>::max());
 }
 
 void DScene::shot()
