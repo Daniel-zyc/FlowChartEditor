@@ -138,4 +138,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     icon.qrc \
-    qss.qrc //1
+    qss.qrc 
