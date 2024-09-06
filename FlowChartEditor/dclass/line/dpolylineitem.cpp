@@ -480,7 +480,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(rect_type) {
             if(temp_relative_pos == 3 || temp_relative_pos == 4) {
                 begin_line_type = 2;
-                //st_midPoint = QPointF(endPoint.x(),beginPoint.y());
             }
             st_midPoint = getBoundingPoint(0,temp_relative_pos);
         } else {
@@ -512,7 +511,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(!rect_type) {
             if(temp_relative_pos == 1 || temp_relative_pos == 4) {
                 end_line_type = 2;
-                //ed_midPoint = QPointF(endPoint.x(),beginPoint.y());
             }
             ed_midPoint = getBoundingPoint(1,temp_relative_pos);
         } else {
@@ -536,7 +534,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(rect_type) {
             if(temp_relative_pos == 1 || temp_relative_pos == 2) {
                 end_line_type = 1;
-                //ed_midPoint = QPointF(beginPoint.x(),endPoint.y());
             }
             ed_midPoint = getBoundingPoint(1,temp_relative_pos);
         } else {
@@ -560,7 +557,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(!rect_type) {
             if(temp_relative_pos == 2 || temp_relative_pos == 3) {
                 end_line_type = 2;
-                //ed_midPoint = QPointF(endPoint.x(),beginPoint.y());
             }
             ed_midPoint = getBoundingPoint(1,temp_relative_pos);
         } else {
@@ -584,7 +580,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(rect_type) {
             if(temp_relative_pos == 3 || temp_relative_pos == 4) {
                 end_line_type = 1;
-                //ed_midPoint = QPointF(beginPoint.x(),endPoint.y());
             }
             ed_midPoint = getBoundingPoint(1,temp_relative_pos);
         } else {
@@ -614,10 +609,7 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         midPoint = ed_midPoint;
     } else {
         line_type = 4;
-        //midPoint = (st_midPoint + ed_midPoint) / 2;
         midPoint = (beginPoint + endPoint) / 2;
-        //begin_midPoint = st_midPoint;
-        //end_midPoint = ed_midPoint;
     }
     qDebug() << "line_type:" << line_type << "midPoint:" << midPoint;
 }
