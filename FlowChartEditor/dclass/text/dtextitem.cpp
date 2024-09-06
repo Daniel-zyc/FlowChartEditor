@@ -1,6 +1,7 @@
 #include "dtextitem.h"
 #include "../base/dshapebase.h"
 #include "../../magpoint.h"
+#include "../../undomanager.h"
 
 #include <QTextDocument>
 #include <QTextCursor>

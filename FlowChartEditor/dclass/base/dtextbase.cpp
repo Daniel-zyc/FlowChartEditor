@@ -1,4 +1,5 @@
 #include "dtextbase.h"
+#include "../../undomanager.h"
 
 #include <QStyleOption>
 #include <QTextDocument>
@@ -35,6 +36,7 @@ void DTextBase::endEdit()
 	tmpCursor.clearSelection();
 	setTextCursor(tmpCursor);
 	setTextInteractionFlags(Qt::NoTextInteraction);
+    UndoManager::instance().shot();
 }
 
 void DTextBase::focusToCenter()
