@@ -764,7 +764,7 @@ void MainWindow::createMenu()
 	sceneMenu->addAction(ui->actSelectFillCol);
 	sceneMenu->addAction(ui->actSelectTextCol);
 	sceneMenu->addAction(ui->actSelectTextFont);
-	sceneMenu->addAction(ui->actStyleSheet);
+	// sceneMenu->addAction(ui->actStyleSheet);
 	sceneMenu->addSeparator();
 	sceneMenu->addMenu(lineType);
 
@@ -805,7 +805,7 @@ void MainWindow::createMenu()
 	ui->styleMenu->addAction(ui->actSelectFillCol);
 	ui->styleMenu->addAction(ui->actSelectTextCol);
 	ui->styleMenu->addAction(ui->actSelectTextFont);
-	ui->styleMenu->addAction(ui->actStyleSheet);
+	// ui->styleMenu->addAction(ui->actStyleSheet);
 	ui->styleMenu->addSeparator();
 	ui->styleMenu->addMenu(lineType);
 
@@ -1009,9 +1009,9 @@ void MainWindow::bindAction()
 	connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
 	connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
 
-	connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
-		rightTab->setVisible(true);
-	});
+	// connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
+	// 	rightTab->setVisible(true);
+	// });
 
 	connect(ui->actSelectFillCol, SIGNAL(triggered(bool)), this, SLOT(changeFillColor()));
 	connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(changeBorderColor()));
