@@ -113,8 +113,6 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
         painter->drawRect(begin_rect);
     }
 */
-    //painter->setBrush(Qt::red);
-    //painter->drawPath(shapeNormal());
 }
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
