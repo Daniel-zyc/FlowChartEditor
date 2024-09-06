@@ -100,7 +100,6 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
     else end_angle = getAngle(points[3],points[5]);
     drawEndArrow(painter, end_angle, endPoint, endArrowType);
     drawBeginArrow(painter, begin_angle + DConst::PI, beginPoint, beginArrowType);
-    // drawArrow(painter, angle, beginPoint, beginArrowType);
     //绘制sizerect
 /*
     if(beginMag) {
@@ -153,14 +152,6 @@ void DPolyLineItem::modiToPoint(QPointF p, int id)
         }
         modi_pos.insert(0,p);
         updateModiPoint();
-        /*
-        qDebug() << "MODIFYING NODE 0:";
-        qDebug() << QPointF(begin_midPoint.x() * direct + end_midPoint.x() * (direct ^ 1),
-                            begin_midPoint.y() * (direct ^ 1) + end_midPoint.y() * direct);
-        qDebug() << QPointF(begin_midPoint.x() * (direct ^ 1) + end_midPoint.x() * direct,
-                        begin_midPoint.y() * direct + end_midPoint.y() * (direct ^ 1));
-        qDebug() << "FINISHED MODIFYING NODE 0";
-        */
         break;
     case 1:
         if(begin_midPoint.x() == end_midPoint.x()) {
@@ -209,11 +200,9 @@ QPainterPath DPolyLineItem::shapeNormal() const
         QPointF(endPoint.x(), endPoint.y())
     };
     QPainterPath path;
-    //path.moveTo(points[0]);  // 起始点
     // 获取数组大小
     int numPoints = sizeof(points) / sizeof(points[0]);
     for (int i = 1; i < numPoints; ++i) {
-        //path.lineTo(points[i]);  // 连接每个点
         path.addPath(getFillPath(points[i-1],points[i]));
     }
     return path;
