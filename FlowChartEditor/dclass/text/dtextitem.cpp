@@ -50,6 +50,15 @@ void DTextItem::updateMagPoint()
 
 void DTextItem::sizeToRect(QRectF nrect)
 {
+	if(parentItem())
+	{
+		qreal maxWidth = dynamic_cast<DShapeBase*>(parentItem())->sizeRect().width() - sizePointRadius*2;
+		if(nrect.width() > maxWidth)
+		{
+			nrect.setWidth(maxWidth);
+			nrect.moveCenter({0, 0});
+		}
+	}
 	rect = nrect; updateAll();
 }
 
@@ -93,10 +102,11 @@ QVariant DTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
 		{
 			DShapeBase* shape = dynamic_cast<DShapeBase*>(parentItem());
 			QPointF p = pos(); QRectF rc = sizeRect(), prc = shape->sizeRect();
-			p.setX(qMin(qMax(0.0, prc.right() - rc.width()/2), p.x()));
-			p.setX(qMax(qMin(0.0, prc.left() + rc.width()/2), p.x()));
-			p.setY(qMin(qMax(0.0, prc.bottom() - rc.height()/2), p.y()));
-			p.setY(qMax(qMin(0.0, prc.top() + rc.height()/2), p.y()));
+			qreal r = sizePointRadius;
+			p.setX(qMin(qMax(0.0, prc.right() - r - rc.width()/2), p.x()));
+			p.setX(qMax(qMin(0.0, prc.left() + r + rc.width()/2), p.x()));
+			p.setY(qMin(qMax(0.0, prc.bottom() - r - rc.height()/2), p.y()));
+			p.setY(qMax(qMin(0.0, prc.top() + r + rc.height()/2), p.y()));
 			if(p != pos()) setPos(p);
 		}
 	}

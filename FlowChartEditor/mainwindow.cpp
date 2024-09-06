@@ -1057,8 +1057,8 @@ void MainWindow::bindAction()
 	connect(ui->actMoveDown, SIGNAL(triggered(bool)), this, SLOT(moveDown()));
 
 	connect(ui->actDelSelectedItem, SIGNAL(triggered(bool)), this, SLOT(delSelectedItem()));
-	QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
-	connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
+	// QShortcut *delshorcut = new QShortcut(QKeySequence("Delete"), this);
+	// connect(delshorcut, SIGNAL(activated()), this, SLOT(delSelectedItem()));
 
 	connect(saveSvgTln, &QToolButton::clicked, this, &MainWindow::saveAsSvg);
     connect(isInspect, &QCheckBox::checkStateChanged, this, [this]() {
