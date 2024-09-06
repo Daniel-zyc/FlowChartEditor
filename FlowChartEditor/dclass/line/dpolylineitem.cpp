@@ -118,7 +118,6 @@ void DPolyLineItem::paintShape(QPainter *painter, const QStyleOptionGraphicsItem
 //判断是否可以调整，目前只限制了中间调整点的调整范围
 int DPolyLineItem::checkModi(int type,QPointF p)
 {
-    //int direct = getPaintDirection();
     QPointF st_temp_offset = QPointF(beginPoint.x() + st_x_offset, beginPoint.y() + st_y_offset);
     QPointF ed_temp_offset = QPointF(endPoint.x() + ed_x_offset, endPoint.y() + ed_y_offset);
 
@@ -132,8 +131,6 @@ int DPolyLineItem::checkModi(int type,QPointF p)
         if(st_y_offset > 0 && p.y() < st_temp_offset.y()) return 0;
         if(ed_y_offset < 0 && p.y() > ed_temp_offset.y()) return 0;
         if(ed_y_offset > 0 && p.y() < ed_temp_offset.y()) return 0;
-    } else if(type == 3) {
-
     }
     return 1;
 }
