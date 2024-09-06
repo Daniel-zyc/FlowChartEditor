@@ -1,4 +1,6 @@
 #include "dfinddialog.h"
+#include "undomanager.h"
+
 #include <QList>
 #include <QMessageBox>
 #include <QTextCharFormat>
@@ -125,6 +127,7 @@ void DFindDialog::replace()
     curs[index].setCharFormat(QTextCharFormat());
     curs[index].insertText(replaceEdit->text());
     curs.removeAt(index);
+	UndoManager::instance().shot();
     num--;
     index--;
 	// qDebug() << "num:" << num;
@@ -161,6 +164,7 @@ void DFindDialog::repalceAll()
         cursor.setCharFormat(QTextCharFormat());
         cursor.insertText(replaceStr);
     }
+	UndoManager::instance().shot();
     index = 0;
     num = 0;
     searchstr = "";
