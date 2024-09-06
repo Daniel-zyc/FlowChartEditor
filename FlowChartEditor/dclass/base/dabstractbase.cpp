@@ -252,7 +252,7 @@ std::tuple<int,int,int> DAbstractBase::getLinedArrowType()
     if(mags == nullptr) return std::make_tuple(0,0,0);
     int in = 0, out = 0, none = 0;
     for(MagPoint * mag : *mags){
-        auto result = mag->linkedLienArrowType();
+        auto result = mag->getLinkedLienArrowType();
         in += std::get<0>(result);
         out += std::get<1>(result);
         none += std::get<2>(result);

@@ -66,7 +66,7 @@ QPointF MagPoint::mapToScene()
 	return parent->mapToScene(pos);
 }
 
-std::tuple<int,int,int> MagPoint::linkedLienArrowType(){
+std::tuple<int,int,int> MagPoint::getLinkedLienArrowType(){
     if(lines == nullptr){
         return std::make_tuple(0,0,0);
     }
