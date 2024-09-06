@@ -126,6 +126,7 @@ private slots:
     QSet<DTextBase *> getTextBases();
     void changeTextCol();
     void changeTextFont();
+	void setDefaultColor();
 
 	void rotateCW();
 	void rotateCCW();

@@ -811,6 +811,17 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="actSetDefaultColor">
+   <property name="text">
+    <string>设为默认形状格式</string>
+   </property>
+   <property name="toolTip">
+    <string>设为默认形状格式</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="icon.qrc"/>

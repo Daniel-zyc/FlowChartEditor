@@ -764,6 +764,7 @@ void MainWindow::createMenu()
 	sceneMenu->addAction(ui->actSelectFillCol);
 	sceneMenu->addAction(ui->actSelectTextCol);
 	sceneMenu->addAction(ui->actSelectTextFont);
+	sceneMenu->addAction(ui->actSetDefaultColor);
 	// sceneMenu->addAction(ui->actStyleSheet);
 	sceneMenu->addSeparator();
 	sceneMenu->addMenu(lineType);
@@ -805,6 +806,7 @@ void MainWindow::createMenu()
 	ui->styleMenu->addAction(ui->actSelectFillCol);
 	ui->styleMenu->addAction(ui->actSelectTextCol);
 	ui->styleMenu->addAction(ui->actSelectTextFont);
+	ui->styleMenu->addAction(ui->actSetDefaultColor);
 	// ui->styleMenu->addAction(ui->actStyleSheet);
 	ui->styleMenu->addSeparator();
 	ui->styleMenu->addMenu(lineType);
@@ -839,6 +841,7 @@ void MainWindow::createToolBar()
 	saveSvgTln->setIcon(QIcon(":/icon/savesvg.png"));
 	saveSvgTln->setToolTip("导出Svg格式");
 
+	ui->headToolBar->setFloatable(false);
 	ui->headToolBar->addAction(ui->actNewFile);
 	ui->headToolBar->addAction(ui->actOpenFile);
 	ui->headToolBar->addAction(ui->actSaveFile);
@@ -1018,6 +1021,7 @@ void MainWindow::bindAction()
 	connect(ui->actSelectFrameCol, SIGNAL(triggered(bool)), this, SLOT(changeBorderColor()));
 	connect(ui->actSelectTextCol, SIGNAL(triggered(bool)), this, SLOT(changeTextCol()));
 	connect(ui->actSelectTextFont, SIGNAL(triggered(bool)), this, SLOT(changeTextFont()));
+	connect(ui->actSetDefaultColor, SIGNAL(triggered(bool)), this, SLOT(setDefaultColor()));
 
     connect(ui->actMoveSelectedZUp, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZUp()));
     connect(ui->actMoveSelectedZDown, SIGNAL(triggered(bool)), this, SLOT(moveSelectedZDown()));
@@ -1246,6 +1250,11 @@ void MainWindow::changeTextFont()
         scene->changeTextFont(font);
         shot();
     }
+}
+
+void MainWindow::setDefaultColor()
+{
+	scene->setDefaultColor();
 }
 
 void MainWindow::rotateCW()
