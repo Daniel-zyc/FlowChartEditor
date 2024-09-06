@@ -1008,6 +1008,7 @@ void MainWindow::bindAction()
 
 	connect(ui->actCopy,SIGNAL(triggered(bool)), this, SLOT(copy()));
 	connect(ui->actPaste,SIGNAL(triggered(bool)), this, SLOT(paste()));
+    connect(ui->actCut,SIGNAL(triggered(bool)),this,SLOT(cut()));
 
 	// connect(ui->actStyleSheet, &QAction::triggered, this, [this]() {
 	// 	rightTab->setVisible(true);
@@ -1414,10 +1415,10 @@ void MainWindow::newFile(){
 
 void MainWindow::copy(){
 	scene->copySelectedItems();
-    shot();
 }
 
-void MainWindow::shear(){
+void MainWindow::cut(){
+    qDebug() << "cut";
     scene->copySelectedItems();
     scene->delSelectedItem();
     shot();
