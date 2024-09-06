@@ -434,7 +434,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(rect_type) {
             if(temp_relative_pos == 1 || temp_relative_pos == 2) {
                 begin_line_type = 2;
-                //st_midPoint = QPointF(endPoint.x(),beginPoint.y());
             }
             st_midPoint = getBoundingPoint(0,temp_relative_pos);
         } else {
@@ -458,7 +457,6 @@ void DPolyLineItem::updateOffsets(int st_dir,int ed_dir)
         if(!rect_type) {
             if(temp_relative_pos == 2 || temp_relative_pos == 3) {
                 begin_line_type = 1;
-                //st_midPoint = QPointF(beginPoint.x(),endPoint.y());
             }
             st_midPoint = getBoundingPoint(0,temp_relative_pos);
         } else {
