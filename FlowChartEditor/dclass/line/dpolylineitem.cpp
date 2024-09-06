@@ -266,7 +266,6 @@ void DPolyLineItem::updateModiPoint()
                                            (endPoint.y() + ed_y_offset + end_midPoint.y()) / 2);
         }
     }
-    //qDebug() << "modi_num:" << modis_num;
     return;
 }
 //折线中间线的方向横1/竖0
@@ -350,15 +349,12 @@ void DPolyLineItem::updatePolyLineType()
     //测试方向 1234上右下左
     int begin_item_direct = 0, end_item_direct = 0;
     QRectF st_item, ed_item;
-    //QPointF st_center,ed_center;
     if(beginMag) {
         st_item = beginMag->parent->mapRectToScene(beginMag->parent->sizeRect());
-        //st_center = beginMag->parent->pos();
         begin_item_direct = getCollideDirection(st_item,beginPoint);
     }
     if(endMag) {
         ed_item = endMag->parent->mapRectToScene(endMag->parent->sizeRect());
-        //ed_center = endMag->parent->pos();
         end_item_direct = getCollideDirection(ed_item,endPoint);
     }
     qDebug() << "directions:" << begin_item_direct << "," << end_item_direct;
