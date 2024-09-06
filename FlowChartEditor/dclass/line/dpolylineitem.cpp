@@ -38,6 +38,7 @@ QRectF DPolyLineItem::boundingRect() const
     return QRectF(minPoint, sz).normalized().adjusted(-r, -r, r, r);
 }
 
+//左上角
 QPointF DPolyLineItem::getMinPoint(QVector<QPointF> points) const
 {
     double minx = 0x3f3f3f3f, miny = 0x3f3f3f3f;
@@ -47,6 +48,7 @@ QPointF DPolyLineItem::getMinPoint(QVector<QPointF> points) const
     }
     return QPointF(minx,miny);
 }
+//右下角
 QPointF DPolyLineItem::getMaxPoint(QVector<QPointF> points) const
 {
     double maxx = 0, maxy = 0;
@@ -252,14 +254,12 @@ void DPolyLineItem::updateModiPoint()
         modis.resize(1);
         modis[0] = (begin_midPoint + end_midPoint) / 2;
         if(begin_midPoint.x() != beginPoint.x() && begin_midPoint.y() != beginPoint.y()) {
-            //(abs(st_x_offset) > 1e-6 || abs(st_y_offset) > 1e-6)
             modis_num++;
             modis.resize(modis_num);
             modis[modis_num - 1] = QPointF((beginPoint.x() + st_x_offset + begin_midPoint.x()) / 2,
                                            (beginPoint.y() + st_y_offset + begin_midPoint.y()) / 2);
         }
         if(end_midPoint.x() != endPoint.x() && end_midPoint.y() != endPoint.y()) {
-            //(abs(ed_x_offset) > 1e-6 || abs(ed_y_offset) > 1e-6)
             modis_num++;
             modis.resize(modis_num);
             modis[modis_num - 1] = QPointF((endPoint.x() + ed_x_offset + end_midPoint.x()) / 2,
