@@ -16,8 +16,8 @@ int DLineBase::checkInterPoint(QPointF p) const
 {
 	p = mapFromScene(p);
 	if(!isSelected()) return DConst::NONE;
-	if(checkModiPoint(p)) return DConst::MODI;
-	if(checkSizePoint(p)) return DConst::SIZE;
+	if(checkModiPoint(p) != -1) return DConst::MODI;
+	if(checkSizePoint(p) != -1) return DConst::SIZE;
 	return DConst::NONE;
 }
 

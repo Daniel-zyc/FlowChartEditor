@@ -1305,6 +1305,7 @@ void DScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	}
 
 mousePressEventPass:
+	qDebug() << "press pass";
 	QGraphicsScene::mousePressEvent(event);
 
 	if(!this->items(p).empty() && !selectedItems().empty())
