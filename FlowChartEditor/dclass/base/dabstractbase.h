@@ -18,6 +18,8 @@ class DAbstractBase : public QAbstractGraphicsShapeItem
 public:
 	enum { Type = DAbstractBaseType };
 	DAbstractBase(QGraphicsItem *parent = nullptr);
+	// 析构函数，会删除 mags以及 mags中的 MagPoint
+	// 需要保证删除时，没有指针指向其中的 MagPoint
 	~DAbstractBase();
 	
 public:
@@ -28,26 +30,10 @@ public:
 	// 绘制图形项，绘制顺序为 paintShape，paintSelected(被选中), paintMagPoint(显示磁吸点）
 	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-	// 图形的类型判断，含义与 global 中相同
-	virtual bool isAbstract();
-	virtual bool isShape();
-	virtual bool isFLowChartShape();
-	virtual bool isLine();
-	virtual bool isText();
-
-	// 设置大小和旋转，根据图形是否可以进行大小变换和旋转变换来调整
-	virtual void setScale(qreal scl);
-	virtual void setRotation(qreal deg);
-
-	// 获得图形大小信息的字符串
-	virtual QString getSizeString() { return QString(""); }
-	// 获得图形旋转信息的字符串
-	virtual QString getRotString() { return QString(""); }
-
 protected:
-	// 被选中下多出的碰撞范围
+	// 被选中下多出的碰撞范围，默认为调整点 + 大小点
 	virtual QPainterPath shapeSelected() const;
-	// 显示磁吸点时多出的碰撞范围
+	// 显示磁吸点时多出的碰撞范围，默认为磁吸点
 	virtual QPainterPath shapeShowMaged() const;
 
 	//==========================================================================
@@ -56,7 +42,7 @@ protected:
 	//==========================================================================
 
 protected:
-	// 绘制被选中时额外需要绘制的部分
+	// 绘制被选中时额外需要绘制的部分，默认为大小点和调整点
 	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 	// 绘制调整点
 	virtual void paintModiPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -85,19 +71,9 @@ public:
 	virtual int setInterPoint(QPointF p) = 0;
 	// 依据之前设置的状态，调整交互点的参数和图形的状态，其中 p 为 scene 坐标系下
 	virtual void interToPoint(QPointF p, MagPoint *mp = nullptr) = 0;
-	//==========================================================================
-
 	// 将图形设置为插入状态，即将当前交互点设置为图形的右下，或者线条的结尾端点
 	virtual void setInsertingItem() = 0;
-
-	// 更新所有连接的线条
-	virtual void updateAllLinkLines();
-
-	// 断开所有连接的线条
-	virtual void unLinkAllLines();
-
-    // 获取图形连线的类型，in，out，none
-    virtual std::tuple<int,int,int> getLinedArrowType();
+	//==========================================================================
 
 protected:
 	// 检查是否与调整点碰撞，p 为 item 坐标系下
@@ -114,7 +90,7 @@ protected:
 	virtual void modiToPointPre(QPointF P);
 	// 准备将选中的大小点设置到 p 位置，p 为 item 坐标系下
 	virtual void sizeToPointPre(QPointF p, MagPoint *mp = nullptr);
-	
+
 	//==========================================================================
 	// 将选中的调整点 id，设置到 p 位置，p 为 item 坐标系下
 	virtual void modiToPoint(QPointF p, int id) = 0;
@@ -122,10 +98,35 @@ protected:
 	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) = 0;
 	//==========================================================================
 
+public:
+	// 图形的类型判断，含义与 global 中相同
+	virtual bool isAbstract() { return DTool::isAbstract(type()); }
+	virtual bool isShape() { return DTool::isShape(type()); }
+	virtual bool isFLowChartShape() { return DTool::isFlowChartShape(type()); }
+	virtual bool isLine() { return DTool::isLine(type()); }
+	virtual bool isText() { return DTool::isText(type()); }
+
+	// 设置大小和旋转，根据图形是否可以进行大小变换和旋转变换来调整
+	virtual void setScale(qreal scl);
+	virtual void setRotation(qreal deg);
 	// 设置图形能否进行旋转或大小调整，会调用图形的 update 函数
 	virtual void setRotateable(bool state);
 	virtual void setScaleable(bool state);
 
+	// 获得图形大小信息的字符串
+	virtual QString getSizeString() { return QString(""); }
+	// 获得图形旋转信息的字符串
+	virtual QString getRotString() { return QString(""); }
+
+	// 更新所有连接的线条
+	virtual void updateAllLinkLines();
+	// 断开所有连接的线条
+	virtual void unLinkAllLines();
+
+	// 获取图形连线的类型，in，out，none
+	virtual std::tuple<int,int,int> getLinedArrowType();
+
+protected:
 	// 检测图形的状态是否发生改变，用于撤销重做
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
@@ -146,7 +147,7 @@ protected:
 	bool showMagPoint = false;
 
 public:
-	// 对图形进行序列化，会输出图形的位置/旋转/大小/Z值，笔刷/画笔
+	// 对图形进行序列化，会输出图形的位置、旋转、大小、Z值，笔刷、画笔
 	// 此处不输出磁吸点信息
 	virtual void serialize(QDataStream &out, const QGraphicsItem* fa = nullptr) const;
 	virtual bool deserialize(QDataStream &in, QGraphicsItem* fa = nullptr);

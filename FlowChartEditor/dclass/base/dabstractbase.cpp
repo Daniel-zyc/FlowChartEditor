@@ -11,6 +11,7 @@ DAbstractBase::DAbstractBase(QGraphicsItem *parent)
 
 DAbstractBase::~DAbstractBase()
 {
+	if(mags) for(MagPoint* mag : *mags) delete mag;
 	delete mags;
 }
 
@@ -22,6 +23,15 @@ QPainterPath DAbstractBase::shape() const
 	if(showMagPoint) pth.addPath(shapeShowMaged());
 	return pth;
 }
+
+void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	paintShape(painter, option, widget);
+	if(isSelected()) paintSelected(painter, option, widget);
+	if(showMagPoint) paintMagPoint(painter, option, widget);
+}
+
+//==============================================================================
 
 QPainterPath DAbstractBase::shapeSelected() const
 {
@@ -41,49 +51,7 @@ QPainterPath DAbstractBase::shapeShowMaged() const
 	return pth;
 }
 
-void DAbstractBase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-	paintShape(painter, option, widget);
-	if(isSelected()) paintSelected(painter, option, widget);
-	if(showMagPoint) paintMagPoint(painter, option, widget);
-}
-
-bool DAbstractBase::isAbstract()
-{
-	return DTool::isAbstract(type());
-}
-
-bool DAbstractBase::isShape()
-{
-	return DTool::isShape(type());
-}
-
-bool DAbstractBase::isFLowChartShape()
-{
-	return DTool::isFlowChartShape(type());
-}
-
-bool DAbstractBase::isLine()
-{
-	return DTool::isLine(type());
-}
-
-bool DAbstractBase::isText()
-{
-	return DTool::isText(type());
-}
-
-void DAbstractBase::setScale(qreal scl)
-{
-	if(!isScaleable) return;
-	QGraphicsItem::setScale(scl);
-}
-
-void DAbstractBase::setRotation(qreal deg)
-{
-	if(!isRotateable) return;
-	QGraphicsItem::setRotation(deg);
-}
+//==============================================================================
 
 void DAbstractBase::paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -130,31 +98,42 @@ void DAbstractBase::paintMagPoint(QPainter *painter, const QStyleOptionGraphicsI
 	for(MagPoint* mag : *mags) painter->drawEllipse(mag->pos, r, r);
 }
 
-void DAbstractBase::modiToPointPre(QPointF p)
-{
-	if(modiPointId == -1) return;
-	modiToPoint(p, modiPointId);
-}
+//==============================================================================
 
-void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
+void DAbstractBase::setShowMagPoint(bool show)
 {
-	if(sizePointId == -1) return;
-	sizeToPoint(p, sizePointId, mp);
-}
-
-void DAbstractBase::setRotateable(bool state)
-{
-	if(state == isRotateable) return;
-	prepareGeometryChange();
-	isRotateable = state;
+	showMagPoint = show;
 	update();
 }
 
-void DAbstractBase::setScaleable(bool state)
+bool DAbstractBase::checkMagPoint(QPointF p) const
 {
-	if(state == isScaleable) return;
-	isScaleable = state;
+	p = mapFromScene(p);
+	qreal r = magPointCollideRadius;
+	for(int i = 0; i < mags->size(); i++)
+		if(DTool::inCircle((*mags)[i]->pos, r, p))
+			return true;
+	return false;
 }
+
+MagPoint* DAbstractBase::getMagPoint(QPointF p)
+{
+	p = mapFromScene(p);
+	qreal r = magPointCollideRadius, minDist = 0;
+	MagPoint *ptr = nullptr;
+	for(int i = 0; i < mags->size(); i++)
+	{
+		qreal dist = DTool::dist(p, (*mags)[i]->pos);
+		if(dist <= r && (ptr == nullptr || minDist > dist))
+		{
+			ptr = (*mags)[i];
+			minDist = dist;
+		}
+	}
+	return ptr;
+}
+
+//==============================================================================
 
 int DAbstractBase::checkModiPoint(QPointF p) const
 {
@@ -204,37 +183,44 @@ bool DAbstractBase::setSizePoint(QPointF p)
 	return sizePointId != -1;
 }
 
-void DAbstractBase::setShowMagPoint(bool show)
+void DAbstractBase::modiToPointPre(QPointF p)
 {
-	showMagPoint = show;
+	if(modiPointId == -1) return;
+	modiToPoint(p, modiPointId);
+}
+
+void DAbstractBase::sizeToPointPre(QPointF p, MagPoint *mp)
+{
+	if(sizePointId == -1) return;
+	sizeToPoint(p, sizePointId, mp);
+}
+
+//==============================================================================
+
+void DAbstractBase::setScale(qreal scl)
+{
+	if(!isScaleable) return;
+	QGraphicsItem::setScale(scl);
+}
+
+void DAbstractBase::setRotation(qreal deg)
+{
+	if(!isRotateable) return;
+	QGraphicsItem::setRotation(deg);
+}
+
+void DAbstractBase::setRotateable(bool state)
+{
+	if(state == isRotateable) return;
+	prepareGeometryChange();
+	isRotateable = state;
 	update();
 }
 
-bool DAbstractBase::checkMagPoint(QPointF p) const
+void DAbstractBase::setScaleable(bool state)
 {
-	p = mapFromScene(p);
-	qreal r = magPointCollideRadius;
-	for(int i = 0; i < mags->size(); i++)
-		if(DTool::inCircle((*mags)[i]->pos, r, p))
-			return true;
-	return false;
-}
-
-MagPoint* DAbstractBase::getMagPoint(QPointF p)
-{
-	p = mapFromScene(p);
-	qreal r = magPointCollideRadius, minDist = 0;
-	MagPoint *ptr = nullptr;
-	for(int i = 0; i < mags->size(); i++)
-	{
-		qreal dist = DTool::dist(p, (*mags)[i]->pos);
-		if(dist <= r && (ptr == nullptr || minDist > dist))
-		{
-			ptr = (*mags)[i];
-			minDist = dist;
-		}
-	}
-	return ptr;
+	if(state == isScaleable) return;
+	isScaleable = state;
 }
 
 void DAbstractBase::updateAllLinkLines()
@@ -249,42 +235,37 @@ void DAbstractBase::unLinkAllLines()
 
 std::tuple<int,int,int> DAbstractBase::getLinedArrowType()
 {
-    if(mags == nullptr) return std::make_tuple(0,0,0);
-    int in = 0, out = 0, none = 0;
-    for(MagPoint * mag : *mags){
+	if(mags == nullptr) return std::make_tuple(0,0,0);
+	int in = 0, out = 0, none = 0;
+	for(MagPoint * mag : *mags){
 		auto result = mag->getLinkedLineArrowType();
-        in += std::get<0>(result);
-        out += std::get<1>(result);
-        none += std::get<2>(result);
-    }
-    return std::make_tuple(in,out,none);
+		in += std::get<0>(result);
+		out += std::get<1>(result);
+		none += std::get<2>(result);
+	}
+	return std::make_tuple(in,out,none);
 }
 
 QVariant DAbstractBase::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if(change == QGraphicsItem::ItemPositionHasChanged
-        || change == QGraphicsItem::ItemRotationHasChanged
-        || change == QGraphicsItem::ItemScaleHasChanged)
+	if(change == QGraphicsItem::ItemPositionHasChanged
+		|| change == QGraphicsItem::ItemRotationHasChanged
+		|| change == QGraphicsItem::ItemScaleHasChanged)
 	{
-        SHOT_STATE = DConst::CHANGED;
+		SHOT_STATE = DConst::CHANGED;
 	}
 	return QGraphicsItem::itemChange(change, value);
 }
-
 
 //==============================================================================
 
 void DAbstractBase::serialize(QDataStream &out, const QGraphicsItem* fa) const
 {
 	if(fa != nullptr || parentItem() == nullptr)
-	{
 		out << pos() << rotation() << scale() << zValue();
-	}
 	else
-	{
 		out << scenePos() << rotation() + parentItem()->rotation()
 			<< scale() * parentItem()->scale() << parentItem()->zValue();
-	}
 
 	out << brush() << pen();
 }
@@ -293,16 +274,16 @@ bool DAbstractBase::deserialize(QDataStream &in, QGraphicsItem* fa)
 {
 	if(fa) setParentItem(fa);
 
-	// qDebug() << "called de abstract";
+	// 关闭发送变化的信号，避免进行由 itemChange引发的多余调整
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 
 	QPointF pos; in >> pos; setPos(pos);
-	// qDebug() << pos << " " << this->pos();
 	qreal rot; in >> rot; QGraphicsItem::setRotation(rot);
 	qreal scl; in >> scl; QGraphicsItem::setScale(scl);
-    qreal zval; in >> zval; setZValue(zval + TOTAL_MAX_Z_VALUE );
+	qreal zval; in >> zval; setZValue(zval + TOTAL_MAX_Z_VALUE );
 	QBrush qb; in >> qb; setBrush(qb);
 	QPen qp; in >> qp; setPen(qp);
+
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
 	return true;

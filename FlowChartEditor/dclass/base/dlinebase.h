@@ -53,28 +53,28 @@ public:
 	virtual void setEndArrowType(int type);
 	virtual qreal getAngle(const QPointF &beginPoint, const QPointF &endPoint);
 
-    virtual void drawEndArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType);
-    virtual void drawBeginArrow(QPainter *painter, double angle, const QPointF &beginPoint, int arrowType);
+	virtual void drawEndArrow(QPainter *painter, double angle, const QPointF &endPoint, int arrowType);
+	virtual void drawBeginArrow(QPainter *painter, double angle, const QPointF &beginPoint, int arrowType);
 
 	// 设置起始/终止点的位置，会调用 SizeToPoint函数来进行线条的刷新
 	virtual void setBeginPoint(QPointF p);
 	virtual void setEndPoint(QPointF p);
 
-    // 获取某个磁吸点的类型
-    int magType(MagPoint *mag);
-    // 判断是否有回环
-    bool ifHasRound();
-    // 判断是否与某一个abstractBase相连
-    bool ifLinkedWith(DAbstractBase *item);
-    // 判断是否与某一个line连接同一个magPoint
-    bool ifLinedSameMag(DLineBase *line);
+	// 获取某个磁吸点的类型
+	int magType(MagPoint *mag);
+	// 判断是否有回环
+	bool ifHasRound();
+	// 判断是否与某一个abstractBase相连
+	bool ifLinkedWith(DAbstractBase *item);
+	// 判断是否与某一个line连接同一个magPoint
+	bool ifLinedSameMag(DLineBase *line);
 
 	// 检查头尾两个磁吸点是否断开，如果断开则进行断开操作
 	// 用来在线条位置发生移动之后，判断是否还应该保持磁吸关系
-	void checkAutoUnlinkLine();
+	void autoUnlinkLine();
 
-    //获取线段的外框
-    QPainterPath getFillPath(QPointF pth_st, QPointF pth_ed) const;
+	//获取线段的外框
+	QPainterPath getFillPath(QPointF pth_st, QPointF pth_ed) const;
 
 	QString getSizeString() override
 	{
@@ -82,10 +82,6 @@ public:
 	}
 
 protected:
-	virtual void paintSelected(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-	virtual QPainterPath shapeSelected() const override;
-	virtual QPainterPath shapeShowMaged() const override;
-
 	virtual void sizeToPoint(QPointF p, int id, MagPoint *mp = nullptr) override;
 
 	//==========================================================================

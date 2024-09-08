@@ -1415,7 +1415,7 @@ void DScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	if(drag_state != DConst::NONE)
 	{
 		for(DLineBase* line : getSelectedLines())
-			line->checkAutoUnlinkLine();
+			line->autoUnlinkLine();
 	}
 
 	insert_state = DConst::NONE;
