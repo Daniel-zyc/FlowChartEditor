@@ -300,7 +300,10 @@ void DScene::prepareInsertItem(DAbstractBase* item)
 	if(item->isShape())
 	{
 		insert_state = DConst::INSERT_SHAPE;
-		labelState->setText("插入图形");
+		if(item->isFLowChartShape())
+			labelState->setText("插入流程图图形");
+		else
+			labelState->setText("插入基础图形");
 	}
 	if(item->isLine())
 	{
@@ -582,9 +585,9 @@ void DScene::selectAllItems()
 
 void DScene::delSelectedItem()
 {
-	qDebug() << "delete selected items";
+	// qDebug() << "delete selected items";
 	QList<DAbstractBase*> items = getRootSelectedBases();
-	qDebug() << "deleteed items: " << items;
+	// qDebug() << "deleteed items: " << items;
 	for(DAbstractBase *item : items) if(item)
 	{
 		DShapeBase* shape; DLineBase* line;
@@ -623,7 +626,7 @@ void DScene::delSelectedItem()
 		removeItem(item);
 		delete item;
 	}
-	qDebug() << "delete pass";
+	// qDebug() << "delete pass";
 }
 
 void DScene::setItemSelected(QGraphicsItem * item){
@@ -646,7 +649,7 @@ bool DScene::ifCollision(QGraphicsItem * item){
 
             // 去除与其有连线的图形
             if (abstractBase != nullptr && lineBase->ifLinkedWith(abstractBase)) {
-                qDebug() << "去除有连线";
+				// qDebug() << "去除有连线";
                 items.removeAt(i);
                 continue;
             }
@@ -654,7 +657,7 @@ bool DScene::ifCollision(QGraphicsItem * item){
             // 去除连接相同磁吸点的线
             DLineBase *otherLineBase = dynamic_cast<DLineBase*>(items[i]);
             if (otherLineBase != nullptr && lineBase->ifLinedSameMag(otherLineBase)) {
-                qDebug() << "去除有相同磁吸点";
+				// qDebug() << "去除有相同磁吸点";
                 items.removeAt(i);
                 continue;
             }
@@ -671,8 +674,8 @@ bool DScene::ifCollision(QGraphicsItem * item){
     }
 
     if(DTool::isShape(base->type())){
-        qDebug() << "开始检测图形碰撞";
-        qDebug() << items.size();
+		// qDebug() << "开始检测图形碰撞";
+		// qDebug() << items.size();
         DShapeBase *shapeBase = dynamic_cast<DShapeBase*>(base);
         if(shapeBase == nullptr) return false;
         for (int i = items.size() - 1; i >= 0; i--) {

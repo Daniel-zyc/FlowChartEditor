@@ -8,7 +8,7 @@ UndoManager::UndoManager(){
 }
 
 void UndoManager::shot(QGraphicsScene *scene){
-    qDebug() << "shot";
+	// qDebug() << "shot";
     QByteArray data;
     QDataStream out(&data,QIODevice::WriteOnly);
     QList<QGraphicsItem *> items = scene->items();
@@ -16,7 +16,7 @@ void UndoManager::shot(QGraphicsScene *scene){
     if(undoStack.empty() || data != undoStack.top()) undoStack.push(data);
     trimStack();
     SHOT_STATE = DConst::UNCHANGED;
-	qDebug() << "shot finish";
+	// qDebug() << "shot finish";
 }
 
 void UndoManager::shot(){
@@ -26,7 +26,7 @@ void UndoManager::shot(){
 
 void UndoManager::undo(){
 
-    printStackSize();
+	// printStackSize();
     if(scene == nullptr || undoStack.empty()) return;
     if(undoStack.size() > 1) redoStack.push(undoStack.pop());
     if(undoStack.empty()) return;
@@ -38,7 +38,7 @@ void UndoManager::undo(){
 }
 
 void UndoManager::redo(){
-    printStackSize();
+	// printStackSize();
     if(scene == nullptr || redoStack.empty()) return;
     QByteArray data = redoStack.pop();
     QDataStream in(&data,QIODevice::ReadOnly);
