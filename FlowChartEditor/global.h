@@ -5,6 +5,8 @@
 #include <QBrush>
 #include <QPen>
 
+const QString FormWorkPath = QDir(QCoreApplication::applicationDirPath()).filePath("formwork");
+
 // 全局变量，记录最大图层
 extern int TOTAL_MAX_Z_VALUE;
 // 全局变量，记录图形是否发生了修改

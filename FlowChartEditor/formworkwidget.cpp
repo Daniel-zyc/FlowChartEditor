@@ -95,7 +95,7 @@ void FormworkWidget::handleNewFormwork(){
             return;
         }
 
-        QDir rootDir("../../formwork");
+        QDir rootDir(FormWorkPath);
         if (!rootDir.exists()) {
             rootDir.mkpath("..");
             rootDir.mkpath("formwork");
@@ -194,7 +194,7 @@ void FormworkWidget::handleItemClick() {
         FILE_PATH = "";
     }else{
         QString title = fromworkData[index].Title;
-        QString folderPath = QString("../../formwork/%1").arg(title);
+        QString folderPath = QString(FormWorkPath+"/%1").arg(title);
         QMessageBox::StandardButton reply;
         reply = QMessageBox::question(this, "确认删除", QString("确认删除模板 \"%1\" 吗？").arg(title),
                                       QMessageBox::Yes | QMessageBox::No);
@@ -224,7 +224,7 @@ void FormworkWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void FormworkWidget::loadFormwork() {
     fromworkData.clear();
-    QDir rootDir("../../formwork");
+    QDir rootDir(FormWorkPath);
     QStringList subDirs = rootDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     for (const QString &subDirName : subDirs) {
